@@ -164,5 +164,4 @@ public class GuiEditableTextField implements IGui
         if (this.editing && this.textField.isFocused())
             this.textField.textboxKeyTyped(character, keyCode);
     }
-*/
 }
