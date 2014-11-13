@@ -31,7 +31,7 @@ public class GuiScreenFileExplorer extends GuiScreen
     boolean createNewFileExplorer = false;
     String location = "C:\\Users\\Konrad\\Documents\\Minecraftig";
     String openFile = location;
-    int changerX,changerXTarget;
+    int changerX=10,changerXTarget;
 
     @Override
     public void initGui()
@@ -82,13 +82,13 @@ public class GuiScreenFileExplorer extends GuiScreen
         explorer.update();
 
         if (explorer.getScrollHeight()>0)
-            changerXTarget=175;
+            changerXTarget=175+25;
         else changerXTarget=10;
 
         if (changerX<changerXTarget)
-            changerX+=5;
+            changerX+=19;
         else if (changerX>changerXTarget)
-            changerX-=5;
+            changerX-=19;
 
         System.out.println("Scroll height: "+explorer.getScrollHeight()+", changerX: "+changerX+", target: "+changerXTarget);
 
