@@ -7,7 +7,7 @@ import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiTextField;
 
 /**
- * Created by MrSpring on 09-11-2014 for MC Music Player.
+ * Created by MrSpring on 09-11-2014 for In-Game File Explorer.
  */
 public class GuiEditableTextField implements IGui
 {
@@ -164,4 +164,5 @@ public class GuiEditableTextField implements IGui
         if (this.editing && this.textField.isFocused())
             this.textField.textboxKeyTyped(character, keyCode);
     }
+*/
 }

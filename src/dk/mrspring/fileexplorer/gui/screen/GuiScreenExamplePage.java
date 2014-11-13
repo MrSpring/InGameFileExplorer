@@ -7,7 +7,7 @@ import net.minecraft.client.gui.GuiScreen;
 import java.io.IOException;
 
 /**
- * Created by MrSpring on 09-11-2014 for MC Music Player.
+ * Created by MrSpring on 09-11-2014 for In-Game File Explorer.
  */
 public class GuiScreenExamplePage extends GuiScreen
 {

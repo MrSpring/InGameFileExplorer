@@ -14,7 +14,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 
 /**
- * Created by MrSpring on 09-11-2014 for MC Music Player.
+ * Created by MrSpring on 09-11-2014 for In-Game File Explorer.
  */
 public class LiteModFileExplorer implements Tickable
 {

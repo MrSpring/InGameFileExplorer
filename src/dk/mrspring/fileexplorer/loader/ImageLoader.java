@@ -12,7 +12,7 @@ import java.nio.ByteBuffer;
 import static org.lwjgl.opengl.GL11.*;
 
 /**
- * Created by MrSpring on 16-07-2014 for MC Music Player.
+ * Created by MrSpring on 16-07-2014 for In-Game File Explorer.
  */
 public class ImageLoader
 {

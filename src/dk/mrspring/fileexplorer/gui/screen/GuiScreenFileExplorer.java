@@ -16,7 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by MrSpring on 09-11-2014 for MC Music Player.
+ * Created by MrSpring on 09-11-2014 for In-Game File Explorer.
  */
 public class GuiScreenFileExplorer extends GuiScreen
 {

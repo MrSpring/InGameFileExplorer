@@ -6,7 +6,7 @@ import java.io.FileReader;
 import java.util.List;
 
 /**
- * Created by MrSpring on 16-07-2014 for MC Music Player.
+ * Created by MrSpring on 16-07-2014 for In-Game File Explorer.
  */
 public class FileLoader
 {

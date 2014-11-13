@@ -5,7 +5,7 @@ import net.minecraft.client.renderer.Tessellator;
 import static org.lwjgl.opengl.GL11.*;
 
 /**
- * Created by MrSpring on 31-07-14 for MC Music Player.
+ * Created by MrSpring on 31-07-14 for In-Game File Explorer.
  */
 public class DrawingHelper
 {

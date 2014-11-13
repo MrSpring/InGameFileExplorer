@@ -1,7 +1,7 @@
 package dk.mrspring.fileexplorer.gui.helper;
 
 /**
- * Created by MrSpring on 31-07-14 for MC Music Player.
+ * Created by MrSpring on 31-07-14 for In-Game File Explorer.
  */
 public class Color
 {
