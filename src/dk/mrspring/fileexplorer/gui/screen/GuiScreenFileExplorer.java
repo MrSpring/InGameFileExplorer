@@ -21,7 +21,7 @@ import java.util.List;
 public class GuiScreenFileExplorer extends GuiScreen
 {
     GuiFileExplorer explorer;
-    GuiSimpleButton reload;
+    //    GuiSimpleButton reload;
     GuiMultiLineTextField textEditor;
     GuiImageViewer imageViewer;
     GuiSimpleButton saveOpenFile;
@@ -29,9 +29,9 @@ public class GuiScreenFileExplorer extends GuiScreen
     GuiEditableTextField locationChanger;
 
     boolean createNewFileExplorer = false;
-    String location = "C:\\Users\\Konrad\\Documents\\Minecraftig";
+    String location = "C:\\Users\\Konrad\\OneDrive\\YouTube";
     String openFile = location;
-    int changerX=10,changerXTarget;
+    int changerX = 10, changerXTarget;
 
     @Override
     public void initGui()
@@ -49,10 +49,10 @@ public class GuiScreenFileExplorer extends GuiScreen
         });
 
         explorer = new GuiFileExplorer(10, 40, 240, this.height - 40, location);
-        reload = new GuiSimpleButton(200, height - 30, 50, 20, "Refresh");
+        //reload = new GuiSimpleButton(200, height - 30, 50, 20, "Refresh");
 
-        saveOpenFile = new GuiSimpleButton(270, 10, 40, 20, "Save");
-        closeOpenFile = new GuiSimpleButton(320, 10, 40, 20, "Close");
+        saveOpenFile = new GuiSimpleButton(320, 40, 40, 20, "Save");
+        closeOpenFile = new GuiSimpleButton(270, 40, 40, 20, "Close");
     }
 
     @Override
@@ -60,19 +60,19 @@ public class GuiScreenFileExplorer extends GuiScreen
     {
         explorer.draw(mc, mouseX, mouseY);
         locationChanger.draw(mc, mouseX, mouseY);
-        reload.draw(mc, mouseX, mouseY);
+//        reload.draw(mc, mouseX, mouseY);
 
         if (textEditor != null)
         {
             textEditor.draw(mc, mouseX, mouseY);
             saveOpenFile.draw(mc, mouseX, mouseY);
             closeOpenFile.draw(mc, mouseX, mouseY);
-            DrawingHelper.drawRect(260, 10, 1, height - 20, Color.WHITE, 1F);
+            DrawingHelper.drawRect(260, 40, 1, height - 50, Color.WHITE, 1F);
         } else if (imageViewer != null)
         {
             closeOpenFile.draw(mc, mouseX, mouseY);
             imageViewer.draw(mc, mouseX, mouseY);
-            DrawingHelper.drawRect(260, 10, 1, height - 20, Color.WHITE, 1F);
+            DrawingHelper.drawRect(260, 40, 1, height - 50, Color.WHITE, 1F);
         }
     }
 
@@ -81,21 +81,21 @@ public class GuiScreenFileExplorer extends GuiScreen
     {
         explorer.update();
 
-        if (explorer.getScrollHeight()>0)
-            changerXTarget=175+25;
-        else changerXTarget=10;
+        if (explorer.getScrollHeight() > 0)
+            changerXTarget = 175 + 25;
+        else changerXTarget = 10;
 
-        if (changerX<changerXTarget)
-            changerX+=19;
-        else if (changerX>changerXTarget)
-            changerX-=19;
+        if (changerX < changerXTarget)
+            changerX += 19;
+        else if (changerX > changerXTarget)
+            changerX -= 19;
 
-        System.out.println("Scroll height: "+explorer.getScrollHeight()+", changerX: "+changerX+", target: "+changerXTarget);
+        System.out.println("Scroll height: " + explorer.getScrollHeight() + ", changerX: " + changerX + ", target: " + changerXTarget);
 
         locationChanger.setX(changerX);
 
         locationChanger.update();
-        reload.update();
+        //reload.update();
         if (textEditor != null)
         {
             textEditor.update();
@@ -105,7 +105,7 @@ public class GuiScreenFileExplorer extends GuiScreen
         } else if (imageViewer != null)
         {
             imageViewer.setWidth((width - 10) - 270);
-            imageViewer.setHeight(height - 50);
+            imageViewer.setHeight(height - 80);
 //            this.imageViewer = new GuiImageViewer(path, 270, 40, (width-10)-270, height-50);
 
             imageViewer.update();
@@ -135,10 +135,10 @@ public class GuiScreenFileExplorer extends GuiScreen
     protected void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException
     {
         explorer.mouseDown(mouseX, mouseY, mouseButton);
-        if (reload.mouseDown(mouseX, mouseY, mouseButton))
+        //if (reload.mouseDown(mouseX, mouseY, mouseButton))
 //            explorer = new GuiFileExplorer("C:\\Users\\Konrad\\Documents\\Minecraftig");
-            createNewFileExplorer = true;
-        else if (textEditor != null && saveOpenFile.mouseDown(mouseX, mouseY, mouseButton))
+            //createNewFileExplorer = true;
+        /*else*/ if (textEditor != null && saveOpenFile.mouseDown(mouseX, mouseY, mouseButton))
             explorer.saveTextFile(textEditor.getText(), openFile);
         else if (closeOpenFile.mouseDown(mouseX, mouseY, mouseButton))
             closeOpenFile();
@@ -181,7 +181,7 @@ public class GuiScreenFileExplorer extends GuiScreen
     public void openImageFile(String path)
     {
         openFile = path;
-        this.imageViewer = new GuiImageViewer(path, 270, 40, (width - 10) - 270, height - 50);
+        this.imageViewer = new GuiImageViewer(path, 270, 70, (width - 10) - 270, height - 70);
     }
 
     @Override
@@ -198,6 +198,7 @@ public class GuiScreenFileExplorer extends GuiScreen
         String currentPath;
         List<GuiFile> guis = new ArrayList<GuiFile>();
         GuiSimpleButton back;
+        GuiSimpleButton reload;
         long timeAtLastClick = 0;
 
         public GuiFileExplorer(int xPos, int yPos, int width, int height, String path)
@@ -209,6 +210,7 @@ public class GuiScreenFileExplorer extends GuiScreen
             System.out.println(h);
             this.currentPath = path;
             back = new GuiSimpleButton(x + w - 50, y, 50, 20, "Go Up");
+            reload = new GuiSimpleButton(x + w - 50, y + h - 20, 50, 20, "Reload");
             List<File> files = new ArrayList<File>();
             FileLoader.addFiles(currentPath, files, false);
             int fileY = y;
