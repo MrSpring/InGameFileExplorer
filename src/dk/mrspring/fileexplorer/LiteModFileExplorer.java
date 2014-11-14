@@ -41,7 +41,7 @@ public class LiteModFileExplorer implements Tickable
     @Override
     public String getVersion()
     {
-        return "0001-0.1.0-BETA";
+        return "0.1.0-BETA";
     }
 
     @Override
