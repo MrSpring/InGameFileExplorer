@@ -48,7 +48,7 @@
     <property name="md5.dir"        location="${mcp.dir}/md5" />
     <property name="build.dir"      location="${mcp.dir}/build" />
     <property name="target.dir"     location="${build.dir}/src" />
-    <property name="dist.dir"       location="..\dist" />
+    <property name="dist.dir"       location="${build.dir}/dist" />
     <property name="stage.dir"      location="${build.dir}/stage/${ant.project.name}/${version}" />
 
     <!-- Output file properties, change as required but in general you won't need to -->
