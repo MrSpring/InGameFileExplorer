@@ -41,6 +41,7 @@
     <property name="mcp.dir"        location="..\mcp" />
 
     <!-- These directory entries should not be changed, they point at various resources below the MCP dir -->
+    <property name="project.src"    location=""
     <property name="eclipse.dir"    location="${mcp.dir}/eclipse" />
     <property name="mc.src.dir"     location="${mcp.dir}/src/minecraft" />
     <property name="temp.dir"       location="${mcp.dir}/temp" />
@@ -109,10 +110,10 @@
         <!-- upstream project needs a line below, so if you have additional upstreams then       -->
         <!-- simply duplicate the line below and change "LiteLoader" to the name of the eclipse  -->
         <!-- project that you want to contribute sources from.                                   -->
-        <antcall target="contributesource"><param name="lib" value="LiteLoader" /></antcall>
+        <antcall target="contribute-liteloader-source"/>
 
         <!-- Lastly we contribute sources from the project itself, you do not need to change this -->
-        <antcall target="contributesource"><param name="lib" value="${project}" /></antcall>
+        <antcall target="contribute-project-source"/>
     </target>
 
     <!-- Stage class files and resources into the staging directory -->
@@ -147,16 +148,24 @@
         </concat>
     </target>
 
-    <!-- Contributes java sources from a project, do not alter -->
-    <target name="contributesource" description="Contribute an upstream project source code to the source path">
-        <echo level="info" message="Contributing project ${lib}" />
+    <!-- Contributes the LiteLoader source files only -->
+    <target name="contribute-liteloader-source" description="Contribute an upstream project source code to the source path">
+        <echo level="info" message="Contributing LiteLoader sources" />
         <copy todir="${target.dir}" verbose="false" overwrite="true" failonerror="false">
             <!-- Eclipse default -->
-            <fileset dir="${eclipse.dir}/${lib}/src" />
+            <fileset dir="${eclipse.dir}/LiteLoader/src" />
             <!-- Legacy default -->
-            <fileset dir="${eclipse.dir}/${lib}/java" />
+            <fileset dir="${eclipse.dir}/LiteLoader/java" />
             <!-- Maven default -->
-            <fileset dir="${eclipse.dir}/${lib}/src/main/java" />
+            <fileset dir="${eclipse.dir}/LiteLoader/src/main/java" />
+        </copy>
+    </target>
+
+    <!-- Contributes sources for the project. Needed to change because of non-standard project setup. -->
+    <target name="contribute-project-source" description="Contributes source files from the project">
+        <echo level="info" message="Contributing sources from main source folder at: ${project.src}" />
+        <copy todir="${target.dir}" verbose="false" overwrite="true" failonerror="false">
+            <fileset dir="${project.src}" />
         </copy>
     </target>
 
