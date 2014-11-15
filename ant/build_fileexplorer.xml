@@ -32,7 +32,7 @@
     <property name="project"        value="InGameFileExplorer" />
 
     <!-- The upstream MD5 set to use when outputting your mod classes, usually liteloader -->
-    <property name="md5set"         value="liteloader" />
+    <property name="md5set"         value="mcp" />
 
     <!-- The MD5 set to *write* for downstream projects to use, uncomment this line to enable -->
     <!-- <property name="outmd5set" value="${ant.project.name}" /> -->
