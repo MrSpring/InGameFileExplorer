@@ -13,11 +13,11 @@
 <!-- The file is well commented and you should have a read through this script before making     -->
 <!-- changes to ensure that you know how it works.                                               -->
 
-<project name="examplemod" basedir="." default="main">
+<project name="fileexplorer" basedir="." default="main">
 
     <!-- The version of your mod, can be any string as long as it's valid as part of a file name -->
     <!-- and should match the version string returned by your mod.                               -->
-    <property name="version"        value="0.1.0-BETA" />
+    <property name="version"        value="0.1.0" />
 
     <!-- The Minecraft version the mod is for, appended to the output file name for reference -->
     <property name="mcversion"      value="1.8.0" />
@@ -48,7 +48,7 @@
     <property name="md5.dir"        location="${mcp.dir}/md5" />
     <property name="build.dir"      location="${mcp.dir}/build" />
     <property name="target.dir"     location="${build.dir}/src" />
-    <property name="dist.dir"       location="${build.dir}/dist" />
+    <property name="dist.dir"       location="..\dist" />
     <property name="stage.dir"      location="${build.dir}/stage/${ant.project.name}/${version}" />
 
     <!-- Output file properties, change as required but in general you won't need to -->
@@ -236,7 +236,7 @@
         <echo level="info" message="Building final output" />
 
         <mkdir dir="${dist.dir}" />
-        <jar destfile="${dist.dir}/${file.prefix}_${ant.project.name}_${version}_mc${mcversion}.${file.type}" duplicate="preserve" index="true" manifestencoding="UTF-8">
+        <jar destfile="${dist.dir}/FileExplorer-${version}.${build.number}-mc${mcversion}.${file.type}" duplicate="preserve" index="true" manifestencoding="UTF-8">
             <manifest>
                 <attribute name="Built-By" value="MCP (http://mcp.ocean-labs.de)" />
                 <attribute name="Implementation-Vendor" value="${author}" />
