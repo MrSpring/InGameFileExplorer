@@ -41,7 +41,7 @@
     <property name="mcp.dir"        location="..\mcp" />
 
     <!-- These directory entries should not be changed, they point at various resources below the MCP dir -->
-    <property name="project.src"    location=""
+    <property name="project.src"    location="..\src" />
     <property name="eclipse.dir"    location="${mcp.dir}/eclipse" />
     <property name="mc.src.dir"     location="${mcp.dir}/src/minecraft" />
     <property name="temp.dir"       location="${mcp.dir}/temp" />
