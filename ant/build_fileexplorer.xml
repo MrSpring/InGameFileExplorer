@@ -208,7 +208,7 @@
     <target name="reobfuscate" description="MCP reobfuscate">
         <echo level="info" message="Obfuscating classes" />
 
-        <exec executable="${python}" dir="${mcp.dir}">
+        <exec executable="python" dir="${mcp.dir}">
             <arg value="runtime/reobfuscate.py" />
             <arg value="--client" />
             <arg value="%*" />
