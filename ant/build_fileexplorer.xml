@@ -195,7 +195,7 @@
 
         <echo append="false" file="${temp.dir}/build.cfg" message="[OUTPUT]&#x0A;SrcClient = build/src" />
 
-        <exec executable="${python}" dir="${mcp.dir}">
+        <exec executable="python" dir="${mcp.dir}">
             <arg value="runtime/recompile.py" />
             <arg value="--client" />
             <arg value="--config" />
