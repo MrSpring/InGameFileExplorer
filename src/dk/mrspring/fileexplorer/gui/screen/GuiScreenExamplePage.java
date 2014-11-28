@@ -15,7 +15,7 @@ public class GuiScreenExamplePage extends GuiScreen
 
     public GuiScreenExamplePage(net.minecraft.client.gui.GuiScreen currentScreen)
     {
-        super("Example Page", currentScreen);
+        super("gui.screen.example_page.name", currentScreen);
     }
 
     @Override
@@ -29,9 +29,7 @@ public class GuiScreenExamplePage extends GuiScreen
         this.addGuiElement(tFieldID, new GuiEditableTextField(60 + 75 + 10, 10, 240, 20, "This is Edible!", mc.fontRendererObj));
         this.addGuiElement(checkBID, new GuiCheckbox(10, 10 + 40 + 10, 10, 10, false));
 
-        this.setBarHeight(50);
-
-        this.setSubtitle("Play around with some cool Gui features!");
+        this.setSubtitle("gui.screen.example_page.description");
     }
 
     /*

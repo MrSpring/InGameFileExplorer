@@ -4,6 +4,7 @@ import dk.mrspring.fileexplorer.gui.GuiSimpleButton;
 import dk.mrspring.fileexplorer.gui.IGui;
 import dk.mrspring.fileexplorer.gui.helper.Color;
 import dk.mrspring.fileexplorer.gui.helper.DrawingHelper;
+import net.minecraft.util.StatCollector;
 import org.lwjgl.opengl.GL11;
 
 import java.io.IOException;
@@ -19,7 +20,6 @@ public class GuiScreen extends net.minecraft.client.gui.GuiScreen
     private HashMap<String, IGui> guiHashMap;
     private boolean showBars = true;
     private boolean drawCenteredTitle = true;
-    private boolean drawCenteredSubtitle = false;
     private boolean useDefaultDoneButton = true;
     private int barHeight = 30;
     private net.minecraft.client.gui.GuiScreen previousScreen;
@@ -28,8 +28,6 @@ public class GuiScreen extends net.minecraft.client.gui.GuiScreen
     {
         this.title = title;
         this.previousScreen = previousScreen;
-        if (previousScreen == null)
-            this.useDefaultDoneButton = false;
     }
 
     @Override
@@ -39,8 +37,7 @@ public class GuiScreen extends net.minecraft.client.gui.GuiScreen
 
         this.guiHashMap = new HashMap<String, IGui>();
 
-        if (this.useDefaultDoneButton)
-            this.addGuiElement("done_button", new GuiSimpleButton(0, 0, 40, 20, "Done"));
+        this.addGuiElement("done_button", new GuiSimpleButton(0, 0, 40, 20, "Done").hideBackground());
     }
 
     public void addGuiElement(String identifier, IGui gui)
@@ -51,21 +48,38 @@ public class GuiScreen extends net.minecraft.client.gui.GuiScreen
 
     public void drawCenteredTitle()
     {
+        String translatedTitle = StatCollector.translateToLocal(this.title);
+
         int textPosY = this.barHeight / 2 - 4;
 
-        if (this.drawCenteredSubtitle)
+        if (this.drawSubTitle())
             textPosY -= 6;
 
-        float titleWidth = mc.fontRendererObj.getStringWidth("§l" + this.title);
+        float titleWidth = mc.fontRendererObj.getStringWidth("§l" + translatedTitle);
         float underlineOverflow = 5F;
         float underlinePosX = (width / 2) - (titleWidth / 2) - underlineOverflow;
 
-        this.drawCenteredString(mc.fontRendererObj, "§l" + this.title, this.width / 2, textPosY, 0xFFFFFF);
-        if (this.drawCenteredSubtitle)
-            this.drawCenteredString(mc.fontRendererObj, this.subtitle, this.width / 2, textPosY + 10, 0xFFFFFF);
+        this.drawCenteredString(mc.fontRendererObj, "§l" + translatedTitle, this.width / 2, textPosY, 0xFFFFFF);
+        /*if (this.drawCenteredSubtitle)
+            this.drawCenteredString(mc.fontRendererObj, this.subtitle, this.width / 2, textPosY + 10, 0xFFFFFF);*/
+
+        if (this.drawSubTitle())
+            this.drawCenteredSubTitle();
 
         DrawingHelper.drawRect(underlinePosX + 1, textPosY + 9, titleWidth + (underlineOverflow * 2), 1, Color.DKGREY, 1F);
         DrawingHelper.drawRect(underlinePosX, textPosY + 8, titleWidth + (underlineOverflow * 2), 1, Color.WHITE, 1F);
+    }
+
+    public void drawCenteredSubTitle()
+    {
+        String translatedSubTitle = StatCollector.translateToLocal(this.subtitle);
+        int textPosY = this.barHeight / 2 - 10;
+        this.drawCenteredString(mc.fontRendererObj, translatedSubTitle, this.width / 2, textPosY + 10, 0xFFFFFF);
+    }
+
+    public boolean drawSubTitle()
+    {
+        return !this.subtitle.equals("");
     }
 
     @Override
@@ -153,7 +167,9 @@ public class GuiScreen extends net.minecraft.client.gui.GuiScreen
             String identifier = entry.getKey();
             IGui gui = entry.getValue();
 
-            if (gui.mouseDown(mouseX, actualMouseY, mouseButton))
+            if (identifier.equals("done_button") && gui.mouseDown(mouseX, actualMouseY, mouseButton))
+                mc.displayGuiScreen(this.previousScreen);
+            else if (gui.mouseDown(mouseX, actualMouseY, mouseButton))
                 this.guiClicked(identifier, gui, mouseX, mouseY, mouseButton);
         }
     }
@@ -194,7 +210,6 @@ public class GuiScreen extends net.minecraft.client.gui.GuiScreen
         this.subtitle = subtitle;
         if (this.barHeight < 30)
             this.barHeight = 30;
-        this.drawCenteredSubtitle = true;
         return this;
     }
 
@@ -230,11 +245,6 @@ public class GuiScreen extends net.minecraft.client.gui.GuiScreen
         if (this.guiHashMap.containsKey(identifier))
             return this.guiHashMap.get(identifier);
         else return null;
-    }
-
-    public void onMouseClicked(String identifier, IGui gui, int mouseX, int mouseY, int mouseButton)
-    {
-
     }
 
     public boolean drawGui(String identifier, IGui gui)

@@ -13,7 +13,7 @@ public class GuiSimpleButton implements IGui
     int x, y, width, height;
     String text;
 
-    boolean wasMouseHoveringLastFrame = false, isEnabled = true,highlight=false;
+    boolean wasMouseHoveringLastFrame = false, isEnabled = true, highlight = false, drawBackground = true;
     int alphaProgress = 0;
     int alphaTarget = 0;
 
@@ -41,7 +41,10 @@ public class GuiSimpleButton implements IGui
     @Override
     public void draw(Minecraft minecraft, int mouseX, int mouseY)
     {
-        DrawingHelper.drawButtonThingy(x, y, width, height, Color.BLACK, 0.25F, Color.WHITE, 1F);
+//        DrawingHelper.drawButtonThingy(x, y, width, height, Color.BLACK, 0.25F, Color.WHITE, 1F);
+        if (this.drawBackground)
+            DrawingHelper.drawRect(x, y, width, height, Color.BLACK, 0.25F);
+        DrawingHelper.drawOutline(x, y, width, height, Color.WHITE, 1F);
         wasMouseHoveringLastFrame = GuiHelper.isMouseInBounds(mouseX, mouseY, this.x, this.y, this.width, this.height);
         if (wasMouseHoveringLastFrame)
             alphaTarget = 10;
@@ -58,6 +61,12 @@ public class GuiSimpleButton implements IGui
 
         float textY = (this.height / 2 - 4) + y, textX = (this.width / 2 - (minecraft.fontRendererObj.getStringWidth(this.text) / 2)) + x;
         minecraft.fontRendererObj.drawStringWithShadow(this.text, textX, textY, textColor);
+    }
+
+    public GuiSimpleButton hideBackground()
+    {
+        this.drawBackground = false;
+        return this;
     }
 
     public void setX(int x)
@@ -82,12 +91,12 @@ public class GuiSimpleButton implements IGui
 
     public void makeHighlighted()
     {
-        this.highlight=true;
+        this.highlight = true;
     }
 
     public void stopBeingHighlighted()
     {
-        this.highlight=false;
+        this.highlight = false;
     }
 
     public boolean isHighlighted()
@@ -97,14 +106,14 @@ public class GuiSimpleButton implements IGui
 
     public void toggleHightlight()
     {
-        this.highlight=!this.highlight;
+        this.highlight = !this.highlight;
     }
 
     @Override
     public void update()
     {
         if (highlight)
-            alphaTarget=15;
+            alphaTarget = 15;
         if (alphaProgress < alphaTarget)
             alphaProgress += 5;
         else if (alphaProgress > alphaTarget)
@@ -116,7 +125,7 @@ public class GuiSimpleButton implements IGui
     {
         if (GuiHelper.isMouseInBounds(mouseX, mouseY, x, y, width, height) && isEnabled)
         {
-            alphaProgress =9;
+            alphaProgress = 9;
             return true;
         } else return false;
     }
