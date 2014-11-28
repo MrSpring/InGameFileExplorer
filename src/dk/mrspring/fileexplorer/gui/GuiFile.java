@@ -146,6 +146,12 @@ public class GuiFile implements IGui
 
     }
 
+    @Override
+    public void handleKeyTyped(int keyCode, char character)
+    {
+
+    }
+
     private enum FileType
     {
         UNKNOWN,

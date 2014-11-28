@@ -16,4 +16,6 @@ public interface IGui
     public void mouseUp(int mouseX, int mouseY, int mouseButton);
 
     public void mouseClickMove(int mouseX, int mouseY, int mouseButton, long timeSinceClick);
+
+    public void handleKeyTyped(int keyCode, char character);
 }

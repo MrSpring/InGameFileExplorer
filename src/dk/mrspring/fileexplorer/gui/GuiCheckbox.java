@@ -70,4 +70,10 @@ public class GuiCheckbox implements IGui
     {
 
     }
+
+    @Override
+    public void handleKeyTyped(int keyCode, char character)
+    {
+
+    }
 }

@@ -98,7 +98,7 @@ public class GuiEditableTextField implements IGui
 
             DrawingHelper.drawEditIcon(x + 1 + buttonSize + spacing, y + 1, buttonSize - 2, buttonSize - 2, Color.WHITE, 1F);
 
-            minecraft.fontRendererObj.drawStringWithShadow(value, x + ((buttonSize + 2) * 2), y + (buttonSize / 2) - 5, 0xFFFFFF);
+            minecraft.fontRendererObj.drawStringWithShadow(value, x + ((buttonSize + 2) * 2) + 5, y + (buttonSize / 2) - 5, 0xFFFFFF);
         }
     }
 
@@ -152,6 +152,13 @@ public class GuiEditableTextField implements IGui
     public void mouseClickMove(int mouseX, int mouseY, int mouseButton, long timeSinceClick)
     {
 
+    }
+
+    @Override
+    public void handleKeyTyped(int keyCode, char character)
+    {
+        if (this.editing && this.textField.isFocused())
+            this.textField.textboxKeyTyped(character, keyCode);
     }
 
     public boolean isEditing()

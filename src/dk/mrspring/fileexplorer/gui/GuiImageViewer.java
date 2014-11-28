@@ -127,4 +127,10 @@ public class GuiImageViewer implements IGui
     {
 
     }
+
+    @Override
+    public void handleKeyTyped(int keyCode, char character)
+    {
+
+    }
 }

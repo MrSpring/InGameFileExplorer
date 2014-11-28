@@ -373,6 +373,12 @@ public class GuiScreenFileExplorer extends GuiScreen
         {
 
         }
+
+        @Override
+        public void handleKeyTyped(int keyCode, char character)
+        {
+
+        }
     }
 
 }

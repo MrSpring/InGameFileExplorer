@@ -116,7 +116,7 @@ public class GuiSimpleButton implements IGui
     {
         if (GuiHelper.isMouseInBounds(mouseX, mouseY, x, y, width, height) && isEnabled)
         {
-            alphaProgress +=5;
+            alphaProgress =9;
             return true;
         } else return false;
     }
@@ -129,6 +129,12 @@ public class GuiSimpleButton implements IGui
 
     @Override
     public void mouseClickMove(int mouseX, int mouseY, int mouseButton, long timeSinceClick)
+    {
+
+    }
+
+    @Override
+    public void handleKeyTyped(int keyCode, char character)
     {
 
     }

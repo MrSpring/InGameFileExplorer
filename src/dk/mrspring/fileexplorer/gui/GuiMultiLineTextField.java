@@ -182,4 +182,10 @@ public class GuiMultiLineTextField implements IGui
     {
 
     }
+
+    @Override
+    public void handleKeyTyped(int keyCode, char character)
+    {
+
+    }
 }

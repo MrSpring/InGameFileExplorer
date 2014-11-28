@@ -21,7 +21,7 @@ public class LiteModFileExplorer implements Tickable
     public static KeyBinding openExampleGui = new KeyBinding("key.file_explorer.open_gui", Keyboard.KEY_F, "key.categories.litemods");
     public static KeyBinding openFileExplorer = new KeyBinding("key.file_explorer.open_explorer", Keyboard.KEY_G, "key.categories.litemods");
     public static KeyBinding openTextEditor = new KeyBinding("key.file_explorer.open_editor", Keyboard.KEY_H, "key.categories.litemods");
-    public static KeyBinding openImageViewer =new KeyBinding("ket.file_explorer.open_image",Keyboard.KEY_J, "key.categories.litemods");
+    public static KeyBinding openImageViewer = new KeyBinding("ket.file_explorer.open_image", Keyboard.KEY_J, "key.categories.litemods");
 
     public static BufferedImage image;
 
@@ -29,7 +29,7 @@ public class LiteModFileExplorer implements Tickable
     public void onTick(Minecraft minecraft, float partialTicks, boolean inGame, boolean clock)
     {
         if (openExampleGui.isPressed())
-            minecraft.displayGuiScreen(new GuiScreenExamplePage());
+            minecraft.displayGuiScreen(new GuiScreenExamplePage(minecraft.currentScreen));
         if (openFileExplorer.isPressed())
             minecraft.displayGuiScreen(new GuiScreenFileExplorer());
         if (openTextEditor.isPressed())

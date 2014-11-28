@@ -1,16 +1,40 @@
 package dk.mrspring.fileexplorer.gui.screen;
 
 import dk.mrspring.fileexplorer.gui.*;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiScreen;
-
-import java.io.IOException;
 
 /**
  * Created by MrSpring on 09-11-2014 for In-Game File Explorer.
  */
 public class GuiScreenExamplePage extends GuiScreen
 {
+    private String buttonID = "button";
+    private String numberID = "number_field";
+    private String sliderID = "slider";
+    private String tFieldID = "text_field";
+    private String checkBID = "check_box";
+
+    public GuiScreenExamplePage(net.minecraft.client.gui.GuiScreen currentScreen)
+    {
+        super("Example Page", currentScreen);
+    }
+
+    @Override
+    public void initGui()
+    {
+        super.initGui();
+
+        this.addGuiElement(buttonID, new GuiSimpleButton(10, 10, 40, 40, "Button"));
+        this.addGuiElement(numberID, new GuiNumberField(60, 10, 20, GuiNumberField.Type.PERCENTAGE, mc.fontRendererObj));
+        this.addGuiElement(sliderID, new GuiSlider(60, 40, 120, 30, GuiSlider.Type.PERCENTAGE, 50));
+        this.addGuiElement(tFieldID, new GuiEditableTextField(60 + 75 + 10, 10, 240, 20, "This is Edible!", mc.fontRendererObj));
+        this.addGuiElement(checkBID, new GuiCheckbox(10, 10 + 40 + 10, 10, 10, false));
+
+        this.setBarHeight(50);
+
+        this.setSubtitle("Play around with some cool Gui features!");
+    }
+
+    /*
     GuiSimpleButton button;
     GuiNumberField numberField;
     GuiSlider slider;
@@ -87,4 +111,5 @@ public class GuiScreenExamplePage extends GuiScreen
 
         this.field.keyPressed(keyCode, typedChar);
     }
+*/
 }

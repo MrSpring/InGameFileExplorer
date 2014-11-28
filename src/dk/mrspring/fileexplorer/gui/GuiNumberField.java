@@ -125,6 +125,12 @@ public class GuiNumberField implements IGui
 
     }
 
+    @Override
+    public void handleKeyTyped(int keyCode, char character)
+    {
+
+    }
+
     public enum Type
     {
         PERCENTAGE(75),
