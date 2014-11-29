@@ -12,6 +12,7 @@ public class GuiScreenExamplePage extends GuiScreen
     private String sliderID = "slider";
     private String tFieldID = "text_field";
     private String checkBID = "check_box";
+    private String cFieldID = "custom_text_field";
 
     public GuiScreenExamplePage(net.minecraft.client.gui.GuiScreen currentScreen)
     {
@@ -28,6 +29,7 @@ public class GuiScreenExamplePage extends GuiScreen
         this.addGuiElement(sliderID, new GuiSlider(60, 40, 120, 30, GuiSlider.Type.PERCENTAGE, 50));
         this.addGuiElement(tFieldID, new GuiEditableTextField(60 + 75 + 10, 10, 240, 20, "This is Edible!", mc.fontRendererObj));
         this.addGuiElement(checkBID, new GuiCheckbox(10, 10 + 40 + 10, 10, 10, false));
+        this.addGuiElement(cFieldID, new GuiCustomTextField(10, 10 + 60 + 10, 200, 15).setText("Text!"));
 
         this.setSubtitle("gui.screen.example_page.description");
     }
