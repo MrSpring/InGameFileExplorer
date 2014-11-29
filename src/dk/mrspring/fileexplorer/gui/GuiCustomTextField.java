@@ -16,7 +16,7 @@ public class GuiCustomTextField implements IGui
     int x, y, w, h;
     String text = "";
     boolean focused = false;
-    int editPosition = 0, lastEditPosition = -1;
+    int editPosition = 0;
     float editX = 0, editY = 0;
     int editCount = 0;
     int maxEditCount = 20;
