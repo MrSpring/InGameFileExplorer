@@ -23,6 +23,9 @@ public class TextHelper
 
         keyCodeBlacklist.add(KEY_LMENU);
         keyCodeBlacklist.add(KEY_RMENU);
+
+        keyCodeBlacklist.add(KEY_UP);
+        keyCodeBlacklist.add(KEY_DOWN);
     }
 
     public static boolean isKeyWritable(int keyCode)
