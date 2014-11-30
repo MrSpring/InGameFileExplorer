@@ -9,226 +9,225 @@ import static org.lwjgl.opengl.GL11.*;
  */
 public class DrawingHelper
 {
-    public static void drawImageIcon(float x, float y, float w, float h, Color c, float a)
+    IIcon crossIcon=new IIcon()
     {
-        float tenthWidth = w / 10, tenthHeight = h / 10;
-
-        drawCustomQuad(
-                x + 3 * tenthWidth, y + 5 * tenthHeight,
-                x + 6 * tenthWidth, y + 9 * tenthHeight,
-                x + 1 * tenthWidth, y + 9 * tenthHeight,
-                x + 1 * tenthWidth, y + 8 * tenthHeight, c, a);
-
-        drawCustomQuad(
-                x + 7 * tenthWidth, y + 4 * tenthHeight,
-                x + 9 * tenthWidth, y + 6 * tenthHeight,
-                x + 9 * tenthWidth, y + 9 * tenthHeight,
-                x + 2 * tenthWidth, y + 9 * tenthHeight, c, a);
-    }
-
-    public static void drawFolderIcon(float x, float y, float w, float h, Color c, float a)
+        @Override
+        public Quad[] getQuads(float x, float y, float w, float h)
+        {
+            float tenthWidth = w / 10, tenthHeight = h / 10;
+            return new Quad[]{
+                    new Quad(
+                            x + 8 * tenthWidth, y + 1 * tenthHeight,
+                            x + 9 * tenthWidth, y + 2 * tenthHeight,
+                            x + 2 * tenthWidth, y + 9 * tenthHeight,
+                            x + 1 * tenthWidth, y + 8 * tenthHeight),
+                    new Quad(
+                            x + 2 * tenthWidth, y + 1 * tenthHeight,
+                            x + 9 * tenthWidth, y + 8 * tenthHeight,
+                            x + 8 * tenthWidth, y + 9 * tenthHeight,
+                            x + 1 * tenthWidth, y + 2 * tenthHeight)
+            };
+        }
+    };
+    IIcon checkMarkIcon=new IIcon()
     {
-        float tenthWidth = w / 10, tenthHeight = h / 10;
-
-        drawCustomQuad(
-                x + 7 * tenthWidth, y + 5 * tenthHeight,
-                x + 9 * tenthWidth, y + 9 * tenthHeight,
-                x + 3 * tenthWidth, y + 9 * tenthHeight,
-                x + 1 * tenthWidth, y + 5 * tenthHeight, c, a);
-
-        drawCustomQuad(
-                x + 9 * tenthWidth, y + 3 * tenthHeight,
-                x + 9 * tenthWidth, y + 7 * tenthHeight,
-                x + 9 * tenthWidth, y + 7 * tenthHeight,
-                x + 7 * tenthWidth, y + 3 * tenthHeight, c, a);
-
-        drawCustomQuad(
-                x + 9 * tenthWidth, y + 2 * tenthHeight,
-                x + 9 * tenthWidth, y + 4 * tenthHeight,
-                x + 1 * tenthWidth, y + 4 * tenthHeight,
-                x + 1 * tenthWidth, y + 2 * tenthHeight, c, a);
-
-        drawCustomQuad(
-                x + 7 * tenthWidth, y + 5 * tenthHeight,
-                x + 9 * tenthWidth, y + 9 * tenthHeight,
-                x + 3 * tenthWidth, y + 9 * tenthHeight,
-                x + 1 * tenthWidth, y + 5 * tenthHeight, c, a);
-
-        drawCustomQuad(
-                x + 5.5F * tenthWidth, y + 1 * tenthHeight,
-                x + 5.5F * tenthWidth, y + 2 * tenthHeight,
-                x + 2.5F * tenthWidth, y + 2 * tenthHeight,
-                x + 2.5F * tenthWidth, y + 1 * tenthHeight, c, a);
-    }
-
-    public static void drawTextFileIcon(float x, float y, float w, float h, Color c, float a)
+        @Override
+        public Quad[] getQuads(float x, float y, float w, float h)
+        {
+            float tenthWidth = w / 10, tenthHeight = h / 10;
+            return new Quad[]{
+                    new Quad(
+                            x + 2 * tenthWidth, y + h - 5 * tenthHeight,
+                            x + 4 * tenthWidth, y + h - 3 * tenthHeight,
+                            x + 4 * tenthWidth, y + h - 1 * tenthHeight,
+                            x + 1 * tenthWidth, y + h - 4 * tenthHeight),
+                    new Quad(
+                            x + 8 * tenthWidth, y + 1 * tenthHeight,
+                            x + 9 * tenthWidth, y + 2 * tenthHeight,
+                            x + 4 * tenthWidth, y + 9 * tenthHeight,
+                            x + 3 * tenthWidth, y + 8 * tenthHeight)
+            };
+        }
+    };
+    IIcon editIcon = new IIcon()
     {
-        float tenthWidth = w / 10, tenthHeight = h / 10;
+        @Override
+        public Quad[] getQuads(float x, float y, float w, float h)
+        {
+            float tenthWidth = w / 10, tenthHeight = h / 10;
+            return new Quad[]{
+                    new Quad(
+                            x + 2 * tenthWidth, y + h - 4 * tenthHeight,
+                            x + 4 * tenthWidth, y + h - 2 * tenthHeight,
+                            x + tenthWidth, y + h - tenthHeight,
+                            x + tenthWidth, y + h - tenthHeight
+                    ),
+                    new Quad(
+                            x + 7 * tenthWidth, y + tenthHeight,
+                            x + w - tenthWidth, y + 3 * tenthHeight,
+                            x + 5 * tenthWidth, y + h - 3 * tenthHeight,
+                            x + 3 * tenthWidth, y + h - 5 * tenthHeight
+                    )
+            };
+        }
+    };
+    IIcon playIcon = new IIcon()
+    {
+        @Override
+        public Quad[] getQuads(float x, float y, float w, float h)
+        {
+            return new Quad[]{new Quad(x, y, x + w, y + (h / 2), x + w, y + (h / w), x, y + h)};
+        }
+    };
 
-        drawCustomQuad(
-                x + 5 * tenthWidth, y + 1 * tenthHeight,
-                x + 5 * tenthWidth, y + 4 * tenthHeight,
-                x + 2 * tenthWidth, y + 4 * tenthHeight,
-                x + 2 * tenthWidth, y + 1 * tenthHeight, c, a);
+    IIcon pauseIcon = new IIcon()
+    {
+        @Override
+        public Quad[] getQuads(float x, float y, float w, float h)
+        {
+            return new Quad[]{
+                    new Quad(x, y, x + w / 3, y, x + w / 3, y + h, x, y + h),
+                    new Quad(x + (2 * (w / 3)), y, x + w, y, x + w, y + h, x + (2 * (w / 3)), y + h)
+            };
+        }
+    };
 
-        drawCustomQuad(
-                x + 6 * tenthWidth, y + 1 * tenthHeight,
-                x + 8 * tenthWidth, y + 3 * tenthHeight,
-                x + 6 * tenthWidth, y + 3 * tenthHeight,
-                x + 6 * tenthWidth, y + 3 * tenthHeight, c, a);
+    IIcon imageIcon = new IIcon()
+    {
+        @Override
+        public Quad[] getQuads(float x, float y, float w, float h)
+        {
+            float tenthWidth = w / 10, tenthHeight = h / 10;
+            return new Quad[]{new Quad(x + 3 * tenthWidth, y + (5 * tenthHeight), x + (6 * tenthWidth), y + (9 * tenthHeight), x + tenthWidth, y + (9 * tenthHeight), x + tenthWidth, y + (8 * tenthHeight))};
+        }
+    };
 
-        drawCustomQuad(
-                x + 8 * tenthWidth, y + 4 * tenthHeight,
-                x + 8 * tenthWidth, y + 5 * tenthHeight,
-                x + 2 * tenthWidth, y + 5 * tenthHeight,
-                x + 2 * tenthWidth, y + 4 * tenthHeight, c, a);
+    IIcon folderIcon = new IIcon()
+    {
+        @Override
+        public Quad[] getQuads(float x, float y, float w, float h)
+        {
+            float tenthWidth = w / 10, tenthHeight = h / 10;
+            return new Quad[]{
+                    new Quad(
+                            x + 7 * tenthWidth, y + 5 * tenthHeight,
+                            x + 9 * tenthWidth, y + 9 * tenthHeight,
+                            x + 3 * tenthWidth, y + 9 * tenthHeight,
+                            x + tenthWidth, y + 5 * tenthHeight),
+                    new Quad(
+                            x + 9 * tenthWidth, y + 3 * tenthHeight,
+                            x + 9 * tenthWidth, y + 7 * tenthHeight,
+                            x + 9 * tenthWidth, y + 7 * tenthHeight,
+                            x + 7 * tenthWidth, y + 3 * tenthHeight),
+                    new Quad(
+                            x + 9 * tenthWidth, y + 2 * tenthHeight,
+                            x + 9 * tenthWidth, y + 4 * tenthHeight,
+                            x + 1 * tenthWidth, y + 4 * tenthHeight,
+                            x + 1 * tenthWidth, y + 2 * tenthHeight),
+                    new Quad(
+                            x + 7 * tenthWidth, y + 5 * tenthHeight,
+                            x + 9 * tenthWidth, y + 9 * tenthHeight,
+                            x + 3 * tenthWidth, y + 9 * tenthHeight,
+                            x + 1 * tenthWidth, y + 5 * tenthHeight),
+                    new Quad(
+                            x + 5.5F * tenthWidth, y + 1 * tenthHeight,
+                            x + 5.5F * tenthWidth, y + 2 * tenthHeight,
+                            x + 2.5F * tenthWidth, y + 2 * tenthHeight,
+                            x + 2.5F * tenthWidth, y + 1 * tenthHeight)
+            };
+        }
+    };
 
-        drawCustomQuad(
-                x + 8 * tenthWidth, y + 5 * tenthHeight,
-                x + 8 * tenthWidth, y + 6 * tenthHeight,
-                x + 6 * tenthWidth, y + 6 * tenthHeight,
-                x + 6 * tenthWidth, y + 5 * tenthHeight, c, a);
-
-        drawCustomQuad(
-                x + 3 * tenthWidth, y + 5 * tenthHeight,
-                x + 3 * tenthWidth, y + 6 * tenthHeight,
-                x + 2 * tenthWidth, y + 6 * tenthHeight,
-                x + 2 * tenthWidth, y + 5 * tenthHeight, c, a);
-
-        drawCustomQuad(
-                x + 8 * tenthWidth, y + 6 * tenthHeight,
-                x + 8 * tenthWidth, y + 7 * tenthHeight,
-                x + 2 * tenthWidth, y + 7 * tenthHeight,
-                x + 2 * tenthWidth, y + 6 * tenthHeight, c, a);
-
-        drawCustomQuad(
-                x + 8 * tenthWidth, y + 7 * tenthHeight,
-                x + 8 * tenthWidth, y + 8 * tenthHeight,
-                x + 7 * tenthWidth, y + 8 * tenthHeight,
-                x + 7 * tenthWidth, y + 7 * tenthHeight, c, a);
-
-        drawCustomQuad(
-                x + 3 * tenthWidth, y + 7 * tenthHeight,
-                x + 3 * tenthWidth, y + 8 * tenthHeight,
-                x + 2 * tenthWidth, y + 8 * tenthHeight,
-                x + 2 * tenthWidth, y + 7 * tenthHeight, c, a);
-
-        drawCustomQuad(
-                x + 8 * tenthWidth, y + 8 * tenthHeight,
-                x + 8 * tenthWidth, y + 9 * tenthHeight,
-                x + 2 * tenthWidth, y + 9 * tenthHeight,
-                x + 2 * tenthWidth, y + 8 * tenthHeight, c, a);
-    }
+    IIcon textFileIcon = new IIcon()
+    {
+        @Override
+        public Quad[] getQuads(float x, float y, float w, float h)
+        {
+            float tenthWidth = w / 10, tenthHeight = h / 10;
+            return new Quad[]{
+                    new Quad(
+                            x + 5 * tenthWidth, y + 1 * tenthHeight,
+                            x + 5 * tenthWidth, y + 4 * tenthHeight,
+                            x + 2 * tenthWidth, y + 4 * tenthHeight,
+                            x + 2 * tenthWidth, y + 1 * tenthHeight),
+                    new Quad(
+                            x + 6 * tenthWidth, y + 1 * tenthHeight,
+                            x + 8 * tenthWidth, y + 3 * tenthHeight,
+                            x + 6 * tenthWidth, y + 3 * tenthHeight,
+                            x + 6 * tenthWidth, y + 3 * tenthHeight),
+                    new Quad(
+                            x + 8 * tenthWidth, y + 4 * tenthHeight,
+                            x + 8 * tenthWidth, y + 5 * tenthHeight,
+                            x + 2 * tenthWidth, y + 5 * tenthHeight,
+                            x + 2 * tenthWidth, y + 4 * tenthHeight),
+                    new Quad(
+                            x + 8 * tenthWidth, y + 5 * tenthHeight,
+                            x + 8 * tenthWidth, y + 6 * tenthHeight,
+                            x + 6 * tenthWidth, y + 6 * tenthHeight,
+                            x + 6 * tenthWidth, y + 5 * tenthHeight),
+                    new Quad(
+                            x + 3 * tenthWidth, y + 5 * tenthHeight,
+                            x + 3 * tenthWidth, y + 6 * tenthHeight,
+                            x + 2 * tenthWidth, y + 6 * tenthHeight,
+                            x + 2 * tenthWidth, y + 5 * tenthHeight),
+                    new Quad(
+                            x + 8 * tenthWidth, y + 6 * tenthHeight,
+                            x + 8 * tenthWidth, y + 7 * tenthHeight,
+                            x + 2 * tenthWidth, y + 7 * tenthHeight,
+                            x + 2 * tenthWidth, y + 6 * tenthHeight),
+                    new Quad(
+                            x + 8 * tenthWidth, y + 7 * tenthHeight,
+                            x + 8 * tenthWidth, y + 8 * tenthHeight,
+                            x + 7 * tenthWidth, y + 8 * tenthHeight,
+                            x + 7 * tenthWidth, y + 7 * tenthHeight),
+                    new Quad(
+                            x + 3 * tenthWidth, y + 7 * tenthHeight,
+                            x + 3 * tenthWidth, y + 8 * tenthHeight,
+                            x + 2 * tenthWidth, y + 8 * tenthHeight,
+                            x + 2 * tenthWidth, y + 7 * tenthHeight),
+                    new Quad(
+                            x + 8 * tenthWidth, y + 8 * tenthHeight,
+                            x + 8 * tenthWidth, y + 9 * tenthHeight,
+                            x + 2 * tenthWidth, y + 9 * tenthHeight,
+                            x + 2 * tenthWidth, y + 8 * tenthHeight)
+            };
+        }
+    };
 
     public static void drawVerticalGradient(float x, float y, float w, float h, Color topColor, float topAlpha, Color bottomColor, float bottomAlpha)
     {
-        drawCustomQuad(x, y, x + w, y, x + w, y + h, x, y + h, topColor, topAlpha, topColor, topAlpha, bottomColor, bottomAlpha, bottomColor, bottomAlpha);
+//        drawCustomQuad(x, y, x + w, y, x + w, y + h, x, y + h, topColor, topAlpha, topColor, topAlpha, bottomColor, bottomAlpha, bottomColor, bottomAlpha);
+        drawQuad(new Quad(
+                new Vector(x, y).setColor(topColor).setAlpha(topAlpha),
+                new Vector(x + w, y).setColor(topColor).setAlpha(topAlpha),
+                new Vector(x + w, y + h).setColor(bottomColor).setAlpha(bottomAlpha),
+                new Vector(x, y + h).setColor(bottomColor).setAlpha(bottomAlpha)
+        ));
+    }
+
+    public static void drawHorizontalGradient(float x, float y, float w, float h, Color leftColor, float leftAlpha, Color rightColor, float rightAlpha)
+    {
+//        drawCustomQuad(x, y, x + w, y, x + w, y + h, x, y + h, leftColor, leftAlpha, rightColor, rightAlpha, rightColor, rightAlpha, leftColor, leftAlpha);
+        drawQuad(new Quad(
+                new Vector(x, y).setColor(leftColor).setAlpha(leftAlpha),
+                new Vector(x + w, y).setColor(rightColor).setAlpha(rightAlpha),
+                new Vector(x + w, y + h).setColor(rightColor).setAlpha(rightAlpha),
+                new Vector(x, y + h).setColor(leftColor).setAlpha(leftAlpha)
+        ));
     }
 
     public static void drawButtonThingy(float x, float y, float w, float h, Color c1, float a1, Color c2, float a2)
     {
-        drawRect(x, y, w, h, c1, a1);
+        drawQuad(x, y, w, h, c1, a1);
         drawOutline(x, y, w, h, c2, a2);
     }
 
     public static void drawOutline(float x, float y, float w, float h, Color c, float a)
     {
-        drawRect(x, y, w, 1, c, a);
-        drawRect(x, y, 1, h, c, a);
-        drawRect(x + w - 1, y, 1, h, c, a);
-        drawRect(x, y + h - 1, w, 1, c, a);
-    }
-
-    public static void drawEditIcon(float x, float y, float width, float height, Color color, float alpha)
-    {
-//        drawOutline(x, y, width, height, color, alpha);
-
-//        drawRect(x, y, width, 1, color, alpha);
-//        drawRect(x, y + height - 1, width, 1, color, alpha);
-//
-//        drawRect(x, y, 1, height, color, alpha);
-//        drawRect(x + width - 1, y, 1, height, color, alpha);
-
-        float tenthWidth = width / 10, tenthHeight = height / 10;
-
-        drawCustomQuad(
-                x + 2 * tenthWidth, y + height - 4 * tenthHeight,
-                x + 4 * tenthWidth, y + height - 2 * tenthHeight,
-                x + tenthWidth, y + height - tenthHeight,
-                x + tenthWidth, y + height - tenthHeight,
-                color, alpha
-        );
-
-        drawCustomQuad(
-                x + 7 * tenthWidth, y + tenthHeight,
-                x + width - tenthWidth, y + 3 * tenthHeight,
-                x + 5 * tenthWidth, y + height - 3 * tenthHeight,
-                x + 3 * tenthWidth, y + height - 5 * tenthHeight,
-                color, alpha
-        );
-    }
-
-    public static void drawCheckMarkIcon(float x, float y, float width, float height, Color color, float alpha)
-    {
-//        drawRect(x, y, width, 1, color, alpha);
-//        drawRect(x, y + height - 1, width, 1, color, alpha);
-//
-//        drawRect(x, y, 1, height, color, alpha);
-//        drawRect(x + width - 1, y, 1, height, color, alpha);
-
-        float tenthWidth = width / 10, tenthHeight = height / 10;
-
-        drawCustomQuad(
-                x + 2 * tenthWidth, y + height - 5 * tenthHeight,
-                x + 4 * tenthWidth, y + height - 3 * tenthHeight,
-                x + 4 * tenthWidth, y + height - 1 * tenthHeight,
-                x + 1 * tenthWidth, y + height - 4 * tenthHeight,
-                color, alpha
-        );
-
-        drawCustomQuad(
-                x + 8 * tenthWidth, y + 1 * tenthHeight,
-                x + 9 * tenthWidth, y + 2 * tenthHeight,
-                x + 4 * tenthWidth, y + 9 * tenthHeight,
-                x + 3 * tenthWidth, y + 8 * tenthHeight,
-                color, alpha
-        );
-    }
-
-    public static void drawCross(float x, float y, float width, float height, Color color, float alpha)
-    {
-        float tenthWidth = width / 10, tenthHeight = height / 10;
-
-        drawCustomQuad(
-                x + 8 * tenthWidth, y + 1 * tenthHeight,
-                x + 9 * tenthWidth, y + 2 * tenthHeight,
-                x + 2 * tenthWidth, y + 9 * tenthHeight,
-                x + 1 * tenthWidth, y + 8 * tenthHeight,
-                color, alpha
-        );
-
-        drawCustomQuad(
-                x + 2 * tenthWidth, y + 1 * tenthHeight,
-                x + 9 * tenthWidth, y + 8 * tenthHeight,
-                x + 8 * tenthWidth, y + 9 * tenthHeight,
-                x + 1 * tenthWidth, y + 2 * tenthHeight,
-                color, alpha
-        );
-    }
-
-    public static void drawRect(float x, float y, float width, float height, Color color, float alpha)
-    {
-        glEnable(GL_BLEND);
-        glDisable(GL_TEXTURE_2D);
-        glDisable(GL_CULL_FACE);
-        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-        glColor4f(color.getRed(), color.getGreen(), color.getBlue(), alpha);
-
-        drawCustomQuad(x, y, x + width, y, x + width, y + height, x, y + height, color, alpha);
-
-        glEnable(GL_CULL_FACE);
-        glEnable(GL_TEXTURE_2D);
-        glDisable(GL_BLEND);
+        drawQuad(x, y, w, 1, c, a);
+        drawQuad(x, y, 1, h, c, a);
+        drawQuad(x + w - 1, y, 1, h, c, a);
+        drawQuad(x, y + h - 1, w, 1, c, a);
     }
 
     public static void drawTexturedRect(float x, float y, float width, float height, int u, int v, int u2, int v2, float alpha)
@@ -255,52 +254,24 @@ public class DrawingHelper
         glDisable(GL_BLEND);
     }
 
-    public static void drawPlayIcon(float x, float y, float width, float height, Color color, float alpha)
-    {
-        glEnable(GL_BLEND);
-        glDisable(GL_TEXTURE_2D);
-        glDisable(GL_CULL_FACE);
-        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-        glColor4f(color.getRed(), color.getGreen(), color.getBlue(), alpha);
-
-        drawCustomQuad(x, y, x + width, y + (height / 2), x + width, y + (height / 2), x, y + height, color, alpha);
-
-        glEnable(GL_CULL_FACE);
-        glEnable(GL_TEXTURE_2D);
-        glDisable(GL_BLEND);
-    }
-
-    public static void drawPauseIcon(float xPos, float yPos, float width, float height, Color color, float alpha)
-    {
-        drawRect(xPos, yPos, width / 3, height, color, alpha);
-        drawRect(xPos + ((width / 3) * 2), yPos, width / 3, height, color, alpha);
-    }
-
-    public static void drawCustomQuad(float v1PosX, float v1PosY, float v2PosX, float v2PosY, float v3PosX, float v3PosY, float v4PosX, float v4PosY, Color c1, float a1, Color c2, float a2, Color c3, float a3, Color c4, float a4)
+    public static void drawQuad(Quad quad)
     {
         glEnable(GL_BLEND);
         glDisable(GL_TEXTURE_2D);
         glDisable(GL_CULL_FACE);
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
         glShadeModel(7425);
-//        GlStateManager.disableTexture2D();
-//        GlStateManager.enableBlend();
-//        GlStateManager.disableAlpha();
-//        GlStateManager.tryBlendFuncSeparate(770, 771, 1, 0);
-//        GlStateManager.shadeModel(7425);
 
         Tessellator tessellator = Tessellator.getInstance();
         tessellator.getWorldRenderer().startDrawingQuads();
 
-//        glColor4f(c1.getRed(), c1.getGreen(), c1.getBlue(), a1);
-        tessellator.getWorldRenderer().setColorRGBA_F(c1.getRed(), c1.getGreen(), c1.getBlue(), a1);
-        tessellator.getWorldRenderer().addVertex(v1PosX, v1PosY, 0);
-        tessellator.getWorldRenderer().setColorRGBA_F(c2.getRed(), c2.getGreen(), c2.getBlue(), a2);
-        tessellator.getWorldRenderer().addVertex(v2PosX, v2PosY, 0);
-        tessellator.getWorldRenderer().setColorRGBA_F(c3.getRed(), c3.getGreen(), c3.getBlue(), a3);
-        tessellator.getWorldRenderer().addVertex(v3PosX, v3PosY, 0);
-        tessellator.getWorldRenderer().setColorRGBA_F(c4.getRed(), c4.getGreen(), c4.getBlue(), a4);
-        tessellator.getWorldRenderer().addVertex(v4PosX, v4PosY, 0);
+        Vector[] vectors = quad.getVectors();
+
+        for (Vector vector : vectors)
+        {
+            tessellator.getWorldRenderer().setColorRGBA_F(vector.getColor().getRed(), vector.getColor().getGreen(), vector.getColor().getBlue(), vector.getAlpha());
+            tessellator.getWorldRenderer().addVertex(vector.getX(), vector.getY(), 0);
+        }
 
         tessellator.draw();
         glShadeModel(7424);
@@ -310,8 +281,8 @@ public class DrawingHelper
         glDisable(GL_BLEND);
     }
 
-    public static void drawCustomQuad(float v1PosX, float v1PosY, float v2PosX, float v2PosY, float v3PosX, float v3PosY, float v4PosX, float v4PosY, Color color, float alpha)
+    public static void drawQuad(float x, float y, float width, float height, Color color, float alpha)
     {
-        drawCustomQuad(v1PosX, v1PosY, v2PosX, v2PosY, v3PosX, v3PosY, v4PosX, v4PosY, color, alpha, color, alpha, color, alpha, color, alpha);
+        drawQuad(new Quad(x, y, width, height).setColor(color).setAlpha(alpha));
     }
 }
