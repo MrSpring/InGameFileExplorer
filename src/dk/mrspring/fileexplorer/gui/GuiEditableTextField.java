@@ -1,6 +1,5 @@
 package dk.mrspring.fileexplorer.gui;
 
-import dk.mrspring.fileexplorer.gui.helper.Color;
 import dk.mrspring.fileexplorer.gui.helper.DrawingHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
@@ -89,14 +88,14 @@ public class GuiEditableTextField implements IGui
             this.saveButton.draw(minecraft, mouseX, mouseY);
             this.cancelButton.draw(minecraft, mouseX, mouseY);
 
-            DrawingHelper.drawCheckMarkIcon(x + 1, y + 1, buttonSize - 2, buttonSize - 2, Color.WHITE, 1F);
-            DrawingHelper.drawCross(x + 1 + buttonSize + spacing, y + 1, buttonSize - 2, buttonSize - 2, Color.WHITE, 1F);
+            DrawingHelper.drawIcon(DrawingHelper.checkMarkIcon, x + 1, y + 1, buttonSize - 2, buttonSize - 2);
+            DrawingHelper.drawIcon(DrawingHelper.crossIcon, x + 1 + buttonSize + spacing, y + 1, buttonSize - 2, buttonSize - 2);
 
         } else
         {
             this.editButton.draw(minecraft, mouseX, mouseY);
 
-            DrawingHelper.drawEditIcon(x + 1 + buttonSize + spacing, y + 1, buttonSize - 2, buttonSize - 2, Color.WHITE, 1F);
+            DrawingHelper.drawIcon(DrawingHelper.editIcon, x + 1 + buttonSize + spacing, y + 1, buttonSize - 2, buttonSize - 2);
 
             minecraft.fontRendererObj.drawStringWithShadow(value, x + ((buttonSize + 2) * 2) + 5, y + (buttonSize / 2) - 5, 0xFFFFFF);
         }

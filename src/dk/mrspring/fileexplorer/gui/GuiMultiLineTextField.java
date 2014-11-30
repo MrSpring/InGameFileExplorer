@@ -79,7 +79,7 @@ public class GuiMultiLineTextField implements IGui
         }
 
 //        minecraft.fontRendererObj.drawStringWithShadow("|", cursorPosX, cursorPosY, 0xAFAFAF);
-        DrawingHelper.drawRect(cursorPosX, cursorPosY-1, 1, 9, Color.LTGREY, 1F);
+        DrawingHelper.drawQuad(cursorPosX, cursorPosY-1, 1, 9, Color.LTGREY, 1F);
 
         this.lastWidth = maxTextX + 10 - x;
         this.lastHeight = textY + 10 - y;

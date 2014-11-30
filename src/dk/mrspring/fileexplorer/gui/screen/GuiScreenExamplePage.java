@@ -13,6 +13,7 @@ public class GuiScreenExamplePage extends GuiScreen
     private String tFieldID = "text_field";
     private String checkBID = "check_box";
     private String cFieldID = "custom_text_field";
+    private String   fileID = "file";
 
     public GuiScreenExamplePage(net.minecraft.client.gui.GuiScreen currentScreen)
     {
@@ -30,6 +31,7 @@ public class GuiScreenExamplePage extends GuiScreen
         this.addGuiElement(tFieldID, new GuiEditableTextField(60 + 75 + 10, 10, 240, 20, "This is Edible!", mc.fontRendererObj));
         this.addGuiElement(checkBID, new GuiCheckbox(10, 10 + 40 + 10, 10, 10, false));
         this.addGuiElement(cFieldID, new GuiCustomTextField(10, 10 + 60 + 10, 200, 15).setText("Text!"));
+        this.addGuiElement  (fileID, new GuiFile(10,100,100,100,"C:\\Users\\Konrad\\Pictures\\TITANFALL.png", GuiFile.RenderType.SQUARE_GRID));
 
         this.setSubtitle("gui.screen.example_page.description");
     }

@@ -86,7 +86,7 @@ public class GuiCustomTextField implements IGui
     private void drawEditThingy(Minecraft mc)
     {
         if (editCount < maxEditCount / 2)
-            DrawingHelper.drawRect((editX + x + 5) - 0.5F, editY + y + 2.5F, 1, 10, Color.LTGREY, 1F);
+            DrawingHelper.drawQuad((editX + x + 5) - 0.5F, editY + y + 2.5F, 1, 10, Color.LTGREY, 1F);
     }
 
     private void recalculateEditRenderPosition(Minecraft mc)

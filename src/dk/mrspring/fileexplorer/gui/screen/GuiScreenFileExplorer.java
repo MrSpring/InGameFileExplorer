@@ -20,6 +20,7 @@ import java.util.List;
  */
 public class GuiScreenFileExplorer extends GuiScreen
 {
+/*
     GuiFileExplorer explorer;
     //    GuiSimpleButton reload;
     GuiMultiLineTextField textEditor;
@@ -138,7 +139,9 @@ public class GuiScreenFileExplorer extends GuiScreen
         //if (reload.mouseDown(mouseX, mouseY, mouseButton))
 //            explorer = new GuiFileExplorer("C:\\Users\\Konrad\\Documents\\Minecraftig");
             //createNewFileExplorer = true;
-        /*else*/ if (textEditor != null && saveOpenFile.mouseDown(mouseX, mouseY, mouseButton))
+        */
+/*else*//*
+ if (textEditor != null && saveOpenFile.mouseDown(mouseX, mouseY, mouseButton))
             explorer.saveTextFile(textEditor.getText(), openFile);
         else if (closeOpenFile.mouseDown(mouseX, mouseY, mouseButton))
             closeOpenFile();
@@ -380,5 +383,6 @@ public class GuiScreenFileExplorer extends GuiScreen
 
         }
     }
+*/
 
 }

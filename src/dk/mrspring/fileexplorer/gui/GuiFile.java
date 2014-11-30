@@ -12,6 +12,118 @@ import java.io.File;
 public class GuiFile implements IGui
 {
     int x, y, w, h;
+    String filePath;
+    GuiSimpleButton button;
+    RenderType renderType;
+
+    public GuiFile(int xPos, int yPos, int width, int height, String path, RenderType renderType)
+    {
+        this.x = xPos;
+        this.y = yPos;
+        this.w = width;
+        this.h = height;
+        this.filePath = path;
+        button = new GuiSimpleButton(x, y, w, h, "");
+        this.renderType = renderType;
+    }
+
+    public GuiFile(int xPos, int yPos, int width, int height, File path, RenderType type)
+    {
+        this(xPos, yPos, width, height, path.getPath(), type);
+    }
+
+    public EnumFileType getFileType()
+    {
+        if (filePath != null)
+        {
+            int lastDot = filePath.lastIndexOf('.');
+            String extension = filePath.substring(lastDot);
+            return EnumFileType.getFileTypeFor(extension);
+        } else return EnumFileType.UNKNOWN;
+    }
+
+    public RenderType getRenderType()
+    {
+        return renderType;
+    }
+
+    public void setRenderType(RenderType renderType)
+    {
+        this.renderType = renderType;
+    }
+
+    public File getFile()
+    {
+        return new File(filePath);
+    }
+
+    public String getShortFileName()
+    {
+        int lastFileSeperator=this.filePath.lastIndexOf('\\')+1;
+        return this.filePath.substring(lastFileSeperator);
+    }
+
+    private void renderSquare(Minecraft minecraft)
+    {
+        float nameHeight = 30;
+        float iconSize = Math.min(w, h - nameHeight);
+        DrawingHelper.drawIcon(this.getFileType().getIcon(), x - ((iconSize - w) / 2), y, iconSize, iconSize);
+        DrawingHelper.drawQuad(x, y + iconSize, w, 1, Color.WHITE, 1F);
+        minecraft.fontRendererObj.drawString(this.getShortFileName(), x + 4, y + iconSize + (nameHeight/2)-4, 0xFFFFFF, true);
+    }
+
+    @Override
+    public void draw(Minecraft minecraft, int mouseX, int mouseY)
+    {
+        //DrawingHelper.drawButtonThingy(x, y, w, h, Color.BLACK, 0.25F, Color.WHITE, 1F);
+        button.draw(minecraft, mouseX, mouseY);
+
+        switch (this.getRenderType())
+        {
+            case SQUARE_GRID:
+                renderSquare(minecraft);
+                break;
+        }
+    }
+
+    @Override
+    public void update()
+    {
+        button.update();
+    }
+
+    @Override
+    public boolean mouseDown(int mouseX, int mouseY, int mouseButton)
+    {
+        return this.button.mouseDown(mouseX, mouseY, mouseButton);
+    }
+
+    @Override
+    public void mouseUp(int mouseX, int mouseY, int mouseButton)
+    {
+
+    }
+
+    @Override
+    public void mouseClickMove(int mouseX, int mouseY, int mouseButton, long timeSinceClick)
+    {
+
+    }
+
+    @Override
+    public void handleKeyTyped(int keyCode, char character)
+    {
+
+    }
+
+    public enum RenderType
+    {
+        LIST,
+        SQUARE_GRID,
+        LONG_GRID
+    }
+/*
+    int x, y, w, h;
     File file;
     GuiSimpleButton button;
     FileType type;
@@ -159,4 +271,5 @@ public class GuiFile implements IGui
         TEXT_FILE,
         IMAGE
     }
+*/
 }

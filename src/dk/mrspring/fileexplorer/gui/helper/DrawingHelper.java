@@ -9,7 +9,7 @@ import static org.lwjgl.opengl.GL11.*;
  */
 public class DrawingHelper
 {
-    IIcon crossIcon=new IIcon()
+    public static IIcon crossIcon = new IIcon()
     {
         @Override
         public Quad[] getQuads(float x, float y, float w, float h)
@@ -29,7 +29,7 @@ public class DrawingHelper
             };
         }
     };
-    IIcon checkMarkIcon=new IIcon()
+    public static IIcon checkMarkIcon = new IIcon()
     {
         @Override
         public Quad[] getQuads(float x, float y, float w, float h)
@@ -49,7 +49,7 @@ public class DrawingHelper
             };
         }
     };
-    IIcon editIcon = new IIcon()
+    public static IIcon editIcon = new IIcon()
     {
         @Override
         public Quad[] getQuads(float x, float y, float w, float h)
@@ -71,38 +71,64 @@ public class DrawingHelper
             };
         }
     };
-    IIcon playIcon = new IIcon()
-    {
-        @Override
-        public Quad[] getQuads(float x, float y, float w, float h)
-        {
-            return new Quad[]{new Quad(x, y, x + w, y + (h / 2), x + w, y + (h / w), x, y + h)};
-        }
-    };
-
-    IIcon pauseIcon = new IIcon()
-    {
-        @Override
-        public Quad[] getQuads(float x, float y, float w, float h)
-        {
-            return new Quad[]{
-                    new Quad(x, y, x + w / 3, y, x + w / 3, y + h, x, y + h),
-                    new Quad(x + (2 * (w / 3)), y, x + w, y, x + w, y + h, x + (2 * (w / 3)), y + h)
-            };
-        }
-    };
-
-    IIcon imageIcon = new IIcon()
+    public static IIcon playIcon = new IIcon()
     {
         @Override
         public Quad[] getQuads(float x, float y, float w, float h)
         {
             float tenthWidth = w / 10, tenthHeight = h / 10;
-            return new Quad[]{new Quad(x + 3 * tenthWidth, y + (5 * tenthHeight), x + (6 * tenthWidth), y + (9 * tenthHeight), x + tenthWidth, y + (9 * tenthHeight), x + tenthWidth, y + (8 * tenthHeight))};
+            return new Quad[]{new Quad(
+                    x + tenthWidth, y + tenthHeight,
+                    x + 9 * tenthWidth, y + (h / 2),
+                    x + 9 * tenthWidth, y + (h / 2),
+                    x + tenthWidth, y + 9 * tenthHeight)
+            };
         }
     };
 
-    IIcon folderIcon = new IIcon()
+    public static IIcon pauseIcon = new IIcon()
+    {
+        @Override
+        public Quad[] getQuads(float x, float y, float w, float h)
+        {
+            float tenthWidth = w / 10, tenthHeight = h / 10;
+            return new Quad[]{
+                    new Quad(
+                            x + tenthWidth, y + tenthHeight,
+                            x + 4 * tenthWidth, y + tenthHeight,
+                            x + 4 * tenthWidth, y + h - tenthHeight,
+                            x + tenthWidth, y + h - tenthHeight),
+                    new Quad(
+                            x + 6 * tenthWidth, y + tenthHeight,
+                            x + 9 * tenthWidth, y + tenthHeight,
+                            x + 9 * tenthWidth, y + 9 * tenthHeight,
+                            x + 6 * tenthWidth, y + 9 * tenthHeight)
+            };
+        }
+    };
+
+    public static IIcon imageIcon = new IIcon()
+    {
+        @Override
+        public Quad[] getQuads(float x, float y, float w, float h)
+        {
+            float tenthWidth = w / 10, tenthHeight = h / 10;
+            return new Quad[]{
+                    new Quad(
+                            x + 3 * tenthWidth, y + 5 * tenthHeight,
+                            x + 6 * tenthWidth, y + 9 * tenthHeight,
+                            x + tenthWidth, y + 9 * tenthHeight,
+                            x + tenthWidth, y + 8 * tenthHeight),
+                    new Quad(
+                            x + 7 * tenthWidth, y + 4 * tenthHeight,
+                            x + 9 * tenthWidth, y + 6 * tenthHeight,
+                            x + 9 * tenthWidth, y + 9 * tenthHeight,
+                            x + 2 * tenthWidth, y + 9 * tenthHeight
+                    )};
+        }
+    };
+
+    public static IIcon folderIcon = new IIcon()
     {
         @Override
         public Quad[] getQuads(float x, float y, float w, float h)
@@ -138,7 +164,7 @@ public class DrawingHelper
         }
     };
 
-    IIcon textFileIcon = new IIcon()
+    public static IIcon textFileIcon = new IIcon()
     {
         @Override
         public Quad[] getQuads(float x, float y, float w, float h)
@@ -252,6 +278,13 @@ public class DrawingHelper
         tessellator.draw();
 
         glDisable(GL_BLEND);
+    }
+
+    public static void drawIcon(IIcon icon, float x, float y, float w, float h)
+    {
+        Quad[] quads = icon.getQuads(x, y, w, h);
+        for (Quad quad : quads)
+            drawQuad(quad);
     }
 
     public static void drawQuad(Quad quad)

@@ -43,7 +43,7 @@ public class GuiSimpleButton implements IGui
     {
 //        DrawingHelper.drawButtonThingy(x, y, width, height, Color.BLACK, 0.25F, Color.WHITE, 1F);
         if (this.drawBackground)
-            DrawingHelper.drawRect(x, y, width, height, Color.BLACK, 0.25F);
+            DrawingHelper.drawQuad(x, y, width, height, Color.BLACK, 0.25F);
         DrawingHelper.drawOutline(x, y, width, height, Color.WHITE, 1F);
         wasMouseHoveringLastFrame = GuiHelper.isMouseInBounds(mouseX, mouseY, this.x, this.y, this.width, this.height);
         if (wasMouseHoveringLastFrame)

@@ -1,6 +1,5 @@
 package dk.mrspring.fileexplorer.gui;
 
-import dk.mrspring.fileexplorer.gui.helper.Color;
 import dk.mrspring.fileexplorer.gui.helper.DrawingHelper;
 import net.minecraft.client.Minecraft;
 
@@ -30,7 +29,7 @@ public class GuiCheckbox implements IGui
     {
         button.draw(minecraft, mouseX, mouseY);
         if (isChecked())
-            DrawingHelper.drawCheckMarkIcon(x + 1, y + 1, w - 2, h - 2, Color.WHITE, 1F);
+            DrawingHelper.drawIcon(DrawingHelper.checkMarkIcon, x + 1, y + 1, w - 2, h - 2);
     }
 
     @Override
@@ -46,7 +45,7 @@ public class GuiCheckbox implements IGui
         {
             this.toggleChecked();
             return true;
-        }else return false;
+        } else return false;
     }
 
     public boolean isChecked()
@@ -56,7 +55,7 @@ public class GuiCheckbox implements IGui
 
     public void toggleChecked()
     {
-        this.checked=!checked;
+        this.checked = !checked;
     }
 
     @Override
