@@ -15,6 +15,7 @@ public class GuiFile implements IGui
     String filePath;
     GuiSimpleButton button;
     RenderType renderType;
+    long timeAtLastClick = 0;
 
     public GuiFile(int xPos, int yPos, int width, int height, String path, RenderType renderType)
     {
@@ -59,7 +60,7 @@ public class GuiFile implements IGui
 
     public String getShortFileName()
     {
-        int lastFileSeperator=this.filePath.lastIndexOf('\\')+1;
+        int lastFileSeperator = this.filePath.lastIndexOf('\\') + 1;
         return this.filePath.substring(lastFileSeperator);
     }
 
@@ -69,7 +70,7 @@ public class GuiFile implements IGui
         float iconSize = Math.min(w, h - nameHeight);
         DrawingHelper.drawIcon(this.getFileType().getIcon(), x - ((iconSize - w) / 2), y, iconSize, iconSize);
         DrawingHelper.drawQuad(x, y + iconSize, w, 1, Color.WHITE, 1F);
-        minecraft.fontRendererObj.drawString(this.getShortFileName(), x + 4, y + iconSize + (nameHeight/2)-4, 0xFFFFFF, true);
+        minecraft.fontRendererObj.drawString(this.getShortFileName(), x + 4, y + iconSize + (nameHeight / 2) - 4, 0xFFFFFF, true);
     }
 
     @Override
@@ -95,7 +96,20 @@ public class GuiFile implements IGui
     @Override
     public boolean mouseDown(int mouseX, int mouseY, int mouseButton)
     {
-        return this.button.mouseDown(mouseX, mouseY, mouseButton);
+        if (this.button.mouseDown(mouseX, mouseY, mouseButton))
+        {
+            long systemTime = System.currentTimeMillis();
+            System.out.println(systemTime + ", " + timeAtLastClick + ", " + (systemTime - timeAtLastClick));
+            if (systemTime - timeAtLastClick < 250)
+                this.button.makeHighlighted();
+            else this.button.stopBeingHighlighted();
+            this.timeAtLastClick = System.currentTimeMillis();
+            return true;
+        } else
+        {
+            this.button.stopBeingHighlighted();
+            return false;
+        }
     }
 
     @Override
