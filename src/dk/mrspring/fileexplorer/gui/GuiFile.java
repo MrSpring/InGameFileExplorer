@@ -36,6 +36,7 @@ public class GuiFile implements IGui
         this.y = yPos;
         this.w = width;
         this.h = height;
+
         this.filePath = path;
         button = new GuiSimpleButton(x, y, w, h, "");
         this.renderType = renderType;
@@ -106,13 +107,48 @@ public class GuiFile implements IGui
         DrawingHelper.drawIcon(this.getFileType().getIcon(), x - ((iconSize - w) / 2), y, iconSize, iconSize);
 
         DrawingHelper.drawQuad(x, y + h - nameHeight, w, 1, Color.WHITE, 1F);
-        DrawingHelper.drawQuad(x, y + h - nameHeight-1, w, 1, Color.LTGREY, 1F);
+        DrawingHelper.drawQuad(x, y + h - nameHeight - 1, w, 1, Color.LTGREY, 1F);
         if (wrapName())
         {
-            minecraft.fontRendererObj.drawSplitString(this.getShortFileName(), x + 5, nameY+1, w - 8, 0x4C4C4C);
+            minecraft.fontRendererObj.drawSplitString(this.getShortFileName(), x + 5, nameY + 1, w - 8, 0x4C4C4C);
             minecraft.fontRendererObj.drawSplitString(this.getShortFileName(), x + 4, nameY, w - 8, 0xFFFFFF);
+        } else minecraft.fontRendererObj.drawString(this.getShortFileName(), x + 4, nameY, 0xFFFFFF, true);
+    }
+
+    private void renderBigList(Minecraft minecraft)
+    {
+        float height = h;
+        float minimumHeightFor2Lines = 20;
+
+        float iconSize = height;
+
+        int nameWidth = minecraft.fontRendererObj.getStringWidth(this.getShortFileName());
+        int nameY = y + h / 2 - 4;
+
+        int maxNameWidth = w - (int) iconSize - 6;
+
+        if (nameWidth > maxNameWidth)
+        {
+            if (height < minimumHeightFor2Lines)
+                height = minimumHeightFor2Lines;
+
+            nameY -= 4;
+            button.setHeight((int) height);
         }
-        else minecraft.fontRendererObj.drawString(this.getShortFileName(), x + 4, nameY, 0xFFFFFF,true);
+
+        iconSize = height;
+
+        DrawingHelper.drawQuad(x + iconSize - 1, y, 1, height, Color.LTGREY, 1F);
+        DrawingHelper.drawQuad(x + iconSize, y, 1, height, Color.WHITE, 1F);
+
+        DrawingHelper.drawIcon(this.getFileType().getIcon(), x + 1, y + 1, iconSize - 2, iconSize - 2);
+
+        minecraft.fontRendererObj.drawSplitString(this.getShortFileName(), x + (int) iconSize + 3, nameY, w - (int) iconSize - 6, 0xFFFFFF);
+    }
+
+    private void renderList(Minecraft minecraft)
+    {
+        minecraft.fontRendererObj.drawString(this.getShortFileName(), x + 3, y + (h / 2) - 4, 0xFFFFFF, true);
     }
 
     @Override
@@ -121,10 +157,17 @@ public class GuiFile implements IGui
         //DrawingHelper.drawButtonThingy(x, y, w, h, Color.BLACK, 0.25F, Color.WHITE, 1F);
         button.draw(minecraft, mouseX, mouseY);
 
-        switch (this.getRenderType())
+        RenderType type = this.getRenderType();
+        switch (type)
         {
             case SQUARE_GRID:
                 renderSquare(minecraft);
+                break;
+            case LONG_GRID:
+                renderBigList(minecraft);
+                break;
+            case LIST:
+                renderList(minecraft);
                 break;
         }
     }
