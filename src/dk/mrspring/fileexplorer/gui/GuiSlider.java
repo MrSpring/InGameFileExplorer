@@ -274,9 +274,12 @@ public class GuiSlider implements IGui, IDelayedDraw
             @Override
             public void draw(Minecraft minecraft, int mouseX, int mouseY)
             {
-                List<String> lines = new ArrayList<String>();
-                lines.add(String.valueOf(GuiSlider.this.getValue()) + "%");
-                GuiSlider.this.drawHoveringText(lines, mouseX, mouseY, minecraft.fontRendererObj);
+                if (GuiSlider.this.dragging)
+                {
+                    List<String> lines = new ArrayList<String>();
+                    lines.add(String.valueOf(GuiSlider.this.getValue()) + "%");
+                    GuiSlider.this.drawHoveringText(lines, mouseX, mouseY, minecraft.fontRendererObj);
+                }
             }
         };
     }
