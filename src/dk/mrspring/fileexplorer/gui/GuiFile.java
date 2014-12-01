@@ -2,9 +2,13 @@ package dk.mrspring.fileexplorer.gui;
 
 import dk.mrspring.fileexplorer.gui.helper.Color;
 import dk.mrspring.fileexplorer.gui.helper.DrawingHelper;
+import dk.mrspring.fileexplorer.gui.helper.IIcon;
+import dk.mrspring.fileexplorer.gui.helper.Quad;
 import net.minecraft.client.Minecraft;
 
 import java.io.File;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * Created by MrSpring on 09-11-2014 for In-Game File Explorer.
@@ -16,6 +20,15 @@ public class GuiFile implements IGui
     GuiSimpleButton button;
     RenderType renderType;
     long timeAtLastClick = 0;
+    private Runnable onFileOpened = new Runnable()
+    {
+        @Override
+        public void run()
+        {
+
+        }
+    };
+    boolean wrapName = true;
 
     public GuiFile(int xPos, int yPos, int width, int height, String path, RenderType renderType)
     {
@@ -31,6 +44,11 @@ public class GuiFile implements IGui
     public GuiFile(int xPos, int yPos, int width, int height, File path, RenderType type)
     {
         this(xPos, yPos, width, height, path.getPath(), type);
+    }
+
+    public void setOnFileOpened(Runnable onFileOpened)
+    {
+        this.onFileOpened = onFileOpened;
     }
 
     public EnumFileType getFileType()
@@ -64,13 +82,37 @@ public class GuiFile implements IGui
         return this.filePath.substring(lastFileSeperator);
     }
 
+    public void setWrapName(boolean wrapName)
+    {
+        this.wrapName = wrapName;
+    }
+
+    public boolean wrapName()
+    {
+        return wrapName;
+    }
+
     private void renderSquare(Minecraft minecraft)
     {
-        float nameHeight = 30;
+        int nameHeight = 16;
+        int nameWidth = minecraft.fontRendererObj.getStringWidth(this.getShortFileName());
         float iconSize = Math.min(w, h - nameHeight);
+        int nameY = y + h - nameHeight + (nameHeight / 2) - 4;
+        if (nameWidth > w - 8 && wrapName())
+        {
+            nameHeight += 9;
+            nameY -= 9;
+        }
         DrawingHelper.drawIcon(this.getFileType().getIcon(), x - ((iconSize - w) / 2), y, iconSize, iconSize);
-        DrawingHelper.drawQuad(x, y + iconSize, w, 1, Color.WHITE, 1F);
-        minecraft.fontRendererObj.drawString(this.getShortFileName(), x + 4, y + iconSize + (nameHeight / 2) - 4, 0xFFFFFF, true);
+
+        DrawingHelper.drawQuad(x, y + h - nameHeight, w, 1, Color.WHITE, 1F);
+        DrawingHelper.drawQuad(x, y + h - nameHeight-1, w, 1, Color.LTGREY, 1F);
+        if (wrapName())
+        {
+            minecraft.fontRendererObj.drawSplitString(this.getShortFileName(), x + 5, nameY+1, w - 8, 0x4C4C4C);
+            minecraft.fontRendererObj.drawSplitString(this.getShortFileName(), x + 4, nameY, w - 8, 0xFFFFFF);
+        }
+        else minecraft.fontRendererObj.drawString(this.getShortFileName(), x + 4, nameY, 0xFFFFFF,true);
     }
 
     @Override
@@ -101,8 +143,10 @@ public class GuiFile implements IGui
             long systemTime = System.currentTimeMillis();
             System.out.println(systemTime + ", " + timeAtLastClick + ", " + (systemTime - timeAtLastClick));
             if (systemTime - timeAtLastClick < 250)
+            {
                 this.button.makeHighlighted();
-            else this.button.stopBeingHighlighted();
+                this.onFileOpened.run();
+            } else this.button.stopBeingHighlighted();
             this.timeAtLastClick = System.currentTimeMillis();
             return true;
         } else
@@ -136,154 +180,49 @@ public class GuiFile implements IGui
         SQUARE_GRID,
         LONG_GRID
     }
-/*
-    int x, y, w, h;
-    File file;
-    GuiSimpleButton button;
-    FileType type;
 
-    public GuiFile(int xPos, int yPos, int width, int height, File file)
+    public enum EnumFileType
     {
-        this.x = xPos;
-        this.y = yPos;
-
-        this.w = width;
-        this.h = height;
-
-        this.file = file;
-        button = new GuiSimpleButton(x, y, width, height, "");
-
-        if (file.isDirectory())
-            type = FileType.FOLDER;
-        else
+        UNKNOWN(new IIcon()
         {
-            int lastDot = file.toURI().toASCIIString().lastIndexOf(".");
-            if (lastDot > 0)
+            @Override
+            public Quad[] getQuads(float x, float y, float w, float h)
             {
-                String extension = file.toURI().toASCIIString().substring(lastDot);
+                return new Quad[]{new Quad(x, y, w, h)};
+            }
+        }),
+        FOLDER(DrawingHelper.folderIcon),
+        TEXT_FILE(DrawingHelper.textFileIcon, ".txt"),
+        IMAGE(DrawingHelper.imageIcon, ".png", ".jpg", ".jpeg");
 
-                if (extension.equalsIgnoreCase(".txt"))
-                    type = FileType.TEXT_FILE;
-                else if (extension.equalsIgnoreCase(".png") || extension.equalsIgnoreCase(".jpg") || extension.equalsIgnoreCase(".jpeg"))
-                    type = FileType.IMAGE;
-                else type = FileType.UNKNOWN;
-            } else type = FileType.UNKNOWN;
-        }
-    }
-
-    public void setY(int y)
-    {
-        this.y = y;
-    }
-
-    public void setHightlighted()
-    {
-        this.button.makeHighlighted();
-    }
-
-    public void stopBeingHighlighted()
-    {
-        this.button.stopBeingHighlighted();
-    }
-
-    public boolean isHighlighted()
-    {
-        return this.button.isHighlighted();
-    }
-
-    @Override
-    public void draw(Minecraft minecraft, int mouseX, int mouseY)
-    {
-        button.draw(minecraft, mouseX, mouseY);
-        float size = this.h;
-        DrawingHelper.drawOutline(x, y, size, size, Color.WHITE, 1F);
-        switch (type)
+        private EnumFileType(IIcon icon, String... fileTypes)
         {
-            case FOLDER:
-                DrawingHelper.drawFolderIcon(x + 1, y + 1, size - 2, size - 2, Color.WHITE, 1F);
-                break;
-            case TEXT_FILE:
-                DrawingHelper.drawTextFileIcon(x + 1, y + 1, size - 2, size - 2, Color.WHITE, 1F);
-                break;
-            case UNKNOWN:
-                //DrawingHelper.drawRect(x + 2, y + 2, size - 4, size - 4, Color.WHITE, 1F);
-                minecraft.fontRendererObj.drawStringWithShadow("?", x + (size / 2) - 2, y + (size / 2) - 4, 0xFFFFFF);
-                break;
-            case IMAGE:
-                //minecraft.fontRendererObj.drawStringWithShadow("M", x + (size / 2) - 2, y + (size / 2) - 4, 0xFFFFFF);
-                DrawingHelper.drawImageIcon(x + 1, y + 1, size - 2, size - 2, Color.WHITE, 1F);
-                break;
+            if (fileTypes == null)
+                fileTypes = new String[]{""};
+
+            this.extensions = fileTypes;
+            this.icon = icon;
         }
-        String fileName = file.getName();
 
-        int textY = y + (h / 2) - 4;
-        int maxTextWidth=w - (int) size - 4;
+        final String[] extensions;
+        final IIcon icon;
 
-        if (minecraft.fontRendererObj.getStringWidth(fileName) > maxTextWidth)
-            textY -= 4;
+        public List<String> getExtensions()
+        {
+            return Arrays.asList(this.extensions);
+        }
 
-        minecraft.fontRendererObj.drawSplitString(file.getName(), x + (int) size + 3+1, textY+1, maxTextWidth, 0x4C4C4C);
-        minecraft.fontRendererObj.drawSplitString(file.getName(), x + (int) size + 3, textY, maxTextWidth, 0xFFFFFF);
+        public IIcon getIcon()
+        {
+            return icon;
+        }
+
+        public static EnumFileType getFileTypeFor(String extension)
+        {
+            for (EnumFileType type : values())
+                if (type.getExtensions().contains(extension))
+                    return type;
+            return UNKNOWN;
+        }
     }
-
-    public boolean isDirectory()
-    {
-        return this.file.isDirectory();
-    }
-
-    public boolean isTextFile()
-    {
-        return this.type == FileType.TEXT_FILE;
-    }
-
-    public boolean isImage()
-    {
-        return this.type == FileType.IMAGE;
-    }
-
-    public String getPath()
-    {
-        return this.file.getPath();
-    }
-
-    @Override
-    public void update()
-    {
-        button.setY(y);
-        button.setX(x);
-        button.update();
-    }
-
-    @Override
-    public boolean mouseDown(int mouseX, int mouseY, int mouseButton)
-    {
-        return button.mouseDown(mouseX, mouseY, mouseButton);
-    }
-
-    @Override
-    public void mouseUp(int mouseX, int mouseY, int mouseButton)
-    {
-
-    }
-
-    @Override
-    public void mouseClickMove(int mouseX, int mouseY, int mouseButton, long timeSinceClick)
-    {
-
-    }
-
-    @Override
-    public void handleKeyTyped(int keyCode, char character)
-    {
-
-    }
-
-    private enum FileType
-    {
-        UNKNOWN,
-        FOLDER,
-        TEXT_FILE,
-        IMAGE
-    }
-*/
 }

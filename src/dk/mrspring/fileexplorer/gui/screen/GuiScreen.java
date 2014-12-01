@@ -1,6 +1,8 @@
 package dk.mrspring.fileexplorer.gui.screen;
 
+import dk.mrspring.fileexplorer.gui.Drawable;
 import dk.mrspring.fileexplorer.gui.GuiSimpleButton;
+import dk.mrspring.fileexplorer.gui.IDelayedDraw;
 import dk.mrspring.fileexplorer.gui.IGui;
 import dk.mrspring.fileexplorer.gui.helper.Color;
 import dk.mrspring.fileexplorer.gui.helper.DrawingHelper;
@@ -8,7 +10,9 @@ import net.minecraft.util.StatCollector;
 import org.lwjgl.opengl.GL11;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -107,6 +111,8 @@ public class GuiScreen extends net.minecraft.client.gui.GuiScreen
         } else if (this.drawCenteredTitle)
             this.drawCenteredTitle();
 
+        List<Drawable> drawables = new ArrayList<Drawable>();
+
         for (Map.Entry<String, IGui> entry : guiHashMap.entrySet())
         {
             String identifier = entry.getKey();
@@ -118,8 +124,16 @@ public class GuiScreen extends net.minecraft.client.gui.GuiScreen
                 ((GuiSimpleButton) element).setX((barHeight / 2) - 10);
                 element.draw(mc, mouseX, actualMouseY);
             } else if (this.drawGui(identifier, element))
+            {
                 element.draw(mc, mouseX, actualMouseY);
+                if (element instanceof IDelayedDraw)
+                    drawables.add(((IDelayedDraw) element).getDelayedDrawable());
+            }
         }
+
+        if (drawables.size() > 0)
+            for (Drawable drawable : drawables)
+                drawable.draw(mc, mouseX, actualMouseY);
     }
 
     @Override

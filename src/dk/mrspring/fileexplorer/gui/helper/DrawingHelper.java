@@ -115,16 +115,31 @@ public class DrawingHelper
             float tenthWidth = w / 10, tenthHeight = h / 10;
             return new Quad[]{
                     new Quad(
-                            x + 3 * tenthWidth, y + 5 * tenthHeight,
+                            x + 3.5F * tenthWidth, y + 5 * tenthHeight,
                             x + 6 * tenthWidth, y + 9 * tenthHeight,
                             x + tenthWidth, y + 9 * tenthHeight,
                             x + tenthWidth, y + 8 * tenthHeight),
                     new Quad(
-                            x + 7 * tenthWidth, y + 4 * tenthHeight,
+                            x + 6.5F * tenthWidth, y + 4 * tenthHeight,
                             x + 9 * tenthWidth, y + 6 * tenthHeight,
                             x + 9 * tenthWidth, y + 9 * tenthHeight,
-                            x + 2 * tenthWidth, y + 9 * tenthHeight
-                    )};
+                            x + 2 * tenthWidth, y + 9 * tenthHeight),
+                    new Quad(
+                            x + tenthWidth, y + tenthWidth,
+                            x + 2 * tenthWidth, y + tenthHeight,
+                            x + 2 * tenthWidth, y + 9 * tenthHeight,
+                            x + tenthWidth, y + 9 * tenthHeight),
+                    new Quad(
+                            x + 8 * tenthWidth, y + tenthWidth,
+                            x + 9 * tenthWidth, y + tenthHeight,
+                            x + 9 * tenthWidth, y + 9 * tenthHeight,
+                            x + 8 * tenthWidth, y + 9 * tenthHeight),
+                    new Quad(
+                            x + tenthWidth, y + tenthHeight,
+                            x + 9 * tenthWidth, y + tenthHeight,
+                            x + 9 * tenthWidth, y + 2 * tenthHeight,
+                            x + tenthWidth, y + 2 * tenthHeight)
+            };
         }
     };
 
@@ -250,10 +265,10 @@ public class DrawingHelper
 
     public static void drawOutline(float x, float y, float w, float h, Color c, float a)
     {
-        drawQuad(x, y, w, 1, c, a);
-        drawQuad(x, y, 1, h, c, a);
-        drawQuad(x + w - 1, y, 1, h, c, a);
-        drawQuad(x, y + h - 1, w, 1, c, a);
+        drawQuad(x, y, w, 1, Color.WHITE, a);
+        drawQuad(x, y, 1, h, Color.WHITE, a);
+        drawQuad(x + w - 1, y, 1, h, Color.LTGREY, a);
+        drawQuad(x, y + h - 1, w, 1, Color.LTGREY, a);
     }
 
     public static void drawTexturedRect(float x, float y, float width, float height, int u, int v, int u2, int v2, float alpha)
@@ -282,7 +297,16 @@ public class DrawingHelper
 
     public static void drawIcon(IIcon icon, float x, float y, float w, float h)
     {
+        float twentiethWidth = w / 20, twentiethHeight = h / 20;
         Quad[] quads = icon.getQuads(x, y, w, h);
+        for (Quad quad : quads)
+        {
+            quad.setColor(Color.LTGREY);
+            quad.translate(twentiethWidth / 2, twentiethHeight / 2);
+            drawQuad(quad);
+            quad.setColor(Color.WHITE);
+            quad.translate(-(twentiethWidth), -(twentiethHeight));
+        }
         for (Quad quad : quads)
             drawQuad(quad);
     }

@@ -34,6 +34,13 @@ public class Color
         this.name = name;
     }
 
+    public Color(int colorCode)
+    {
+        float var7 = (float)(colorCode >> 24 & 255) / 255.0F;
+        float var8 = (float)(colorCode >> 16 & 255) / 255.0F;
+        float var9 = (float)(colorCode >> 8 & 255) / 255.0F;
+    }
+
     public float getRed()
     {
         return this.r;

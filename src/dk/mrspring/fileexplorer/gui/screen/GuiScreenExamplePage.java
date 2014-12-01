@@ -25,13 +25,13 @@ public class GuiScreenExamplePage extends GuiScreen
     {
         super.initGui();
 
+        this.addGuiElement(sliderID, new GuiSlider(60, 40, 120, 30, GuiSlider.Type.PERCENTAGE, 50));
         this.addGuiElement(buttonID, new GuiSimpleButton(10, 10, 40, 40, "Button"));
         this.addGuiElement(numberID, new GuiNumberField(60, 10, 20, GuiNumberField.Type.PERCENTAGE, mc.fontRendererObj));
-        this.addGuiElement(sliderID, new GuiSlider(60, 40, 120, 30, GuiSlider.Type.PERCENTAGE, 50));
         this.addGuiElement(tFieldID, new GuiEditableTextField(60 + 75 + 10, 10, 240, 20, "This is Edible!", mc.fontRendererObj));
         this.addGuiElement(checkBID, new GuiCheckbox(10, 10 + 40 + 10, 10, 10, false));
         this.addGuiElement(cFieldID, new GuiCustomTextField(10, 10 + 60 + 10, 200, 15).setText("Text!"));
-        this.addGuiElement  (fileID, new GuiFile(10,100,100,100,"C:\\Users\\Konrad\\Pictures\\TITANFALL.png", GuiFile.RenderType.SQUARE_GRID));
+        this.addGuiElement  (fileID, new GuiFile(10,100,85,100,"C:\\Users\\Konrad\\Pictures\\TITANFALL.png", GuiFile.RenderType.SQUARE_GRID));
 
         this.setSubtitle("gui.screen.example_page.description");
     }
