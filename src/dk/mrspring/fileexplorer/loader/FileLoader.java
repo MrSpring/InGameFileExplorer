@@ -10,7 +10,7 @@ import java.util.List;
  */
 public class FileLoader
 {
-    public static void addFiles(String path, List<File> fileList,boolean addSubFiles)
+    public static void addFiles(String path, List<File> fileList, boolean addSubFiles)
     {
         try
         {
@@ -24,7 +24,7 @@ public class FileLoader
                 File file = new File(String.valueOf(directory), fileName);
                 System.out.println(" Found file: " + file.toString() + ". Adding it to the list.");
                 fileList.add(file);
-                if (file.isDirectory()&&addSubFiles)
+                if (file.isDirectory() && addSubFiles)
                     addFiles(file.getPath(), fileList, true);
             }
         } catch (Exception e)
@@ -33,19 +33,19 @@ public class FileLoader
         }
     }
 
-    public static String loadFile(String path)
+    public static String readFile(String path)
     {
         try
         {
-            FileReader reader=new FileReader(path);
-            BufferedReader bufferedReader=new BufferedReader(reader);
-            StringBuilder builder=new StringBuilder();
+            FileReader reader = new FileReader(path);
+            BufferedReader bufferedReader = new BufferedReader(reader);
+            StringBuilder builder = new StringBuilder();
 
             String line;
 
-            while((line=bufferedReader.readLine())!=null)
+            while ((line = bufferedReader.readLine()) != null)
             {
-                System.out.println("Found line "+line+" from file @ "+path);
+                System.out.println("Found line " + line + " from file @ " + path);
                 builder.append(line);
                 builder.append('\n');
             }
@@ -53,7 +53,7 @@ public class FileLoader
             bufferedReader.close();
 
             return builder.toString();
-        }catch (Exception e)
+        } catch (Exception e)
         {
             e.printStackTrace();
             return null;
