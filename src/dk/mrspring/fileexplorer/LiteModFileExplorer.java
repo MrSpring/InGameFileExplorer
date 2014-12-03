@@ -31,7 +31,7 @@ public class LiteModFileExplorer implements Tickable
         if (openExampleGui.isPressed())
             minecraft.displayGuiScreen(new GuiScreenExamplePage(minecraft.currentScreen));
         if (openFileExplorer.isPressed())
-            minecraft.displayGuiScreen(new GuiScreenFileExplorer());
+            minecraft.displayGuiScreen(new GuiScreenFileExplorer(minecraft.currentScreen));
         if (openTextEditor.isPressed())
             minecraft.displayGuiScreen(new GuiScreenTextEditor("Text text text text\nMore text on a new line.\n\nEven more text.\nAnd finally, no more text! :D"));
         if (openImageViewer.isPressed())

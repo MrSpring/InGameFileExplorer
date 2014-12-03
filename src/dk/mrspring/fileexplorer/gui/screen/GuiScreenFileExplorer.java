@@ -1,26 +1,28 @@
 package dk.mrspring.fileexplorer.gui.screen;
 
-import dk.mrspring.fileexplorer.gui.*;
-import dk.mrspring.fileexplorer.gui.helper.Color;
-import dk.mrspring.fileexplorer.gui.helper.DrawingHelper;
-import dk.mrspring.fileexplorer.loader.FileLoader;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiScreen;
-import org.lwjgl.input.Mouse;
-
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+import dk.mrspring.fileexplorer.gui.GuiFileExplorer;
 
 /**
  * Created by MrSpring on 09-11-2014 for In-Game File Explorer.
  */
 public class GuiScreenFileExplorer extends GuiScreen
 {
-/*
+    public GuiScreenFileExplorer(net.minecraft.client.gui.GuiScreen previousScreen)
+    {
+        super("File Explorer", previousScreen);
+    }
+
+    @Override
+    public void initGui()
+    {
+        super.initGui();
+
+        this.addGuiElement("explorer", new GuiFileExplorer(5, -1, 250, height - 58, "C:").setShowBackground(false));
+
+        this.setSubtitle("Explore your files on your local hard-drive!");
+    }
+
+    /*
     GuiFileExplorer explorer;
     //    GuiSimpleButton reload;
     GuiMultiLineTextField textEditor;

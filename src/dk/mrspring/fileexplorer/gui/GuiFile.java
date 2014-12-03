@@ -57,9 +57,35 @@ public class GuiFile implements IGui
         if (filePath != null)
         {
             int lastDot = filePath.lastIndexOf('.');
+            if (lastDot < 0 || new File(filePath).isDirectory())
+                return EnumFileType.FOLDER;
             String extension = filePath.substring(lastDot);
             return EnumFileType.getFileTypeFor(extension);
         } else return EnumFileType.UNKNOWN;
+    }
+
+    public void setX(int x)
+    {
+        this.x = x;
+        this.button.setX(x);
+    }
+
+    public void setY(int y)
+    {
+        this.y = y;
+        this.button.setY(y);
+    }
+
+    public void setWidth(int w)
+    {
+        this.w = w;
+        this.button.setWidth(w);
+    }
+
+    public void setHeight(int h)
+    {
+        this.h = h;
+        this.button.setHeight(h);
     }
 
     public RenderType getRenderType()

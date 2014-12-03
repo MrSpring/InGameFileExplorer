@@ -1,9 +1,6 @@
 package dk.mrspring.fileexplorer.gui.screen;
 
-import dk.mrspring.fileexplorer.gui.Drawable;
-import dk.mrspring.fileexplorer.gui.GuiSimpleButton;
-import dk.mrspring.fileexplorer.gui.IDelayedDraw;
-import dk.mrspring.fileexplorer.gui.IGui;
+import dk.mrspring.fileexplorer.gui.*;
 import dk.mrspring.fileexplorer.gui.helper.Color;
 import dk.mrspring.fileexplorer.gui.helper.DrawingHelper;
 import net.minecraft.util.StatCollector;
@@ -97,19 +94,7 @@ public class GuiScreen extends net.minecraft.client.gui.GuiScreen
         super.drawScreen(mouseX, mouseY, partialTicks);
 
         if (this.showBars)
-        {
-            DrawingHelper.drawQuad(0, 0, width, barHeight - 1, Color.BLACK, 0.75F);
-            DrawingHelper.drawQuad(0, height - barHeight + 1, width, barHeight - 1, Color.BLACK, 0.75F);
-
-            DrawingHelper.drawQuad(0, barHeight - 1, width, 1, Color.WHITE, 1F);
-            DrawingHelper.drawQuad(0, height - barHeight, width, 1, Color.WHITE, 1F);
-
-            if (this.drawCenteredTitle)
-                this.drawCenteredTitle();
-
             GL11.glTranslatef(0, barHeight, 0);
-        } else if (this.drawCenteredTitle)
-            this.drawCenteredTitle();
 
         List<Drawable> drawables = new ArrayList<Drawable>();
 
@@ -118,22 +103,43 @@ public class GuiScreen extends net.minecraft.client.gui.GuiScreen
             String identifier = entry.getKey();
             IGui element = entry.getValue();
 
-            if (identifier.equals("done_button") && this.useDefaultDoneButton)
-            {
-                ((GuiSimpleButton) element).setY(height - (barHeight * 2) + (barHeight / 2) - 9);
-                ((GuiSimpleButton) element).setX((barHeight / 2) - 10);
-                element.draw(mc, mouseX, actualMouseY);
-            } else if (this.drawGui(identifier, element))
+            if (this.drawGui(identifier, element) && !identifier.equals("done_button"))
             {
                 element.draw(mc, mouseX, actualMouseY);
                 if (element instanceof IDelayedDraw)
+                {
                     drawables.add(((IDelayedDraw) element).getDelayedDrawable());
+                }
             }
         }
 
         if (drawables.size() > 0)
+        {
             for (Drawable drawable : drawables)
                 drawable.draw(mc, mouseX, actualMouseY);
+        }
+
+        if (this.showBars)
+        {
+            GL11.glTranslatef(0, -barHeight, 0);
+
+            DrawingHelper.drawQuad(0, 0, width, barHeight - 1, Color.BLACK, 0.75F);
+            DrawingHelper.drawQuad(0, height - barHeight + 1, width, barHeight - 1, Color.BLACK, 0.75F);
+
+            DrawingHelper.drawQuad(0, barHeight - 1, width, 1, Color.WHITE, 1F);
+            DrawingHelper.drawQuad(0, height - barHeight, width, 1, Color.WHITE, 1F);
+
+            if (this.drawCenteredTitle)
+                this.drawCenteredTitle();
+        } else if (this.drawCenteredTitle)
+            this.drawCenteredTitle();
+
+        if (this.useDefaultDoneButton)
+        {
+            ((GuiSimpleButton) this.getGui("done_button")).setY(height - barHeight + (barHeight / 2) - 9);
+            ((GuiSimpleButton) this.getGui("done_button")).setX((barHeight / 2) - 10);
+            this.getGui("done_button").draw(mc, mouseX, actualMouseY);
+        }
     }
 
     @Override
@@ -166,6 +172,14 @@ public class GuiScreen extends net.minecraft.client.gui.GuiScreen
             if (this.listensForKey(identifier, gui))
                 gui.handleKeyTyped(keyCode, typedChar);
         }
+    }
+
+    @Override
+    public void handleMouseInput() throws IOException
+    {
+        for (IGui iGui : this.guiHashMap.values())
+            if (iGui instanceof IMouseListener)
+                ((IMouseListener) iGui).handleMouseInput();
     }
 
     @Override
