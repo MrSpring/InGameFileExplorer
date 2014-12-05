@@ -131,7 +131,7 @@ public class GuiFileExplorer implements IGui, IMouseListener
 
         float scrollBarY = scrollBarYRange * scrollProgress;
 
-        DrawingHelper.drawQuad(x-1, y + scrollBarY+6, 2, 40, Color.WHITE, 1F);
+        DrawingHelper.drawQuad(x - 1, y + scrollBarY + 6, 2, 40, Color.WHITE, 1F);
     }
 
     private boolean drawGuiFile(int xOffset, int yOffset, GuiFile file)
@@ -180,16 +180,41 @@ public class GuiFileExplorer implements IGui, IMouseListener
     @Override
     public boolean mouseDown(int mouseX, int mouseY, int mouseButton)
     {
+        this.openFile.disable();
         for (GuiFile guiFile : this.guiFiles)
             if (guiFile.mouseDown(mouseX, mouseY, mouseButton))
+            {
+                openFile.enable();
                 return true;
+            }
+
         if (this.openFile.mouseDown(mouseX, mouseY, mouseButton))
-            ; // TODO: Open file
-        else if (this.refreshList.mouseDown(mouseX, mouseY, mouseButton))
+        {
+            for (GuiFile guiFile:this.guiFiles)
+            {
+                if (guiFile.is)
+                this.openFile();
+            }
+        } else if (this.refreshList.mouseDown(mouseX, mouseY, mouseButton))
             ; // TODO: this.refreshFileList();
         else if (this.newFolder.mouseDown(mouseX, mouseY, mouseButton))
             ; // TODO: this.createNewFile();
         return false;
+    }
+
+    private void openFile()
+    {
+
+    }
+
+    private void refreshList()
+    {
+
+    }
+
+    private void createNewFile()
+    {
+
     }
 
     @Override
