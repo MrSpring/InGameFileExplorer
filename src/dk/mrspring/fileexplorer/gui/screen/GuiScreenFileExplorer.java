@@ -1,6 +1,11 @@
 package dk.mrspring.fileexplorer.gui.screen;
 
+import dk.mrspring.fileexplorer.gui.GuiFile;
 import dk.mrspring.fileexplorer.gui.GuiFileExplorer;
+import dk.mrspring.fileexplorer.gui.GuiMultiLineTextField;
+import dk.mrspring.fileexplorer.loader.FileLoader;
+
+import java.io.File;
 
 /**
  * Created by MrSpring on 09-11-2014 for In-Game File Explorer.
@@ -8,6 +13,7 @@ import dk.mrspring.fileexplorer.gui.GuiFileExplorer;
 public class GuiScreenFileExplorer extends GuiScreen
 {
     String startFrom;
+    String openFileType = "";
 
     public GuiScreenFileExplorer(net.minecraft.client.gui.GuiScreen previousScreen, String path)
     {
@@ -20,9 +26,41 @@ public class GuiScreenFileExplorer extends GuiScreen
     {
         super.initGui();
 
-        this.addGuiElement("explorer", new GuiFileExplorer(5, -1, 250, height - 58, startFrom).setShowBackground(false));
+        this.addGuiElement("explorer", new GuiFileExplorer(5, -1, 250, height - 58, startFrom).setShowBackground(false).setOnFileOpened(new GuiFileExplorer.IOnFileOpened()
+        {
+            @Override
+            public void onOpened(File file)
+            {
+                GuiScreenFileExplorer.this.openFile(file);
+            }
+        }));
 
         this.setSubtitle("Explore your files on your local hard-drive!");
+    }
+
+    public void openFile(File file)
+    {
+        int lastDot = file.getPath().lastIndexOf(".");
+        String extension = file.getPath().substring(lastDot);
+        GuiFile.EnumFileType fileType = GuiFile.EnumFileType.getFileTypeFor(extension);
+
+        if (!this.openFileType.equals(""))
+            this.removeElement(this.openFileType);
+
+        switch (fileType)
+        {
+            case TEXT_FILE:
+            {
+                String fileContents = FileLoader.readFile(file);
+                this.openFileType = "text_editor";
+                this.addGuiElement(this.openFileType, new GuiMultiLineTextField(260, 10, fileContents));
+                break;
+            }
+            case IMAGE: // TODO: Open an image viewer
+                break;
+            default:
+                break;
+        }
     }
 
     /*

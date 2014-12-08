@@ -20,6 +20,7 @@ public class GuiFileExplorer implements IGui, IMouseListener
     boolean showBackground = true;
     List<GuiFileBase> guiFiles;
     String currentPath;
+    IOnFileOpened onFileOpened;
 
     int scrollHeight = 0;
 
@@ -44,6 +45,12 @@ public class GuiFileExplorer implements IGui, IMouseListener
         upOne = new GuiSimpleButton(x, y, 50, 20, "Go Up");
 
         this.refreshList();
+    }
+
+    public GuiFileExplorer setOnFileOpened(IOnFileOpened onFileOpened)
+    {
+        this.onFileOpened = onFileOpened;
+        return this;
     }
 
     public GuiFileExplorer setShowBackground(boolean showBackground)
@@ -185,7 +192,7 @@ public class GuiFileExplorer implements IGui, IMouseListener
             for (GuiFileBase guiFile : this.guiFiles)
                 if (guiFile.mouseDown(mouseX, mouseY, mouseButton) && guiFile instanceof GuiFile)
                 {
-                    if (((GuiFile)guiFile).isDirectory())
+                    if (((GuiFile) guiFile).getFileType() != GuiFile.EnumFileType.UNKNOWN)
                         openFile.enable();
                     returnFromHere = true;
                 }
@@ -236,7 +243,8 @@ public class GuiFileExplorer implements IGui, IMouseListener
                     this.scrollHeight = -5;
                 } else
                 {
-                    // TODO: Start a Runnable that tells the open Screen that a non-directory file has been opened
+                    if (this.onFileOpened != null)
+                        this.onFileOpened.onOpened(file);
                 }
     }
 
@@ -307,5 +315,10 @@ public class GuiFileExplorer implements IGui, IMouseListener
         int mouseWheel = Mouse.getDWheel();
         mouseWheel /= 4;
         this.addScroll(-mouseWheel);
+    }
+
+    public interface IOnFileOpened
+    {
+        public void onOpened(File file);
     }
 }

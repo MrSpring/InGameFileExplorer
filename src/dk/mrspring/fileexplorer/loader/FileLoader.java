@@ -33,11 +33,11 @@ public class FileLoader
         }
     }
 
-    public static String readFile(String path)
+    public static String readFile(File file)
     {
         try
         {
-            FileReader reader = new FileReader(path);
+            FileReader reader = new FileReader(file);
             BufferedReader bufferedReader = new BufferedReader(reader);
             StringBuilder builder = new StringBuilder();
 
@@ -45,7 +45,7 @@ public class FileLoader
 
             while ((line = bufferedReader.readLine()) != null)
             {
-                System.out.println("Found line " + line + " from file @ " + path);
+                System.out.println("Found line " + line + " from file @ " + file.getPath());
                 builder.append(line);
                 builder.append('\n');
             }
