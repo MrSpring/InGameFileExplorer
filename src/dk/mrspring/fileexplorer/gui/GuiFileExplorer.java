@@ -17,9 +17,8 @@ public class GuiFileExplorer implements IGui, IMouseListener
 {
     int x, y, w, h;
     boolean showControls = true;
-    boolean showFileDetails = true;
     boolean showBackground = true;
-    List<GuiFile> guiFiles;
+    List<GuiFileBase> guiFiles;
     String currentPath;
 
     int scrollHeight = 0;
@@ -36,7 +35,7 @@ public class GuiFileExplorer implements IGui, IMouseListener
         h = height;
         currentPath = path;
 
-        guiFiles = new ArrayList<GuiFile>();
+        guiFiles = new ArrayList<GuiFileBase>();
 
         List<File> filesAtCurrentPath = new ArrayList<File>();
 
@@ -50,19 +49,20 @@ public class GuiFileExplorer implements IGui, IMouseListener
 
         for (File file : filesAtCurrentPath)
         {
-            guiFiles.add(new GuiFile(0, yOffset, w - 10, 30, file, GuiFile.RenderType.LONG_GRID));
+            guiFiles.add(new GuiFile(0, yOffset, w - 10, 30, file, GuiFile.RenderType.LONG_GRID).setOnFileOpened(new Runnable()
+            {
+                @Override
+                public void run()
+                {
+                    GuiFileExplorer.this.openSelectedFile();
+                }
+            }));
         }
     }
 
     public GuiFileExplorer setShowBackground(boolean showBackground)
     {
         this.showBackground = showBackground;
-        return this;
-    }
-
-    public GuiFileExplorer setShowFileDetails(boolean showFileDetails)
-    {
-        this.showFileDetails = showFileDetails;
         return this;
     }
 
@@ -110,7 +110,7 @@ public class GuiFileExplorer implements IGui, IMouseListener
 
         int yOffset = 0 - scrollHeight, xOffset = 5;
 
-        for (GuiFile guiFile : guiFiles)
+        for (GuiFileBase guiFile : guiFiles)
         {
             if (!drawGuiFile(xOffset, yOffset, guiFile))
             {
@@ -134,7 +134,7 @@ public class GuiFileExplorer implements IGui, IMouseListener
         DrawingHelper.drawQuad(x - 1, y + scrollBarY + 6, 2, 40, Color.WHITE, 1F);
     }
 
-    private boolean drawGuiFile(int xOffset, int yOffset, GuiFile file)
+    private boolean drawGuiFile(int xOffset, int yOffset, GuiFileBase file)
     {
         boolean isFileTooHigh = yOffset < -70;
         boolean isFileTooLow = yOffset > this.h + 40;
@@ -156,15 +156,10 @@ public class GuiFileExplorer implements IGui, IMouseListener
         this.newFolder.draw(minecraft, mouseX, mouseY);
     }
 
-    private void drawFileDetails()
-    {
-
-    }
-
     @Override
     public void update()
     {
-        for (GuiFile guiFile : this.guiFiles)
+        for (GuiFileBase guiFile : this.guiFiles)
         {
             guiFile.update();
         }
@@ -180,31 +175,52 @@ public class GuiFileExplorer implements IGui, IMouseListener
     @Override
     public boolean mouseDown(int mouseX, int mouseY, int mouseButton)
     {
+        System.out.println("Mouse Down! X: " + mouseX + ", Y: " + mouseY + ", Button: " + mouseButton);
+
         this.openFile.disable();
-        for (GuiFile guiFile : this.guiFiles)
-            if (guiFile.mouseDown(mouseX, mouseY, mouseButton))
+        for (GuiFileBase guiFile : this.guiFiles)
+            if (guiFile.mouseDown(mouseX, mouseY, mouseButton) && guiFile instanceof GuiFile)
             {
                 openFile.enable();
                 return true;
             }
 
         if (this.openFile.mouseDown(mouseX, mouseY, mouseButton))
-        {
-            for (GuiFile guiFile:this.guiFiles)
-            {
-                if (guiFile.is)
-                this.openFile();
-            }
-        } else if (this.refreshList.mouseDown(mouseX, mouseY, mouseButton))
-            ; // TODO: this.refreshFileList();
+            return this.openSelectedFile();
+        else if (this.refreshList.mouseDown(mouseX, mouseY, mouseButton))
+            this.refreshList();
         else if (this.newFolder.mouseDown(mouseX, mouseY, mouseButton))
             ; // TODO: this.createNewFile();
         return false;
     }
 
-    private void openFile()
+    private boolean openSelectedFile()
     {
+        for (GuiFileBase guiFile : this.guiFiles)
+        {
+            if (guiFile instanceof GuiFile)
+                if (((GuiFile) guiFile).isSelected())
+                {
+                    this.openFile(((GuiFile) guiFile).getFile());
+                    return true;
+                }
+//                this.openFile();
+        }
+        return false;
+    }
 
+    private void openFile(File file)
+    {
+        if (file != null)
+            if (file.exists())
+                if (file.isDirectory())
+                {
+                    this.currentPath = file.toString();
+                    this.refreshList();
+                } else
+                {
+                    // TODO: Start a Runnable that tells the open Screen that a non-directory file has been opened
+                }
     }
 
     private void refreshList()

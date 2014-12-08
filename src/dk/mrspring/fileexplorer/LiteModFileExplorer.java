@@ -2,10 +2,7 @@ package dk.mrspring.fileexplorer;
 
 import com.mumfrey.liteloader.Tickable;
 import com.mumfrey.liteloader.core.LiteLoader;
-import dk.mrspring.fileexplorer.gui.screen.GuiScreenExamplePage;
-import dk.mrspring.fileexplorer.gui.screen.GuiScreenFileExplorer;
-import dk.mrspring.fileexplorer.gui.screen.GuiScreenImageViewer;
-import dk.mrspring.fileexplorer.gui.screen.GuiScreenTextEditor;
+import dk.mrspring.fileexplorer.gui.screen.*;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.settings.KeyBinding;
 import org.lwjgl.input.Keyboard;

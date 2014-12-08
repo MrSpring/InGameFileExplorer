@@ -13,12 +13,9 @@ import java.util.List;
 /**
  * Created by MrSpring on 09-11-2014 for In-Game File Explorer.
  */
-public class GuiFile implements IGui
+public class GuiFile extends GuiFileBase
 {
-    int x, y, w, h;
-    String filePath;
     GuiSimpleButton button;
-    RenderType renderType;
     long timeAtLastClick = 0;
     private Runnable onFileOpened = new Runnable()
     {
@@ -47,9 +44,10 @@ public class GuiFile implements IGui
         this(xPos, yPos, width, height, path.getPath(), type);
     }
 
-    public void setOnFileOpened(Runnable onFileOpened)
+    public GuiFile setOnFileOpened(Runnable onFileOpened)
     {
         this.onFileOpened = onFileOpened;
+        return this;
     }
 
     public EnumFileType getFileType()
@@ -66,31 +64,31 @@ public class GuiFile implements IGui
 
     public void setX(int x)
     {
-        this.x = x;
+        super.setX(x);
         this.button.setX(x);
     }
 
     public void setY(int y)
     {
-        this.y = y;
+        super.setY(y);
         this.button.setY(y);
     }
 
     public void setWidth(int w)
     {
-        this.w = w;
+        super.setWidth(w);
         this.button.setWidth(w);
     }
 
     public void setHeight(int h)
     {
-        this.h = h;
+        super.setHeight(h);
         this.button.setHeight(h);
     }
 
-    public RenderType getRenderType()
+    public boolean isSelected()
     {
-        return renderType;
+        return this.button.isHighlighted();
     }
 
     public void setRenderType(RenderType renderType)
@@ -223,31 +221,6 @@ public class GuiFile implements IGui
             this.button.stopBeingHighlighted();
             return false;
         }
-    }
-
-    @Override
-    public void mouseUp(int mouseX, int mouseY, int mouseButton)
-    {
-
-    }
-
-    @Override
-    public void mouseClickMove(int mouseX, int mouseY, int mouseButton, long timeSinceClick)
-    {
-
-    }
-
-    @Override
-    public void handleKeyTyped(int keyCode, char character)
-    {
-
-    }
-
-    public enum RenderType
-    {
-        LIST,
-        SQUARE_GRID,
-        LONG_GRID
     }
 
     public enum EnumFileType

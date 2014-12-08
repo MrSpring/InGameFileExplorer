@@ -180,6 +180,7 @@ public class GuiScreen extends net.minecraft.client.gui.GuiScreen
         for (IGui iGui : this.guiHashMap.values())
             if (iGui instanceof IMouseListener)
                 ((IMouseListener) iGui).handleMouseInput();
+        super.handleMouseInput();
     }
 
     @Override

@@ -2,6 +2,8 @@ package dk.mrspring.fileexplorer.gui.screen;
 
 import dk.mrspring.fileexplorer.gui.*;
 
+import java.io.IOException;
+
 /**
  * Created by MrSpring on 09-11-2014 for In-Game File Explorer.
  */
@@ -35,6 +37,13 @@ public class GuiScreenExamplePage extends GuiScreen
         this.addGuiElement(epxlorerID, new GuiFileExplorer(10, 105, 300, height - 60 - 10 - 105, "C:"));
 
         this.setSubtitle("gui.screen.example_page.description");
+    }
+
+    @Override
+    protected void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException
+    {
+        System.out.println("mouseX = [" + mouseX + "], mouseY = [" + mouseY + "], mouseButton = [" + mouseButton + "]");
+        super.mouseClicked(mouseX, mouseY, mouseButton);
     }
 
     /*
