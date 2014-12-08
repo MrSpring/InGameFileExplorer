@@ -6,6 +6,4 @@ package dk.mrspring.fileexplorer;
 public class Config
 {
     public String startLocation = "C:\\";
-    public boolean acceptFileCreation = false;
-    public boolean showWelcomeScreen = true;
 }
