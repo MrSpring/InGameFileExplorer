@@ -2,6 +2,7 @@ package dk.mrspring.fileexplorer.gui.screen;
 
 import dk.mrspring.fileexplorer.gui.GuiFile;
 import dk.mrspring.fileexplorer.gui.GuiFileExplorer;
+import dk.mrspring.fileexplorer.gui.GuiImageViewer;
 import dk.mrspring.fileexplorer.gui.GuiMultiLineTextField;
 import dk.mrspring.fileexplorer.loader.FileLoader;
 
@@ -25,6 +26,8 @@ public class GuiScreenFileExplorer extends GuiScreen
     public void initGui()
     {
         super.initGui();
+
+//        this.addGuiElement(this.openFileType, new GuiImageViewer("D:\\MC Modding\\In-Game File Explorer\\jars\\liteconfig\\common\\Pick A Universe Wallpaper.png", 258, 5, width - 243 - 20, height - (getBarHeight() * 2) - 9));
 
         this.addGuiElement("explorer", new GuiFileExplorer(5, -1, 250, height - 58, startFrom).setShowBackground(false).setOnFileOpened(new GuiFileExplorer.IOnFileOpened()
         {
@@ -57,7 +60,11 @@ public class GuiScreenFileExplorer extends GuiScreen
                 break;
             }
             case IMAGE: // TODO: Open an image viewer
+            {
+                this.openFileType = "image_viewer";
+                this.addGuiElement(this.openFileType, new GuiImageViewer(file.getPath(), 258, 5, width - 243 - 20, height - (getBarHeight() * 2) - 9));
                 break;
+            }
             default:
                 break;
         }

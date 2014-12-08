@@ -67,8 +67,6 @@ public class GuiScreen extends net.minecraft.client.gui.GuiScreen
         float underlinePosX = (width / 2) - (titleWidth / 2) - underlineOverflow;
 
         this.drawCenteredString(mc.fontRendererObj, "§l" + translatedTitle, this.width / 2, textPosY, 0xFFFFFF);
-        /*if (this.drawCenteredSubtitle)
-            this.drawCenteredString(mc.fontRendererObj, this.subtitle, this.width / 2, textPosY + 10, 0xFFFFFF);*/
 
         if (this.drawSubTitle())
             this.drawCenteredSubTitle();
@@ -92,6 +90,8 @@ public class GuiScreen extends net.minecraft.client.gui.GuiScreen
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks)
     {
+        // TODO: Fix Done button
+
         int actualMouseY = mouseY;
 
         if (this.showBars)
@@ -100,7 +100,26 @@ public class GuiScreen extends net.minecraft.client.gui.GuiScreen
         super.drawScreen(mouseX, mouseY, partialTicks);
 
         if (this.showBars)
+        {
+            DrawingHelper.drawQuad(0, 0, width, barHeight - 1, Color.BLACK, 0.75F);
+            DrawingHelper.drawQuad(0, height - barHeight + 1, width, barHeight - 1, Color.BLACK, 0.75F);
+
+            DrawingHelper.drawQuad(0, barHeight - 1, width, 1, Color.WHITE, 1F);
+            DrawingHelper.drawQuad(0, height - barHeight, width, 1, Color.WHITE, 1F);
+
+            if (this.drawCenteredTitle)
+                this.drawCenteredTitle();
+
             GL11.glTranslatef(0, barHeight, 0);
+        } else if (this.drawCenteredTitle)
+            this.drawCenteredTitle();
+
+        /*if (this.useDefaultDoneButton)
+        {
+            ((GuiSimpleButton) this.getGui("done_button")).setY(height - barHeight + (barHeight / 2) - 9);
+            ((GuiSimpleButton) this.getGui("done_button")).setX((barHeight / 2) - 10);
+            this.getGui("done_button").draw(mc, mouseX, actualMouseY);
+        }*/
 
         List<Drawable> drawables = new ArrayList<Drawable>();
 
@@ -124,28 +143,11 @@ public class GuiScreen extends net.minecraft.client.gui.GuiScreen
             for (Drawable drawable : drawables)
                 drawable.draw(mc, mouseX, actualMouseY);
         }
+    }
 
-        if (this.showBars)
-        {
-            GL11.glTranslatef(0, -barHeight, 0);
-
-            DrawingHelper.drawQuad(0, 0, width, barHeight - 1, Color.BLACK, 0.75F);
-            DrawingHelper.drawQuad(0, height - barHeight + 1, width, barHeight - 1, Color.BLACK, 0.75F);
-
-            DrawingHelper.drawQuad(0, barHeight - 1, width, 1, Color.WHITE, 1F);
-            DrawingHelper.drawQuad(0, height - barHeight, width, 1, Color.WHITE, 1F);
-
-            if (this.drawCenteredTitle)
-                this.drawCenteredTitle();
-        } else if (this.drawCenteredTitle)
-            this.drawCenteredTitle();
-
-        if (this.useDefaultDoneButton)
-        {
-            ((GuiSimpleButton) this.getGui("done_button")).setY(height - barHeight + (barHeight / 2) - 9);
-            ((GuiSimpleButton) this.getGui("done_button")).setX((barHeight / 2) - 10);
-            this.getGui("done_button").draw(mc, mouseX, actualMouseY);
-        }
+    public int getBarHeight()
+    {
+        return barHeight;
     }
 
     @Override
@@ -197,15 +199,21 @@ public class GuiScreen extends net.minecraft.client.gui.GuiScreen
         if (this.showBars)
             actualMouseY -= barHeight;
 
-        for (Map.Entry<String, IGui> entry : this.guiHashMap.entrySet())
+        try
         {
-            String identifier = entry.getKey();
-            IGui gui = entry.getValue();
+            for (Map.Entry<String, IGui> entry : this.guiHashMap.entrySet())
+            {
+                String identifier = entry.getKey();
+                IGui gui = entry.getValue();
 
-            if (identifier.equals("done_button") && gui.mouseDown(mouseX, actualMouseY, mouseButton))
-                mc.displayGuiScreen(this.previousScreen);
-            else if (gui.mouseDown(mouseX, actualMouseY, mouseButton))
-                this.guiClicked(identifier, gui, mouseX, mouseY, mouseButton);
+                if (identifier.equals("done_button") && gui.mouseDown(mouseX, actualMouseY, mouseButton))
+                    mc.displayGuiScreen(this.previousScreen);
+                else if (gui.mouseDown(mouseX, actualMouseY, mouseButton))
+                    this.guiClicked(identifier, gui, mouseX, mouseY, mouseButton);
+            }
+        } catch (Exception e)
+        {
+            e.printStackTrace();
         }
     }
 
