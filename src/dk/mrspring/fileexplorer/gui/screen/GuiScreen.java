@@ -47,6 +47,12 @@ public class GuiScreen extends net.minecraft.client.gui.GuiScreen
             this.guiHashMap.put(identifier, gui);
     }
 
+    public void removeElement(String identifier)
+    {
+        if (this.guiHashMap.containsKey(identifier))
+            this.guiHashMap.remove(identifier);
+    }
+
     public void drawCenteredTitle()
     {
         String translatedTitle = StatCollector.translateToLocal(this.title);
