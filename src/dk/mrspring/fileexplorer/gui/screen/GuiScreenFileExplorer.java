@@ -7,9 +7,12 @@ import dk.mrspring.fileexplorer.gui.GuiFileExplorer;
  */
 public class GuiScreenFileExplorer extends GuiScreen
 {
-    public GuiScreenFileExplorer(net.minecraft.client.gui.GuiScreen previousScreen)
+    String startFrom;
+
+    public GuiScreenFileExplorer(net.minecraft.client.gui.GuiScreen previousScreen, String path)
     {
         super("File Explorer", previousScreen);
+        startFrom = path;
     }
 
     @Override
@@ -17,7 +20,7 @@ public class GuiScreenFileExplorer extends GuiScreen
     {
         super.initGui();
 
-        this.addGuiElement("explorer", new GuiFileExplorer(5, -1, 250, height - 58, "C:").setShowBackground(false));
+        this.addGuiElement("explorer", new GuiFileExplorer(5, -1, 250, height - 58, startFrom).setShowBackground(false));
 
         this.setSubtitle("Explore your files on your local hard-drive!");
     }

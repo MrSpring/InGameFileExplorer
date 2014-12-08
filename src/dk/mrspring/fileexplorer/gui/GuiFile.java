@@ -62,6 +62,11 @@ public class GuiFile extends GuiFileBase
         } else return EnumFileType.UNKNOWN;
     }
 
+    public boolean isDirectory()
+    {
+        return this.getFileType().equals(EnumFileType.FOLDER);
+    }
+
     public void setX(int x)
     {
         super.setX(x);

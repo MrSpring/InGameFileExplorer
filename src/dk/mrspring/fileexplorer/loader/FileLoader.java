@@ -15,7 +15,7 @@ public class FileLoader
         try
         {
             File directory = new File(path);
-            System.out.println("Loading files from: " + directory.toURI().toASCIIString());
+            System.out.println("Loading files from: " + directory.toString());
             System.out.println("Directory list size: " + directory.list().length);
             String[] directoryContents = directory.list();
 

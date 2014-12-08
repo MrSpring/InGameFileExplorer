@@ -40,7 +40,8 @@ public class GuiFileExplorer implements IGui, IMouseListener
 
         openFile = new GuiSimpleButton(x, y, 50, 20, "Open").disable();
         refreshList = new GuiSimpleButton(x, y, 50, 20, "Refresh");
-        newFolder = new GuiSimpleButton(x, y, 50, 20, "New Folder");
+        newFolder = new GuiSimpleButton(x, y, 50, 20, "New File");
+        upOne = new GuiSimpleButton(x, y, 50, 20, "Go Up");
 
         this.refreshList();
     }
@@ -184,7 +185,8 @@ public class GuiFileExplorer implements IGui, IMouseListener
             for (GuiFileBase guiFile : this.guiFiles)
                 if (guiFile.mouseDown(mouseX, mouseY, mouseButton) && guiFile instanceof GuiFile)
                 {
-                    openFile.enable();
+                    if (((GuiFile)guiFile).isDirectory())
+                        openFile.enable();
                     returnFromHere = true;
                 }
 
