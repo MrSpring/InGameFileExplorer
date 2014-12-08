@@ -207,13 +207,12 @@ public class GuiFile extends GuiFileBase
     {
         if (this.button.mouseDown(mouseX, mouseY, mouseButton))
         {
+            this.button.makeHighlighted();
             long systemTime = System.currentTimeMillis();
-            System.out.println(systemTime + ", " + timeAtLastClick + ", " + (systemTime - timeAtLastClick));
             if (systemTime - timeAtLastClick < 250)
             {
-                this.button.makeHighlighted();
                 this.onFileOpened.run();
-            } else this.button.stopBeingHighlighted();
+            }
             this.timeAtLastClick = System.currentTimeMillis();
             return true;
         } else
