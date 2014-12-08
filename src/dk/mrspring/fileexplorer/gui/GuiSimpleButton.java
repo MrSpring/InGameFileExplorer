@@ -28,9 +28,10 @@ public class GuiSimpleButton implements IGui
         this.text = message;
     }
 
-    public void disable()
+    public GuiSimpleButton disable()
     {
         this.isEnabled = false;
+        return this;
     }
 
     public void enable()

@@ -39,13 +39,6 @@ public class GuiScreenExamplePage extends GuiScreen
         this.setSubtitle("gui.screen.example_page.description");
     }
 
-    @Override
-    protected void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException
-    {
-        System.out.println("mouseX = [" + mouseX + "], mouseY = [" + mouseY + "], mouseButton = [" + mouseButton + "]");
-        super.mouseClicked(mouseX, mouseY, mouseButton);
-    }
-
     /*
     GuiSimpleButton button;
     GuiNumberField numberField;

@@ -43,7 +43,7 @@ public class GuiFileExplorer implements IGui, IMouseListener
 
         int yOffset = 0;
 
-        openFile = new GuiSimpleButton(x, y, 50, 20, "Open");
+        openFile = new GuiSimpleButton(x, y, 50, 20, "Open").disable();
         refreshList = new GuiSimpleButton(x, y, 50, 20, "Refresh");
         newFolder = new GuiSimpleButton(x, y, 50, 20, "New Folder");
 
@@ -175,8 +175,6 @@ public class GuiFileExplorer implements IGui, IMouseListener
     @Override
     public boolean mouseDown(int mouseX, int mouseY, int mouseButton)
     {
-        System.out.println("Mouse Down! X: " + mouseX + ", Y: " + mouseY + ", Button: " + mouseButton);
-
         this.openFile.disable();
         for (GuiFileBase guiFile : this.guiFiles)
             if (guiFile.mouseDown(mouseX, mouseY, mouseButton) && guiFile instanceof GuiFile)
