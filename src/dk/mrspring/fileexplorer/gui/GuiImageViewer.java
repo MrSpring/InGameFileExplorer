@@ -3,7 +3,6 @@ package dk.mrspring.fileexplorer.gui;
 import dk.mrspring.fileexplorer.gui.helper.DrawingHelper;
 import dk.mrspring.fileexplorer.loader.ImageLoader;
 import net.minecraft.client.Minecraft;
-import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
@@ -22,6 +21,7 @@ public class GuiImageViewer implements IGui//, IDelayedDraw
     BufferedImage image;
     ByteBuffer buffer;
     int textureId = -1;
+    boolean failed = false;
 
     public GuiImageViewer(final String path, int xPos, int yPos, int width, int height)
     {
@@ -44,6 +44,8 @@ public class GuiImageViewer implements IGui//, IDelayedDraw
                 } catch (IOException e)
                 {
                     e.printStackTrace();
+                    System.out.println("Reporting failed...");
+                    GuiImageViewer.this.onImageFailedLoading();
                 }
             }
         });
@@ -65,6 +67,11 @@ public class GuiImageViewer implements IGui//, IDelayedDraw
     {
         this.image = image;
         this.buffer = buffer;
+    }
+
+    private void onImageFailedLoading()
+    {
+        this.failed = true;
     }
 
     public void setImage(final BufferedImage image, ByteBuffer buffer)
@@ -118,7 +125,9 @@ public class GuiImageViewer implements IGui//, IDelayedDraw
         {
             if (this.image != null && this.buffer != null)
                 this.setImage(image, buffer);
-            minecraft.fontRendererObj.drawString("Loading...", x + 10, y + 10, 0xfff);
+            if (failed)
+                minecraft.fontRendererObj.drawString("Failed loading... :(", x + 10, y + 10, 0xfff);
+            else minecraft.fontRendererObj.drawString("Loading...", x + 10, y + 10, 0xfff);
         }
     }
 

@@ -1,5 +1,6 @@
 package dk.mrspring.fileexplorer.gui.helper;
 
+import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.renderer.Tessellator;
 
 import static org.lwjgl.opengl.GL11.*;
@@ -9,6 +10,22 @@ import static org.lwjgl.opengl.GL11.*;
  */
 public class DrawingHelper
 {
+    public static IIcon hoverIcon = new IIcon()
+    {
+        @Override
+        public Quad[] getQuads(float x, float y, float w, float h)
+        {
+            return new Quad[]{
+                    new Quad(x + 1, y, w - 2, h, Color.BLACK, 0.8F),
+                    new Quad(x, y + 1, 1, h - 2, Color.BLACK, 0.8F),
+                    new Quad(x + w - 1, y + 1, 1, h - 2, Color.BLACK, 0.8F),
+                    new Quad(x + 1, y + 1, w - 2, 1, Color.WHITE, 1F),
+                    new Quad(x + 1, y + 2, 1, h - 4, Color.WHITE, 1F),
+                    new Quad(x + w - 2, y + 2, 1, h - 3, Color.LTGREY, 1F),
+                    new Quad(x + 1, y + h - 2, w - 3, 1, Color.LTGREY, 1F)
+            };
+        }
+    };
     public static IIcon crossIcon = new IIcon()
     {
         @Override
@@ -295,20 +312,26 @@ public class DrawingHelper
         glDisable(GL_BLEND);
     }
 
-    public static void drawIcon(IIcon icon, float x, float y, float w, float h)
+    public static void drawIcon(IIcon icon, float x, float y, float w, float h, boolean shadow)
     {
         float twentiethWidth = w / 20, twentiethHeight = h / 20;
         Quad[] quads = icon.getQuads(x, y, w, h);
+        if (shadow)
+            for (Quad quad : quads)
+            {
+                quad.setColor(Color.LTGREY);
+                quad.translate(twentiethWidth / 2, twentiethHeight / 2);
+                drawQuad(quad);
+                quad.setColor(Color.WHITE);
+                quad.translate(-(twentiethWidth), -(twentiethHeight));
+            }
         for (Quad quad : quads)
-        {
-            quad.setColor(Color.LTGREY);
-            quad.translate(twentiethWidth / 2, twentiethHeight / 2);
             drawQuad(quad);
-            quad.setColor(Color.WHITE);
-            quad.translate(-(twentiethWidth), -(twentiethHeight));
-        }
-        for (Quad quad : quads)
-            drawQuad(quad);
+    }
+
+    public static void drawIcon(IIcon icon, float x, float y, float w, float h)
+    {
+        drawIcon(icon, x, y, w, h, true);
     }
 
     public static void drawQuad(Quad quad)
@@ -341,5 +364,27 @@ public class DrawingHelper
     public static void drawQuad(float x, float y, float width, float height, Color color, float alpha)
     {
         drawQuad(new Quad(x, y, width, height).setColor(color).setAlpha(alpha));
+    }
+
+    public static void drawCenteredString(FontRenderer renderer, float x, float y, String s, int color, boolean shadow)
+    {
+        renderer.drawString(s, x - (renderer.getStringWidth(s) / 2), y, color, shadow);
+    }
+
+    public static void drawCenteredString(FontRenderer renderer, float x, float y, String s, int color)
+    {
+        drawCenteredString(renderer, x, y, s, color, true);
+    }
+
+    public static void drawSplitString(FontRenderer renderer, int x, int y, String s, int color, int maxLength, boolean shadow)
+    {
+        renderer.drawSplitString(s, x, y, maxLength, color);
+        if (shadow)
+            renderer.drawSplitString(s, x + 1, y + 1, maxLength, getShadowColor(color));
+    }
+
+    public static int getShadowColor(int color)
+    {
+        return (color & 16579836) >> 2 | color & -16777216;
     }
 }

@@ -38,11 +38,11 @@ public class LiteModFileExplorer implements Tickable
         if (openExampleGui.isPressed())
             minecraft.displayGuiScreen(new GuiScreenExamplePage(minecraft.currentScreen));
         if (openFileExplorer.isPressed())
-            minecraft.displayGuiScreen(new GuiScreenFileExplorer(minecraft.currentScreen, config.startLocation));
+            minecraft.displayGuiScreen(new GuiScreenFileExplorer(minecraft.currentScreen, new File(config.startLocation)));
         if (openTextEditor.isPressed())
             minecraft.displayGuiScreen(new GuiScreenTextEditor("Text text text text\nMore text on a new line.\n\nEven more text.\nAnd finally, no more text! :D"));
         if (openImageViewer.isPressed())
-            minecraft.displayGuiScreen(new GuiScreenImageViewer());
+            minecraft.displayGuiScreen(new GuiScreenImageViewer("Image Viewer", minecraft.currentScreen, "D:\\MC Modding\\In-Game File Explorer\\jars\\liteconfig\\common\\Pick A Universe Wallpaper.png"));
     }
 
     @Override
@@ -89,14 +89,6 @@ public class LiteModFileExplorer implements Tickable
         {
             e.printStackTrace();
         }
-
-        /*try
-        {
-            image = ImageLoader.loadImage("C:\\Users\\Konrad\\Documents\\Minecraftig\\More Folder\\Minecraft_grass_block.png");
-        } catch (IOException e)
-        {
-            e.printStackTrace();
-        }*/
     }
 
     @Override

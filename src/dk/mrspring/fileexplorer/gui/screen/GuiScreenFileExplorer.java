@@ -2,8 +2,8 @@ package dk.mrspring.fileexplorer.gui.screen;
 
 import dk.mrspring.fileexplorer.gui.GuiFile;
 import dk.mrspring.fileexplorer.gui.GuiFileExplorer;
-import dk.mrspring.fileexplorer.gui.GuiImageViewer;
 import dk.mrspring.fileexplorer.gui.GuiMultiLineTextField;
+import dk.mrspring.fileexplorer.gui.IGui;
 import dk.mrspring.fileexplorer.loader.FileLoader;
 
 import java.io.File;
@@ -15,30 +15,35 @@ public class GuiScreenFileExplorer extends GuiScreen
 {
     String startFrom;
     String openFileType = "";
+    boolean initialized = false;
 
-    public GuiScreenFileExplorer(net.minecraft.client.gui.GuiScreen previousScreen, String path)
+    public GuiScreenFileExplorer(net.minecraft.client.gui.GuiScreen previousScreen, File path)
     {
         super("File Explorer", previousScreen);
-        startFrom = path;
+        startFrom = path.getPath();
     }
 
     @Override
     public void initGui()
     {
-        super.initGui();
-
-//        this.addGuiElement(this.openFileType, new GuiImageViewer("D:\\MC Modding\\In-Game File Explorer\\jars\\liteconfig\\common\\Pick A Universe Wallpaper.png", 258, 5, width - 243 - 20, height - (getBarHeight() * 2) - 9));
-
-        this.addGuiElement("explorer", new GuiFileExplorer(5, -1, 250, height - 58, startFrom).setShowBackground(false).setOnFileOpened(new GuiFileExplorer.IOnFileOpened()
+        if (!initialized)
         {
-            @Override
-            public void onOpened(File file)
-            {
-                GuiScreenFileExplorer.this.openFile(file);
-            }
-        }));
+            super.initGui();
 
-        this.setSubtitle("Explore your files on your local hard-drive!");
+            this.addGuiElement("explorer", new GuiFileExplorer(5, 5, 250, height - 10, startFrom).setShowBackground(false).setOnFileOpened(new GuiFileExplorer.IOnFileOpened()
+            {
+                @Override
+                public void onOpened(File file)
+                {
+                    GuiScreenFileExplorer.this.openFile(file);
+                }
+            })/*.setPathEditorPosition(8, height - getBarHeight() - 22)*/);
+
+//        this.setSubtitle("Explore your files on your local hard-drive!");
+            this.hideBars();
+            this.hideTitle();
+            initialized = true;
+        }
     }
 
     public void openFile(File file)
@@ -59,15 +64,24 @@ public class GuiScreenFileExplorer extends GuiScreen
                 this.addGuiElement(this.openFileType, new GuiMultiLineTextField(260, 10, fileContents));
                 break;
             }
-            case IMAGE: // TODO: Open an image viewer
+            case IMAGE:
             {
-                this.openFileType = "image_viewer";
-                this.addGuiElement(this.openFileType, new GuiImageViewer(file.getPath(), 258, 5, width - 243 - 20, height - (getBarHeight() * 2) - 9));
+                /*this.openFileType = "image_viewer";
+                this.addGuiElement(this.openFileType, new GuiImageViewer(file.getPath(), 258, 10, width - 243 - 25, height - 20));*/
+                this.mc.displayGuiScreen(new GuiScreenImageViewer("image_viewer", this, file.getPath()));
                 break;
             }
             default:
                 break;
         }
+    }
+
+    @Override
+    public boolean updateElement(String identifier, IGui gui)
+    {
+        if (identifier.equals("explorer"))
+            ((GuiFileExplorer) gui).setHeight(height - 10);
+        return true;
     }
 
     /*

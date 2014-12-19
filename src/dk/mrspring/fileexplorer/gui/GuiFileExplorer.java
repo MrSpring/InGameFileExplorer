@@ -22,6 +22,10 @@ public class GuiFileExplorer implements IGui, IMouseListener
     String currentPath;
     IOnFileOpened onFileOpened;
 
+    int pathX = 0, pathY = 0;
+    boolean drawPath = false;
+    GuiSimpleButton[] pathButtons;
+
     int scrollHeight = 0;
 
     GuiSimpleButton openFile;
@@ -62,6 +66,15 @@ public class GuiFileExplorer implements IGui, IMouseListener
     public GuiFileExplorer setShowControls(boolean showControls)
     {
         this.showControls = showControls;
+        return this;
+    }
+
+    public GuiFileExplorer setPathEditorPosition(int x, int y)
+    {
+        this.pathX = x;
+        this.pathY = y;
+        this.drawPath = true;
+        this.refreshList();
         return this;
     }
 
@@ -125,6 +138,9 @@ public class GuiFileExplorer implements IGui, IMouseListener
             float scrollBarY = scrollBarYRange * scrollProgress;
             DrawingHelper.drawQuad(x - 1, y + scrollBarY + 6, 2, 40, Color.WHITE, 1F);
         }
+
+        if (this.drawPath)
+            this.drawPath(minecraft, mouseX, mouseY);
     }
 
     @Override
@@ -145,6 +161,14 @@ public class GuiFileExplorer implements IGui, IMouseListener
             this.refreshList.update();
             this.newFolder.update();
             this.upOne.update();
+        }
+
+        if (drawPath)
+        {
+            if (this.pathButtons != null)
+                if (this.pathButtons.length > 0)
+                    for (GuiSimpleButton button : this.pathButtons)
+                        button.update();
         }
     }
 
@@ -174,6 +198,17 @@ public class GuiFileExplorer implements IGui, IMouseListener
         this.upOne.draw(minecraft, mouseX, mouseY);
     }
 
+    private void drawPath(Minecraft minecraft, int mouseX, int mouseY)
+    {
+        for (int i = 0; i < pathButtons.length; i++)
+        {
+            GuiSimpleButton button = pathButtons[i];
+            button.draw(minecraft, mouseX, mouseY);
+            if (i + 1 < pathButtons.length)
+                minecraft.fontRendererObj.drawString(">", button.getX() + button.getWidth() + 1, button.getY() + 3, 0xFFFFFF);
+        }
+    }
+
     @Override
     public boolean mouseDown(int mouseX, int mouseY, int mouseButton)
     {
@@ -185,6 +220,8 @@ public class GuiFileExplorer implements IGui, IMouseListener
             ; // TODO: this.createNewFile();
         else if (this.upOne.mouseDown(mouseX, mouseY, mouseButton))
             this.goUpOne();
+        else if (this.isPathClicked(mouseX, mouseY, mouseButton))
+            return true;
         else
         {
             boolean returnFromHere = false;
@@ -203,10 +240,31 @@ public class GuiFileExplorer implements IGui, IMouseListener
         return false;
     }
 
+    private boolean isPathClicked(int mouseX, int mouseY, int mouseButton)
+    {
+        if (this.drawPath)
+            if (this.pathButtons != null)
+                if (this.pathButtons.length > 0)
+                {
+                    String pathSoFar = "";
+                    for (GuiSimpleButton button : this.pathButtons)
+                    {
+                        pathSoFar += button.text;
+                        if (button.mouseDown(mouseX, mouseY, mouseButton))
+                        {
+                            this.openFile(new File(pathSoFar));
+                            return true;
+                        } else pathSoFar += File.separator;
+                    }
+                }
+        return false;
+    }
+
     private void goUpOne()
     {
         int lastIndexOfSeperator = this.currentPath.lastIndexOf(File.separator);
         System.out.println("seperator = " + File.separator);
+        System.out.println(currentPath);
         if (lastIndexOfSeperator > 1)
         {
             String goTo = this.currentPath.substring(0, lastIndexOfSeperator + 1);
@@ -266,6 +324,25 @@ public class GuiFileExplorer implements IGui, IMouseListener
                     GuiFileExplorer.this.openSelectedFile();
                 }
             }));
+        }
+
+        System.out.println("currentPath = " + currentPath);
+        String actualPath = new File(currentPath).getPath();
+        System.out.println("actualPath = " + actualPath);
+        String[] foldersToPath = actualPath.split("\\" + File.separator);
+
+        if (foldersToPath.length > 0)
+        {
+            this.pathButtons = new GuiSimpleButton[foldersToPath.length];
+            int xOffset = 0;
+            for (int i = 0; i < foldersToPath.length; i++)
+            {
+                String folderName = foldersToPath[i];
+                System.out.println("Adding: " + folderName + " to the button list.");
+                int folderWidth = Minecraft.getMinecraft().fontRendererObj.getStringWidth(folderName) + 6;
+                this.pathButtons[i] = new GuiSimpleButton(pathX + xOffset, pathY, folderWidth, 14, folderName);
+                xOffset += folderWidth + 6;
+            }
         }
     }
 

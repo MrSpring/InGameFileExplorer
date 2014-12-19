@@ -23,7 +23,7 @@ public class GuiScreen extends net.minecraft.client.gui.GuiScreen
     private boolean drawCenteredTitle = true;
     private boolean useDefaultDoneButton = true;
     private int barHeight = 30;
-    private net.minecraft.client.gui.GuiScreen previousScreen;
+    protected net.minecraft.client.gui.GuiScreen previousScreen;
 
     public GuiScreen(String title, net.minecraft.client.gui.GuiScreen previousScreen)
     {
