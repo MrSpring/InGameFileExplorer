@@ -25,7 +25,7 @@ public class GuiScreenImageViewer extends GuiScreen
     public void initGui()
     {
         super.initGui();
-        this.addGuiElement("image_viewer", new GuiImageViewer(image, 0, 0, width, height));
+        this.addGuiElement("image_viewer", new GuiImageViewer(image, 0, 0, width, height).centerImage());
         this.hideTitle().hideBars().hideDoneButton();
     }
 

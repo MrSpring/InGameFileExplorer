@@ -1,9 +1,6 @@
 package dk.mrspring.fileexplorer.gui.screen;
 
-import dk.mrspring.fileexplorer.gui.GuiFile;
-import dk.mrspring.fileexplorer.gui.GuiFileExplorer;
-import dk.mrspring.fileexplorer.gui.GuiMultiLineTextField;
-import dk.mrspring.fileexplorer.gui.IGui;
+import dk.mrspring.fileexplorer.gui.*;
 import dk.mrspring.fileexplorer.loader.FileLoader;
 
 import java.io.File;
@@ -66,9 +63,9 @@ public class GuiScreenFileExplorer extends GuiScreen
             }
             case IMAGE:
             {
-                /*this.openFileType = "image_viewer";
-                this.addGuiElement(this.openFileType, new GuiImageViewer(file.getPath(), 258, 10, width - 243 - 25, height - 20));*/
-                this.mc.displayGuiScreen(new GuiScreenImageViewer("image_viewer", this, file.getPath()));
+                this.openFileType = "image_viewer";
+                this.addGuiElement(this.openFileType, new GuiImageViewer(file.getPath(), 258, 10, width - 243 - 25, height - 20).enableFullscreenButton());
+//                this.mc.displayGuiScreen(new GuiScreenImageViewer("image_viewer", this, file.getPath()));
                 break;
             }
             default:
@@ -81,6 +78,8 @@ public class GuiScreenFileExplorer extends GuiScreen
     {
         if (identifier.equals("explorer"))
             ((GuiFileExplorer) gui).setHeight(height - 10);
+        else if (identifier.equals("image_viewer"))
+            ((GuiImageViewer) gui).setWidth(width - 243 - 25);
         return true;
     }
 

@@ -1,6 +1,7 @@
 package dk.mrspring.fileexplorer.gui;
 
 import dk.mrspring.fileexplorer.gui.helper.DrawingHelper;
+import dk.mrspring.fileexplorer.gui.screen.GuiScreenImageViewer;
 import dk.mrspring.fileexplorer.loader.ImageLoader;
 import net.minecraft.client.Minecraft;
 import org.lwjgl.opengl.GL11;
@@ -18,17 +19,23 @@ import static org.lwjgl.opengl.GL11.*;
 public class GuiImageViewer implements IGui//, IDelayedDraw
 {
     int x, y, w, h;
+    String path;
     BufferedImage image;
     ByteBuffer buffer;
     int textureId = -1;
     boolean failed = false;
+    boolean showFullscreenButton = false;
+    boolean center = false;
+    GuiSimpleButton fullscreenButton;
 
     public GuiImageViewer(final String path, int xPos, int yPos, int width, int height)
     {
+        this.path = path;
         x = xPos;
         y = yPos;
         w = width;
         h = height;
+        fullscreenButton = new GuiSimpleButton(x, y, 20, 20, "");
 
         Thread thread = new Thread(new Runnable()
         {
@@ -61,6 +68,18 @@ public class GuiImageViewer implements IGui//, IDelayedDraw
         }
         this.setImage(image);*/
         //textureId=ImageLoader.loadTexture(this.image);
+    }
+
+    public GuiImageViewer centerImage()
+    {
+        this.center = true;
+        return this;
+    }
+
+    public GuiImageViewer enableFullscreenButton()
+    {
+        this.showFullscreenButton = true;
+        return this;
     }
 
     private void onImageDoneLoading(BufferedImage image, ByteBuffer buffer)
@@ -116,11 +135,18 @@ public class GuiImageViewer implements IGui//, IDelayedDraw
             if (height > h)
             {
                 height = h;
-                //System.out.println("Height is: "+height +" width is "+imageHeight);
                 width = height * (imageWidth / imageHeight);
             }
-            DrawingHelper.drawTexturedRect(x, y, width, height, 0, 0, 512, 512, 1F);
-//            minecraft.getRenderManager().renderEngine.bindTexture(new ResourceLocation("minecraft", "textures/font/ascii.png"));
+            if (center)
+                DrawingHelper.drawTexturedRect(x + ((w - width) / 2), y + ((h - height) / 2), width, height, 0, 0, 512, 512, 1F);
+            else DrawingHelper.drawTexturedRect(x, y, width, height, 0, 0, 512, 512, 1F);
+            if (showFullscreenButton)
+            {
+                fullscreenButton.setX(x + (int) width - 20);
+                fullscreenButton.setY(y + (int) height - 20);
+                fullscreenButton.draw(minecraft, mouseX, mouseY);
+                DrawingHelper.drawIcon(DrawingHelper.fullscreenIcon, x + (int) width - 20, y + (int) height - 20, 20, 20, false);
+            }
         } else
         {
             if (this.image != null && this.buffer != null)
@@ -144,12 +170,16 @@ public class GuiImageViewer implements IGui//, IDelayedDraw
     @Override
     public void update()
     {
-
+        if (showFullscreenButton)
+            fullscreenButton.update();
     }
 
     @Override
     public boolean mouseDown(int mouseX, int mouseY, int mouseButton)
     {
+        if (showFullscreenButton)
+            if (fullscreenButton.mouseDown(mouseX, mouseY, mouseButton))
+                Minecraft.getMinecraft().displayGuiScreen(new GuiScreenImageViewer("Fullscreen Image Viewer", Minecraft.getMinecraft().currentScreen, path));
         return false;
     }
 

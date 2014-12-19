@@ -10,6 +10,56 @@ import static org.lwjgl.opengl.GL11.*;
  */
 public class DrawingHelper
 {
+    public static IIcon fullscreenIcon = new IIcon()
+    {
+        @Override
+        public Quad[] getQuads(float x, float y, float w, float h)
+        {
+            float tenthWidth = w / 10, tenthHeight = h / 10;
+            return new Quad[]{
+                    new Quad(
+                            x + tenthWidth, y + tenthHeight,
+                            x + 4 * tenthWidth, y + tenthWidth,
+                            x + tenthWidth, y + 4 * tenthHeight,
+                            x + tenthWidth, y + tenthHeight),
+                    new Quad(
+                            x + 6 * tenthWidth, y + tenthHeight,
+                            x + 9 * tenthWidth, y + tenthHeight,
+                            x + 9 * tenthWidth, y + 4 * tenthHeight,
+                            x + 6 * tenthWidth, y + tenthHeight),
+                    new Quad(
+                            x + tenthWidth, y + 6 * tenthHeight,
+                            x + tenthWidth, y + 9 * tenthHeight,
+                            x + 4 * tenthWidth, y + 9 * tenthHeight,
+                            x + tenthWidth, y + 6 * tenthHeight),
+                    new Quad(
+                            x + 6 * tenthWidth, y + 9 * tenthHeight,
+                            x + 9 * tenthWidth, y + 9 * tenthHeight,
+                            x + 9 * tenthWidth, y + 6 * tenthHeight,
+                            x + 6 * tenthWidth, y + 9 * tenthHeight),
+                    new Quad(
+                            x + 2 * tenthWidth, y + 3 * tenthHeight,
+                            x + 3 * tenthWidth, y + 2 * tenthHeight,
+                            x + 4 * tenthWidth, y + 3 * tenthHeight,
+                            x + 3 * tenthWidth, y + 4 * tenthHeight),
+                    new Quad(
+                            x + 6 * tenthWidth, y + 3 * tenthHeight,
+                            x + 7 * tenthWidth, y + 2 * tenthHeight,
+                            x + 8 * tenthWidth, y + 3 * tenthHeight,
+                            x + 7 * tenthWidth, y + 4 * tenthHeight),
+                    new Quad(
+                            x + 2 * tenthWidth, y + 7 * tenthHeight,
+                            x + 3 * tenthWidth, y + 8 * tenthHeight,
+                            x + 4 * tenthWidth, y + 7 * tenthHeight,
+                            x + 3 * tenthWidth, y + 6 * tenthHeight),
+                    new Quad(
+                            x + 6 * tenthWidth, y + 7 * tenthHeight,
+                            x + 7 * tenthWidth, y + 8 * tenthHeight,
+                            x + 8 * tenthWidth, y + 7 * tenthHeight,
+                            x + 7 * tenthWidth, y + 6 * tenthHeight)
+            };
+        }
+    };
     public static IIcon hoverIcon = new IIcon()
     {
         @Override
