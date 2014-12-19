@@ -1,18 +1,65 @@
 package dk.mrspring.fileexplorer.gui;
 
-import dk.mrspring.fileexplorer.gui.helper.Color;
-import dk.mrspring.fileexplorer.gui.helper.DrawingHelper;
-import dk.mrspring.fileexplorer.gui.helper.GuiHelper;
-import dk.mrspring.fileexplorer.gui.helper.TextHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
-import org.lwjgl.input.Keyboard;
 
 /**
  * Created by MrSpring on 14-11-2014 for In-Game File Explorer.
  */
 public class GuiCustomTextField implements IGui
 {
+    int x, y, w, h;
+    int cursorPos = 0;
+    int renderStart, renderEnd;
+    String text;
+    boolean focused;
+
+    public GuiCustomTextField(int x, int y, int width, int height, String startText)
+    {
+
+    }
+
+    private void loadRenderLimits(FontRenderer renderer)
+    {
+
+    }
+
+    @Override
+    public void draw(Minecraft minecraft, int mouseX, int mouseY)
+    {
+
+    }
+
+    @Override
+    public void update()
+    {
+
+    }
+
+    @Override
+    public boolean mouseDown(int mouseX, int mouseY, int mouseButton)
+    {
+        return false;
+    }
+
+    @Override
+    public void mouseUp(int mouseX, int mouseY, int mouseButton)
+    {
+
+    }
+
+    @Override
+    public void mouseClickMove(int mouseX, int mouseY, int mouseButton, long timeSinceClick)
+    {
+
+    }
+
+    @Override
+    public void handleKeyTyped(int keyCode, char character)
+    {
+
+    }
+/*
     int x, y, w, h;
     String text = "";
     boolean focused = false;
@@ -151,7 +198,8 @@ public class GuiCustomTextField implements IGui
         } else editX = textWidth;
 
 
-        /*if (localMouseX < textWidth)
+        */
+/*if (localMouseX < textWidth)
             editX = renderer.splitStringWidth(this.getText(), localMouseX);
         else editX = 0;
 
@@ -163,7 +211,8 @@ public class GuiCustomTextField implements IGui
         {
             int characterWidth=renderer.getCharWidth(character);
             renderer.splitStringWidth()
-        }*/
+        }*//*
+
     }
 
     public void writeCharacter(char character)
@@ -242,21 +291,25 @@ public class GuiCustomTextField implements IGui
     @Override
     public void handleKeyTyped(int keyCode, char character)
     {
-        if (keyCode == Keyboard.KEY_LEFT)
+        if (this.focused)
         {
-            if (this.getEditPosition() > 0)
-                this.setEditPosition(this.getEditPosition() - 1);
-            this.recalculateEditRenderPosition(Minecraft.getMinecraft());
-        } else if (keyCode == Keyboard.KEY_RIGHT)
-        {
-            if (this.getEditPosition() < this.getText().length())
-                this.setEditPosition(this.getEditPosition() + 1);
-            this.recalculateEditRenderPosition(Minecraft.getMinecraft());
-        } else if (keyCode == Keyboard.KEY_BACK)
-            this.delete(-1);
-        else if (keyCode == Keyboard.KEY_DELETE)
-            this.delete(1);
-        else if (TextHelper.isKeyWritable(keyCode))
-            this.writeCharacter(character);
+            if (keyCode == Keyboard.KEY_LEFT)
+            {
+                if (this.getEditPosition() > 0)
+                    this.setEditPosition(this.getEditPosition() - 1);
+                this.recalculateEditRenderPosition(Minecraft.getMinecraft());
+            } else if (keyCode == Keyboard.KEY_RIGHT)
+            {
+                if (this.getEditPosition() < this.getText().length())
+                    this.setEditPosition(this.getEditPosition() + 1);
+                this.recalculateEditRenderPosition(Minecraft.getMinecraft());
+            } else if (keyCode == Keyboard.KEY_BACK)
+                this.delete(-1);
+            else if (keyCode == Keyboard.KEY_DELETE)
+                this.delete(1);
+            else if (TextHelper.isKeyWritable(keyCode))
+                this.writeCharacter(character);
+        }
     }
+*/
 }

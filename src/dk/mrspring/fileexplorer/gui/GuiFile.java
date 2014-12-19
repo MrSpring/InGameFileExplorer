@@ -239,7 +239,8 @@ public class GuiFile extends GuiFileBase
         }),
         FOLDER(DrawingHelper.folderIcon),
         TEXT_FILE(DrawingHelper.textFileIcon, ".txt"),
-        IMAGE(DrawingHelper.imageIcon, ".png", ".jpg", ".jpeg");
+        IMAGE(DrawingHelper.imageIcon, ".png", ".jpg", ".jpeg"),
+        JSON(DrawingHelper.textFileIcon, ".json");
 
         private EnumFileType(IIcon icon, String... fileTypes)
         {

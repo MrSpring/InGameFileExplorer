@@ -68,6 +68,12 @@ public class GuiScreenFileExplorer extends GuiScreen
 //                this.mc.displayGuiScreen(new GuiScreenImageViewer("image_viewer", this, file.getPath()));
                 break;
             }
+            case JSON:
+            {
+                this.openFileType = "json_editor";
+                this.addGuiElement(this.openFileType, new GuiJsonEditor(258, 10, width - 243 - 25, height - 20, file));
+                break;
+            }
             default:
                 break;
         }
