@@ -1,7 +1,9 @@
 package dk.mrspring.fileexplorer.gui;
 
+import dk.mrspring.fileexplorer.gui.helper.GuiHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
+import org.lwjgl.input.Keyboard;
 
 /**
  * Created by MrSpring on 14-11-2014 for In-Game File Explorer.
@@ -16,18 +18,55 @@ public class GuiCustomTextField implements IGui
 
     public GuiCustomTextField(int x, int y, int width, int height, String startText)
     {
-
+        this.x = x;
+        this.y = y;
+        this.w = width;
+        this.h = height;
+        this.text = startText;
+        renderStart = 0;
+        renderEnd = Minecraft.getMinecraft().fontRendererObj.trimStringToWidth(text, w - 6).length(); // TODO: 3 pixels either side of the text.
+//        this.loadRenderLimits(Minecraft.getMinecraft().fontRendererObj);
     }
 
     private void loadRenderLimits(FontRenderer renderer)
     {
-
+        if (this.cursorPos > renderEnd - 4)
+        {
+            while (this.cursorPos > renderEnd - 4 && renderEnd < text.length())
+            {
+                this.renderStart++;
+                System.out.println("Render Start: " + renderStart + ", Render End: " + renderEnd + ", Cursor Position: " + cursorPos + ", Text Length: " + text.length());
+                String cutString = text.substring(renderStart);
+                renderEnd = renderStart + renderer.trimStringToWidth(cutString, w - 6).length();
+            }
+        } else if (this.cursorPos < renderStart + 4)
+        {
+            while (this.cursorPos < renderStart + 4 && renderStart > 0)
+            {
+                this.renderStart--;
+                String cutString = text.substring(renderStart);
+                renderEnd = renderStart + renderer.trimStringToWidth(cutString, w - 6).length();
+            }
+        }
     }
 
     @Override
     public void draw(Minecraft minecraft, int mouseX, int mouseY)
     {
 
+        String trimmedString = text.substring(renderStart, renderEnd);
+        char[] characters = trimmedString.toCharArray();
+        int xOffset = 0;
+        for (int i = 0; i < characters.length; i++)
+        {
+            char character = characters[i];
+            minecraft.fontRendererObj.drawStringWithShadow(String.valueOf(character), x + 3 + xOffset, y, 0xFFFFFF);
+            if (i + renderStart == cursorPos)
+                minecraft.fontRendererObj.drawString("|", x + xOffset + 2F, y, 0xFF0000, false);
+            else if (i + renderStart + 1 == cursorPos)
+                minecraft.fontRendererObj.drawString("|", x + xOffset + 2F + minecraft.fontRendererObj.getCharWidth(character), y, 0xFF0000, false);
+            xOffset += minecraft.fontRendererObj.getCharWidth(character);
+        }
     }
 
     @Override
@@ -39,7 +78,11 @@ public class GuiCustomTextField implements IGui
     @Override
     public boolean mouseDown(int mouseX, int mouseY, int mouseButton)
     {
-        return false;
+        if (GuiHelper.isMouseInBounds(mouseX, mouseY, x, y, w, h))
+        {
+            focused = true;
+            return true;
+        } else return false;
     }
 
     @Override
@@ -54,10 +97,33 @@ public class GuiCustomTextField implements IGui
 
     }
 
+    public void setCursorPos(int cursorPos)
+    {
+        if (cursorPos >= 0 && cursorPos < text.length() + 1)
+            this.cursorPos = cursorPos;
+    }
+
     @Override
     public void handleKeyTyped(int keyCode, char character)
     {
+        if (keyCode == Keyboard.KEY_RIGHT)
+        {
+            this.setCursorPos(this.cursorPos + 1);
+            this.loadRenderLimits(Minecraft.getMinecraft().fontRendererObj);
+        } else if (keyCode == Keyboard.KEY_LEFT)
+        {
+            this.setCursorPos(this.cursorPos - 1);
+            this.loadRenderLimits(Minecraft.getMinecraft().fontRendererObj);
+        } else this.writeCharacter(character);
+    }
 
+    public void writeCharacter(char character)
+    {
+        StringBuilder builder = new StringBuilder(this.text);
+        builder.insert(this.cursorPos, character);
+        this.text = (builder.toString());
+        this.setCursorPos(this.cursorPos + 1);
+        this.loadRenderLimits(Minecraft.getMinecraft().fontRendererObj);
     }
 /*
     int x, y, w, h;
