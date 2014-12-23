@@ -43,85 +43,37 @@ public class GuiCustomTextField implements IGui
         String cutText = text.substring(renderStart);
         int cursorPosition = renderer.getStringWidth(cutText.substring(0, cursorPos - renderStart));
         int minimum = 10, maximum = w - 8 - 10;
-
-        System.out.println("");
-        System.out.println("Starting loading...");
-        System.out.println("minimum = " + minimum);
-        System.out.println("maximum = " + maximum);
-        System.out.println("cursorPosition = " + cursorPosition);
-        System.out.println("renderStart = " + renderStart);
-        System.out.println("renderEnd = " + renderEnd);
-
         if (cursorPosition < minimum && renderStart > 0)
         {
             while (cursorPosition < minimum && renderStart > 0)
             {
-                System.out.println("Decreasing renderStart!");
-                System.out.println("renderStart = " + renderStart);
                 renderStart--;
                 cutText = text.substring(renderStart);
                 cursorPosition = renderer.getStringWidth(cutText.substring(0, cursorPos - renderStart));
             }
             String textWithinLength = renderer.trimStringToWidth(cutText, w - 8);
             renderEnd = textWithinLength.length();
-            System.out.println("renderEnd = " + renderEnd);
         }
         if (cursorPosition > maximum && renderEnd < text.length())
         {
             while (cursorPosition > maximum && renderEnd < text.length())
             {
-                System.out.println("Increasing renderStart!");
-                System.out.println("renderStart = " + renderStart);
                 renderStart++;
                 cutText = text.substring(renderStart);
                 cursorPosition = renderer.getStringWidth(cutText.substring(0, cursorPos - renderStart));
             }
             String textWithinLength = renderer.trimStringToWidth(cutText, w - 8);
             renderEnd = renderStart + textWithinLength.length();
-            System.out.println("Cutting: \"" + cutText + "\" to width: " + (w - 8) + ", result: \"" + textWithinLength + "\", with a length of: " + textWithinLength.length());
-            System.out.println("renderEnd = " + renderEnd);
         }
     }
-        /*if (renderer.getStringWidth(text) <= this.w - 8)
-        {
-            this.renderStart = 0;
-            this.renderEnd = text.length();
-            return;
-        }
-
-        if (renderEnd > text.length())
-            renderEnd = text.length();
-
-        if (this.cursorPos > renderer.trimStringToWidth(text.substring(renderStart), w - 6).length() - 4)
-        {
-            while (this.cursorPos > renderer.trimStringToWidth(text.substring(renderStart), w - 6).length() - 4 && renderEnd < text.length())
-            {
-                this.renderStart++;
-                System.out.println("Render Start: " + renderStart + ", Render End: " + renderEnd + ", Cursor Position: " + cursorPos + ", Text Length: " + text.length());
-                String cutString = text.substring(renderStart);
-                renderEnd = renderStart + renderer.trimStringToWidth(cutString, w - 8).length();
-            }
-        } else if (this.cursorPos < renderStart + 4)
-        {
-            while (this.cursorPos < renderStart + 4 && renderStart > 0)
-            {
-                this.renderStart--;
-                String cutString = text.substring(renderStart);
-                renderEnd = renderStart + renderer.trimStringToWidth(cutString, w - 8).length();
-            }
-        }
-    }*/
 
     @Override
     public void draw(Minecraft minecraft, int mouseX, int mouseY)
     {
-//        DrawingHelper.drawIcon(DrawingHelper.hoverIcon, x, y, w, h, false);
         DrawingHelper.drawButtonThingy(x, y, w, h, focused ? 1 : 0, true, Color.BLACK, 0.85F, Color.BLACK, 0.85F);
 
         if (renderEnd > text.length())
             this.loadRenderLimits(minecraft.fontRendererObj);
-
-//        System.out.println("Render Start: " + renderStart + ", Render End: " + renderEnd + ", Text Length: " + text.length() + ", Cursor Pos: " + cursorPos);
 
         String trimmedString = text.substring(renderStart, renderEnd);
         char[] characters = trimmedString.toCharArray();
@@ -204,11 +156,9 @@ public class GuiCustomTextField implements IGui
 
     public void setCursorPos(int newCursorPos, boolean moveSelection)
     {
-        System.out.println("Old Cursor Pos: " + this.cursorPos + ", New Cursor Pos: " + newCursorPos + ", Text Length: " + text.length());
         if (newCursorPos >= 0 && newCursorPos < text.length() + 1)
         {
             this.cursorPos = newCursorPos;
-            System.out.println("Setting to new cursor pos!");
             if (moveSelection)
             {
                 if (!(Keyboard.isKeyDown(Keyboard.KEY_LSHIFT) || Keyboard.isKeyDown(Keyboard.KEY_RSHIFT)))
@@ -388,5 +338,25 @@ public class GuiCustomTextField implements IGui
     public boolean isFocused()
     {
         return focused;
+    }
+
+    public int getX()
+    {
+        return x;
+    }
+
+    public int getY()
+    {
+        return y;
+    }
+
+    public int getW()
+    {
+        return w;
+    }
+
+    public int getH()
+    {
+        return h;
     }
 }
