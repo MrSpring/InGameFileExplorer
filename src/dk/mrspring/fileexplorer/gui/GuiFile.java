@@ -232,7 +232,7 @@ public class GuiFile extends GuiFileBase
         UNKNOWN(new IIcon()
         {
             @Override
-            public Quad[] getQuads(float x, float y, float w, float h)
+            public Quad[] getQuads(float x, float y, float w, float h, float alpha)
             {
                 return new Quad[]{new Quad(x, y, w, h)};
             }

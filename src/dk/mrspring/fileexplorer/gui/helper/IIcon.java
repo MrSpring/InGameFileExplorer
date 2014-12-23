@@ -5,5 +5,5 @@ package dk.mrspring.fileexplorer.gui.helper;
  */
 public interface IIcon
 {
-    public Quad[] getQuads(float x, float y, float w, float h);
+    public Quad[] getQuads(float x, float y, float w, float h, float alpha);
 }

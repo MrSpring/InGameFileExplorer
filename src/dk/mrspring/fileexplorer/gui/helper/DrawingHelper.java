@@ -13,7 +13,7 @@ public class DrawingHelper
     public static IIcon fullscreenIcon = new IIcon()
     {
         @Override
-        public Quad[] getQuads(float x, float y, float w, float h)
+        public Quad[] getQuads(float x, float y, float w, float h, float alpha)
         {
             float tenthWidth = w / 10, tenthHeight = h / 10;
             return new Quad[]{
@@ -63,12 +63,12 @@ public class DrawingHelper
     public static IIcon hoverIcon = new IIcon()
     {
         @Override
-        public Quad[] getQuads(float x, float y, float w, float h)
+        public Quad[] getQuads(float x, float y, float w, float h, float alpha)
         {
             return new Quad[]{
-                    new Quad(x + 1, y, w - 2, h, Color.BLACK, 0.8F),
-                    new Quad(x, y + 1, 1, h - 2, Color.BLACK, 0.8F),
-                    new Quad(x + w - 1, y + 1, 1, h - 2, Color.BLACK, 0.8F),
+                    new Quad(x + 1, y, w - 2, h, Color.BLACK, alpha),
+                    new Quad(x, y + 1, 1, h - 2, Color.BLACK, alpha),
+                    new Quad(x + w - 1, y + 1, 1, h - 2, Color.BLACK, alpha),
                     new Quad(x + 1, y + 1, w - 2, 1, Color.WHITE, 1F),
                     new Quad(x + 1, y + 2, 1, h - 4, Color.WHITE, 1F),
                     new Quad(x + w - 2, y + 2, 1, h - 3, Color.LTGREY, 1F),
@@ -79,7 +79,7 @@ public class DrawingHelper
     public static IIcon crossIcon = new IIcon()
     {
         @Override
-        public Quad[] getQuads(float x, float y, float w, float h)
+        public Quad[] getQuads(float x, float y, float w, float h, float alpha)
         {
             float tenthWidth = w / 10, tenthHeight = h / 10;
             return new Quad[]{
@@ -99,7 +99,7 @@ public class DrawingHelper
     public static IIcon checkMarkIcon = new IIcon()
     {
         @Override
-        public Quad[] getQuads(float x, float y, float w, float h)
+        public Quad[] getQuads(float x, float y, float w, float h, float alpha)
         {
             float tenthWidth = w / 10, tenthHeight = h / 10;
             return new Quad[]{
@@ -119,7 +119,7 @@ public class DrawingHelper
     public static IIcon editIcon = new IIcon()
     {
         @Override
-        public Quad[] getQuads(float x, float y, float w, float h)
+        public Quad[] getQuads(float x, float y, float w, float h, float alpha)
         {
             float tenthWidth = w / 10, tenthHeight = h / 10;
             return new Quad[]{
@@ -141,7 +141,7 @@ public class DrawingHelper
     public static IIcon playIcon = new IIcon()
     {
         @Override
-        public Quad[] getQuads(float x, float y, float w, float h)
+        public Quad[] getQuads(float x, float y, float w, float h, float alpha)
         {
             float tenthWidth = w / 10, tenthHeight = h / 10;
             return new Quad[]{new Quad(
@@ -156,7 +156,7 @@ public class DrawingHelper
     public static IIcon pauseIcon = new IIcon()
     {
         @Override
-        public Quad[] getQuads(float x, float y, float w, float h)
+        public Quad[] getQuads(float x, float y, float w, float h, float alpha)
         {
             float tenthWidth = w / 10, tenthHeight = h / 10;
             return new Quad[]{
@@ -177,7 +177,7 @@ public class DrawingHelper
     public static IIcon imageIcon = new IIcon()
     {
         @Override
-        public Quad[] getQuads(float x, float y, float w, float h)
+        public Quad[] getQuads(float x, float y, float w, float h, float alpha)
         {
             float tenthWidth = w / 10, tenthHeight = h / 10;
             return new Quad[]{
@@ -213,7 +213,7 @@ public class DrawingHelper
     public static IIcon folderIcon = new IIcon()
     {
         @Override
-        public Quad[] getQuads(float x, float y, float w, float h)
+        public Quad[] getQuads(float x, float y, float w, float h, float alpha)
         {
             float tenthWidth = w / 10, tenthHeight = h / 10;
             return new Quad[]{
@@ -249,7 +249,7 @@ public class DrawingHelper
     public static IIcon textFileIcon = new IIcon()
     {
         @Override
-        public Quad[] getQuads(float x, float y, float w, float h)
+        public Quad[] getQuads(float x, float y, float w, float h, float alpha)
         {
             float tenthWidth = w / 10, tenthHeight = h / 10;
             return new Quad[]{
@@ -324,10 +324,24 @@ public class DrawingHelper
         ));
     }
 
-    public static void drawButtonThingy(float x, float y, float w, float h, Color c1, float a1, Color c2, float a2)
+    public static void drawButtonThingy(float x, float y, float w, float h, float alphaProgress, boolean enabled, Color startColor, float startAlphaMultiplier, Color endColor, float endAlphaMultiplier)
     {
-        drawQuad(x, y, w, h, c1, a1);
-        drawOutline(x, y, w, h, c2, a2);
+        drawIcon(hoverIcon, x, y, w, h, 0.25F, false);
+        if (enabled)
+            drawVerticalGradient(x + 2, y + 2, w - 4, h - 4, startColor, alphaProgress * startAlphaMultiplier, endColor, alphaProgress * endAlphaMultiplier);
+        else DrawingHelper.drawVerticalGradient(x + 2, y + 2, w - 4, h - 4, Color.LTGREY, 0.5F, Color.DKGREY, 0.8F);
+//        drawQuad(x, y, w, h, c1, a1);
+//        drawOutline(x, y, w, h, c2, a2);
+    }
+
+    public static void drawButtonThingy(float x, float y, float w, float h, float alphaProgress, boolean enabled, Color startColor, Color endColor)
+    {
+        drawButtonThingy(x, y, w, h, alphaProgress, enabled, startColor, 0.25F, endColor, 0.5F);
+    }
+
+    public static void drawButtonThingy(float x, float y, float w, float h, float alphaProgress, boolean enabled)
+    {
+        drawButtonThingy(x, y, w, h, alphaProgress, enabled, Color.CYAN, Color.BLUE);
     }
 
     public static void drawOutline(float x, float y, float w, float h, Color c, float a)
@@ -362,10 +376,20 @@ public class DrawingHelper
         glDisable(GL_BLEND);
     }
 
+    public static void drawIcon(IIcon icon, float x, float y, float w, float h, float alpha)
+    {
+        drawIcon(icon, x, y, w, h, alpha, true);
+    }
+
     public static void drawIcon(IIcon icon, float x, float y, float w, float h, boolean shadow)
     {
+        drawIcon(icon, x, y, w, h, 0.85F, shadow);
+    }
+
+    public static void drawIcon(IIcon icon, float x, float y, float w, float h, float alpha, boolean shadow)
+    {
         float twentiethWidth = w / 20, twentiethHeight = h / 20;
-        Quad[] quads = icon.getQuads(x, y, w, h);
+        Quad[] quads = icon.getQuads(x, y, w, h, alpha);
         if (shadow)
             for (Quad quad : quads)
             {

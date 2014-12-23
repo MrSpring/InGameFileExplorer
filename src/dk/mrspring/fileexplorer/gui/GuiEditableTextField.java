@@ -3,7 +3,6 @@ package dk.mrspring.fileexplorer.gui;
 import dk.mrspring.fileexplorer.gui.helper.DrawingHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.client.gui.GuiTextField;
 
 /**
  * Created by MrSpring on 09-11-2014 for In-Game File Explorer.
@@ -11,7 +10,7 @@ import net.minecraft.client.gui.GuiTextField;
 public class GuiEditableTextField implements IGui
 {
     int x, y, w, h, minW, buttonSize;
-    GuiTextField textField;
+    GuiCustomTextField textField;
     GuiSimpleButton editButton, saveButton, cancelButton;
     String value;
     boolean editing = false;
@@ -33,7 +32,8 @@ public class GuiEditableTextField implements IGui
 
         buttonSize = height;
 
-        textField = new GuiTextField(200, fontRenderer, x + (buttonSize * 2) + (spacing * 2), y, w - (buttonSize * 2) - (spacing * 2), h);
+//        textField = new GuiTextField(200, fontRenderer, x + (buttonSize * 2) + (spacing * 2), y, w - (buttonSize * 2) - (spacing * 2), h);
+        textField = new GuiCustomTextField(x + (buttonSize * 2) + (spacing * 2), y, w - (buttonSize * 2) - (spacing * 2), h, startValue);
         editButton = new GuiSimpleButton(x + buttonSize + spacing, y, buttonSize, buttonSize, "");
         cancelButton = new GuiSimpleButton(x + buttonSize + spacing, y, buttonSize, buttonSize, "");
         saveButton = new GuiSimpleButton(x, y, buttonSize, buttonSize, "");
@@ -42,6 +42,7 @@ public class GuiEditableTextField implements IGui
     public void setX(int newX)
     {
         x = newX;
+        this.textField.setX(newX);
     }
 
     public void setOnSave(Runnable onSave)
@@ -52,8 +53,8 @@ public class GuiEditableTextField implements IGui
     public void startEditing()
     {
         this.editing = true;
-        textField = new GuiTextField(200, renderer, x + (buttonSize * 2) + (spacing * 2), y, w - (buttonSize * 2) - (spacing * 2), h);
         textField.setText(value);
+        textField.setCursorPos(0, false);
     }
 
     public void cancelEditing()
@@ -84,7 +85,7 @@ public class GuiEditableTextField implements IGui
     {
         if (editing)
         {
-            this.textField.drawTextBox();
+            this.textField.draw(minecraft, mouseX, mouseY);
             this.saveButton.draw(minecraft, mouseX, mouseY);
             this.cancelButton.draw(minecraft, mouseX, mouseY);
 
@@ -128,7 +129,7 @@ public class GuiEditableTextField implements IGui
                 return true;
             } else
             {
-                this.textField.mouseClicked(mouseX, mouseY, mouseButton);
+                this.textField.mouseDown(mouseX, mouseY, mouseButton);
                 return false;
             }
         } else
@@ -157,17 +158,11 @@ public class GuiEditableTextField implements IGui
     public void handleKeyTyped(int keyCode, char character)
     {
         if (this.editing && this.textField.isFocused())
-            this.textField.textboxKeyTyped(character, keyCode);
+            this.textField.handleKeyTyped(keyCode, character);
     }
 
     public boolean isEditing()
     {
         return editing;
-    }
-
-    public void keyPressed(int keyCode, char character)
-    {
-        if (this.editing && this.textField.isFocused())
-            this.textField.textboxKeyTyped(character, keyCode);
     }
 }

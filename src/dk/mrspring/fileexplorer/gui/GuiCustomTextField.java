@@ -40,9 +40,33 @@ public class GuiCustomTextField implements IGui
 
     private void loadRenderLimits(FontRenderer renderer)
     {
-        if (this.cursorPos > renderEnd - 4)
+        String cutText = text.substring(renderStart);
+        int cursorPosition = renderer.getStringWidth(cutText.substring(0, cursorPos));
+        int minimum = 10, maximum = w - 8 - 10;
+
+        if (cursorPosition < minimum && renderStart > 0)
         {
-            while (this.cursorPos > renderEnd - 4 && renderEnd < text.length())
+            renderStart--;
+            this.loadRenderLimits(renderer);
+        }
+        if (cursorPosition > maximum && renderEnd < text.length())
+        {
+            // TODO: Do the while (loop)
+        }
+    }
+        /*if (renderer.getStringWidth(text) <= this.w - 8)
+        {
+            this.renderStart = 0;
+            this.renderEnd = text.length();
+            return;
+        }
+
+        if (renderEnd > text.length())
+            renderEnd = text.length();
+
+        if (this.cursorPos > renderer.trimStringToWidth(text.substring(renderStart), w - 6).length() - 4)
+        {
+            while (this.cursorPos > renderer.trimStringToWidth(text.substring(renderStart), w - 6).length() - 4 && renderEnd < text.length())
             {
                 this.renderStart++;
                 System.out.println("Render Start: " + renderStart + ", Render End: " + renderEnd + ", Cursor Position: " + cursorPos + ", Text Length: " + text.length());
@@ -58,12 +82,18 @@ public class GuiCustomTextField implements IGui
                 renderEnd = renderStart + renderer.trimStringToWidth(cutString, w - 8).length();
             }
         }
-    }
+    }*/
 
     @Override
     public void draw(Minecraft minecraft, int mouseX, int mouseY)
     {
-        DrawingHelper.drawIcon(DrawingHelper.hoverIcon, x, y, w, h, false);
+//        DrawingHelper.drawIcon(DrawingHelper.hoverIcon, x, y, w, h, false);
+        DrawingHelper.drawButtonThingy(x, y, w, h, focused ? 1 : 0, true, Color.BLACK, 0.85F, Color.BLACK, 0.85F);
+
+        if (renderEnd > text.length())
+            this.loadRenderLimits(minecraft.fontRendererObj);
+
+//        System.out.println("Render Start: " + renderStart + ", Render End: " + renderEnd + ", Text Length: " + text.length() + ", Cursor Pos: " + cursorPos);
 
         String trimmedString = text.substring(renderStart, renderEnd);
         char[] characters = trimmedString.toCharArray();
@@ -89,16 +119,17 @@ public class GuiCustomTextField implements IGui
                 selectionX = xOffset + 1;
 
             char character = characters[i];
+
             minecraft.fontRendererObj.drawStringWithShadow(String.valueOf(character), x + 4 + xOffset, textY, 0xFFFFFF);
-            if (i + renderStart == cursorPos)
-            {
+
+            if (i + renderStart == cursorPos && focused)
                 minecraft.fontRendererObj.drawString("|", x + xOffset + 3F, textY, 0xFF0000, false);
-            } else if (i + renderStart + 1 == cursorPos)
-            {
+            else if (i + renderStart + 1 == cursorPos && focused)
                 minecraft.fontRendererObj.drawString("|", x + xOffset + 3F + minecraft.fontRendererObj.getCharWidth(character), textY, 0xFF0000, false);
-            }
+
             if (i + renderStart == selectionEnd)
                 selectionWidth = xOffset - selectionX + 1;
+
             xOffset += minecraft.fontRendererObj.getCharWidth(character);
         }
         if (cursorPos != selectionStartPos)
@@ -127,11 +158,8 @@ public class GuiCustomTextField implements IGui
     @Override
     public boolean mouseDown(int mouseX, int mouseY, int mouseButton)
     {
-        if (GuiHelper.isMouseInBounds(mouseX, mouseY, x, y, w, h))
-        {
-            focused = true;
-            return true;
-        } else return false;
+        focused = GuiHelper.isMouseInBounds(mouseX, mouseY, x, y, w, h);
+        return focused;
     }
 
     @Override
@@ -146,40 +174,43 @@ public class GuiCustomTextField implements IGui
 
     }
 
-    public void setCursorPos(int cursorPos, boolean moveSelection)
+    public void setCursorPos(int newCursorPos, boolean moveSelection)
     {
-        if (cursorPos >= 0 && cursorPos < text.length() + 1)
+        System.out.println("Old Cursor Pos: " + this.cursorPos + ", New Cursor Pos: " + newCursorPos);
+        if (newCursorPos >= 0 && newCursorPos < text.length() + 1)
         {
-            this.cursorPos = cursorPos;
+            this.cursorPos = newCursorPos;
             if (moveSelection)
             {
                 if (!(Keyboard.isKeyDown(Keyboard.KEY_LSHIFT) || Keyboard.isKeyDown(Keyboard.KEY_RSHIFT)))
-                    this.selectionStartPos = cursorPos;
-            } else this.selectionStartPos = cursorPos;
+                    this.selectionStartPos = newCursorPos;
+            } else this.selectionStartPos = newCursorPos;
         }
+        this.loadRenderLimits(Minecraft.getMinecraft().fontRendererObj);
     }
 
     @Override
     public void handleKeyTyped(int keyCode, char character)
     {
-        if (keyCode == Keyboard.KEY_RIGHT)
-        {
-            this.setCursorPos(this.cursorPos + 1, true);
-            this.loadRenderLimits(Minecraft.getMinecraft().fontRendererObj);
-        } else if (keyCode == Keyboard.KEY_LEFT)
-        {
-            this.setCursorPos(this.cursorPos - 1, true);
-            this.loadRenderLimits(Minecraft.getMinecraft().fontRendererObj);
-        } else if (keyCode == Keyboard.KEY_BACK)
-            this.backspace();
-        else if (keyCode == Keyboard.KEY_DELETE)
-            this.delete();
-        else if (keyCode == Keyboard.KEY_V && (Keyboard.isKeyDown(Keyboard.KEY_LCONTROL) || Keyboard.isKeyDown(Keyboard.KEY_LCONTROL)))
-            this.paste();
-        else if (keyCode == Keyboard.KEY_C && (Keyboard.isKeyDown(Keyboard.KEY_LCONTROL) || Keyboard.isKeyDown(Keyboard.KEY_LCONTROL)))
-            this.copySelection();
-        else if (TextHelper.isKeyWritable(keyCode))
-            this.writeCharacter(character);
+        if (focused)
+            if (keyCode == Keyboard.KEY_RIGHT)
+            {
+                this.setCursorPos(this.cursorPos + 1, true);
+                this.loadRenderLimits(Minecraft.getMinecraft().fontRendererObj);
+            } else if (keyCode == Keyboard.KEY_LEFT)
+            {
+                this.setCursorPos(this.cursorPos - 1, true);
+                this.loadRenderLimits(Minecraft.getMinecraft().fontRendererObj);
+            } else if (keyCode == Keyboard.KEY_BACK)
+                this.backspace();
+            else if (keyCode == Keyboard.KEY_DELETE)
+                this.delete();
+            else if (keyCode == Keyboard.KEY_V && (Keyboard.isKeyDown(Keyboard.KEY_LCONTROL) || Keyboard.isKeyDown(Keyboard.KEY_LCONTROL)))
+                this.paste();
+            else if (keyCode == Keyboard.KEY_C && (Keyboard.isKeyDown(Keyboard.KEY_LCONTROL) || Keyboard.isKeyDown(Keyboard.KEY_LCONTROL)))
+                this.copySelection();
+            else if (TextHelper.isKeyWritable(keyCode))
+                this.writeCharacter(character);
     }
 
     private void copySelection()
@@ -188,6 +219,16 @@ public class GuiCustomTextField implements IGui
         Toolkit toolkit = Toolkit.getDefaultToolkit();
         Clipboard clipboard = toolkit.getSystemClipboard();
         clipboard.setContents(selection, selection);
+    }
+
+    public void setText(String text)
+    {
+        this.text = text;
+    }
+
+    public String getText()
+    {
+        return text;
     }
 
     private void paste()
@@ -255,6 +296,7 @@ public class GuiCustomTextField implements IGui
                 StringBuilder builder = new StringBuilder(this.text);
                 builder.delete(this.cursorPos, this.cursorPos + 1);
                 text = builder.toString();
+                this.loadRenderLimits(Minecraft.getMinecraft().fontRendererObj);
             }
         }
     }
@@ -292,5 +334,30 @@ public class GuiCustomTextField implements IGui
             }
             return text.substring(selectionStart, selectionEnd);
         } else return "";
+    }
+
+    public void setX(int x)
+    {
+        this.x = x;
+    }
+
+    public void setY(int y)
+    {
+        this.y = y;
+    }
+
+    public void setW(int w)
+    {
+        this.w = w;
+    }
+
+    public void setH(int h)
+    {
+        this.h = h;
+    }
+
+    public boolean isFocused()
+    {
+        return focused;
     }
 }

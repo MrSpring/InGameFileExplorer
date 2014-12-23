@@ -1,6 +1,5 @@
 package dk.mrspring.fileexplorer.gui;
 
-import dk.mrspring.fileexplorer.gui.helper.Color;
 import dk.mrspring.fileexplorer.gui.helper.DrawingHelper;
 import dk.mrspring.fileexplorer.gui.helper.GuiHelper;
 import net.minecraft.client.Minecraft;
@@ -63,21 +62,22 @@ public class GuiSimpleButton implements IGui
     public void draw(Minecraft minecraft, int mouseX, int mouseY)
     {
 //        DrawingHelper.drawButtonThingy(x, y, width, height, Color.BLACK, 0.25F, Color.WHITE, 1F);
-        if (this.drawBackground)
-            DrawingHelper.drawQuad(x, y, width, height, Color.BLACK, 0.25F);
-        DrawingHelper.drawOutline(x, y, width, height, Color.WHITE, 1F);
+//        if (this.drawBackground)
+//            DrawingHelper.drawQuad(x, y, width, height, Color.BLACK, 0.25F);
+//        DrawingHelper.drawOutline(x, y, width, height, Color.WHITE, 1F);
         wasMouseHoveringLastFrame = GuiHelper.isMouseInBounds(mouseX, mouseY, this.x, this.y, this.width, this.height);
         if (wasMouseHoveringLastFrame)
             alphaTarget = 10;
         else alphaTarget = 0;
-        if (alphaProgress != 0 && isEnabled)
-            DrawingHelper.drawVerticalGradient(x + 2, y + 2, width - 4, height - 4, Color.CYAN, ((float) alphaProgress) / 10 * 0.25F, Color.BLUE, ((float) alphaProgress) / 10 * 0.5F);
+//        if (alphaProgress != 0 && isEnabled)
+//            DrawingHelper.drawVerticalGradient(x + 2, y + 2, width - 4, height - 4, Color.CYAN, ((float) alphaProgress) / 10 * 0.25F, Color.BLUE, ((float) alphaProgress) / 10 * 0.5F);
 
         int textColor = 0xFFFFFF;
+        DrawingHelper.drawButtonThingy(x, y, width, height, (float) alphaProgress / 10, isEnabled);
         if (!isEnabled)
         {
             textColor = 0xAFAFAF;
-            DrawingHelper.drawVerticalGradient(x + 2, y + 2, width - 4, height - 4, Color.LTGREY, 0.5F, Color.DKGREY, 0.8F);
+
         }
 
         float textY = (this.height / 2 - 4) + y, textX = (this.width / 2 - (minecraft.fontRendererObj.getStringWidth(this.text) / 2)) + x;

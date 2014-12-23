@@ -52,17 +52,17 @@ public class GuiSlider implements IGui, IDelayedDraw
     @Override
     public void draw(Minecraft minecraft, int mouseX, int mouseY)
     {
-        DrawingHelper.drawButtonThingy(x, y + 1, width, height - 2, Color.BLACK, 0.25F, Color.WHITE, 1F);
-        float sliderWidth = 10F, sliderHeight = height, sliderXpos = x, sliderYpos = y;
+        DrawingHelper.drawButtonThingy(x, y + 1, width, height - 2, 0, true);
+        float sliderWidth = 10F, sliderHeight = height, sliderXPos = x, sliderYPos = y;
         float progress = (((float) this.getValue()) / this.maximum);
-        sliderXpos += progress * this.width - (sliderWidth * progress);
-        DrawingHelper.drawButtonThingy(sliderXpos, sliderYpos, sliderWidth, sliderHeight, Color.BLACK, 0.25F, Color.WHITE, 1F);
+        sliderXPos += progress * this.width - (sliderWidth * progress);
+        DrawingHelper.drawButtonThingy(sliderXPos, sliderYPos, sliderWidth, sliderHeight, 0, true);
         if (GuiHelper.isMouseInBounds(mouseX, mouseY, x, y, width, height))
             alphaTarget = 10;
         else alphaTarget = 0;
 
         if (alphaProgress != 0)
-            DrawingHelper.drawVerticalGradient(sliderXpos + 2, sliderYpos + 2, sliderWidth - 4, sliderHeight - 4, Color.CYAN, ((float) alphaProgress) / 10 * 0.5F, Color.BLUE, ((float) alphaProgress) / 10 * 0.7F);
+            DrawingHelper.drawVerticalGradient(sliderXPos + 2, sliderYPos + 2, sliderWidth - 4, sliderHeight - 4, Color.CYAN, ((float) alphaProgress) / 10 * 0.5F, Color.BLUE, ((float) alphaProgress) / 10 * 0.7F);
 
 //        if (dragging)
 //        {

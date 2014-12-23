@@ -112,7 +112,7 @@ public class GuiFileExplorer implements IGui, IMouseListener
         }
 
         if (showBackground)
-            DrawingHelper.drawButtonThingy(x, y, w, h, Color.BLACK, 0.25F, Color.WHITE, 1F);
+            DrawingHelper.drawButtonThingy(x, y, w, h, 0, true);
 
         int yOffset = 0 - scrollHeight, xOffset = 5;
 
