@@ -1,7 +1,7 @@
 {
-    "name": "${ant.project.name}",
+    "name": "In-Game File Explorer",
     "mcversion": "${litemodversion}",
     "revision": "${build.number}",
     "author": "${author}",
-    "description": "This is an example liteloader mod which draws a clock."
+    "description": "Allows the player to look around their computer's file system, and view/edit some file-types."
 }

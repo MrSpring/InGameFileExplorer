@@ -41,17 +41,45 @@ public class GuiCustomTextField implements IGui
     private void loadRenderLimits(FontRenderer renderer)
     {
         String cutText = text.substring(renderStart);
-        int cursorPosition = renderer.getStringWidth(cutText.substring(0, cursorPos));
+        int cursorPosition = renderer.getStringWidth(cutText.substring(0, cursorPos - renderStart));
         int minimum = 10, maximum = w - 8 - 10;
+
+        System.out.println("");
+        System.out.println("Starting loading...");
+        System.out.println("minimum = " + minimum);
+        System.out.println("maximum = " + maximum);
+        System.out.println("cursorPosition = " + cursorPosition);
+        System.out.println("renderStart = " + renderStart);
+        System.out.println("renderEnd = " + renderEnd);
 
         if (cursorPosition < minimum && renderStart > 0)
         {
-            renderStart--;
-            this.loadRenderLimits(renderer);
+            while (cursorPosition < minimum && renderStart > 0)
+            {
+                System.out.println("Decreasing renderStart!");
+                System.out.println("renderStart = " + renderStart);
+                renderStart--;
+                cutText = text.substring(renderStart);
+                cursorPosition = renderer.getStringWidth(cutText.substring(0, cursorPos - renderStart));
+            }
+            String textWithinLength = renderer.trimStringToWidth(cutText, w - 8);
+            renderEnd = textWithinLength.length();
+            System.out.println("renderEnd = " + renderEnd);
         }
         if (cursorPosition > maximum && renderEnd < text.length())
         {
-            // TODO: Do the while (loop)
+            while (cursorPosition > maximum && renderEnd < text.length())
+            {
+                System.out.println("Increasing renderStart!");
+                System.out.println("renderStart = " + renderStart);
+                renderStart++;
+                cutText = text.substring(renderStart);
+                cursorPosition = renderer.getStringWidth(cutText.substring(0, cursorPos - renderStart));
+            }
+            String textWithinLength = renderer.trimStringToWidth(cutText, w - 8);
+            renderEnd = renderStart + textWithinLength.length();
+            System.out.println("Cutting: \"" + cutText + "\" to width: " + (w - 8) + ", result: \"" + textWithinLength + "\", with a length of: " + textWithinLength.length());
+            System.out.println("renderEnd = " + renderEnd);
         }
     }
         /*if (renderer.getStringWidth(text) <= this.w - 8)
@@ -176,10 +204,11 @@ public class GuiCustomTextField implements IGui
 
     public void setCursorPos(int newCursorPos, boolean moveSelection)
     {
-        System.out.println("Old Cursor Pos: " + this.cursorPos + ", New Cursor Pos: " + newCursorPos);
+        System.out.println("Old Cursor Pos: " + this.cursorPos + ", New Cursor Pos: " + newCursorPos + ", Text Length: " + text.length());
         if (newCursorPos >= 0 && newCursorPos < text.length() + 1)
         {
             this.cursorPos = newCursorPos;
+            System.out.println("Setting to new cursor pos!");
             if (moveSelection)
             {
                 if (!(Keyboard.isKeyDown(Keyboard.KEY_LSHIFT) || Keyboard.isKeyDown(Keyboard.KEY_RSHIFT)))
@@ -264,9 +293,9 @@ public class GuiCustomTextField implements IGui
             selectionEnd = cursorPos;
         }
         builder.delete(selectionStart, selectionEnd);
-        cursorPos = selectionStart;
+        this.setCursorPos(selectionStart, true);
         selectionStartPos = cursorPos;
-        text = builder.toString();
+        this.setText(builder.toString());
     }
 
     public void backspace()
@@ -279,7 +308,7 @@ public class GuiCustomTextField implements IGui
             {
                 StringBuilder builder = new StringBuilder(this.text);
                 builder.delete(this.cursorPos - 1, this.cursorPos);
-                text = builder.toString();
+                this.setText(builder.toString());
                 this.setCursorPos(cursorPos - 1, false);
             }
         }
@@ -295,7 +324,7 @@ public class GuiCustomTextField implements IGui
             {
                 StringBuilder builder = new StringBuilder(this.text);
                 builder.delete(this.cursorPos, this.cursorPos + 1);
-                text = builder.toString();
+                this.setText(builder.toString());
                 this.loadRenderLimits(Minecraft.getMinecraft().fontRendererObj);
             }
         }
@@ -312,7 +341,7 @@ public class GuiCustomTextField implements IGui
             this.deleteSelection();
         StringBuilder builder = new StringBuilder(this.text);
         builder.insert(this.cursorPos, string);
-        this.text = (builder.toString());
+        this.setText(builder.toString());
         this.setCursorPos(this.cursorPos + string.length(), false);
         this.loadRenderLimits(Minecraft.getMinecraft().fontRendererObj);
     }
