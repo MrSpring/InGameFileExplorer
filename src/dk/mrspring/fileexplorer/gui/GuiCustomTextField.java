@@ -188,6 +188,8 @@ public class GuiCustomTextField implements IGui
                 this.paste();
             else if (keyCode == Keyboard.KEY_C && (Keyboard.isKeyDown(Keyboard.KEY_LCONTROL) || Keyboard.isKeyDown(Keyboard.KEY_LCONTROL)))
                 this.copySelection();
+            else if (keyCode==Keyboard.KEY_X && (Keyboard.isKeyDown(Keyboard.KEY_LCONTROL) || Keyboard.isKeyDown(Keyboard.KEY_LCONTROL)))
+                this.cut();
             else if (TextHelper.isKeyWritable(keyCode))
                 this.writeCharacter(character);
     }
@@ -198,6 +200,12 @@ public class GuiCustomTextField implements IGui
         Toolkit toolkit = Toolkit.getDefaultToolkit();
         Clipboard clipboard = toolkit.getSystemClipboard();
         clipboard.setContents(selection, selection);
+    }
+
+    private void cut()
+    {
+        this.copySelection();
+        this.deleteSelection();
     }
 
     public void setText(String text)
