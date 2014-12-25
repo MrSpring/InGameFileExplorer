@@ -32,6 +32,7 @@ public class GuiScreenFileExplorer extends GuiScreen
                 @Override
                 public void onOpened(File file)
                 {
+                    System.out.println("Opening file!");
                     GuiScreenFileExplorer.this.openFile(file);
                 }
             })/*.setPathEditorPosition(8, height - getBarHeight() - 22)*/);
@@ -45,6 +46,7 @@ public class GuiScreenFileExplorer extends GuiScreen
 
     public void openFile(File file)
     {
+        System.out.println("Opening file!");
         int lastDot = file.getPath().lastIndexOf(".");
         String extension = file.getPath().substring(lastDot);
         GuiFile.EnumFileType fileType = GuiFile.EnumFileType.getFileTypeFor(extension);

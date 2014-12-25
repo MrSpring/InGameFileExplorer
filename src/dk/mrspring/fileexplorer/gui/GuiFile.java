@@ -29,10 +29,7 @@ public class GuiFile extends GuiFileBase
 
     public GuiFile(int xPos, int yPos, int width, int height, String path, RenderType renderType)
     {
-        this.x = xPos;
-        this.y = yPos;
-        this.w = width;
-        this.h = height;
+        super(xPos, yPos, width, height);
 
         this.filePath = path;
         button = new GuiSimpleButton(x, y, w, h, "");
@@ -167,10 +164,10 @@ public class GuiFile extends GuiFileBase
 
         iconSize = height;
 
-        DrawingHelper.drawQuad(x + iconSize - 1, y, 1, height, Color.LTGREY, 1F);
-        DrawingHelper.drawQuad(x + iconSize, y, 1, height, Color.WHITE, 1F);
+        DrawingHelper.drawQuad(x + iconSize - 1, y + 1, 1, height - 2, Color.LTGREY, 1F);
+        DrawingHelper.drawQuad(x + iconSize, y + 1, 1, height - 2, Color.WHITE, 1F);
 
-        DrawingHelper.drawIcon(this.getFileType().getIcon(), x + 1, y + 1, iconSize - 2, iconSize - 2);
+        DrawingHelper.drawIcon(this.getFileType().getIcon(), x, y, iconSize, iconSize, false);
 
         minecraft.fontRendererObj.drawSplitString(this.getShortFileName(), x + (int) iconSize + 3, nameY, w - (int) iconSize - 6, 0xFFFFFF);
     }

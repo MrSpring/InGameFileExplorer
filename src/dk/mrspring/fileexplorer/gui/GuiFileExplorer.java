@@ -126,7 +126,7 @@ public class GuiFileExplorer implements IGui, IMouseListener
                 guiFile.draw(minecraft, mouseX, mouseY);
             }
 
-            yOffset += 35;
+            yOffset += guiFile.getHeight() + 5;
         }
 
         int totalHeight = this.guiFiles.size() * 35;
@@ -217,7 +217,7 @@ public class GuiFileExplorer implements IGui, IMouseListener
         else if (this.refreshList.mouseDown(mouseX, mouseY, mouseButton))
             this.refreshList();
         else if (this.newFolder.mouseDown(mouseX, mouseY, mouseButton))
-            ; // TODO: this.createNewFile();
+            this.createNewFile();
         else if (this.upOne.mouseDown(mouseX, mouseY, mouseButton))
             this.goUpOne();
         else if (this.isPathClicked(mouseX, mouseY, mouseButton))
@@ -291,7 +291,11 @@ public class GuiFileExplorer implements IGui, IMouseListener
     private void openFile(File file)
     {
         if (file != null)
+        {
+            System.out.println("Opening file: " + file.toString());
             if (file.exists())
+            {
+                System.out.println("File exists...");
                 if (file.isDirectory())
                 {
                     System.out.println("Opening directory at: " + file.toString());
@@ -302,8 +306,13 @@ public class GuiFileExplorer implements IGui, IMouseListener
                 } else
                 {
                     if (this.onFileOpened != null)
+                    {
+                        System.out.println("onFileOpened is not null. Opening file!");
                         this.onFileOpened.onOpened(file);
+                    }
                 }
+            }
+        }
     }
 
     private void refreshList()
@@ -348,7 +357,8 @@ public class GuiFileExplorer implements IGui, IMouseListener
 
     private void createNewFile()
     {
-
+        this.guiFiles.add(0, new GuiFileNew(0, 0, w - 10, 30));
+        this.scrollHeight = 0;
     }
 
     @Override
@@ -366,7 +376,12 @@ public class GuiFileExplorer implements IGui, IMouseListener
     @Override
     public void handleKeyTyped(int keyCode, char character)
     {
-
+        for (GuiFileBase guiFile : this.guiFiles)
+        {
+            GuiFileNew newGuiFile = guiFile instanceof GuiFileNew ? ((GuiFileNew) guiFile) : null;
+            if (newGuiFile != null)
+                newGuiFile.handleKeyTyped(keyCode, character);
+        }
     }
 
     private void addScroll(int scrollHeight)
