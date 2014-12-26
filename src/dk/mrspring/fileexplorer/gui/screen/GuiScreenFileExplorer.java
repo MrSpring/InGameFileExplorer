@@ -73,7 +73,7 @@ public class GuiScreenFileExplorer extends GuiScreen
             case JSON:
             {
                 this.openFileType = "json_editor";
-                this.addGuiElement(this.openFileType, new GuiJsonEditor(258, 10, width - 243 - 25, height - 20, file));
+                this.addGuiElement(this.openFileType, new GuiJsonViewer(258, 10, width - 243 - 25, height - 20, file));
                 break;
             }
             default:
