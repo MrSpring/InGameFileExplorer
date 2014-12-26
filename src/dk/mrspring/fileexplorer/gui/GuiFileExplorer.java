@@ -358,7 +358,7 @@ public class GuiFileExplorer implements IGui, IMouseListener
 
     private void createNewFile()
     {
-        this.guiFiles.add(0, new GuiFileNew(0, 0, w - 10, 40, new GuiFileNew.INewFileEvents()
+        this.guiFiles.add(0, new GuiFileNew(0, 0, w - 10, 30, new GuiFileNew.INewFileEvents()
         {
             @Override
             public void onCreated(GuiFileNew newFile, String path)
