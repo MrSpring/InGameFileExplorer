@@ -45,31 +45,38 @@ public class GuiCustomTextField implements IGui
 
     private void loadRenderLimits(FontRenderer renderer)
     {
-        int relativeCursorPos = getRelativeCursorPos(renderer);//cursorPos - renderStart;
-        int minRender = renderer.getStringWidth(text.substring(renderStart, renderStart + 4));
-        int maxRender = Math.min(w - 23, renderer.getStringWidth(text.substring(renderStart)));//w - 23;
-        if (relativeCursorPos < minRender && renderStart > 0)
-            while (relativeCursorPos < minRender && renderStart > 0)
-            {
-                renderStart--;
-                this.loadRenderEnd(renderer);
-                relativeCursorPos = getRelativeCursorPos(renderer);
-            }
-        if (relativeCursorPos > maxRender && renderEnd < text.length())
-            while (relativeCursorPos > maxRender && renderEnd < text.length())
-            {
-                renderStart++;
-                this.loadRenderEnd(renderer);
-                relativeCursorPos = getRelativeCursorPos(renderer);
-                maxRender = Math.min(w - 23, renderer.getStringWidth(text.substring(renderStart)));//w - 23;
-            }
+        if (renderer.getStringWidth(text) > w - 8)
+        {
+            int relativeCursorPos = getRelativeCursorPos(renderer);//cursorPos - renderStart;
+            int minRender = renderer.getStringWidth(text.substring(renderStart, renderStart + 4));
+            int maxRender = Math.min(w - 23, renderer.getStringWidth(text.substring(renderStart)));//w - 23;
+            if (relativeCursorPos < minRender && renderStart > 0)
+                while (relativeCursorPos < minRender && renderStart > 0)
+                {
+                    renderStart--;
+                    this.loadRenderEnd(renderer);
+                    relativeCursorPos = getRelativeCursorPos(renderer);
+                }
+            if (relativeCursorPos > maxRender && renderEnd < text.length())
+                while (relativeCursorPos > maxRender && renderEnd < text.length())
+                {
+                    renderStart++;
+                    this.loadRenderEnd(renderer);
+                    relativeCursorPos = getRelativeCursorPos(renderer);
+                    maxRender = Math.min(w - 23, renderer.getStringWidth(text.substring(renderStart)));//w - 23;
+                }
 
-        this.loadRenderEnd(renderer);
+            this.loadRenderEnd(renderer);
 
-        if (renderEnd > text.length())
-            renderEnd = text.length();
-        if (renderStart < 0)
+            if (renderEnd > text.length())
+                renderEnd = text.length();
+            if (renderStart < 0)
+                renderStart = 0;
+        } else
+        {
             renderStart = 0;
+            renderEnd = text.length();
+        }
     }
 
     private void loadRenderEnd(FontRenderer renderer)
