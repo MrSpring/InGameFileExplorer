@@ -7,6 +7,7 @@ import net.minecraft.client.Minecraft;
 import org.lwjgl.input.Mouse;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -357,8 +358,49 @@ public class GuiFileExplorer implements IGui, IMouseListener
 
     private void createNewFile()
     {
-        this.guiFiles.add(0, new GuiFileNew(0, 0, w - 10, 30));
+        this.guiFiles.add(0, new GuiFileNew(0, 0, w - 10, 40, new GuiFileNew.INewFileEvents()
+        {
+            @Override
+            public void onCreated(GuiFileNew newFile, String path)
+            {
+                GuiFileExplorer.this.onFileCreated(newFile, path);
+            }
+
+            @Override
+            public void onCanceled(GuiFileNew guiFileNew, String path)
+            {
+                GuiFileExplorer.this.cancelNewFile(guiFileNew);
+            }
+        }));
         this.scrollHeight = 0;
+    }
+
+    private void onFileCreated(GuiFileNew newFile, String path)
+    {
+        try
+        {
+            File file = new File(this.currentPath + File.separator + path);
+            System.out.println("file.getPath() = " + file.getPath());
+            int lastDot = path.lastIndexOf('.');
+            if (!file.exists())
+                if (lastDot >= 0)
+                {
+                    if (file.createNewFile())
+                        guiFiles.add(0, new GuiFile(0, 0, w - 10, 30, file, GuiFileBase.RenderType.LONG_GRID));
+                } else if (file.mkdir())
+                    guiFiles.add(0, new GuiFile(0, 0, w - 10, 30, file, GuiFileBase.RenderType.LONG_GRID));
+
+            guiFiles.remove(newFile);
+        } catch (IOException e)
+        {
+            System.err.println("Failed to create file: \"" + path + "\":");
+            e.printStackTrace();
+        }
+    }
+
+    private void cancelNewFile(GuiFileNew guiFileNew)
+    {
+        this.guiFiles.remove(guiFileNew);
     }
 
     @Override
@@ -386,9 +428,12 @@ public class GuiFileExplorer implements IGui, IMouseListener
 
     private void addScroll(int scrollHeight)
     {
-        int maxScrollHeight, minScrollHeight = -5, scrollHeightAfterAddition = this.scrollHeight + scrollHeight;
+        int maxScrollHeight = -40, minScrollHeight = -5, scrollHeightAfterAddition = this.scrollHeight + scrollHeight;
 
-        maxScrollHeight = (this.guiFiles.size() * 35) - 40;
+//        maxScrollHeight = (this.guiFiles.size() * 35) - 40;
+
+        for (GuiFileBase file : guiFiles)
+            maxScrollHeight += file.getHeight() + 5;
 
         if (scrollHeightAfterAddition > maxScrollHeight)
             scrollHeightAfterAddition = maxScrollHeight;
