@@ -38,33 +38,45 @@ public class GuiCustomTextField implements IGui
         renderEnd = Minecraft.getMinecraft().fontRendererObj.trimStringToWidth(text, w - 8).length();
     }
 
+    private int getRelativeCursorPos(FontRenderer renderer)
+    {
+        return renderer.getStringWidth(text.substring(renderStart, cursorPos));
+    }
+
     private void loadRenderLimits(FontRenderer renderer)
     {
-        String cutText = text.substring(renderStart);
-        int cursorPosition = renderer.getStringWidth(cutText.substring(0, cursorPos - renderStart));
-        int minimum = 10, maximum = w - 8 - 10;
-        if (cursorPosition < minimum && renderStart > 0)
-        {
-            while (cursorPosition < minimum && renderStart > 0)
+        int relativeCursorPos = getRelativeCursorPos(renderer);//cursorPos - renderStart;
+        int minRender = renderer.getStringWidth(text.substring(renderStart, renderStart + 4));
+        int maxRender = Math.min(w - 23, renderer.getStringWidth(text.substring(renderStart)));//w - 23;
+        if (relativeCursorPos < minRender && renderStart > 0)
+            while (relativeCursorPos < minRender && renderStart > 0)
             {
                 renderStart--;
-                cutText = text.substring(renderStart);
-                cursorPosition = renderer.getStringWidth(cutText.substring(0, cursorPos - renderStart));
+                this.loadRenderEnd(renderer);
+                relativeCursorPos = getRelativeCursorPos(renderer);
             }
-            String textWithinLength = renderer.trimStringToWidth(cutText, w - 8);
-            renderEnd = textWithinLength.length();
-        }
-        if (cursorPosition > maximum && renderEnd < text.length())
-        {
-            while (cursorPosition > maximum && renderEnd < text.length())
+        if (relativeCursorPos > maxRender && renderEnd < text.length())
+            while (relativeCursorPos > maxRender && renderEnd < text.length())
             {
                 renderStart++;
-                cutText = text.substring(renderStart);
-                cursorPosition = renderer.getStringWidth(cutText.substring(0, cursorPos - renderStart));
+                this.loadRenderEnd(renderer);
+                relativeCursorPos = getRelativeCursorPos(renderer);
+                maxRender = Math.min(w - 23, renderer.getStringWidth(text.substring(renderStart)));//w - 23;
             }
-            String textWithinLength = renderer.trimStringToWidth(cutText, w - 8);
-            renderEnd = renderStart + textWithinLength.length();
-        }
+
+        this.loadRenderEnd(renderer);
+
+        if (renderEnd > text.length())
+            renderEnd = text.length();
+        if (renderStart < 0)
+            renderStart = 0;
+    }
+
+    private void loadRenderEnd(FontRenderer renderer)
+    {
+        String renderingRightNow = text.substring(renderStart);
+        renderingRightNow = renderer.trimStringToWidth(renderingRightNow, w - 8);
+        renderEnd = renderStart + renderingRightNow.length();
     }
 
     @Override
@@ -72,60 +84,68 @@ public class GuiCustomTextField implements IGui
     {
         DrawingHelper.drawButtonThingy(x, y, w, h, focused ? 1 : 0, true, Color.BLACK, 0.85F, Color.BLACK, 0.85F);
 
-        if (renderEnd > text.length())
+        if (renderEnd > text.length() || renderStart < 0)
             this.loadRenderLimits(minecraft.fontRendererObj);
 
-        String trimmedString = text.substring(renderStart, renderEnd);
-        char[] characters = trimmedString.toCharArray();
-        int xOffset = 0;
-        int selectionStart, selectionEnd;
-        int textY = y + (h / 2) - 4;
-
-        if (selectionStartPos > cursorPos)
+        try
         {
-            selectionStart = cursorPos;
-            selectionEnd = selectionStartPos;
-        } else
-        {
-            selectionStart = selectionStartPos;
-            selectionEnd = cursorPos;
-        }
+            String trimmedString = text.substring(renderStart, renderEnd);
+            char[] characters = trimmedString.toCharArray();
+            int xOffset = 0;
+            int textY = y + (h / 2) - 4;
+            int selectionStart, selectionEnd;
 
-        float selectionX = 0, selectionWidth = 0;
-
-        for (int i = 0; i < characters.length; i++)
-        {
-            if (i + renderStart == selectionStart)
-                selectionX = xOffset + 1;
-
-            char character = characters[i];
-
-            minecraft.fontRendererObj.drawStringWithShadow(String.valueOf(character), x + 4 + xOffset, textY, 0xFFFFFF);
-
-            if (i + renderStart == cursorPos && focused)
-                minecraft.fontRendererObj.drawString("|", x + xOffset + 3F, textY, 0xFF0000, false);
-            else if (i + renderStart + 1 == cursorPos && focused)
-                minecraft.fontRendererObj.drawString("|", x + xOffset + 3F + minecraft.fontRendererObj.getCharWidth(character), textY, 0xFF0000, false);
-
-            if (i + renderStart == selectionEnd)
-                selectionWidth = xOffset - selectionX + 1;
-
-            xOffset += minecraft.fontRendererObj.getCharWidth(character);
-        }
-        if (cursorPos != selectionStartPos)
-        {
-            if (selectionStart < renderStart)
-                selectionX = 0;
-            if (selectionEnd >= renderEnd)
-                selectionWidth = w - 4 - selectionX;
-
-            if (cursorPos < selectionStartPos)
+            if (selectionStartPos > cursorPos)
             {
-                selectionX++;
-                selectionWidth--;
+                selectionStart = cursorPos;
+                selectionEnd = selectionStartPos;
+            } else
+            {
+                selectionStart = selectionStartPos;
+                selectionEnd = cursorPos;
             }
 
-            DrawingHelper.drawQuad(x + selectionX + 2, y + 2, selectionWidth, h - 4, Color.BLUE, 0.5F);
+            float selectionX = 0, selectionWidth = 0;
+
+            for (int i = 0; i < characters.length; i++)
+            {
+                if (i + renderStart == selectionStart)
+                    selectionX = xOffset + 1;
+
+                char character = characters[i];
+
+                minecraft.fontRendererObj.drawStringWithShadow(String.valueOf(character), x + 4 + xOffset, textY, 0xFFFFFF);
+
+                if (i + renderStart == cursorPos && focused)
+                    minecraft.fontRendererObj.drawString("|", x + xOffset + 3F, textY, 0xFF0000, false);
+                else if (i + renderStart + 1 == cursorPos && focused)
+                    minecraft.fontRendererObj.drawString("|", x + xOffset + 3F + minecraft.fontRendererObj.getCharWidth(character), textY, 0xFF0000, false);
+
+                if (i + renderStart == selectionEnd)
+                    selectionWidth = xOffset - selectionX + 1;
+
+                xOffset += minecraft.fontRendererObj.getCharWidth(character);
+            }
+            if (cursorPos != selectionStartPos)
+            {
+                if (selectionStart < renderStart)
+                    selectionX = 0;
+                if (selectionEnd >= renderEnd)
+                    selectionWidth = w - 4 - selectionX;
+
+                if (cursorPos < selectionStartPos)
+                {
+                    selectionX++;
+                    selectionWidth--;
+                }
+
+                DrawingHelper.drawQuad(x + selectionX + 2, y + 2, selectionWidth, h - 4, Color.BLUE, 0.5F);
+            }
+        } catch (Exception e)
+        {
+            System.err.println("Failed to render text: \"" + text + "\"!");
+            e.printStackTrace();
+            this.loadRenderLimits(Minecraft.getMinecraft().fontRendererObj);
         }
     }
 
@@ -175,11 +195,9 @@ public class GuiCustomTextField implements IGui
             if (keyCode == Keyboard.KEY_RIGHT)
             {
                 this.setCursorPos(this.cursorPos + 1, true);
-                this.loadRenderLimits(Minecraft.getMinecraft().fontRendererObj);
             } else if (keyCode == Keyboard.KEY_LEFT)
             {
                 this.setCursorPos(this.cursorPos - 1, true);
-                this.loadRenderLimits(Minecraft.getMinecraft().fontRendererObj);
             } else if (keyCode == Keyboard.KEY_BACK)
                 this.backspace();
             else if (keyCode == Keyboard.KEY_DELETE)
@@ -188,7 +206,7 @@ public class GuiCustomTextField implements IGui
                 this.paste();
             else if (keyCode == Keyboard.KEY_C && (Keyboard.isKeyDown(Keyboard.KEY_LCONTROL) || Keyboard.isKeyDown(Keyboard.KEY_LCONTROL)))
                 this.copySelection();
-            else if (keyCode==Keyboard.KEY_X && (Keyboard.isKeyDown(Keyboard.KEY_LCONTROL) || Keyboard.isKeyDown(Keyboard.KEY_LCONTROL)))
+            else if (keyCode == Keyboard.KEY_X && (Keyboard.isKeyDown(Keyboard.KEY_LCONTROL) || Keyboard.isKeyDown(Keyboard.KEY_LCONTROL)))
                 this.cut();
             else if (TextHelper.isKeyWritable(keyCode))
                 this.writeCharacter(character);
@@ -283,7 +301,7 @@ public class GuiCustomTextField implements IGui
                 StringBuilder builder = new StringBuilder(this.text);
                 builder.delete(this.cursorPos, this.cursorPos + 1);
                 this.setText(builder.toString());
-                this.loadRenderLimits(Minecraft.getMinecraft().fontRendererObj);
+//                this.loadRenderLimits(Minecraft.getMinecraft().fontRendererObj);
             }
         }
     }
@@ -301,7 +319,7 @@ public class GuiCustomTextField implements IGui
         builder.insert(this.cursorPos, string);
         this.setText(builder.toString());
         this.setCursorPos(this.cursorPos + string.length(), false);
-        this.loadRenderLimits(Minecraft.getMinecraft().fontRendererObj);
+//        this.loadRenderLimits(Minecraft.getMinecraft().fontRendererObj);
     }
 
     public String getSelected()

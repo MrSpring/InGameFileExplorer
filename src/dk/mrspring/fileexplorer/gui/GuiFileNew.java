@@ -40,6 +40,7 @@ public class GuiFileNew extends GuiFileBase
     {
         super.update();
         this.createButton.update();
+        this.cancelButton.update();
     }
 
     @Override
@@ -59,8 +60,10 @@ public class GuiFileNew extends GuiFileBase
     {
         super.setX(x);
         this.nameField.setX(x + 5);
-        this.createButton.setX(x + w - 5 - 10);
-        this.cancelButton.setX(x + w - 5);
+        this.createButton.setX(x + w - 5 - 9);
+        if (h >= 30)
+            this.cancelButton.setX(x + w - 5 - 9);
+        else this.cancelButton.setX(x + w - 5);
     }
 
     @Override
@@ -68,8 +71,15 @@ public class GuiFileNew extends GuiFileBase
     {
         super.setY(y);
         this.nameField.setY(y + 5);
-        this.createButton.setY(y + (h / 2) - 5);
-        this.cancelButton.setY(y + (h / 2) - 5);
+        if (w >= 30)
+        {
+            this.createButton.setY(y + (h / 2) - 11);
+            this.cancelButton.setY(y + (h / 2) + 1);
+        } else
+        {
+            this.createButton.setY(y + (h / 2) - 5);
+            this.cancelButton.setY(y + (h / 2) - 5);
+        }
     }
 
     @Override
@@ -78,14 +88,12 @@ public class GuiFileNew extends GuiFileBase
         super.setWidth(w);
         if (h >= 30)
         {
-            this.nameField.setW(w - 23);
-            this.createButton.setY(y + 5);
-            this.cancelButton.setY(y + h - 15);
+            this.nameField.setW(w - 22);
+            this.setY(y);
         } else
         {
-            this.nameField.setW(w - 33);
-            this.createButton.setY(y + (h / 2) - 5);
-            this.cancelButton.setY(y + (h / 2) - 5);
+            this.nameField.setW(w - 32);
+            this.setY(y);
         }
         this.setX(x);
     }
