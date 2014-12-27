@@ -13,6 +13,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.Map;
 
 /**
@@ -72,12 +73,11 @@ public class GuiJsonViewer implements IGui
 //        System.out.println("Drawing object: " + name + ", of type: " + object.getClass().getName() + " at Y: " + yOffset);
         if (object instanceof String || object instanceof Boolean || object instanceof Double)
         {
-            this.drawSimpleTextValue(minecraft.fontRendererObj, name, object, x + xOffset, y + yOffset);
-            return 10;
+            return this.drawSimpleTextValue(minecraft.fontRendererObj, name, object, x + xOffset, y + yOffset);
         } else if (object instanceof ArrayList)
         {
             ArrayList<Object> list = (ArrayList<Object>) object;
-            int height = 10;
+            int height = 11;
 
             minecraft.fontRendererObj.drawString(name + ":", x + xOffset, y + yOffset, 0xFFFFFF, true);
             for (int i = 0; i < list.size(); i++)
@@ -85,23 +85,37 @@ public class GuiJsonViewer implements IGui
                 String entryName = String.valueOf(i);
                 Object entryObject = list.get(i);
                 int objectHeight = this.drawObject(minecraft, xOffset + 5, yOffset + height, entryName, entryObject);
-                DrawingHelper.drawQuad(x + xOffset, y + yOffset + height, 3, objectHeight, Color.WHITE, 1F);
+                float lineHeight = objectHeight;
+                if (i == list.size() - 1)
+                    lineHeight = 5F;
+                DrawingHelper.drawQuad(x + xOffset + 1, y + yOffset + height + 1, 1, lineHeight, Color.DKGREY, 1F);
+                DrawingHelper.drawQuad(x + xOffset, y + yOffset + height, 1, lineHeight, Color.WHITE, 1F);
+
+                DrawingHelper.drawQuad(x + xOffset + 2, y + yOffset + height + 5, 3, 1, Color.DKGREY, 1F);
+                DrawingHelper.drawQuad(x + xOffset + 1, y + yOffset + height + 4, 3, 1, Color.WHITE, 1F);
                 height += objectHeight;
-//                this.drawSimpleTextValue(minecraft.fontRendererObj, String.valueOf(i), list.get(i), x + xOffset + 5, y + yOffset + height);
-//                height += 10;
             }
             return height;
         } else if (object instanceof LinkedTreeMap)
         {
             LinkedTreeMap<String, Object> treeMap = (LinkedTreeMap<String, Object>) object;
             minecraft.fontRendererObj.drawString(name + ":", x + xOffset, y + yOffset, 0xFFFFFF, true);
-            int height = 10;
-            for (Map.Entry<String, Object> entry : treeMap.entrySet())
+            int height = 11;
+            Iterator<Map.Entry<String, Object>> iterator = treeMap.entrySet().iterator();
+            while (iterator.hasNext())
             {
+                Map.Entry<String, Object> entry = iterator.next();
                 String entryName = entry.getKey();
                 Object entryObject = entry.getValue();
                 int objectHeight = this.drawObject(minecraft, xOffset + 5, yOffset + height, entryName, entryObject);
-                DrawingHelper.drawQuad(x + xOffset, y + yOffset + height, 3, objectHeight, Color.WHITE, 1F);
+                float lineHeight = objectHeight;
+                if (!iterator.hasNext())
+                    lineHeight -= 6F;
+                DrawingHelper.drawQuad(x + xOffset + 1, y + yOffset + height + 1, 1, lineHeight, Color.DKGREY, 1F);
+                DrawingHelper.drawQuad(x + xOffset, y + yOffset + height, 1, lineHeight, Color.WHITE, 1F);
+
+                DrawingHelper.drawQuad(x + xOffset + 2, y + yOffset + height + 5, 3, 1, Color.DKGREY, 1F);
+                DrawingHelper.drawQuad(x + xOffset + 1, y + yOffset + height + 4, 3, 1, Color.WHITE, 1F);
                 height += objectHeight;
             }
             return height;
@@ -116,10 +130,13 @@ public class GuiJsonViewer implements IGui
      * @param object   The value being rendered.
      * @param x        The X position to render the key, value set.
      * @param y        The Y position to render the key, value set.
+     * @return Returns the height of the rendered object.
      */
-    private void drawSimpleTextValue(FontRenderer renderer, String name, Object object, int x, int y)
+    private int drawSimpleTextValue(FontRenderer renderer, String name, Object object, int x, int y)
     {
-        renderer.drawString(name + ": " + String.valueOf(object), x, y, 0xFFFFFF, true);
+        int nameWidth = renderer.getStringWidth(name + ": ");
+        renderer.drawString(name + ": ", x, y, 0xFFFFFF, true);
+        return (9 * DrawingHelper.drawSplitString(renderer, x + nameWidth, y, String.valueOf(object), 0xFFFFFF, width - nameWidth - (x - this.x), true)) + 2;
     }
 
     @Override
@@ -150,5 +167,10 @@ public class GuiJsonViewer implements IGui
     public void handleKeyTyped(int keyCode, char character)
     {
 
+    }
+
+    public void setWidth(int width)
+    {
+        this.width = width;
     }
 }

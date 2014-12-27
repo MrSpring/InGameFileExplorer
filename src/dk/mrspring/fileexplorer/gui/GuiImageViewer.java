@@ -178,8 +178,6 @@ public class GuiImageViewer implements IGui//, IDelayedDraw
             loadTime++;
         if (loadTime > timeOut)
             this.failed = true;
-        System.out.println("loadTime = " + loadTime);
-        System.out.println("timeOut = " + timeOut);
     }
 
     @Override

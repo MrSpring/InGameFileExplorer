@@ -450,13 +450,26 @@ public class DrawingHelper
         drawCenteredString(renderer, x, y, s, color, true);
     }
 
-
-    public static boolean drawSplitString(FontRenderer renderer, int x, int y, String s, int color, int maxLength, boolean shadow)
+    /**
+     * @param renderer
+     * @param x
+     * @param y
+     * @param s
+     * @param color
+     * @param maxLength
+     * @param shadow
+     * @return Returns how many lines the string has been wrapped to.
+     */
+    public static int drawSplitString(FontRenderer renderer, int x, int y, String s, int color, int maxLength, boolean shadow)
     {
         if (shadow)
             renderer.drawSplitString(s, x + 1, y + 1, maxLength, getShadowColor(color));
         renderer.drawSplitString(s, x, y, maxLength, color);
-        return renderer.getStringWidth(s) > maxLength;
+        int stringWidth = renderer.getStringWidth(s);
+//        System.out.println("Drawing string: " + s);
+//        System.out.println("stringWidth = " + stringWidth);
+//        System.out.println("maxLength = " + maxLength);
+        return renderer.listFormattedStringToWidth(s, maxLength).size();
     }
 
     public static int getShadowColor(int color)
