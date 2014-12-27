@@ -164,8 +164,8 @@ public class GuiFile extends GuiFileBase
 
         iconSize = height;
 
-        DrawingHelper.drawQuad(x + iconSize - 1, y + 1, 1, height - 2, Color.LTGREY, 1F);
-        DrawingHelper.drawQuad(x + iconSize, y + 1, 1, height - 2, Color.WHITE, 1F);
+        DrawingHelper.drawQuad(x + iconSize - 2, y + 1, 1, height - 2, Color.LTGREY, 1F);
+        DrawingHelper.drawQuad(x + iconSize - 1, y + 1, 1, height - 2, Color.WHITE, 1F);
 
         DrawingHelper.drawIcon(this.getFileType().getIcon(), x, y, iconSize, iconSize, false);
 
