@@ -153,8 +153,8 @@ public class GuiImageViewer implements IGui//, IDelayedDraw
             if (this.image != null && this.buffer != null)
                 this.setImage(image, buffer);
             if (failed)
-                minecraft.fontRendererObj.drawString("Failed loading... :(", x + 10, y + 10, 0xFF0000);
-            else minecraft.fontRendererObj.drawString("Loading...", x + 10, y + 10, 0x0000FF);
+                minecraft.fontRendererObj.drawString("Failed loading... :(", x + 10, y + 10, 0xFF0000,true);
+            else minecraft.fontRendererObj.drawString("Loading...", x + 10, y + 10, 0x0000FF,true);
         }
     }
 
