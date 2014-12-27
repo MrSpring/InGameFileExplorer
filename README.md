@@ -5,3 +5,6 @@ These include:
 * .txt - The mod has a built in text-editor for text files. Files can be viewed, edited and saved without having to leave the game!
 * .png/.jpeg - The mod also include an image viewer!
 * .json - The mod includes a simple-to-use in-game JSON editor (WIP)!
+
+### Preview:
+![Preview](http://mrspring.dk/mods/igfe/preview01.png)
