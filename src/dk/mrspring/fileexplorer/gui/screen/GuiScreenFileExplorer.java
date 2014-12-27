@@ -89,7 +89,10 @@ public class GuiScreenFileExplorer extends GuiScreen
         else if (identifier.equals("image_viewer"))
             ((GuiImageViewer) gui).setWidth(width - 243 - 25);
         else if (identifier.equals("json_editor"))
+        {
             ((GuiJsonViewer) gui).setWidth(width - 243 - 25);
+            ((GuiJsonViewer) gui).setHeight(height - 10);
+        }
         return true;
     }
 

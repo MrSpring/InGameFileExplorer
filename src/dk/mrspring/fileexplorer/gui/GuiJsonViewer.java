@@ -7,6 +7,7 @@ import dk.mrspring.fileexplorer.gui.helper.Color;
 import dk.mrspring.fileexplorer.gui.helper.DrawingHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
+import org.lwjgl.input.Mouse;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -19,9 +20,9 @@ import java.util.Map;
 /**
  * Created by MrSpring on 19-12-2014 for In-Game File Explorer.
  */
-public class GuiJsonViewer implements IGui
+public class GuiJsonViewer implements IGui, IMouseListener
 {
-    int x, y, width, height;
+    int x, y, width, height, jsonHeight, scrollHeight = 0;
     Map<String, Object> jsonObject;
 
     public GuiJsonViewer(int x, int y, int width, int height, File jsonFile)
@@ -51,11 +52,33 @@ public class GuiJsonViewer implements IGui
     @Override
     public void draw(Minecraft minecraft, int mouseX, int mouseY)
     {
-        int yOffset = 0;
+        int yOffset = -scrollHeight;
+        this.jsonHeight = 0;
         for (Map.Entry<String, Object> entry : this.jsonObject.entrySet())
         {
-            yOffset += this.drawObject(minecraft, 0, yOffset, entry.getKey(), entry.getValue());
+            int objectHeight = this.drawObject(minecraft, 5, yOffset, entry.getKey(), entry.getValue());
+            yOffset += objectHeight;
+            this.jsonHeight += objectHeight;
         }
+
+        if (jsonHeight > height)
+        {
+            this.drawScrollBar();
+        }
+    }
+
+    private void drawScrollBar()
+    {
+        float scrollBarYRange = (height - 50);
+        float maxScrollHeight = getMaxScrollHeight();
+        float scrollProgress = (float) this.scrollHeight / maxScrollHeight;
+        float scrollBarY = scrollBarYRange * scrollProgress;
+        DrawingHelper.drawQuad(x - 1, y + scrollBarY, 2, 40, Color.WHITE, 1F);
+    }
+
+    private int getMaxScrollHeight()
+    {
+        return jsonHeight - height + 10;
     }
 
     /**
@@ -87,7 +110,7 @@ public class GuiJsonViewer implements IGui
                 int objectHeight = this.drawObject(minecraft, xOffset + 5, yOffset + height, entryName, entryObject);
                 float lineHeight = objectHeight;
                 if (i == list.size() - 1)
-                    lineHeight = 5F;
+                    lineHeight -= 6F;
                 DrawingHelper.drawQuad(x + xOffset + 1, y + yOffset + height + 1, 1, lineHeight, Color.DKGREY, 1F);
                 DrawingHelper.drawQuad(x + xOffset, y + yOffset + height, 1, lineHeight, Color.WHITE, 1F);
 
@@ -142,7 +165,8 @@ public class GuiJsonViewer implements IGui
     @Override
     public void update()
     {
-
+        if (jsonHeight < height)
+            scrollHeight = 0;
     }
 
     @Override
@@ -172,5 +196,31 @@ public class GuiJsonViewer implements IGui
     public void setWidth(int width)
     {
         this.width = width;
+    }
+
+    private void addScroll(int amount)
+    {
+        int maxScrollHeight = getMaxScrollHeight(), minScrollHeight = 0, scrollHeightAfterAddition = this.scrollHeight + amount;
+
+        if (scrollHeightAfterAddition > maxScrollHeight)
+            scrollHeightAfterAddition = maxScrollHeight;
+        else if (scrollHeightAfterAddition < minScrollHeight)
+            scrollHeightAfterAddition = minScrollHeight;
+
+        this.scrollHeight = scrollHeightAfterAddition;
+    }
+
+    @Override
+    public void handleMouseInput()
+    {
+        int mouseWheel = Mouse.getDWheel();
+        mouseWheel /= 4;
+        if (mouseWheel != 0)
+            this.addScroll(-mouseWheel);
+    }
+
+    public void setHeight(int height)
+    {
+        this.height = height;
     }
 }

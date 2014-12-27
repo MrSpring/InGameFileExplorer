@@ -449,9 +449,9 @@ public class GuiFileExplorer implements IGui, IMouseListener
     @Override
     public void handleMouseInput()
     {
-        int mouseWheel = Mouse.getDWheel();
-        mouseWheel /= 4;
-        this.addScroll(-mouseWheel);
+//        int mouseWheel = Mouse.getDWheel();
+//        mouseWheel /= 4;
+//        this.addScroll(-mouseWheel);
     }
 
     public interface IOnFileOpened
