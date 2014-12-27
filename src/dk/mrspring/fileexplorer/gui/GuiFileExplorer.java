@@ -134,7 +134,7 @@ public class GuiFileExplorer implements IGui, IMouseListener
         if (totalHeight > this.h)
         {
             float scrollBarYRange = (h - 50);
-            float maxScrollHeight = (this.guiFiles.size() * 35) - 40;
+            float maxScrollHeight = totalHeight - 40;
             float scrollProgress = (float) this.scrollHeight / maxScrollHeight;
             float scrollBarY = scrollBarYRange * scrollProgress;
             DrawingHelper.drawQuad(x - 1, y + scrollBarY + 6, 2, 40, Color.WHITE, 1F);
