@@ -27,6 +27,7 @@ public class GuiImageViewer implements IGui//, IDelayedDraw
     boolean showFullscreenButton = false;
     boolean center = false;
     GuiSimpleButton fullscreenButton;
+    int loadTime = 0, timeOut = 300;
 
     public GuiImageViewer(final String path, int xPos, int yPos, int width, int height)
     {
@@ -125,7 +126,7 @@ public class GuiImageViewer implements IGui//, IDelayedDraw
     @Override
     public void draw(Minecraft minecraft, int mouseX, int mouseY)
     {
-        if (textureId != -1)
+        if (textureId != -1 && !failed)
         {
             glBindTexture(GL11.GL_TEXTURE_2D, textureId);
             float imageWidth = image.getWidth(), imageHeight = image.getHeight();
@@ -145,15 +146,15 @@ public class GuiImageViewer implements IGui//, IDelayedDraw
                 fullscreenButton.setX(x + (int) width - 20);
                 fullscreenButton.setY(y + (int) height - 20);
                 fullscreenButton.draw(minecraft, mouseX, mouseY);
-                DrawingHelper.drawIcon(DrawingHelper.fullscreenIcon, x + (int) width - 20, y + (int) height - 20, 20, 20, false);
+                DrawingHelper.drawIcon(DrawingHelper.fullscreenIcon, x + (int) width - 19, y + (int) height - 19, 18, 18, false);
             }
         } else
         {
             if (this.image != null && this.buffer != null)
                 this.setImage(image, buffer);
             if (failed)
-                minecraft.fontRendererObj.drawString("Failed loading... :(", x + 10, y + 10, 0xfff);
-            else minecraft.fontRendererObj.drawString("Loading...", x + 10, y + 10, 0xfff);
+                minecraft.fontRendererObj.drawString("Failed loading... :(", x + 10, y + 10, 0xFF0000);
+            else minecraft.fontRendererObj.drawString("Loading...", x + 10, y + 10, 0x0000FF);
         }
     }
 
@@ -172,6 +173,13 @@ public class GuiImageViewer implements IGui//, IDelayedDraw
     {
         if (showFullscreenButton)
             fullscreenButton.update();
+
+        if (textureId == -1 && loadTime <= timeOut)
+            loadTime++;
+        if (loadTime > timeOut)
+            this.failed = true;
+        System.out.println("loadTime = " + loadTime);
+        System.out.println("timeOut = " + timeOut);
     }
 
     @Override

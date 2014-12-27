@@ -3,6 +3,8 @@ package dk.mrspring.fileexplorer.gui;
 import com.google.gson.Gson;
 import com.google.gson.internal.LinkedTreeMap;
 import com.google.gson.reflect.TypeToken;
+import dk.mrspring.fileexplorer.gui.helper.Color;
+import dk.mrspring.fileexplorer.gui.helper.DrawingHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 
@@ -51,7 +53,7 @@ public class GuiJsonViewer implements IGui
         int yOffset = 0;
         for (Map.Entry<String, Object> entry : this.jsonObject.entrySet())
         {
-            yOffset += this.drawObject(minecraft, 0, yOffset, entry.getKey(), entry.getValue()) + 2;
+            yOffset += this.drawObject(minecraft, 0, yOffset, entry.getKey(), entry.getValue());
         }
     }
 
@@ -80,41 +82,29 @@ public class GuiJsonViewer implements IGui
             minecraft.fontRendererObj.drawString(name + ":", x + xOffset, y + yOffset, 0xFFFFFF, true);
             for (int i = 0; i < list.size(); i++)
             {
-                this.drawSimpleTextValue(minecraft.fontRendererObj, String.valueOf(i), list.get(i), x + xOffset + 5, y + yOffset + height);
-                height += 10;
+                String entryName = String.valueOf(i);
+                Object entryObject = list.get(i);
+                int objectHeight = this.drawObject(minecraft, xOffset + 5, yOffset + height, entryName, entryObject);
+                DrawingHelper.drawQuad(x + xOffset, y + yOffset + height, 3, objectHeight, Color.WHITE, 1F);
+                height += objectHeight;
+//                this.drawSimpleTextValue(minecraft.fontRendererObj, String.valueOf(i), list.get(i), x + xOffset + 5, y + yOffset + height);
+//                height += 10;
             }
             return height;
-
-            /*ArrayList list = (ArrayList) object;
-            minecraft.fontRendererObj.drawString(name + ":", x + xOffset, y + yOffset, 0xFFFFFF, true);
-            yOffset += 10;
-            DrawingHelper.drawQuad(x + xOffset + 1, y + yOffset + 1, 1, 3l, Color.DKGREY, 1F);
-            int yOffsetAtListStart = yOffset;
-            for (int i = 0, listSize = list.size(); i < listSize; i++)
-            {
-                DrawingHelper.drawQuad(x + xOffset + 1, y + yOffset + 4, 3, 1, Color.DKGREY, 1F);
-                DrawingHelper.drawQuad(x + xOffset, y + yOffset + 3, 3, 1, Color.WHITE, 1F);
-                if (i < listSize - 1)
-                    DrawingHelper.drawQuad(x + xOffset + 1, y + yOffset + 5, 1, 9, Color.DKGREY, 1F);
-                Object listObject = list.get(i);
-                this.drawObject(minecraft, xOffset + 5, yOffset, String.valueOf(i), listObject);
-                if (i < listSize - 1)
-                    yOffset += 10;
-            }
-            DrawingHelper.drawQuad(x + xOffset, y + yOffsetAtListStart, 1, yOffset - yOffsetAtListStart + 4, Color.WHITE, 1F);*/
         } else if (object instanceof LinkedTreeMap)
         {
             LinkedTreeMap<String, Object> treeMap = (LinkedTreeMap<String, Object>) object;
             minecraft.fontRendererObj.drawString(name + ":", x + xOffset, y + yOffset, 0xFFFFFF, true);
-            yOffset += 10;
+            int height = 10;
             for (Map.Entry<String, Object> entry : treeMap.entrySet())
             {
                 String entryName = entry.getKey();
                 Object entryObject = entry.getValue();
-                this.drawObject(minecraft, xOffset + 5, yOffset, entryName, entryObject);
-                yOffset += 10;
+                int objectHeight = this.drawObject(minecraft, xOffset + 5, yOffset + height, entryName, entryObject);
+                DrawingHelper.drawQuad(x + xOffset, y + yOffset + height, 3, objectHeight, Color.WHITE, 1F);
+                height += objectHeight;
             }
-            return 10;
+            return height;
         } else return 0;
     }
 

@@ -169,7 +169,8 @@ public class GuiFile extends GuiFileBase
 
         DrawingHelper.drawIcon(this.getFileType().getIcon(), x, y, iconSize, iconSize, false);
 
-        minecraft.fontRendererObj.drawSplitString(this.getShortFileName(), x + (int) iconSize + 3, nameY, w - (int) iconSize - 6, 0xFFFFFF);
+//        minecraft.fontRendererObj.drawSplitString(this.getShortFileName(), x + (int) iconSize + 3, nameY, w - (int) iconSize - 6, 0xFFFFFF);
+        DrawingHelper.drawSplitString(minecraft.fontRendererObj, x + (int) iconSize + 3, nameY, this.getShortFileName(), 0xFFFFFF, w - (int) iconSize - 6, true);
     }
 
     private void renderList(Minecraft minecraft)
