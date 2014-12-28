@@ -1,10 +1,11 @@
 package dk.mrspring.fileexplorer.gui;
 
+import dk.mrspring.fileexplorer.LiteModFileExplorer;
 import dk.mrspring.fileexplorer.gui.helper.Color;
 import dk.mrspring.fileexplorer.gui.helper.DrawingHelper;
 import dk.mrspring.fileexplorer.loader.FileLoader;
 import net.minecraft.client.Minecraft;
-import org.lwjgl.input.Mouse;
+import net.minecraft.util.StatCollector;
 
 import java.io.File;
 import java.io.IOException;
@@ -117,17 +118,28 @@ public class GuiFileExplorer implements IGui, IMouseListener
 
         int yOffset = 0 - scrollHeight, xOffset = 5;
 
-        for (GuiFileBase guiFile : guiFiles)
+        if (guiFiles.size() > 0)
         {
-            if (!drawGuiFile(xOffset, yOffset, guiFile))
+            for (GuiFileBase guiFile : guiFiles)
             {
-                guiFile.setX(xOffset + x);
-                guiFile.setY(yOffset + y);
-                guiFile.setWidth(width);
-                guiFile.draw(minecraft, mouseX, mouseY);
-            }
+                if (!drawGuiFile(xOffset, yOffset, guiFile))
+                {
+                    guiFile.setX(xOffset + x);
+                    guiFile.setY(yOffset + y);
+                    guiFile.setWidth(width);
+                    guiFile.draw(minecraft, mouseX, mouseY);
+                }
 
-            yOffset += guiFile.getHeight() + 5;
+                yOffset += guiFile.getHeight() + 5;
+            }
+        } else
+        {
+            int textMaxLength = w;
+            if (this.showControls)
+                textMaxLength -= 75;
+
+            float textX = x + textMaxLength / 2, textY = y + 10;
+            DrawingHelper.drawSplitCenteredString(minecraft.fontRendererObj, textX, textY, StatCollector.translateToLocal("gui.explorer.no_files"), 0xFFFFFF, textMaxLength, true);
         }
 
         int totalHeight = this.guiFiles.size() * 35;
@@ -147,6 +159,8 @@ public class GuiFileExplorer implements IGui, IMouseListener
     @Override
     public void update()
     {
+        this.newFolder.setEnabled(LiteModFileExplorer.config.acceptFileManipulation);
+
         int totalHeight = this.guiFiles.size() * 35;
         if (totalHeight < this.h)
             scrollHeight = -5;
@@ -358,21 +372,24 @@ public class GuiFileExplorer implements IGui, IMouseListener
 
     private void createNewFile()
     {
-        this.guiFiles.add(0, new GuiFileNew(0, 0, w - 10, 30, new GuiFileNew.INewFileEvents()
+        if (LiteModFileExplorer.config.acceptFileManipulation)
         {
-            @Override
-            public void onCreated(GuiFileNew newFile, String path)
+            this.guiFiles.add(0, new GuiFileNew(0, 0, w - 10, 30, new GuiFileNew.INewFileEvents()
             {
-                GuiFileExplorer.this.onFileCreated(newFile, path);
-            }
+                @Override
+                public void onCreated(GuiFileNew newFile, String path)
+                {
+                    GuiFileExplorer.this.onFileCreated(newFile, path);
+                }
 
-            @Override
-            public void onCanceled(GuiFileNew guiFileNew, String path)
-            {
-                GuiFileExplorer.this.cancelNewFile(guiFileNew);
-            }
-        }));
-        this.scrollHeight = 0;
+                @Override
+                public void onCanceled(GuiFileNew guiFileNew, String path)
+                {
+                    GuiFileExplorer.this.cancelNewFile(guiFileNew);
+                }
+            }));
+            this.scrollHeight = 0;
+        }
     }
 
     private void onFileCreated(GuiFileNew newFile, String path)
