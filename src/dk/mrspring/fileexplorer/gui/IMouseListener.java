@@ -5,5 +5,6 @@ package dk.mrspring.fileexplorer.gui;
  */
 public interface IMouseListener
 {
-    public void handleMouseInput();
+    //    public void handleMouseInput();
+    public void handleMouseWheel(int mouseX, int mouseY, int dWheelRaw);
 }

@@ -5,6 +5,7 @@ import com.google.gson.internal.LinkedTreeMap;
 import com.google.gson.reflect.TypeToken;
 import dk.mrspring.fileexplorer.gui.helper.Color;
 import dk.mrspring.fileexplorer.gui.helper.DrawingHelper;
+import dk.mrspring.fileexplorer.gui.helper.GuiHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import org.lwjgl.input.Mouse;
@@ -207,18 +208,21 @@ public class GuiJsonViewer implements IGui, IMouseListener
         this.scrollHeight = scrollHeightAfterAddition;
     }
 
-    @Override
-    public void handleMouseInput()
-    {
-        int mouseWheel = Mouse.getDWheel();
-        mouseWheel /= 4;
-        if (mouseWheel != 0)
-            this.addScroll(-mouseWheel);
-    }
-
     public void setHeight(int height)
     {
         this.height = height;
+    }
+
+    @Override
+    public void handleMouseWheel(int mouseX, int mouseY, int dWheelRaw)
+    {
+        if (GuiHelper.isMouseInBounds(mouseX, mouseY, x, y, width, height))
+        {
+            int mouseWheel = dWheelRaw;
+            mouseWheel /= 4;
+            if (mouseWheel != 0)
+                this.addScroll(-mouseWheel);
+        }
     }
 
     public class GuiJsonEditor implements IGui

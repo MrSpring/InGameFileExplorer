@@ -4,6 +4,7 @@ import dk.mrspring.fileexplorer.gui.*;
 import dk.mrspring.fileexplorer.gui.helper.Color;
 import dk.mrspring.fileexplorer.gui.helper.DrawingHelper;
 import net.minecraft.util.StatCollector;
+import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
 
 import java.io.IOException;
@@ -24,6 +25,7 @@ public class GuiScreen extends net.minecraft.client.gui.GuiScreen
     private boolean useDefaultDoneButton = true;
     private int barHeight = 30;
     protected net.minecraft.client.gui.GuiScreen previousScreen;
+    private int mouseXAtLastFrame = 0, mouseYAtLastFrame = 0;
 
     public GuiScreen(String title, net.minecraft.client.gui.GuiScreen previousScreen)
     {
@@ -92,11 +94,6 @@ public class GuiScreen extends net.minecraft.client.gui.GuiScreen
     {
         // TODO: Fix Done button
 
-        int actualMouseY = mouseY;
-
-        if (this.showBars)
-            actualMouseY -= barHeight;
-
         super.drawScreen(mouseX, mouseY, partialTicks);
 
         if (this.showBars)
@@ -130,7 +127,7 @@ public class GuiScreen extends net.minecraft.client.gui.GuiScreen
 
             if (this.drawGui(identifier, element) && !identifier.equals("done_button"))
             {
-                element.draw(mc, mouseX, actualMouseY);
+                element.draw(mc, mouseX, mouseY);
                 if (element instanceof IDelayedDraw)
                 {
                     drawables.add(((IDelayedDraw) element).getDelayedDrawable());
@@ -141,8 +138,11 @@ public class GuiScreen extends net.minecraft.client.gui.GuiScreen
         if (drawables.size() > 0)
         {
             for (Drawable drawable : drawables)
-                drawable.draw(mc, mouseX, actualMouseY);
+                drawable.draw(mc, mouseX, mouseY);
         }
+
+        this.mouseXAtLastFrame = mouseX;
+        this.mouseYAtLastFrame = mouseY;
     }
 
     public int getBarHeight()
@@ -185,20 +185,16 @@ public class GuiScreen extends net.minecraft.client.gui.GuiScreen
     @Override
     public void handleMouseInput() throws IOException
     {
+        int dWheel = Mouse.getDWheel();
         for (IGui iGui : this.guiHashMap.values())
             if (iGui instanceof IMouseListener)
-                ((IMouseListener) iGui).handleMouseInput();
+                ((IMouseListener) iGui).handleMouseWheel(mc.mouseHelper.deltaX, mc.mouseHelper.deltaY, dWheel);
         super.handleMouseInput();
     }
 
     @Override
     protected void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException
     {
-        int actualMouseY = mouseY;
-
-        if (this.showBars)
-            actualMouseY -= barHeight;
-
         try
         {
             for (Map.Entry<String, IGui> entry : this.guiHashMap.entrySet())
@@ -206,9 +202,9 @@ public class GuiScreen extends net.minecraft.client.gui.GuiScreen
                 String identifier = entry.getKey();
                 IGui gui = entry.getValue();
 
-                if (identifier.equals("done_button") && gui.mouseDown(mouseX, actualMouseY, mouseButton))
+                if (identifier.equals("done_button") && gui.mouseDown(mouseX, mouseY, mouseButton))
                     mc.displayGuiScreen(this.previousScreen);
-                else if (gui.mouseDown(mouseX, actualMouseY, mouseButton))
+                else if (gui.mouseDown(mouseX, mouseY, mouseButton))
                     this.guiClicked(identifier, gui, mouseX, mouseY, mouseButton);
             }
         } catch (Exception e)
