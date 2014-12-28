@@ -103,7 +103,7 @@ public class GuiJsonViewer implements IGui, IMouseListener
                 int objectHeight = this.drawObject(minecraft, xOffset + 5, yOffset + height, entryName, entryObject);
                 float lineHeight = objectHeight;
                 if (i == list.size() - 1)
-                    lineHeight -= 6F;
+                    lineHeight = 5F;
                 DrawingHelper.drawQuad(x + xOffset + 1, y + yOffset + height + 1, 1, lineHeight, Color.DKGREY, 1F);
                 DrawingHelper.drawQuad(x + xOffset, y + yOffset + height, 1, lineHeight, Color.WHITE, 1F);
 
@@ -126,7 +126,7 @@ public class GuiJsonViewer implements IGui, IMouseListener
                 int objectHeight = this.drawObject(minecraft, xOffset + 5, yOffset + height, entryName, entryObject);
                 float lineHeight = objectHeight;
                 if (!iterator.hasNext())
-                    lineHeight -= 6F;
+                    lineHeight = 5F;
                 DrawingHelper.drawQuad(x + xOffset + 1, y + yOffset + height + 1, 1, lineHeight, Color.DKGREY, 1F);
                 DrawingHelper.drawQuad(x + xOffset, y + yOffset + height, 1, lineHeight, Color.WHITE, 1F);
 
