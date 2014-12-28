@@ -27,8 +27,6 @@ public class GuiJsonViewer implements IGui, IMouseListener
 
     public GuiJsonViewer(int x, int y, int width, int height, File jsonFile)
     {
-        System.out.println("Creating json Editor");
-
         this.x = x;
         this.y = y;
         this.width = width;
@@ -46,7 +44,6 @@ public class GuiJsonViewer implements IGui, IMouseListener
         {
             e.printStackTrace();
         }
-
     }
 
     @Override
@@ -73,6 +70,7 @@ public class GuiJsonViewer implements IGui, IMouseListener
         float maxScrollHeight = getMaxScrollHeight();
         float scrollProgress = (float) this.scrollHeight / maxScrollHeight;
         float scrollBarY = scrollBarYRange * scrollProgress;
+        DrawingHelper.drawQuad(x, y + scrollBarY + 1, 2, 40, Color.DKGREY, 1F);
         DrawingHelper.drawQuad(x - 1, y + scrollBarY, 2, 40, Color.WHITE, 1F);
     }
 
@@ -222,5 +220,10 @@ public class GuiJsonViewer implements IGui, IMouseListener
     public void setHeight(int height)
     {
         this.height = height;
+    }
+
+    public class GuiJsonEditor
+    {
+
     }
 }
