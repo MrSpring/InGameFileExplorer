@@ -188,7 +188,7 @@ public class GuiScreen extends net.minecraft.client.gui.GuiScreen
         int dWheel = Mouse.getDWheel();
         for (IGui iGui : this.guiHashMap.values())
             if (iGui instanceof IMouseListener)
-                ((IMouseListener) iGui).handleMouseWheel(mc.mouseHelper.deltaX, mc.mouseHelper.deltaY, dWheel);
+                ((IMouseListener) iGui).handleMouseWheel(mouseXAtLastFrame, mouseYAtLastFrame, dWheel);
         super.handleMouseInput();
     }
 
