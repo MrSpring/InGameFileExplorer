@@ -5,5 +5,8 @@ package dk.mrspring.fileexplorer;
  */
 public class Config
 {
-    public String startLocation = "C:\\";
+    public String startLocation = System.getProperty("user.home");
+    public boolean showWelcomeScreen = true;
+    public boolean acceptFileManipulation = false;
+    public boolean acceptFileReading = false;
 }

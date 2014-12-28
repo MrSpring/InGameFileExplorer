@@ -1,2 +1,6 @@
 gui.screen.example_page.name=Example Page
 gui.screen.example_page.description=Play around with some cool Gui features!
+gui.screen.welcome.title=Welcome
+gui.screen.welcome.message=Thanks for installing the In-Game File Explorer mod, by MrSpring.\nBefore you can start using the mod, you have to agree to these conditions:
+gui.screen.welcome.i_accept.read=I allow the mod to read from my personal files.
+gui.screen.welcome.i_accept.write=I allow the mod to write to my personal files, and understand the possible risks.

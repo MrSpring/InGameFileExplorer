@@ -1,5 +1,7 @@
 package dk.mrspring.fileexplorer.loader;
 
+import dk.mrspring.fileexplorer.LiteModFileExplorer;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -12,51 +14,54 @@ public class FileLoader
 {
     public static void addFiles(String path, List<File> fileList, boolean addSubFiles)
     {
-        try
-        {
-            File directory = new File(path);
-            System.out.println("Loading files from: " + directory.toString());
-            System.out.println("Directory list size: " + directory.list().length);
-            String[] directoryContents = directory.list();
-
-            for (String fileName : directoryContents)
+        if (LiteModFileExplorer.config.acceptFileReading)
+            try
             {
-                File file = new File(String.valueOf(directory), fileName);
-                System.out.println(" Found file: " + file.toString() + ". Adding it to the list.");
-                fileList.add(file);
-                if (file.isDirectory() && addSubFiles)
-                    addFiles(file.getPath(), fileList, true);
+                File directory = new File(path);
+                System.out.println("Loading files from: " + directory.toString());
+                System.out.println("Directory list size: " + directory.list().length);
+                String[] directoryContents = directory.list();
+
+                for (String fileName : directoryContents)
+                {
+                    File file = new File(String.valueOf(directory), fileName);
+                    System.out.println(" Found file: " + file.toString() + ". Adding it to the list.");
+                    fileList.add(file);
+                    if (file.isDirectory() && addSubFiles)
+                        addFiles(file.getPath(), fileList, true);
+                }
+            } catch (Exception e)
+            {
+                e.printStackTrace();
             }
-        } catch (Exception e)
-        {
-            e.printStackTrace();
-        }
     }
 
     public static String readFile(File file)
     {
-        try
-        {
-            FileReader reader = new FileReader(file);
-            BufferedReader bufferedReader = new BufferedReader(reader);
-            StringBuilder builder = new StringBuilder();
-
-            String line;
-
-            while ((line = bufferedReader.readLine()) != null)
+        if (LiteModFileExplorer.config.acceptFileReading)
+            try
             {
-                System.out.println("Found line " + line + " from file @ " + file.getPath());
-                builder.append(line);
-                builder.append('\n');
+                FileReader reader = new FileReader(file);
+                BufferedReader bufferedReader = new BufferedReader(reader);
+                StringBuilder builder = new StringBuilder();
+
+                String line;
+
+                while ((line = bufferedReader.readLine()) != null)
+                {
+                    System.out.println("Found line " + line + " from file @ " + file.getPath());
+                    builder.append(line);
+                    builder.append('\n');
+                }
+
+                bufferedReader.close();
+
+                return builder.toString();
+            } catch (Exception e)
+            {
+                e.printStackTrace();
+                return null;
             }
-
-            bufferedReader.close();
-
-            return builder.toString();
-        } catch (Exception e)
-        {
-            e.printStackTrace();
-            return null;
-        }
+        else return "";
     }
 }

@@ -29,7 +29,7 @@ public class GuiCheckbox implements IGui
     {
         button.draw(minecraft, mouseX, mouseY);
         if (isChecked())
-            DrawingHelper.drawIcon(DrawingHelper.checkMarkIcon, x + 1, y + 1, w - 2, h - 2);
+            DrawingHelper.drawIcon(DrawingHelper.checkMarkIcon, x + 2, y + 2, w - 4, h - 4);
     }
 
     @Override
@@ -46,6 +46,16 @@ public class GuiCheckbox implements IGui
             this.toggleChecked();
             return true;
         } else return false;
+    }
+
+    public void setChecked(boolean checked)
+    {
+        this.checked = checked;
+    }
+
+    public void setIsEnabled(boolean isEnabled)
+    {
+        this.button.setEnabled(isEnabled);
     }
 
     public boolean isChecked()
@@ -74,5 +84,10 @@ public class GuiCheckbox implements IGui
     public void handleKeyTyped(int keyCode, char character)
     {
 
+    }
+
+    public int getY()
+    {
+        return y;
     }
 }

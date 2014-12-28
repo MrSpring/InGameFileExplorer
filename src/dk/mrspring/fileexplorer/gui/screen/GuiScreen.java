@@ -237,7 +237,7 @@ public class GuiScreen extends net.minecraft.client.gui.GuiScreen
         }
     }
 
-    public void guiClicked(String identifier, IGui gui, int mouseX, int mouseY, int mouseBurron)
+    public void guiClicked(String identifier, IGui gui, int mouseX, int mouseY, int mouseButton)
     {
 
     }

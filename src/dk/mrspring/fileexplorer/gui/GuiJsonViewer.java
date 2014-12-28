@@ -91,7 +91,6 @@ public class GuiJsonViewer implements IGui, IMouseListener
      */
     private int drawObject(Minecraft minecraft, int xOffset, int yOffset, String name, Object object)
     {
-//        System.out.println("Drawing object: " + name + ", of type: " + object.getClass().getName() + " at Y: " + yOffset);
         if (object instanceof String || object instanceof Boolean || object instanceof Double)
         {
             return this.drawSimpleTextValue(minecraft.fontRendererObj, name, object, x + xOffset, y + yOffset);
@@ -222,8 +221,43 @@ public class GuiJsonViewer implements IGui, IMouseListener
         this.height = height;
     }
 
-    public class GuiJsonEditor
+    public class GuiJsonEditor implements IGui
     {
 
+        @Override
+        public void draw(Minecraft minecraft, int mouseX, int mouseY)
+        {
+
+        }
+
+        @Override
+        public void update()
+        {
+
+        }
+
+        @Override
+        public boolean mouseDown(int mouseX, int mouseY, int mouseButton)
+        {
+            return false;
+        }
+
+        @Override
+        public void mouseUp(int mouseX, int mouseY, int mouseButton)
+        {
+
+        }
+
+        @Override
+        public void mouseClickMove(int mouseX, int mouseY, int mouseButton, long timeSinceClick)
+        {
+
+        }
+
+        @Override
+        public void handleKeyTyped(int keyCode, char character)
+        {
+
+        }
     }
 }

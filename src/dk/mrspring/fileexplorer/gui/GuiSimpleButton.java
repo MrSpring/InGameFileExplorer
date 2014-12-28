@@ -168,4 +168,9 @@ public class GuiSimpleButton implements IGui
     {
 
     }
+
+    public void setEnabled(boolean enabled)
+    {
+        this.isEnabled = enabled;
+    }
 }

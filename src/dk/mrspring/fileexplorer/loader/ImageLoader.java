@@ -1,5 +1,6 @@
 package dk.mrspring.fileexplorer.loader;
 
+import dk.mrspring.fileexplorer.LiteModFileExplorer;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL12;
 
@@ -31,8 +32,8 @@ public class ImageLoader
             {
                 int pixel = pixels[y * image.getWidth() + x];
                 buffer.put((byte) ((pixel >> 16) & 0xFF));
-                buffer.put((byte) ((pixel >>  8) & 0xFF));
-                buffer.put((byte)  (pixel & 0xFF));
+                buffer.put((byte) ((pixel >> 8) & 0xFF));
+                buffer.put((byte) (pixel & 0xFF));
                 buffer.put((byte) ((pixel >> 24) & 0xFF));
             }
         }
@@ -67,8 +68,8 @@ public class ImageLoader
             {
                 int pixel = pixels[y * image.getWidth() + x];
                 buffer.put((byte) ((pixel >> 16) & 0xFF));
-                buffer.put((byte) ((pixel >>  8) & 0xFF));
-                buffer.put((byte)  (pixel & 0xFF));
+                buffer.put((byte) ((pixel >> 8) & 0xFF));
+                buffer.put((byte) (pixel & 0xFF));
                 buffer.put((byte) ((pixel >> 24) & 0xFF));
             }
         }
@@ -80,8 +81,10 @@ public class ImageLoader
 
     public static BufferedImage loadImage(String path) throws IOException
     {
-        File file = new File(path);
-
-        return ImageIO.read(file);
+        if (LiteModFileExplorer.config.acceptFileReading)
+        {
+            File file = new File(path);
+            return ImageIO.read(file);
+        } else return null;
     }
 }

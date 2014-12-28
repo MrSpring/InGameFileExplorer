@@ -3,6 +3,8 @@ package dk.mrspring.fileexplorer.gui.helper;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.renderer.Tessellator;
 
+import java.util.List;
+
 import static org.lwjgl.opengl.GL11.*;
 
 /**
@@ -448,6 +450,22 @@ public class DrawingHelper
     public static void drawCenteredString(FontRenderer renderer, float x, float y, String s, int color)
     {
         drawCenteredString(renderer, x, y, s, color, true);
+    }
+
+    public static int drawSplitCenteredString(FontRenderer renderer, float x, float y, String s, int color, int maxLength, boolean shadow)
+    {
+        List<String> lines = renderer.listFormattedStringToWidth(s, maxLength);
+        for (int i = 0; i < lines.size(); i++)
+        {
+            String line = lines.get(i);
+            drawCenteredString(renderer, x, y + (i * 9), line, color, shadow);
+        }
+        return lines.size();
+    }
+
+    public static int drawSplitCenteredString(FontRenderer renderer, float x, float y, String s, int colot, int maxLength)
+    {
+        return drawSplitCenteredString(renderer, x, y, s, colot, maxLength, true);
     }
 
     /**
