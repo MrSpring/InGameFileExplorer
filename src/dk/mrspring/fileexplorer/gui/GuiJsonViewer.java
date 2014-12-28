@@ -75,11 +75,6 @@ public class GuiJsonViewer implements IGui, IMouseListener
         DrawingHelper.drawQuad(x - 1, y + scrollBarY, 2, 40, Color.WHITE, 1F);
     }
 
-    private int getMaxScrollHeight()
-    {
-        return jsonHeight - height + 10;
-    }
-
     /**
      * Renders the Object and returns its display height.
      *
@@ -206,6 +201,11 @@ public class GuiJsonViewer implements IGui, IMouseListener
             scrollHeightAfterAddition = minScrollHeight;
 
         this.scrollHeight = scrollHeightAfterAddition;
+    }
+
+    private int getMaxScrollHeight()
+    {
+        return jsonHeight - height + 10;
     }
 
     public void setHeight(int height)

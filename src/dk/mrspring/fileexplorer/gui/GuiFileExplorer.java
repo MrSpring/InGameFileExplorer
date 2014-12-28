@@ -116,7 +116,7 @@ public class GuiFileExplorer implements IGui, IMouseListener
             DrawingHelper.drawQuad(x + width + 5 + 5 + 61, y + 5, 1, h - 10, Color.WHITE, 1F);
             this.drawControls(minecraft, mouseX, mouseY, x + width + 5 + 11);
         }
-        int yOffset = 5 - scrollHeight, xOffset = 5;
+        int yOffset = -scrollHeight, xOffset = 5;
 
         if (guiFiles.size() > 0)
         {
@@ -129,7 +129,6 @@ public class GuiFileExplorer implements IGui, IMouseListener
                     guiFile.setWidth(width);
                     guiFile.draw(minecraft, mouseX, mouseY);
                 }
-
                 yOffset += guiFile.getHeight() + 5;
             }
         } else
@@ -142,15 +141,15 @@ public class GuiFileExplorer implements IGui, IMouseListener
             DrawingHelper.drawSplitCenteredString(minecraft.fontRendererObj, textX, textY, StatCollector.translateToLocal("gui.explorer.no_files"), 0xFFFFFF, textMaxLength, true);
         }
 
-        int totalHeight = this.guiFiles.size() * 35;
+        int totalHeight = this.getListHeight();
         if (totalHeight > this.h)
         {
-            float scrollBarYRange = (h - 50);
-            float maxScrollHeight = totalHeight - 40;
+            float scrollBarYRange = (h - 45);
+            float maxScrollHeight = this.getMaxScrollHeight();
             float scrollProgress = (float) this.scrollHeight / maxScrollHeight;
             float scrollBarY = scrollBarYRange * scrollProgress;
-            DrawingHelper.drawQuad(x, y + scrollBarY + 7, 2, 40, Color.DKGREY, 1F);
-            DrawingHelper.drawQuad(x - 1, y + scrollBarY + 6, 2, 40, Color.WHITE, 1F);
+            DrawingHelper.drawQuad(x, y + scrollBarY + 1, 2, 40, Color.DKGREY, 1F);
+            DrawingHelper.drawQuad(x - 1, y + scrollBarY, 2, 40, Color.WHITE, 1F);
         }
 
         if (this.drawPath)
@@ -192,7 +191,7 @@ public class GuiFileExplorer implements IGui, IMouseListener
     {
         boolean isFileTooHigh = yOffset < -70;
         boolean isFileTooLow = yOffset > this.h + 40;
-        return isFileTooHigh || isFileTooLow;
+        return (isFileTooHigh || isFileTooLow);
     }
 
     private void drawControls(Minecraft minecraft, int mouseX, int mouseY, int xPos)
@@ -279,13 +278,9 @@ public class GuiFileExplorer implements IGui, IMouseListener
     private void goUpOne()
     {
         int lastIndexOfSeperator = this.currentPath.lastIndexOf(File.separator);
-        System.out.println("seperator = " + File.separator);
-        System.out.println(currentPath);
         if (lastIndexOfSeperator > 1)
         {
             String goTo = this.currentPath.substring(0, lastIndexOfSeperator + 1);
-            System.out.println("lastIndexOfSeperator = " + lastIndexOfSeperator);
-            System.out.println("goTo = " + goTo);
             this.openFile(new File(goTo));
         }
     }
@@ -446,12 +441,7 @@ public class GuiFileExplorer implements IGui, IMouseListener
 
     private void addScroll(int scrollHeight)
     {
-        int maxScrollHeight = -40, minScrollHeight = 0, scrollHeightAfterAddition = this.scrollHeight + scrollHeight;
-
-//        maxScrollHeight = (this.guiFiles.size() * 35) - 40;
-
-        for (GuiFileBase file : guiFiles)
-            maxScrollHeight += file.getHeight() + 5;
+        int maxScrollHeight = getMaxScrollHeight(), minScrollHeight = 0, scrollHeightAfterAddition = this.scrollHeight + scrollHeight;
 
         if (scrollHeightAfterAddition > maxScrollHeight)
             scrollHeightAfterAddition = maxScrollHeight;
@@ -459,9 +449,21 @@ public class GuiFileExplorer implements IGui, IMouseListener
             scrollHeightAfterAddition = minScrollHeight;
 
         this.scrollHeight = scrollHeightAfterAddition;
+    }
 
-        /*if (scrollHeightAfterAddition < maxScrollHeight && scrollHeightAfterAddition > minScrollHeight)
-            this.scrollHeight = scrollHeightAfterAddition;*/
+    private int getMaxScrollHeight()
+    {
+        return getListHeight() - h;
+    }
+
+    private int getListHeight()
+    {
+        int height = 0;
+        if (guiFiles.size() > 0)
+            for (GuiFileBase guiFile : guiFiles)
+//                if (!drawGuiFile(5, height, guiFile))
+                height += guiFile.getHeight() + 5;
+        return height;
     }
 
     @Override
@@ -471,7 +473,8 @@ public class GuiFileExplorer implements IGui, IMouseListener
         {
             int mouseWheel = dWheelRaw;
             mouseWheel /= 4;
-            this.addScroll(-mouseWheel);
+            if (mouseWheel != 0)
+                this.addScroll(-mouseWheel);
         }
     }
 
