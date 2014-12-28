@@ -148,12 +148,31 @@ public class GuiCustomTextField implements IGui
 
                 DrawingHelper.drawQuad(x + selectionX + 2, y + 2, selectionWidth, h - 4, Color.BLUE, 0.5F);
             }
+            this.drawScrollBar();
         } catch (Exception e)
         {
             System.err.println("Failed to render text: \"" + text + "\"!");
             e.printStackTrace();
             this.loadRenderLimits(Minecraft.getMinecraft().fontRendererObj);
         }
+    }
+
+    private void drawScrollBar()
+    {
+        float scrollX = x + 3, scrollY = y + 11, scrollXEnd = x - 3;
+
+        float renderStartProgressThrough = ((float) renderStart) / ((float) text.length());
+        float renderEndProgressThrough = ((float) renderEnd) / ((float) text.length());
+
+        scrollX += w * renderStartProgressThrough;
+        scrollXEnd += w * renderEndProgressThrough;
+
+//        System.out.println("renderStartProgressThrough = " + renderStartProgressThrough);
+//        System.out.println("renderEndProgressThrough = " + renderEndProgressThrough);
+//        System.out.println("scrollX = " + scrollX);
+//        System.out.println("scrollXEnd = " + scrollXEnd);
+
+        DrawingHelper.drawQuad(scrollX, scrollY, scrollXEnd - scrollX, 1, Color.WHITE, 1F);
     }
 
     @Override
