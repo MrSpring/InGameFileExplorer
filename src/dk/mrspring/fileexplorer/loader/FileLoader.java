@@ -2,9 +2,7 @@ package dk.mrspring.fileexplorer.loader;
 
 import dk.mrspring.fileexplorer.LiteModFileExplorer;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
+import java.io.*;
 import java.util.List;
 
 /**
@@ -63,5 +61,23 @@ public class FileLoader
                 return null;
             }
         else return "";
+    }
+
+    public static boolean writeToFile(File file, String toWrite)
+    {
+        if (LiteModFileExplorer.config.acceptFileManipulation)
+        {
+            try
+            {
+                FileWriter writer = new FileWriter(file);
+                writer.write(toWrite);
+                writer.close();
+                return true;
+            } catch (IOException e)
+            {
+                e.printStackTrace();
+                return false;
+            }
+        } else return false;
     }
 }
