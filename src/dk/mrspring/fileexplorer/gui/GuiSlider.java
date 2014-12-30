@@ -3,6 +3,9 @@ package dk.mrspring.fileexplorer.gui;
 import dk.mrspring.fileexplorer.gui.helper.Color;
 import dk.mrspring.fileexplorer.gui.helper.DrawingHelper;
 import dk.mrspring.fileexplorer.gui.helper.GuiHelper;
+import dk.mrspring.fileexplorer.gui.interfaces.Drawable;
+import dk.mrspring.fileexplorer.gui.interfaces.IDelayedDraw;
+import dk.mrspring.fileexplorer.gui.interfaces.IGui;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 

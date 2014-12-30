@@ -1,4 +1,4 @@
-package dk.mrspring.fileexplorer.gui;
+package dk.mrspring.fileexplorer.gui.interfaces;
 
 /**
  * Created by MrSpring on 03-12-2014 for In-Game File Explorer.

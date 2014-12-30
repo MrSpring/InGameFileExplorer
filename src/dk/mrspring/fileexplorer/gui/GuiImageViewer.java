@@ -1,6 +1,7 @@
 package dk.mrspring.fileexplorer.gui;
 
 import dk.mrspring.fileexplorer.gui.helper.DrawingHelper;
+import dk.mrspring.fileexplorer.gui.interfaces.IGui;
 import dk.mrspring.fileexplorer.gui.screen.GuiScreenImageViewer;
 import dk.mrspring.fileexplorer.loader.ImageLoader;
 import net.minecraft.client.Minecraft;

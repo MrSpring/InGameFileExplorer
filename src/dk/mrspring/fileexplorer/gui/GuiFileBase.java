@@ -1,5 +1,6 @@
 package dk.mrspring.fileexplorer.gui;
 
+import dk.mrspring.fileexplorer.gui.interfaces.IGui;
 import net.minecraft.client.Minecraft;
 
 /**

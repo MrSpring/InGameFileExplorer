@@ -4,6 +4,8 @@ import dk.mrspring.fileexplorer.LiteModFileExplorer;
 import dk.mrspring.fileexplorer.gui.helper.Color;
 import dk.mrspring.fileexplorer.gui.helper.DrawingHelper;
 import dk.mrspring.fileexplorer.gui.helper.GuiHelper;
+import dk.mrspring.fileexplorer.gui.interfaces.IGui;
+import dk.mrspring.fileexplorer.gui.interfaces.IMouseListener;
 import dk.mrspring.fileexplorer.loader.FileLoader;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.StatCollector;

@@ -3,6 +3,7 @@ package dk.mrspring.fileexplorer.gui.screen;
 import dk.mrspring.fileexplorer.gui.*;
 import dk.mrspring.fileexplorer.gui.helper.Color;
 import dk.mrspring.fileexplorer.gui.helper.DrawingHelper;
+import dk.mrspring.fileexplorer.gui.interfaces.IGui;
 import dk.mrspring.fileexplorer.loader.FileLoader;
 
 import java.io.File;
