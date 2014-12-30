@@ -2,6 +2,7 @@ package dk.mrspring.fileexplorer.gui;
 
 import dk.mrspring.fileexplorer.gui.helper.DrawingHelper;
 import dk.mrspring.fileexplorer.gui.helper.GuiHelper;
+import dk.mrspring.fileexplorer.gui.helper.IIcon;
 import dk.mrspring.fileexplorer.gui.interfaces.IGui;
 import net.minecraft.client.Minecraft;
 
@@ -12,6 +13,7 @@ public class GuiSimpleButton implements IGui
 {
     int x, y, width, height;
     String text;
+    IIcon icon;
 
     boolean wasMouseHoveringLastFrame = false, isEnabled = true, highlight = false, drawBackground = true;
     int alphaProgress = 0;
@@ -26,6 +28,17 @@ public class GuiSimpleButton implements IGui
         this.height = height;
 
         this.text = message;
+    }
+
+    public GuiSimpleButton setIcon(IIcon icon)
+    {
+        this.icon = icon;
+        return this;
+    }
+
+    public IIcon getIcon()
+    {
+        return icon;
     }
 
     public GuiSimpleButton disable()
@@ -62,24 +75,18 @@ public class GuiSimpleButton implements IGui
     @Override
     public void draw(Minecraft minecraft, int mouseX, int mouseY)
     {
-//        DrawingHelper.drawButtonThingy(x, y, width, height, Color.BLACK, 0.25F, Color.WHITE, 1F);
-//        if (this.drawBackground)
-//            DrawingHelper.drawQuad(x, y, width, height, Color.BLACK, 0.25F);
-//        DrawingHelper.drawOutline(x, y, width, height, Color.WHITE, 1F);
         wasMouseHoveringLastFrame = GuiHelper.isMouseInBounds(mouseX, mouseY, this.x, this.y, this.width, this.height);
         if (wasMouseHoveringLastFrame)
             alphaTarget = 10;
         else alphaTarget = 0;
-//        if (alphaProgress != 0 && isEnabled)
-//            DrawingHelper.drawVerticalGradient(x + 2, y + 2, width - 4, height - 4, Color.CYAN, ((float) alphaProgress) / 10 * 0.25F, Color.BLUE, ((float) alphaProgress) / 10 * 0.5F);
 
         int textColor = 0xFFFFFF;
         DrawingHelper.drawButtonThingy(x, y, width, height, (float) alphaProgress / 10, isEnabled);
         if (!isEnabled)
-        {
             textColor = 0xAFAFAF;
 
-        }
+        if (icon != null)
+            DrawingHelper.drawIcon(this.getIcon(), x + 2, y + 2, width - 4, height - 4, false);
 
         float textY = (this.height / 2 - 4) + y, textX = (this.width / 2 - (minecraft.fontRendererObj.getStringWidth(this.text) / 2)) + x;
         minecraft.fontRendererObj.drawStringWithShadow(this.text, textX, textY, textColor);
