@@ -45,14 +45,12 @@ public class GuiImageViewer implements IGui//, IDelayedDraw
             {
                 try
                 {
-                    System.out.println("Loading image at: " + path);
                     BufferedImage image = ImageLoader.loadImage(path);
                     ByteBuffer buffer = ImageLoader.loadTexture1(image);
                     GuiImageViewer.this.onImageDoneLoading(image, buffer);
                 } catch (IOException e)
                 {
                     e.printStackTrace();
-                    System.out.println("Reporting failed...");
                     GuiImageViewer.this.onImageFailedLoading();
                 }
             }

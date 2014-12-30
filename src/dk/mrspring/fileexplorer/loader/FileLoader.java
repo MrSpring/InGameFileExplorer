@@ -16,14 +16,11 @@ public class FileLoader
             try
             {
                 File directory = new File(path);
-                System.out.println("Loading files from: " + directory.toString());
-                System.out.println("Directory list size: " + directory.list().length);
                 String[] directoryContents = directory.list();
 
                 for (String fileName : directoryContents)
                 {
                     File file = new File(String.valueOf(directory), fileName);
-                    System.out.println(" Found file: " + file.toString() + ". Adding it to the list.");
                     fileList.add(file);
                     if (file.isDirectory() && addSubFiles)
                         addFiles(file.getPath(), fileList, true);
@@ -47,7 +44,6 @@ public class FileLoader
 
                 while ((line = bufferedReader.readLine()) != null)
                 {
-                    System.out.println("Found line " + line + " from file @ " + file.getPath());
                     builder.append(line);
                     builder.append('\n');
                 }

@@ -25,7 +25,6 @@ public class GuiMultiLineTextField implements IGui
 
     public GuiMultiLineTextField(int xPos, int yPos, String text)
     {
-        System.out.println("Constructor is called!");
         this.text = text;
 
         this.x = xPos;

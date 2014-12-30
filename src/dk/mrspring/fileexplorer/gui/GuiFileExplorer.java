@@ -306,13 +306,10 @@ public class GuiFileExplorer implements IGui, IMouseListener
     {
         if (file != null)
         {
-            System.out.println("Opening file: " + file.toString());
             if (file.exists())
             {
-                System.out.println("File exists...");
                 if (file.isDirectory())
                 {
-                    System.out.println("Opening directory at: " + file.toString());
                     this.currentPath = file.toString();
                     this.refreshList();
                     this.openFile.disable();
@@ -321,7 +318,6 @@ public class GuiFileExplorer implements IGui, IMouseListener
                 {
                     if (this.onFileOpened != null)
                     {
-                        System.out.println("onFileOpened is not null. Opening file!");
                         this.onFileOpened.onOpened(file);
                     }
                 }
@@ -349,9 +345,7 @@ public class GuiFileExplorer implements IGui, IMouseListener
             }));
         }
 
-        System.out.println("currentPath = " + currentPath);
         String actualPath = new File(currentPath).getPath();
-        System.out.println("actualPath = " + actualPath);
         String[] foldersToPath = actualPath.split("\\" + File.separator);
 
         if (foldersToPath.length > 0)
@@ -361,7 +355,6 @@ public class GuiFileExplorer implements IGui, IMouseListener
             for (int i = 0; i < foldersToPath.length; i++)
             {
                 String folderName = foldersToPath[i];
-                System.out.println("Adding: " + folderName + " to the button list.");
                 int folderWidth = Minecraft.getMinecraft().fontRendererObj.getStringWidth(folderName) + 6;
                 this.pathButtons[i] = new GuiSimpleButton(pathX + xOffset, pathY, folderWidth, 14, folderName);
                 xOffset += folderWidth + 6;
@@ -396,7 +389,6 @@ public class GuiFileExplorer implements IGui, IMouseListener
         try
         {
             File file = new File(this.currentPath + File.separator + path);
-            System.out.println("file.getPath() = " + file.getPath());
             int lastDot = path.lastIndexOf('.');
             if (!file.exists())
                 if (lastDot >= 0)

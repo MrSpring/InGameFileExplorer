@@ -82,8 +82,6 @@ public class LiteModFileExplorer implements Tickable
         String configFilePath = configPath.getPath() + File.separator + "InGameFileExplorer.json";
         configFile = new File(configFilePath);
 
-        System.out.println("configFilePath = " + configFilePath);
-
         try
         {
             if (configFile.exists())
