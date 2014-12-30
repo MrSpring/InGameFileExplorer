@@ -112,6 +112,9 @@ public class GuiFileExplorer implements IGui, IMouseListener
         if (showControls)
         {
             width -= 75;
+            DrawingHelper.drawQuad(x + width + 5 + 6, y + 6, 1, h - 10, Color.DKGREY, 1F);
+            DrawingHelper.drawQuad(x + width + 5 + 6 + 61, y + 6, 1, h - 10, Color.DKGREY, 1F);
+
             DrawingHelper.drawQuad(x + width + 5 + 5, y + 5, 1, h - 10, Color.WHITE, 1F);
             DrawingHelper.drawQuad(x + width + 5 + 5 + 61, y + 5, 1, h - 10, Color.WHITE, 1F);
             this.drawControls(minecraft, mouseX, mouseY, x + width + 5 + 11);
@@ -144,7 +147,7 @@ public class GuiFileExplorer implements IGui, IMouseListener
         int totalHeight = this.getListHeight();
         if (totalHeight > this.h)
         {
-            float scrollBarYRange = (h - 45);
+            float scrollBarYRange = (h - 40);
             float maxScrollHeight = this.getMaxScrollHeight();
             float scrollProgress = (float) this.scrollHeight / maxScrollHeight;
             float scrollBarY = scrollBarYRange * scrollProgress;
@@ -197,19 +200,19 @@ public class GuiFileExplorer implements IGui, IMouseListener
     private void drawControls(Minecraft minecraft, int mouseX, int mouseY, int xPos)
     {
         this.openFile.setX(xPos);
-        this.openFile.setY(y + 5);
+        this.openFile.setY(y);
         this.openFile.draw(minecraft, mouseX, mouseY);
 
         this.refreshList.setX(xPos);
-        this.refreshList.setY(y + 5 + 25);
+        this.refreshList.setY(y + 25);
         this.refreshList.draw(minecraft, mouseX, mouseY);
 
         this.newFolder.setX(xPos);
-        this.newFolder.setY(y + 5 + 50);
+        this.newFolder.setY(y + 50);
         this.newFolder.draw(minecraft, mouseX, mouseY);
 
         this.upOne.setX(xPos);
-        this.upOne.setY(y + 5 + 75);
+        this.upOne.setY(y + 75);
         this.upOne.draw(minecraft, mouseX, mouseY);
     }
 

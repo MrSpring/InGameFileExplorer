@@ -1,14 +1,15 @@
 package dk.mrspring.fileexplorer.gui;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.internal.LinkedTreeMap;
 import com.google.gson.reflect.TypeToken;
+import dk.mrspring.fileexplorer.LiteModFileExplorer;
 import dk.mrspring.fileexplorer.gui.helper.Color;
 import dk.mrspring.fileexplorer.gui.helper.DrawingHelper;
 import dk.mrspring.fileexplorer.gui.helper.GuiHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
-import org.lwjgl.input.Mouse;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -24,18 +25,29 @@ import java.util.Map;
 public class GuiJsonViewer implements IGui, IMouseListener
 {
     int x, y, width, height, jsonHeight, scrollHeight = 0;
+    File jsonFile;
     Map<String, Object> jsonObject;
+    GuiJsonEditor editor;
+    GuiSimpleButton editButton;
+    GuiSimpleButton saveButton, cancelButton;
+    boolean editing = false;
 
-    public GuiJsonViewer(int x, int y, int width, int height, File jsonFile)
+    public GuiJsonViewer(int x, int y, int width, int height, File file)
     {
         this.x = x;
         this.y = y;
         this.width = width;
         this.height = height;
 
+        this.jsonFile = file;
+
+        editButton = new GuiSimpleButton(x - 62, y + height - 45, 50, 20, "Edit");
+        saveButton = new GuiSimpleButton(x + 30, y + 50, 50, 20, "Save");
+        cancelButton = new GuiSimpleButton(x + 30, y + 80, 50, 20, "Cancel");
+
         try
         {
-            FileReader reader = new FileReader(jsonFile);
+            FileReader reader = new FileReader(this.jsonFile);
             Gson gson = new Gson();
             Type stringStringMap = new TypeToken<Map<String, Object>>()
             {
@@ -50,18 +62,28 @@ public class GuiJsonViewer implements IGui, IMouseListener
     @Override
     public void draw(Minecraft minecraft, int mouseX, int mouseY)
     {
-        int yOffset = -scrollHeight;
-        this.jsonHeight = 0;
-        for (Map.Entry<String, Object> entry : this.jsonObject.entrySet())
+        if (!editing)
         {
-            int objectHeight = this.drawObject(minecraft, 5, yOffset, entry.getKey(), entry.getValue());
-            yOffset += objectHeight;
-            this.jsonHeight += objectHeight;
-        }
+            this.editButton.draw(minecraft, mouseX, mouseY);
 
-        if (jsonHeight > height)
+            int yOffset = -scrollHeight;
+            this.jsonHeight = 0;
+            for (Map.Entry<String, Object> entry : this.jsonObject.entrySet())
+            {
+                int objectHeight = this.drawObject(minecraft, 5, yOffset, entry.getKey(), entry.getValue());
+                yOffset += objectHeight;
+                this.jsonHeight += objectHeight;
+            }
+
+            if (jsonHeight > height)
+            {
+                this.drawScrollBar();
+            }
+        } else
         {
-            this.drawScrollBar();
+            this.editor.draw(minecraft, mouseX, mouseY);
+            this.saveButton.draw(minecraft, mouseX, mouseY);
+            this.cancelButton.draw(minecraft, mouseX, mouseY);
         }
     }
 
@@ -160,12 +182,64 @@ public class GuiJsonViewer implements IGui, IMouseListener
     {
         if (jsonHeight < height)
             scrollHeight = 0;
+
+        if (!LiteModFileExplorer.config.acceptFileManipulation)
+            this.saveButton.disable();
+
+        if (editing)
+        {
+            this.saveButton.update();
+            this.cancelButton.update();
+        } else
+        {
+            this.editButton.update();
+        }
     }
 
     @Override
     public boolean mouseDown(int mouseX, int mouseY, int mouseButton)
     {
-        return false;
+        if (!editing)
+        {
+            if (this.editButton.mouseDown(mouseX, mouseY, mouseButton))
+            {
+                this.startEditing();
+                return true;
+            } else return false;
+        } else
+        {
+            if (this.saveButton.mouseDown(mouseX, mouseY, mouseButton))
+            {
+                this.save();
+                return true;
+            } else if (this.cancelButton.mouseDown(mouseX, mouseY, mouseButton))
+            {
+                this.stopEditing();
+                return true;
+            } else return this.editor.mouseDown(mouseX, mouseY, mouseButton);
+        }
+    }
+
+    private void stopEditing()
+    {
+
+    }
+
+    private void save()
+    {
+        Map<String, Object> fromEditor = editor.toJsonMap();
+        GsonBuilder builder = new GsonBuilder();
+        if (LiteModFileExplorer.config.json_usePrettyPrinting)
+            builder.setPrettyPrinting();
+        Gson gson = builder.create();
+        String jsonCode = gson.toJson(fromEditor);
+
+    }
+
+    private void startEditing()
+    {
+        this.editor = new GuiJsonEditor(this);
+        this.editing = true;
     }
 
     @Override
@@ -211,6 +285,7 @@ public class GuiJsonViewer implements IGui, IMouseListener
     public void setHeight(int height)
     {
         this.height = height;
+        this.editButton.setY(y + height - 45);
     }
 
     @Override
@@ -227,6 +302,10 @@ public class GuiJsonViewer implements IGui, IMouseListener
 
     public class GuiJsonEditor implements IGui
     {
+        public GuiJsonEditor(GuiJsonViewer guiJsonViewer)
+        {
+
+        }
 
         @Override
         public void draw(Minecraft minecraft, int mouseX, int mouseY)
@@ -262,6 +341,11 @@ public class GuiJsonViewer implements IGui, IMouseListener
         public void handleKeyTyped(int keyCode, char character)
         {
 
+        }
+
+        public Map<String, Object> toJsonMap()
+        {
+            return null;
         }
     }
 }

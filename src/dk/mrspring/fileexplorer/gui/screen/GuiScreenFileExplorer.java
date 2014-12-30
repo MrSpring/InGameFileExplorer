@@ -1,6 +1,8 @@
 package dk.mrspring.fileexplorer.gui.screen;
 
 import dk.mrspring.fileexplorer.gui.*;
+import dk.mrspring.fileexplorer.gui.helper.Color;
+import dk.mrspring.fileexplorer.gui.helper.DrawingHelper;
 import dk.mrspring.fileexplorer.loader.FileLoader;
 
 import java.io.File;
@@ -42,6 +44,13 @@ public class GuiScreenFileExplorer extends GuiScreen
             this.hideTitle();
             initialized = true;
         }
+    }
+
+    @Override
+    public void drawScreen(int mouseX, int mouseY, float partialTicks)
+    {
+        DrawingHelper.drawQuad(0, 0, width, height, Color.BLACK, 0.5F);
+        super.drawScreen(mouseX, mouseY, partialTicks);
     }
 
     public void openFile(File file)
