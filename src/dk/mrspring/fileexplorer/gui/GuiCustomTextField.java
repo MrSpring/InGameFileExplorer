@@ -379,6 +379,7 @@ public class GuiCustomTextField implements IGui
     public void setW(int w)
     {
         this.w = w;
+        this.loadRenderLimits(Minecraft.getMinecraft().fontRendererObj);
     }
 
     public void setH(int h)
