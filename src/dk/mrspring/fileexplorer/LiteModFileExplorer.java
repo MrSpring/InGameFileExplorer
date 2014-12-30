@@ -100,18 +100,12 @@ public class LiteModFileExplorer implements Tickable
             {
                 config = new Config();
                 saveConfig();
-//                GsonBuilder gsonBuilder = new GsonBuilder().setPrettyPrinting();
-//                Gson gson = gsonBuilder.create();
-//                String jsonCode = gson.toJson(config);
-//                FileWriter fileWriter = new FileWriter(configFile);
-//                BufferedWriter writer = new BufferedWriter(fileWriter);
-//                writer.write(jsonCode);
-//                writer.close();
-//                fileWriter.close();
             }
         } catch (Exception e)
         {
             e.printStackTrace();
+            if (config == null)
+                config = new Config();
         }
     }
 
