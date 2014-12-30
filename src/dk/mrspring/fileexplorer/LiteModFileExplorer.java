@@ -7,6 +7,7 @@ import com.mumfrey.liteloader.core.LiteLoader;
 import dk.mrspring.fileexplorer.gui.screen.*;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.settings.KeyBinding;
+import org.apache.logging.log4j.LogManager;
 import org.lwjgl.input.Keyboard;
 
 import java.awt.image.BufferedImage;
@@ -51,7 +52,9 @@ public class LiteModFileExplorer implements Tickable
         {
             if (!configFile.exists())
                 configFile.createNewFile();
-            GsonBuilder gsonBuilder = new GsonBuilder().setPrettyPrinting();
+            GsonBuilder gsonBuilder = new GsonBuilder();
+            if (config.json_usePrettyPrinting)
+                gsonBuilder.setPrettyPrinting();
             Gson gson = gsonBuilder.create();
             String jsonCode = gson.toJson(config);
             FileWriter fileWriter = new FileWriter(configFile);
@@ -82,6 +85,8 @@ public class LiteModFileExplorer implements Tickable
         String configFilePath = configPath.getPath() + File.separator + "InGameFileExplorer.json";
         configFile = new File(configFilePath);
 
+        ModLogger.logger = LogManager.getLogger("InGameFileExplorer");
+
         try
         {
             if (configFile.exists())
@@ -89,17 +94,20 @@ public class LiteModFileExplorer implements Tickable
                 Gson gson = new Gson();
                 FileReader reader = new FileReader(configFile);
                 config = gson.fromJson(reader, Config.class);
+                saveConfig();
+                ModLogger.printDebug("Loaded config from file: " + configFile.getPath() + ", debug messages are enabled! Get ready for spam!");
             } else
             {
                 config = new Config();
-                GsonBuilder gsonBuilder = new GsonBuilder().setPrettyPrinting();
-                Gson gson = gsonBuilder.create();
-                String jsonCode = gson.toJson(config);
-                FileWriter fileWriter = new FileWriter(configFile);
-                BufferedWriter writer = new BufferedWriter(fileWriter);
-                writer.write(jsonCode);
-                writer.close();
-                fileWriter.close();
+                saveConfig();
+//                GsonBuilder gsonBuilder = new GsonBuilder().setPrettyPrinting();
+//                Gson gson = gsonBuilder.create();
+//                String jsonCode = gson.toJson(config);
+//                FileWriter fileWriter = new FileWriter(configFile);
+//                BufferedWriter writer = new BufferedWriter(fileWriter);
+//                writer.write(jsonCode);
+//                writer.close();
+//                fileWriter.close();
             }
         } catch (Exception e)
         {

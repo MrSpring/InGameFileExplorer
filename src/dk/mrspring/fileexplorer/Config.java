@@ -10,4 +10,5 @@ public class Config
     public boolean acceptFileManipulation = false;
     public boolean acceptFileReading = false;
     public boolean json_usePrettyPrinting = true;
+    public boolean printDebug = true;
 }

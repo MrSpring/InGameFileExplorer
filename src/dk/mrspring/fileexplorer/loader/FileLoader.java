@@ -1,6 +1,7 @@
 package dk.mrspring.fileexplorer.loader;
 
 import dk.mrspring.fileexplorer.LiteModFileExplorer;
+import dk.mrspring.fileexplorer.ModLogger;
 
 import java.io.*;
 import java.util.List;
@@ -16,12 +17,14 @@ public class FileLoader
             try
             {
                 File directory = new File(path);
+                ModLogger.printDebug("Adding files from folder: " + directory.getPath() + ", add sub files: " + addSubFiles);
                 String[] directoryContents = directory.list();
 
                 for (String fileName : directoryContents)
                 {
                     File file = new File(String.valueOf(directory), fileName);
                     fileList.add(file);
+                    ModLogger.printDebug("Found file: " + file.getPath() + ", adding it to the list.");
                     if (file.isDirectory() && addSubFiles)
                         addFiles(file.getPath(), fileList, true);
                 }
@@ -36,6 +39,7 @@ public class FileLoader
         if (LiteModFileExplorer.config.acceptFileReading)
             try
             {
+                ModLogger.printDebug("Reading from file: " + file.getPath() + "...");
                 FileReader reader = new FileReader(file);
                 BufferedReader bufferedReader = new BufferedReader(reader);
                 StringBuilder builder = new StringBuilder();
@@ -46,6 +50,7 @@ public class FileLoader
                 {
                     builder.append(line);
                     builder.append('\n');
+                    ModLogger.printDebug("Found line: " + line + " in file: " + file.getPath());
                 }
 
                 bufferedReader.close();
@@ -56,7 +61,11 @@ public class FileLoader
                 e.printStackTrace();
                 return null;
             }
-        else return "";
+        else
+        {
+            ModLogger.printDebug("Failed to load from file: " + file.getPath() + ", user has not accepted file reading!");
+            return "";
+        }
     }
 
     public static boolean writeToFile(File file, String toWrite)
