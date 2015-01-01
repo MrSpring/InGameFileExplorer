@@ -5,6 +5,10 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.internal.LinkedTreeMap;
 import com.google.gson.reflect.TypeToken;
 import dk.mrspring.fileexplorer.LiteModFileExplorer;
+import dk.mrspring.fileexplorer.gui.editor.json.JsonArrayElement;
+import dk.mrspring.fileexplorer.gui.editor.json.JsonBooleanElement;
+import dk.mrspring.fileexplorer.gui.editor.json.JsonEditorElement;
+import dk.mrspring.fileexplorer.gui.editor.json.JsonStringElement;
 import dk.mrspring.fileexplorer.gui.helper.Color;
 import dk.mrspring.fileexplorer.gui.helper.DrawingHelper;
 import dk.mrspring.fileexplorer.gui.helper.GuiHelper;
@@ -19,6 +23,7 @@ import java.io.FileReader;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -44,8 +49,8 @@ public class GuiJsonViewer implements IGui, IMouseListener
         this.jsonFile = file;
 
         editButton = new GuiSimpleButton(x - 62, y + height - 45, 50, 20, "Edit");
-        saveButton = new GuiSimpleButton(x + 30, y + 50, 50, 20, "Save");
-        cancelButton = new GuiSimpleButton(x + 30, y + 80, 50, 20, "Cancel");
+        saveButton = new GuiSimpleButton(x - 62, y + 50, 50, 20, "Save");
+        cancelButton = new GuiSimpleButton(x - 62, y + 80, 50, 20, "Cancel");
 
         try
         {
@@ -192,6 +197,7 @@ public class GuiJsonViewer implements IGui, IMouseListener
         {
             this.saveButton.update();
             this.cancelButton.update();
+            this.editor.update();
         } else
         {
             this.editButton.update();
@@ -259,12 +265,26 @@ public class GuiJsonViewer implements IGui, IMouseListener
     @Override
     public void handleKeyTyped(int keyCode, char character)
     {
-
+        if (editing)
+            this.editor.handleKeyTyped(keyCode, character);
     }
 
     public void setWidth(int width)
     {
         this.width = width;
+        if (this.editing)
+            this.editor.setWidth(width);
+    }
+
+    public void setHeight(int height)
+    {
+        this.height = height;
+        if (this.editing)
+        {
+            this.editor.setHeight(height);
+            this.saveButton.setY(y + height - 25 - 25);
+            this.cancelButton.setY(y + height - 25);
+        } else this.editButton.setY(y + height - 25);
     }
 
     private void addScroll(int amount)
@@ -284,12 +304,6 @@ public class GuiJsonViewer implements IGui, IMouseListener
         return jsonHeight - height + 10;
     }
 
-    public void setHeight(int height)
-    {
-        this.height = height;
-        this.editButton.setY(y + height - 45);
-    }
-
     @Override
     public void handleMouseWheel(int mouseX, int mouseY, int dWheelRaw)
     {
@@ -304,27 +318,90 @@ public class GuiJsonViewer implements IGui, IMouseListener
 
     public class GuiJsonEditor implements IGui
     {
+        List<JsonEditorElement> elements;
+        int x, y, width, height;
+
         public GuiJsonEditor(GuiJsonViewer guiJsonViewer)
         {
+            this.x = guiJsonViewer.x;
+            this.y = guiJsonViewer.y;
 
+            this.width = guiJsonViewer.width;
+            this.height = guiJsonViewer.height;
+
+            Map<String, Object> objectsFromJson = guiJsonViewer.jsonObject;
+
+            elements = new ArrayList<JsonEditorElement>();
+
+            for (Map.Entry<String, Object> entry : objectsFromJson.entrySet())
+            {
+                Object value = entry.getValue();
+                String name = entry.getKey();
+
+                if (value instanceof Boolean)
+                {
+                    this.elements.add(new JsonBooleanElement(x, y, width, name, (Boolean) value));
+                } else if (value instanceof String)
+                {
+                    this.elements.add(new JsonStringElement(x, y, width, name, (String) value));
+                } else if (value instanceof ArrayList)
+                {
+                    this.elements.add(new JsonArrayElement(x, y, width, name, (ArrayList<Object>) value));
+                }
+            }
+        }
+
+        public void setWidth(int width)
+        {
+            this.width = width;
+        }
+
+        public void setHeight(int height)
+        {
+            this.height = height;
         }
 
         @Override
         public void draw(Minecraft minecraft, int mouseX, int mouseY)
         {
+            int xOffset = 18, yOffset = 0;
 
+            for (JsonEditorElement element : elements)
+            {
+                element.drawElement(x + xOffset, y + yOffset, width - xOffset, mouseX, mouseY, minecraft);
+
+                element.getDeleteButton().setX(x + xOffset - 18);
+                element.getDeleteButton().setY(y + yOffset);
+                element.getDeleteButton().draw(minecraft, mouseX, mouseY);
+
+                yOffset += element.getHeight() + 3;
+            }
         }
 
         @Override
         public void update()
         {
-
+            for (JsonEditorElement element : elements)
+            {
+                element.updateElement();
+                element.getDeleteButton().update();
+            }
         }
 
         @Override
         public boolean mouseDown(int mouseX, int mouseY, int mouseButton)
         {
-            return false;
+            boolean anythingClicked = false;
+            for (int i = 0; i < elements.size(); i++)
+            {
+                JsonEditorElement element = elements.get(i);
+                if (element.mouseDown(mouseX, mouseY, mouseButton))
+                    anythingClicked = true;
+                else if (element.getDeleteButton().mouseDown(mouseX, mouseY, mouseButton))
+                    elements.remove(i);
+            }
+
+            return anythingClicked;
         }
 
         @Override
@@ -342,7 +419,8 @@ public class GuiJsonViewer implements IGui, IMouseListener
         @Override
         public void handleKeyTyped(int keyCode, char character)
         {
-
+            for (JsonEditorElement element : elements)
+                element.handleKeyTypes(character, keyCode);
         }
 
         public Map<String, Object> toJsonMap()

@@ -7,6 +7,7 @@ import dk.mrspring.fileexplorer.gui.helper.TextHelper;
 import dk.mrspring.fileexplorer.gui.interfaces.IGui;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
+import org.apache.commons.lang3.CharEncoding;
 import org.lwjgl.input.Keyboard;
 
 import java.awt.*;
@@ -15,6 +16,10 @@ import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.StringSelection;
 import java.awt.datatransfer.UnsupportedFlavorException;
 import java.io.IOException;
+import java.nio.charset.Charset;
+import java.nio.charset.CharsetDecoder;
+import java.nio.charset.CharsetEncoder;
+import java.nio.charset.StandardCharsets;
 
 /**
  * Created by MrSpring on 14-11-2014 for In-Game File Explorer.
@@ -48,9 +53,9 @@ public class GuiCustomTextField implements IGui
     {
         if (renderer.getStringWidth(text) > w - 8)
         {
-            int relativeCursorPos = getRelativeCursorPos(renderer);//cursorPos - renderStart;
+            int relativeCursorPos = getRelativeCursorPos(renderer);
             int minRender = renderer.getStringWidth(text.substring(renderStart, renderStart + 4));
-            int maxRender = Math.min(w - 23, renderer.getStringWidth(text.substring(renderStart)));//w - 23;
+            int maxRender = Math.min(w - 23, renderer.getStringWidth(text.substring(renderStart)));
             if (relativeCursorPos < minRender && renderStart > 0)
                 while (relativeCursorPos < minRender && renderStart > 0)
                 {
@@ -64,7 +69,7 @@ public class GuiCustomTextField implements IGui
                     renderStart++;
                     this.loadRenderEnd(renderer);
                     relativeCursorPos = getRelativeCursorPos(renderer);
-                    maxRender = Math.min(w - 23, renderer.getStringWidth(text.substring(renderStart)));//w - 23;
+                    maxRender = Math.min(w - 23, renderer.getStringWidth(text.substring(renderStart)));
                 }
 
             this.loadRenderEnd(renderer);
@@ -162,7 +167,7 @@ public class GuiCustomTextField implements IGui
     {
         if (renderEnd < text.length() || renderStart > 0)
         {
-            float scrollX = x + 3, scrollY = y + 11, scrollXEnd = x - 3;
+            float scrollX = x + 3, scrollY = y + h - 3, scrollXEnd = x - 3;
 
             float renderStartProgressThrough = ((float) renderStart) / ((float) text.length());
             float renderEndProgressThrough = ((float) renderEnd) / ((float) text.length());

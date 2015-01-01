@@ -123,6 +123,11 @@ public class GuiSimpleButton implements IGui
         this.highlight = true;
     }
 
+    public void setHighlight(boolean highlight)
+    {
+        this.highlight = highlight;
+    }
+
     public void stopBeingHighlighted()
     {
         this.highlight = false;
