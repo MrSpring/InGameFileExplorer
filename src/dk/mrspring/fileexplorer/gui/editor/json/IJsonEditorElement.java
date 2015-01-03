@@ -17,6 +17,8 @@ public interface IJsonEditorElement<E>
 
     public String getName();
 
+    public void setName(String name);
+
     public void updateElement();
 
     public void handleKeyTypes(char character, int keyCode);

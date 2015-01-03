@@ -55,7 +55,7 @@ public class JsonStringElement extends JsonEditorElement<String>
             int xOffset = minecraft.fontRendererObj.getStringWidth(this.getName()) + 2;
             this.valueField.setX(x + xOffset);
             this.valueField.setW(width - xOffset);
-            minecraft.fontRendererObj.drawString(this.getName(), x, y, 0xFFFFFF);
+            minecraft.fontRendererObj.drawString(this.getName(), x, y + 3, 0xFFFFFF, true);
         }
 
         this.valueField.setY(y);
@@ -99,5 +99,11 @@ public class JsonStringElement extends JsonEditorElement<String>
     public String getName()
     {
         return this.nameField.getText();
+    }
+
+    @Override
+    public void setName(String name)
+    {
+        this.nameField.setText(name);
     }
 }

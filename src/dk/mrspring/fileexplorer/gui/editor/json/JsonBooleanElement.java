@@ -62,7 +62,7 @@ public class JsonBooleanElement extends JsonEditorElement<Boolean>
         } else
         {
             this.booleanGui.setX(x + minecraft.fontRendererObj.getStringWidth(this.getName()) + 2);
-            minecraft.fontRendererObj.drawString(this.getName(), x, y, 0xFFFFFF);
+            minecraft.fontRendererObj.drawString(this.getName(), x, y + 3, 0xFFFFFF, true);
         }
 
         this.booleanGui.setY(y);
@@ -100,5 +100,11 @@ public class JsonBooleanElement extends JsonEditorElement<Boolean>
     public String getName()
     {
         return nameField.getText();
+    }
+
+    @Override
+    public void setName(String name)
+    {
+        this.nameField.setText(name);
     }
 }

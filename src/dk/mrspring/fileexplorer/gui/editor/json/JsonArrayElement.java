@@ -18,10 +18,12 @@ public class JsonArrayElement extends JsonEditorElement<ArrayList<Object>>
     GuiCustomTextField nameField;
     ArrayList<JsonEditorElement> elements;
     GuiSimpleButton newBoolean, newDouble, newString, newArray, newMap;
+    boolean canEditName;
 
-    public JsonArrayElement(int x, int y, int maxWidth, String name, ArrayList<Object> list)
+    public JsonArrayElement(int x, int y, int maxWidth, String name, ArrayList<Object> list, boolean canEditName)
     {
         super(x, y, maxWidth, name, list);
+        this.canEditName = canEditName;
 
         int width = maxWidth;
         if (width > 200)
@@ -43,27 +45,13 @@ public class JsonArrayElement extends JsonEditorElement<ArrayList<Object>>
             else if (object instanceof Boolean)
                 this.elements.add(new JsonBooleanElement(0, 0, 0, String.valueOf(i) + ": ", (Boolean) object, false));
             else if (object instanceof ArrayList)
-                this.elements.add(new JsonArrayElement(x, y, width, name, (ArrayList<Object>) object));
+                this.elements.add(new JsonArrayElement(0, 0, 0, String.valueOf(i) + ": ", (ArrayList<Object>) object, false));
         }
-            /*if (object instanceof String)
-            {
-                int height = 16;
-                elements.add(new Object[]{
-                        new GuiCustomTextField(x + xOffset + buttonSize, y + yOffset, width - xOffset, height, (String) object),
-                        new GuiSimpleButton(x + xOffset, y + yOffset, 16, 16, "").setIcon(DrawingHelper.crossIcon)});
-                yOffset += height + 3;
-            } else if (object instanceof Boolean)
-            {
-                elements.add(new Object[]{
-                        new GuiBoolean(x + xOffset + buttonSize, y + yOffset, (Boolean) object),
-                        new GuiSimpleButton(x + xOffset, y + yOffset, 16, 16, "").setIcon(DrawingHelper.crossIcon)});
-                yOffset += 19;
-            } else if (object instanceof ArrayList)
-            {
-                elements.add(new Object[]{
-                        new JsonArrayElement(x+xOffset,y+yOffset)
-                });
-            }*/
+    }
+
+    public JsonArrayElement(int x, int y, int maxWidth, String name, ArrayList<Object> list)
+    {
+        this(x, y, maxWidth, name, list, true);
     }
 
     @Override
@@ -81,12 +69,15 @@ public class JsonArrayElement extends JsonEditorElement<ArrayList<Object>>
         if (width > 400)
             width = 400;
 
-        nameField.setX(xPosition);
-        nameField.setY(yPosition);
-        nameField.setW(width);
-        nameField.draw(minecraft, mouseX, mouseY);
+        if (this.canEditName)
+        {
+            nameField.setX(xPosition);
+            nameField.setY(yPosition);
+            nameField.setW(width);
+            nameField.draw(minecraft, mouseX, mouseY);
+        } else minecraft.fontRendererObj.drawString(this.getName(), xPosition, yPosition + 3, 0xFFFFFF, true);
 
-        int yOffset = nameField.getH() + 3, xOffset = 18;
+        int yOffset = 16 + 3, xOffset = 18;
 
         Iterator<JsonEditorElement> iterator = elements.iterator();
         while (iterator.hasNext())
@@ -150,6 +141,11 @@ public class JsonArrayElement extends JsonEditorElement<ArrayList<Object>>
         {
             if (element.mouseDown(relativeMouseX, relativeMouseY, mouseButton))
                 returns = true;
+            else if (element.getDeleteButton().mouseDown(relativeMouseX,relativeMouseY,mouseButton))
+            {
+                elements.remove(element);
+                break;
+            }
         }
         return returns;
     }
@@ -163,7 +159,13 @@ public class JsonArrayElement extends JsonEditorElement<ArrayList<Object>>
     @Override
     public String getName()
     {
-        return null;
+        return this.nameField.getText();
+    }
+
+    @Override
+    public void setName(String name)
+    {
+        this.nameField.setText(name);
     }
 
     @Override
@@ -172,6 +174,7 @@ public class JsonArrayElement extends JsonEditorElement<ArrayList<Object>>
         for (JsonEditorElement element : elements)
         {
             element.updateElement();
+            element.getDeleteButton().update();
         }
         this.newDouble.update();
         this.newBoolean.update();
