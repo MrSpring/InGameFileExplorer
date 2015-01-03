@@ -6,3 +6,5 @@ gui.screen.welcome.i_accept.read=I allow the mod to read from my personal files.
 gui.screen.welcome.i_accept.write=I allow the mod to write to my personal files, and understand the possible risks.
 
 gui.json_editor.add_new=Add new
+
+gui.explorer.no_files=No files found...
