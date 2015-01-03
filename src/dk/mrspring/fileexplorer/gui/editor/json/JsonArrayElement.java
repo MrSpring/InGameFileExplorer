@@ -153,7 +153,9 @@ public class JsonArrayElement extends JsonEditorElement<ArrayList<Object>>
     @Override
     public Object getValue()
     {
-        return null;
+        ArrayList<Object> list = new ArrayList<Object>();
+        for (JsonEditorElement element:elements) list.add(element.getValue());
+        return list;
     }
 
     @Override
