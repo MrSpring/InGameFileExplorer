@@ -7,7 +7,6 @@ import dk.mrspring.fileexplorer.gui.helper.TextHelper;
 import dk.mrspring.fileexplorer.gui.interfaces.IGui;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
-import org.apache.commons.lang3.CharEncoding;
 import org.lwjgl.input.Keyboard;
 
 import java.awt.*;
@@ -16,10 +15,6 @@ import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.StringSelection;
 import java.awt.datatransfer.UnsupportedFlavorException;
 import java.io.IOException;
-import java.nio.charset.Charset;
-import java.nio.charset.CharsetDecoder;
-import java.nio.charset.CharsetEncoder;
-import java.nio.charset.StandardCharsets;
 
 /**
  * Created by MrSpring on 14-11-2014 for In-Game File Explorer.
