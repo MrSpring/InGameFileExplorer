@@ -69,7 +69,7 @@ public class JsonArrayElement extends JsonEditorElement<ArrayList<Object>>
     @Override
     public int getHeight()
     {
-        int height = 19 + 19;
+        int height = 19 + 16;
         for (JsonEditorElement element : elements) height += element.getHeight() + 3;
         return height;
     }
