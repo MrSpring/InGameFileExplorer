@@ -141,7 +141,7 @@ public class JsonArrayElement extends JsonEditorElement<ArrayList<Object>>
         {
             if (element.mouseDown(relativeMouseX, relativeMouseY, mouseButton))
                 returns = true;
-            else if (element.getDeleteButton().mouseDown(relativeMouseX,relativeMouseY,mouseButton))
+            else if (element.getDeleteButton().mouseDown(relativeMouseX, relativeMouseY, mouseButton))
             {
                 elements.remove(element);
                 break;
@@ -171,8 +171,10 @@ public class JsonArrayElement extends JsonEditorElement<ArrayList<Object>>
     @Override
     public void updateElement()
     {
-        for (JsonEditorElement element : elements)
+        for (int i = 0; i < elements.size(); i++)
         {
+            JsonEditorElement element = elements.get(i);
+            element.setName(String.valueOf(i) + ": ");
             element.updateElement();
             element.getDeleteButton().update();
         }
