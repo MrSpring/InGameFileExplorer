@@ -42,6 +42,8 @@ public class JsonArrayElement extends JsonEditorElement<ArrayList<Object>>
                 this.elements.add(new JsonStringElement(0, 0, 0, String.valueOf(i) + ": ", (String) object, false));
             else if (object instanceof Boolean)
                 this.elements.add(new JsonBooleanElement(0, 0, 0, String.valueOf(i) + ": ", (Boolean) object, false));
+            else if (object instanceof ArrayList)
+                this.elements.add(new JsonArrayElement(x, y, width, name, (ArrayList<Object>) object));
         }
             /*if (object instanceof String)
             {
@@ -67,7 +69,7 @@ public class JsonArrayElement extends JsonEditorElement<ArrayList<Object>>
     @Override
     public int getHeight()
     {
-        int height = 19;
+        int height = 19 + 19;
         for (JsonEditorElement element : elements) height += element.getHeight() + 3;
         return height;
     }
