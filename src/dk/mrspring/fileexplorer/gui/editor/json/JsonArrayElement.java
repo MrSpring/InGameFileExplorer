@@ -46,6 +46,8 @@ public class JsonArrayElement extends JsonEditorElement<ArrayList<Object>>
                 this.elements.add(new JsonBooleanElement(0, 0, 0, String.valueOf(i) + ": ", (Boolean) object, false));
             else if (object instanceof ArrayList)
                 this.elements.add(new JsonArrayElement(0, 0, 0, String.valueOf(i) + ": ", (ArrayList<Object>) object, false));
+            else if (object instanceof Double)
+                this.elements.add(new JsonDoubleElement(0, 0, 0, String.valueOf(i) + ": ", (Double) object, false));
         }
     }
 
@@ -154,7 +156,7 @@ public class JsonArrayElement extends JsonEditorElement<ArrayList<Object>>
     public Object getValue()
     {
         ArrayList<Object> list = new ArrayList<Object>();
-        for (JsonEditorElement element:elements) list.add(element.getValue());
+        for (JsonEditorElement element : elements) list.add(element.getValue());
         return list;
     }
 
@@ -190,6 +192,7 @@ public class JsonArrayElement extends JsonEditorElement<ArrayList<Object>>
     @Override
     public void handleKeyTypes(char character, int keyCode)
     {
-
+        for (JsonEditorElement element:elements)
+            element.handleKeyTypes(character, keyCode);
     }
 }

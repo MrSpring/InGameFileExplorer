@@ -44,7 +44,7 @@ public class GuiCustomTextField implements IGui
         return renderer.getStringWidth(text.substring(renderStart, cursorPos));
     }
 
-    private void loadRenderLimits(FontRenderer renderer)
+    protected void loadRenderLimits(FontRenderer renderer)
     {
         if (renderer.getStringWidth(text) > w - 8)
         {
