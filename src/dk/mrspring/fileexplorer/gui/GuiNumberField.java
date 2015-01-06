@@ -1,5 +1,6 @@
 package dk.mrspring.fileexplorer.gui;
 
+import dk.mrspring.fileexplorer.LiteModFileExplorer;
 import dk.mrspring.fileexplorer.gui.helper.Color;
 import dk.mrspring.fileexplorer.gui.helper.DrawingHelper;
 import dk.mrspring.fileexplorer.gui.helper.GuiHelper;
@@ -23,6 +24,8 @@ public class GuiNumberField implements IGui
     int cursorPosition;
     DecimalFormat format;
 
+    int cursorMin, cursorMax;
+
     public GuiNumberField(int x, int y, int w, int h, double startValue)
     {
         this.x = x;
@@ -30,8 +33,18 @@ public class GuiNumberField implements IGui
         this.w = w;
         this.h = h;
 
-        setFormat(new DecimalFormat("00000.00"));
-        setCursorPosition(0);
+        setFormat(new DecimalFormat(LiteModFileExplorer.config.number_format));
+        String formatArray = new StringBuilder(LiteModFileExplorer.config.number_format).reverse().toString();
+
+        char character;
+        if (formatArray.contains("."))
+            character = '.';
+        else character = ',';
+
+        cursorMin = -formatArray.indexOf(character);
+        cursorMax = formatArray.length() + cursorMin -1;
+
+        setCursorPosition(1);
         flashCount = 0;
 
         value = new BigDecimal(startValue);
@@ -52,29 +65,18 @@ public class GuiNumberField implements IGui
         ArrayUtils.reverse(characters);
 
         int xOffset = -10;
-        int cPos = 0;
-        for (int i = 0; i < characters.length; i++)
+        int controllerOffset = 0;
+        for (char character : characters)
         {
-            char character = characters[i];
-            if (character != ',' && character != '.')
-                cPos = i;
+            if (character == ',' || character == '.')
+                controllerOffset = xOffset;
 
-            boolean drawCharacter = true;
-            if (cPos == cursorPosition)
-            {
-                drawControllers(xOffset);
-                drawCharacter = !(flashCount > 10);
-            }
-
-            if (drawCharacter)
-                DrawingHelper.drawSplitCenteredString(minecraft.fontRendererObj, x + w + xOffset, h / 2 + y - 4, String.valueOf(character), 0xFFFFFF, 100, true);
+            DrawingHelper.drawSplitCenteredString(minecraft.fontRendererObj, x + w + xOffset, h / 2 + y - 4, String.valueOf(character), 0xFFFFFF, 100, true);
             xOffset -= 8;
         }
 
-        minecraft.fontRendererObj.drawString("Flash count: " + String.valueOf(flashCount), x, y + h, 0xFFFFFF, true);
-        minecraft.fontRendererObj.drawString("Cursor Pos: " + String.valueOf(cursorPosition), x, y + h + 10, 0xFFFFFF, true);
-
-//        DrawingHelper.drawCenteredString(minecraft.fontRendererObj, w / 2 + x, y + 4, formattedDouble, 0xFFFFFF, true);
+        if (!(flashCount > 10))
+            drawControllers(controllerOffset - (cursorPosition * 8));
     }
 
     private void drawControllers(int xOffset)
@@ -104,13 +106,54 @@ public class GuiNumberField implements IGui
     @Override
     public void handleKeyTyped(int keyCode, char character)
     {
-        String formattedDouble = format.format(value.doubleValue());
-        char[] characters = formattedDouble.toCharArray();
-
-        if (keyCode == Keyboard.KEY_LEFT && cursorPosition + 1 < characters.length)
+        if (keyCode == Keyboard.KEY_LEFT && cursorPosition + 1 <= cursorMax)
+        {
             cursorPosition++;
-        else if (keyCode == Keyboard.KEY_RIGHT && cursorPosition - 1 >= 0)
+            if (cursorPosition == 0)
+                cursorPosition++;
+            flashCount = 0;
+        } else if (keyCode == Keyboard.KEY_RIGHT && cursorPosition - 1 >= cursorMin)
+        {
             cursorPosition--;
+            if (cursorPosition == 0)
+                cursorPosition--;
+            flashCount = 0;
+        } else if (keyCode == Keyboard.KEY_UP)
+            this.increase();
+        else if (keyCode == Keyboard.KEY_DOWN)
+            this.decrease();
+    }
+
+    private void decrease()
+    {
+        if (cursorPosition != 0)
+            if (cursorPosition > 0)
+            {
+                double change = -Math.pow(10, cursorPosition - 1);
+                value = value.add(BigDecimal.valueOf(change));
+                flashCount = 0;
+            } else
+            {
+                double change = -Math.pow(10, cursorPosition);
+                value = value.add(BigDecimal.valueOf(change));
+                flashCount = 0;
+            }
+    }
+
+    private void increase()
+    {
+        if (cursorPosition != 0)
+            if (cursorPosition > 0)
+            {
+                double change = Math.pow(10, cursorPosition - 1);
+                value = value.add(BigDecimal.valueOf(change));
+                flashCount = 0;
+            } else
+            {
+                double change = Math.pow(10, cursorPosition);
+                value = value.add(BigDecimal.valueOf(change));
+                flashCount = 0;
+            }
     }
 
     @Override

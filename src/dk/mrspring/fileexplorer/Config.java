@@ -9,6 +9,9 @@ public class Config
     public boolean showWelcomeScreen = true;
     public boolean acceptFileManipulation = false;
     public boolean acceptFileReading = false;
-    public boolean json_usePrettyPrinting = true;
     public boolean printDebug = true;
+
+    public boolean json_usePrettyPrinting = true;
+
+    public String number_format = "00000.00";
 }
