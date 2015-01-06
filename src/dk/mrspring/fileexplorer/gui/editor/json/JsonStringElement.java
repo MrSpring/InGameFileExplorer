@@ -46,6 +46,7 @@ public class JsonStringElement extends JsonEditorElement<String>
         if (this.canEditName)
         {
             this.nameField.setX(x);
+            this.nameField.setY(y);
             this.nameField.setW((width / 2) - 2);
             this.nameField.draw(minecraft, mouseX, mouseY);
             this.valueField.setX(x + (width / 2) + 2);

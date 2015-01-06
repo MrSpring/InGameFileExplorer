@@ -5,10 +5,7 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.internal.LinkedTreeMap;
 import com.google.gson.reflect.TypeToken;
 import dk.mrspring.fileexplorer.LiteModFileExplorer;
-import dk.mrspring.fileexplorer.gui.editor.json.JsonArrayElement;
-import dk.mrspring.fileexplorer.gui.editor.json.JsonBooleanElement;
-import dk.mrspring.fileexplorer.gui.editor.json.JsonEditorElement;
-import dk.mrspring.fileexplorer.gui.editor.json.JsonStringElement;
+import dk.mrspring.fileexplorer.gui.editor.json.*;
 import dk.mrspring.fileexplorer.gui.helper.Color;
 import dk.mrspring.fileexplorer.gui.helper.DrawingHelper;
 import dk.mrspring.fileexplorer.gui.helper.GuiHelper;
@@ -21,10 +18,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.lang.reflect.Type;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by MrSpring on 19-12-2014 for In-Game File Explorer.
@@ -339,15 +333,13 @@ public class GuiJsonViewer implements IGui, IMouseListener
                 String name = entry.getKey();
 
                 if (value instanceof Boolean)
-                {
                     this.elements.add(new JsonBooleanElement(x, y, width, name, (Boolean) value));
-                } else if (value instanceof String)
-                {
+                else if (value instanceof String)
                     this.elements.add(new JsonStringElement(x, y, width, name, (String) value));
-                } else if (value instanceof ArrayList)
-                {
+                else if (value instanceof ArrayList)
                     this.elements.add(new JsonArrayElement(x, y, width, name, (ArrayList<Object>) value));
-                }
+                else if (value instanceof LinkedTreeMap)
+                    this.elements.add(new JsonMapElement(x, y, width, name, (LinkedTreeMap<String, Object>) value));
             }
         }
 

@@ -11,20 +11,21 @@ import net.minecraft.util.StatCollector;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
 
 /**
  * Created by MrSpring on 30-12-2014 for In-Game File Explorer.
  */
-public class JsonArrayElement extends JsonEditorElement<ArrayList<Object>>
+public class JsonMapElement extends JsonEditorElement<LinkedTreeMap<String, Object>>
 {
     GuiCustomTextField nameField;
     ArrayList<JsonEditorElement> elements;
     GuiSimpleButton newBoolean, newDouble, newString, newArray, newMap;
     boolean canEditName;
 
-    public JsonArrayElement(int x, int y, int maxWidth, String name, ArrayList<Object> list, boolean canEditName)
+    public JsonMapElement(int x, int y, int maxWidth, String name, LinkedTreeMap<String, Object> map, boolean canEditName)
     {
-        super(x, y, maxWidth, name, list);
+        super(x, y, maxWidth, name, map);
         this.canEditName = canEditName;
 
         int width = maxWidth;
@@ -39,23 +40,24 @@ public class JsonArrayElement extends JsonEditorElement<ArrayList<Object>>
         newArray = new GuiSimpleButton(x, y, 16, 16, "A");
         newMap = new GuiSimpleButton(x, y, 16, 16, "M");
 
-        for (int i = 0; i < list.size(); i++)
+        for (Map.Entry<String, Object> entry : map.entrySet())
         {
-            Object object = list.get(i);
+            Object object = entry.getValue();
+            String key = entry.getKey();
             if (object instanceof String)
-                this.elements.add(new JsonStringElement(0, 0, 0, String.valueOf(i) + ": ", (String) object, false));
+                this.elements.add(new JsonStringElement(0, 0, 0, key, (String) object));
             else if (object instanceof Boolean)
-                this.elements.add(new JsonBooleanElement(0, 0, 0, String.valueOf(i) + ": ", (Boolean) object, false));
+                this.elements.add(new JsonBooleanElement(0, 0, 0, key, (Boolean) object));
             else if (object instanceof ArrayList)
-                this.elements.add(new JsonArrayElement(0, 0, 0, String.valueOf(i) + ": ", (ArrayList) object, false));
+                this.elements.add(new JsonArrayElement(0, 0, 0, key, (ArrayList) object));
             else if (object instanceof Double)
-                this.elements.add(new JsonDoubleElement(0, 0, 0, String.valueOf(i) + ": ", (Double) object, false));
+                this.elements.add(new JsonDoubleElement(0, 0, 0, key, (Double) object));
             else if (object instanceof LinkedTreeMap)
-                this.elements.add(new JsonMapElement(0, 0, 0, String.valueOf(i) + ": ", (LinkedTreeMap) object, false));
+                this.elements.add(new JsonMapElement(0, 0, 0, key, (LinkedTreeMap) object));
         }
     }
 
-    public JsonArrayElement(int x, int y, int maxWidth, String name, ArrayList<Object> list)
+    public JsonMapElement(int x, int y, int maxWidth, String name, LinkedTreeMap<String, Object> list)
     {
         this(x, y, maxWidth, name, list, true);
     }
@@ -179,10 +181,8 @@ public class JsonArrayElement extends JsonEditorElement<ArrayList<Object>>
     @Override
     public void updateElement()
     {
-        for (int i = 0; i < elements.size(); i++)
+        for (JsonEditorElement element : elements)
         {
-            JsonEditorElement element = elements.get(i);
-            element.setName(String.valueOf(i) + ": ");
             element.updateElement();
             element.getDeleteButton().update();
         }

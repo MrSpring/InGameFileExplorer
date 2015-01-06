@@ -42,7 +42,7 @@ public class GuiNumberField implements IGui
         else character = ',';
 
         cursorMin = -formatArray.indexOf(character);
-        cursorMax = formatArray.length() + cursorMin -1;
+        cursorMax = formatArray.length() + cursorMin - 1;
 
         setCursorPosition(1);
         flashCount = 0;
@@ -75,7 +75,7 @@ public class GuiNumberField implements IGui
             xOffset -= 8;
         }
 
-        if (!(flashCount > 10))
+        if (!(flashCount > 10) && focused)
             drawControllers(controllerOffset - (cursorPosition * 8));
     }
 
@@ -106,22 +106,25 @@ public class GuiNumberField implements IGui
     @Override
     public void handleKeyTyped(int keyCode, char character)
     {
-        if (keyCode == Keyboard.KEY_LEFT && cursorPosition + 1 <= cursorMax)
+        if (focused)
         {
-            cursorPosition++;
-            if (cursorPosition == 0)
+            if (keyCode == Keyboard.KEY_LEFT && cursorPosition + 1 <= cursorMax)
+            {
                 cursorPosition++;
-            flashCount = 0;
-        } else if (keyCode == Keyboard.KEY_RIGHT && cursorPosition - 1 >= cursorMin)
-        {
-            cursorPosition--;
-            if (cursorPosition == 0)
+                if (cursorPosition == 0)
+                    cursorPosition++;
+                flashCount = 0;
+            } else if (keyCode == Keyboard.KEY_RIGHT && cursorPosition - 1 >= cursorMin)
+            {
                 cursorPosition--;
-            flashCount = 0;
-        } else if (keyCode == Keyboard.KEY_UP)
-            this.increase();
-        else if (keyCode == Keyboard.KEY_DOWN)
-            this.decrease();
+                if (cursorPosition == 0)
+                    cursorPosition--;
+                flashCount = 0;
+            } else if (keyCode == Keyboard.KEY_UP)
+                this.increase();
+            else if (keyCode == Keyboard.KEY_DOWN)
+                this.decrease();
+        }
     }
 
     private void decrease()
@@ -182,7 +185,13 @@ public class GuiNumberField implements IGui
     public GuiNumberField setFocused(boolean focused)
     {
         this.focused = focused;
+        this.flashCount = 0;
         return this;
+    }
+
+    public double getValue()
+    {
+        return value.doubleValue();
     }
 
     public void setX(int x)
