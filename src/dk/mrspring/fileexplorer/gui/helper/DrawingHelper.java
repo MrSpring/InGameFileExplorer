@@ -12,6 +12,62 @@ import static org.lwjgl.opengl.GL11.*;
  */
 public class DrawingHelper
 {
+    public static IIcon newFileIcon = new IIcon()
+    {
+        @Override
+        public Quad[] getQuads(float x, float y, float w, float h, float alpha)
+        {
+            float tenthWidth = w / 10, tenthHeight = h / 10;
+            return new Quad[]{
+                    new Quad(
+                            x + 6 * tenthWidth, y + 6 * tenthHeight,
+                            3 * tenthWidth, tenthHeight),
+                    new Quad(
+                            x + 7 * tenthWidth, y + 5 * tenthHeight,
+                            tenthWidth, 3 * tenthHeight),
+                    new Quad(
+                            x + 2 * tenthWidth, y + tenthHeight,
+                            3 * tenthWidth, 8 * tenthHeight),
+                    new Quad(
+                            x + 5 * tenthWidth, y + tenthHeight,
+                            3 * tenthWidth, 3 * tenthHeight),
+                    new Quad(
+                            x + 5 * tenthWidth, y + 4 * tenthHeight,
+                            tenthWidth, tenthHeight),
+                    new Quad(
+                            x + 5 * tenthWidth, y + 8 * tenthHeight,
+                            tenthWidth, tenthHeight)};
+        }
+    };
+
+    public static IIcon deleteIcon = new IIcon()
+    {
+        @Override
+        public Quad[] getQuads(float x, float y, float w, float h, float alpha)
+        {
+            float tenthWidth = w / 10, tenthHeight = h / 10;
+            return new Quad[]{
+                    new Quad(
+                            x + 2 * tenthWidth, y + 8 * tenthHeight,
+                            6 * tenthWidth, tenthHeight),
+                    new Quad(
+                            x + 2 * tenthWidth, y + 4 * tenthHeight,
+                            tenthWidth, 4 * tenthHeight),
+                    new Quad(
+                            x + 4.5F * tenthWidth, y + 4 * tenthHeight,
+                            tenthWidth, 4 * tenthHeight),
+                    new Quad(
+                            x + 7 * tenthWidth, y + 4 * tenthHeight,
+                            tenthWidth, 4 * tenthHeight),
+                    new Quad(
+                            x + tenthWidth, y + 2 * tenthHeight,
+                            8 * tenthWidth, tenthHeight),
+                    new Quad(
+                            x + 4.5F * tenthWidth, y + tenthHeight,
+                            tenthWidth, tenthHeight)};
+        }
+    };
+
     public static IIcon downArrow = new IIcon()
     {
         @Override
@@ -39,7 +95,6 @@ public class DrawingHelper
                             w / 2 + x, y)};
         }
     };
-
     public static IIcon fullscreenIcon = new IIcon()
     {
         @Override
@@ -168,6 +223,7 @@ public class DrawingHelper
             };
         }
     };
+
     public static IIcon playIcon = new IIcon()
     {
         @Override
@@ -275,7 +331,6 @@ public class DrawingHelper
             };
         }
     };
-
     public static IIcon textFileIcon = new IIcon()
     {
         @Override

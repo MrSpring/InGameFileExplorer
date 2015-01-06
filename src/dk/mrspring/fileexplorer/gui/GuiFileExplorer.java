@@ -26,16 +26,17 @@ public class GuiFileExplorer implements IGui, IMouseListener
     List<GuiFileBase> guiFiles;
     String currentPath;
     IOnFileOpened onFileOpened;
-
     int pathX = 0, pathY = 0;
+
     boolean drawPath = false;
     GuiSimpleButton[] pathButtons;
-
     int scrollHeight = 0;
 
     GuiSimpleButton openFile;
+
     GuiSimpleButton refreshList;
     GuiSimpleButton newFolder;
+    GuiSimpleButton deleteFile;
     GuiSimpleButton upOne;
 
     public GuiFileExplorer(int xPos, int yPos, int width, int height, String path)
@@ -50,8 +51,12 @@ public class GuiFileExplorer implements IGui, IMouseListener
 
         openFile = new GuiSimpleButton(x, y, 50, 20, "Open").disable();
         refreshList = new GuiSimpleButton(x, y, 50, 20, "Refresh");
-        newFolder = new GuiSimpleButton(x, y, 50, 20, "New File");
+        newFolder = new GuiSimpleButton(x, y, 20, 20, "").setIcon(DrawingHelper.newFileIcon);
+        deleteFile = new GuiSimpleButton(x + 30, y, 20, 20, "").setIcon(DrawingHelper.deleteIcon).disable();
         upOne = new GuiSimpleButton(x, y, 50, 20, "Go Up");
+
+        this.newFolder.setEnabled(LiteModFileExplorer.config.acceptFileManipulation);
+        this.deleteFile.setEnabled(LiteModFileExplorer.config.acceptFileManipulation);
 
         this.refreshList();
     }
@@ -161,10 +166,32 @@ public class GuiFileExplorer implements IGui, IMouseListener
             this.drawPath(minecraft, mouseX, mouseY);
     }
 
+    private void drawControls(Minecraft minecraft, int mouseX, int mouseY, int xPos)
+    {
+        this.openFile.setX(xPos);
+        this.openFile.setY(y);
+        this.openFile.draw(minecraft, mouseX, mouseY);
+
+        this.refreshList.setX(xPos);
+        this.refreshList.setY(y + 25);
+        this.refreshList.draw(minecraft, mouseX, mouseY);
+
+        this.newFolder.setX(xPos);
+        this.newFolder.setY(y + 50);
+        this.newFolder.draw(minecraft, mouseX, mouseY);
+
+        this.deleteFile.setX(xPos + 30);
+        this.deleteFile.setY(y + 50);
+        this.deleteFile.draw(minecraft, mouseX, mouseY);
+
+        this.upOne.setX(xPos);
+        this.upOne.setY(y + 75);
+        this.upOne.draw(minecraft, mouseX, mouseY);
+    }
+
     @Override
     public void update()
     {
-        this.newFolder.setEnabled(LiteModFileExplorer.config.acceptFileManipulation);
 
         int totalHeight = this.guiFiles.size() * 35;
         if (totalHeight < this.h)
@@ -180,6 +207,7 @@ public class GuiFileExplorer implements IGui, IMouseListener
             this.openFile.update();
             this.refreshList.update();
             this.newFolder.update();
+            this.deleteFile.update();
             this.upOne.update();
         }
 
@@ -197,25 +225,6 @@ public class GuiFileExplorer implements IGui, IMouseListener
         boolean isFileTooHigh = yOffset < -70;
         boolean isFileTooLow = yOffset > this.h + 40;
         return (isFileTooHigh || isFileTooLow);
-    }
-
-    private void drawControls(Minecraft minecraft, int mouseX, int mouseY, int xPos)
-    {
-        this.openFile.setX(xPos);
-        this.openFile.setY(y);
-        this.openFile.draw(minecraft, mouseX, mouseY);
-
-        this.refreshList.setX(xPos);
-        this.refreshList.setY(y + 25);
-        this.refreshList.draw(minecraft, mouseX, mouseY);
-
-        this.newFolder.setX(xPos);
-        this.newFolder.setY(y + 50);
-        this.newFolder.draw(minecraft, mouseX, mouseY);
-
-        this.upOne.setX(xPos);
-        this.upOne.setY(y + 75);
-        this.upOne.draw(minecraft, mouseX, mouseY);
     }
 
     private void drawPath(Minecraft minecraft, int mouseX, int mouseY)
@@ -238,6 +247,8 @@ public class GuiFileExplorer implements IGui, IMouseListener
             this.refreshList();
         else if (this.newFolder.mouseDown(mouseX, mouseY, mouseButton))
             this.createNewFile();
+        else if (this.deleteFile.mouseDown(mouseX, mouseY, mouseButton))
+            this.deleteSelectedFile();
         else if (this.upOne.mouseDown(mouseX, mouseY, mouseButton))
             this.goUpOne();
         else if (this.isPathClicked(mouseX, mouseY, mouseButton))
@@ -246,11 +257,15 @@ public class GuiFileExplorer implements IGui, IMouseListener
         {
             boolean returnFromHere = false;
             this.openFile.disable();
+            this.deleteFile.disable();
             for (GuiFileBase guiFile : this.guiFiles)
                 if (guiFile.mouseDown(mouseX, mouseY, mouseButton) && guiFile instanceof GuiFile)
                 {
+                    deleteFile.enable();
                     if (((GuiFile) guiFile).getFileType() != GuiFile.EnumFileType.UNKNOWN)
+                    {
                         openFile.enable();
+                    }
                     returnFromHere = true;
                 }
 
@@ -288,6 +303,28 @@ public class GuiFileExplorer implements IGui, IMouseListener
             String goTo = this.currentPath.substring(0, lastIndexOfSeperator + 1);
             this.openFile(new File(goTo));
         }
+    }
+
+    private boolean deleteSelectedFile()
+    {
+        for (GuiFileBase guiFile : this.guiFiles)
+        {
+            if (guiFile instanceof GuiFile)
+                if (((GuiFile) guiFile).isSelected())
+                {
+                    this.deleteFile(((GuiFile) guiFile).getFile());
+                    return true;
+                }
+        }
+        return false;
+    }
+
+    private void deleteFile(File file)
+    {
+        if (file != null)
+            if (file.exists())
+                if (FileLoader.deleteFile(file))
+                    this.refreshList();
     }
 
     private boolean openSelectedFile()
