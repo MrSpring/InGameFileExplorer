@@ -9,7 +9,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.util.StatCollector;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Iterator;
 
 /**
@@ -137,21 +136,35 @@ public class JsonArrayElement extends JsonEditorElement<ArrayList<Object>>
     }
 
     @Override
-    public boolean mouseDown(int relativeMouseX, int relativeMouseY, int mouseButton)
+    public boolean mouseDown(int mouseX, int mouseY, int mouseButton)
     {
         boolean returns = false;
-        if (this.nameField.mouseDown(relativeMouseX, relativeMouseY, mouseButton))
+        if (this.nameField.mouseDown(mouseX, mouseY, mouseButton))
             returns = true;
 
         for (JsonEditorElement element : elements)
         {
-            if (element.mouseDown(relativeMouseX, relativeMouseY, mouseButton))
+            if (element.mouseDown(mouseX, mouseY, mouseButton))
                 returns = true;
-            else if (element.getDeleteButton().mouseDown(relativeMouseX, relativeMouseY, mouseButton))
+            else if (element.getDeleteButton().mouseDown(mouseX, mouseY, mouseButton))
             {
                 elements.remove(element);
                 break;
             }
+        }
+
+        if (!returns)
+        {
+            if (this.newDouble.mouseDown(mouseX, mouseY, mouseButton))
+                this.elements.add(new JsonDoubleElement(0, 0, 0, "name", 10.0, false));
+            else if (this.newBoolean.mouseDown(mouseX, mouseY, mouseButton))
+                this.elements.add(new JsonBooleanElement(0, 0, 0, "name", false, false));
+            else if (this.newString.mouseDown(mouseX, mouseY, mouseButton))
+                this.elements.add(new JsonStringElement(0, 0, 0, "name", "value", false));
+            else if (this.newArray.mouseDown(mouseX, mouseY, mouseButton))
+                this.elements.add(new JsonArrayElement(0, 0, 0, "name", new ArrayList<Object>(), false));
+            else if (this.newMap.mouseDown(mouseX, mouseY, mouseButton))
+                this.elements.add(new JsonMapElement(0, 0, 0, "name", new LinkedTreeMap<String, Object>(), false));
         }
         return returns;
     }
@@ -196,6 +209,8 @@ public class JsonArrayElement extends JsonEditorElement<ArrayList<Object>>
     @Override
     public void handleKeyTypes(char character, int keyCode)
     {
+        if (canEditName)
+            this.nameField.handleKeyTyped(keyCode, character);
         for (JsonEditorElement element : elements)
             element.handleKeyTypes(character, keyCode);
     }

@@ -13,6 +13,7 @@ import dk.mrspring.fileexplorer.gui.interfaces.IGui;
 import dk.mrspring.fileexplorer.gui.interfaces.IMouseListener;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
+import net.minecraft.util.StatCollector;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -58,6 +59,9 @@ public class GuiJsonViewer implements IGui, IMouseListener
         {
             e.printStackTrace();
         }
+
+        if (jsonObject == null)
+            jsonObject = new HashMap<String, Object>();
     }
 
     @Override
@@ -314,6 +318,7 @@ public class GuiJsonViewer implements IGui, IMouseListener
     {
         List<JsonEditorElement> elements;
         int x, y, width, height;
+        GuiSimpleButton newBoolean, newDouble, newString, newArray, newMap;
 
         public GuiJsonEditor(GuiJsonViewer guiJsonViewer)
         {
@@ -326,6 +331,11 @@ public class GuiJsonViewer implements IGui, IMouseListener
             Map<String, Object> objectsFromJson = guiJsonViewer.jsonObject;
 
             elements = new ArrayList<JsonEditorElement>();
+            newString = new GuiSimpleButton(x, y, 16, 16, "S");
+            newBoolean = new GuiSimpleButton(x, y, 16, 16, "B");
+            newDouble = new GuiSimpleButton(x, y, 16, 16, "D");
+            newArray = new GuiSimpleButton(x, y, 16, 16, "A");
+            newMap = new GuiSimpleButton(x, y, 16, 16, "M");
 
             for (Map.Entry<String, Object> entry : objectsFromJson.entrySet())
             {
@@ -368,6 +378,30 @@ public class GuiJsonViewer implements IGui, IMouseListener
 
                 yOffset += element.getHeight() + 3;
             }
+            minecraft.fontRendererObj.drawString(StatCollector.translateToLocal("gui.json_editor.add_new") + ": ", x, y + yOffset + 3, 0xFFFFFF, true);
+
+            int textWidth = minecraft.fontRendererObj.getStringWidth(StatCollector.translateToLocal("gui.json_editor.add_new") + ": ");
+
+            this.newString.setX(x + textWidth);
+            this.newString.setY(y + yOffset);
+
+            this.newBoolean.setX(x + 18 + textWidth);
+            this.newBoolean.setY(y + yOffset);
+
+            this.newDouble.setX(x + 18 + 18 + textWidth);
+            this.newDouble.setY(y + yOffset);
+
+            this.newArray.setX(x + 18 + 18 + 18 + textWidth);
+            this.newArray.setY(y + yOffset);
+
+            this.newMap.setX(x + 18 + 18 + 18 + 18 + textWidth);
+            this.newMap.setY(y + yOffset);
+
+            this.newString.draw(minecraft, mouseX, mouseY);
+            this.newBoolean.draw(minecraft, mouseX, mouseY);
+            this.newDouble.draw(minecraft, mouseX, mouseY);
+            this.newArray.draw(minecraft, mouseX, mouseY);
+            this.newMap.draw(minecraft, mouseX, mouseY);
         }
 
         @Override
@@ -378,6 +412,11 @@ public class GuiJsonViewer implements IGui, IMouseListener
                 element.updateElement();
                 element.getDeleteButton().update();
             }
+            this.newDouble.update();
+            this.newBoolean.update();
+            this.newString.update();
+            this.newArray.update();
+            this.newMap.update();
         }
 
         @Override
@@ -391,6 +430,20 @@ public class GuiJsonViewer implements IGui, IMouseListener
                     anythingClicked = true;
                 else if (element.getDeleteButton().mouseDown(mouseX, mouseY, mouseButton))
                     elements.remove(i);
+            }
+
+            if (!anythingClicked)
+            {
+                if (this.newDouble.mouseDown(mouseX, mouseY, mouseButton))
+                    this.elements.add(new JsonDoubleElement(0, 0, 0, "name", 10.0));
+                else if (this.newBoolean.mouseDown(mouseX, mouseY, mouseButton))
+                    this.elements.add(new JsonBooleanElement(0, 0, 0, "name", false));
+                else if (this.newString.mouseDown(mouseX, mouseY, mouseButton))
+                    this.elements.add(new JsonStringElement(0, 0, 0, "name", "value"));
+                else if (this.newArray.mouseDown(mouseX, mouseY, mouseButton))
+                    this.elements.add(new JsonArrayElement(0, 0, 0, "name", new ArrayList<Object>()));
+                else if (this.newMap.mouseDown(mouseX, mouseY, mouseButton))
+                    this.elements.add(new JsonMapElement(0, 0, 0, "name", new LinkedTreeMap<String, Object>()));
             }
 
             return anythingClicked;

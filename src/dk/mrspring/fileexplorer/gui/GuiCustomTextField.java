@@ -233,6 +233,8 @@ public class GuiCustomTextField implements IGui
                 this.copySelection();
             else if (keyCode == Keyboard.KEY_X && (Keyboard.isKeyDown(Keyboard.KEY_LCONTROL) || Keyboard.isKeyDown(Keyboard.KEY_LCONTROL)))
                 this.cut();
+            else if (keyCode == Keyboard.KEY_RETURN)
+                this.focused = false;
             else if (TextHelper.isKeyWritable(keyCode))
                 this.writeCharacter(character);
     }
