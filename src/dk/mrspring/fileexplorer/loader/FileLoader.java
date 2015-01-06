@@ -85,4 +85,11 @@ public class FileLoader
             }
         } else return false;
     }
+
+    public static boolean deleteFile(File file)
+    {
+        if (LiteModFileExplorer.config.acceptFileManipulation)
+            return file.delete();
+        else return false;
+    }
 }
