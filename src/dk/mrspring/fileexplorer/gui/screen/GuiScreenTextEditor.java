@@ -17,7 +17,7 @@ public class GuiScreenTextEditor extends GuiScreen
 
     public GuiScreenTextEditor(String text)
     {
-        this.text=text;
+        this.text = text;
     }
 
     @Override
@@ -25,7 +25,7 @@ public class GuiScreenTextEditor extends GuiScreen
     {
         super.initGui();
 
-        textField=new GuiMultiLineTextField(10,10,text);
+        textField = new GuiMultiLineTextField(10, 10, width - 20, height - 20, text);
     }
 
     @Override
@@ -33,7 +33,7 @@ public class GuiScreenTextEditor extends GuiScreen
     {
         super.drawScreen(mouseX, mouseY, partialTicks);
 
-        textField.draw(Minecraft.getMinecraft(),mouseX,mouseY);
+        textField.draw(Minecraft.getMinecraft(), mouseX, mouseY);
     }
 
     @Override
@@ -41,6 +41,6 @@ public class GuiScreenTextEditor extends GuiScreen
     {
         super.keyTyped(typedChar, keyCode);
 
-        textField.handleKeystroke(keyCode,typedChar);
+        textField.handleKeyTyped(keyCode, typedChar);
     }
 }

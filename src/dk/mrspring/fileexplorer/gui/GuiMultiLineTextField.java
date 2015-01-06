@@ -4,19 +4,64 @@ import dk.mrspring.fileexplorer.gui.helper.Color;
 import dk.mrspring.fileexplorer.gui.helper.DrawingHelper;
 import dk.mrspring.fileexplorer.gui.interfaces.IGui;
 import net.minecraft.client.Minecraft;
-import org.lwjgl.input.Keyboard;
-
-import java.awt.*;
-import java.awt.datatransfer.Clipboard;
-import java.awt.datatransfer.DataFlavor;
-import java.awt.datatransfer.UnsupportedFlavorException;
-import java.io.IOException;
 
 /**
  * Created by MrSpring on 10-11-2014 for In-Game File Explorer.
  */
 public class GuiMultiLineTextField implements IGui
 {
+    int x, y, w, h;
+    String text;
+    boolean focused;
+
+    public GuiMultiLineTextField(int x, int y, int w, int h, String text)
+    {
+        this.x = x;
+        this.y = y;
+        this.w = w;
+        this.h = h;
+        this.text = text;
+        this.focused = false;
+    }
+
+    @Override
+    public void draw(Minecraft minecraft, int mouseX, int mouseY)
+    {
+        DrawingHelper.drawButtonThingy(x, y, w, h, focused ? 1 : 0, true, Color.BLACK, 0.85F, Color.BLACK, 0.85F);
+
+        DrawingHelper.drawSplitString(minecraft.fontRendererObj, x + 3, y + 3, text, 0xFFFFFF, w - 6, true);
+    }
+
+    @Override
+    public void update()
+    {
+
+    }
+
+    @Override
+    public boolean mouseDown(int mouseX, int mouseY, int mouseButton)
+    {
+        return false;
+    }
+
+    @Override
+    public void mouseUp(int mouseX, int mouseY, int mouseButton)
+    {
+
+    }
+
+    @Override
+    public void mouseClickMove(int mouseX, int mouseY, int mouseButton, long timeSinceClick)
+    {
+
+    }
+
+    @Override
+    public void handleKeyTyped(int keyCode, char character)
+    {
+
+    }
+/*
     int x, y;
 
     int lastWidth, lastHeight;
@@ -74,7 +119,9 @@ public class GuiMultiLineTextField implements IGui
         }
         if (cursorPosition == chars.length + 1)
         {
-            cursorPosX = textX - 1/*+minecraft.fontRendererObj.getCharWidth(chars[chars.length-1])*/;
+            cursorPosX = textX - 1*/
+/*+minecraft.fontRendererObj.getCharWidth(chars[chars.length-1])*//*
+;
             cursorPosY = textY;
         }
 
@@ -188,4 +235,5 @@ public class GuiMultiLineTextField implements IGui
     {
 
     }
+*/
 }

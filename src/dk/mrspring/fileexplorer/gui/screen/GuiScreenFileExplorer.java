@@ -68,7 +68,7 @@ public class GuiScreenFileExplorer extends GuiScreen
             {
                 String fileContents = FileLoader.readFile(file);
                 this.openFileType = "text_editor";
-                this.addGuiElement(this.openFileType, new GuiMultiLineTextField(260, 10, fileContents));
+                this.addGuiElement(this.openFileType, new GuiMultiLineTextField(258, 10, width - 243 - 25, height - 20, fileContents));
                 break;
             }
             case IMAGE:
