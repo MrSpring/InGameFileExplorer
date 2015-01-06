@@ -380,6 +380,17 @@ public class GuiJsonViewer implements IGui, IMouseListener
         {
             int xOffset = 18, yOffset = -scrollHeight;
 
+            int totalHeight = this.getListHeight();
+            if (this.height < totalHeight)
+            {
+                xOffset += 4;
+                float scrollBarYRange = (height - 50);
+                float maxScrollHeight = this.getMaxScrollHeight();
+                float scrollProgress = (float) this.scrollHeight / maxScrollHeight;
+                float scrollBarY = scrollBarYRange * scrollProgress;
+                DrawingHelper.drawQuad(x, y + scrollBarY + 1, 2, 40, Color.DKGREY, 1F);
+                DrawingHelper.drawQuad(x - 1, y + scrollBarY, 2, 40, Color.WHITE, 1F);
+            }
 
             for (JsonEditorElement element : elements)
             {
