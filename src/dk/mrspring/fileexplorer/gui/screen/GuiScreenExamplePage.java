@@ -1,6 +1,5 @@
 package dk.mrspring.fileexplorer.gui.screen;
 
-import dk.mrspring.fileexplorer.ModLogger;
 import dk.mrspring.fileexplorer.gui.*;
 
 /**
@@ -26,22 +25,14 @@ public class GuiScreenExamplePage extends GuiScreen
     {
         super.initGui();
 
-        this.addGuiElement(sliderID, new GuiSlider(60, 40, 120, 30, GuiSlider.Type.PERCENTAGE, 50));
-        this.addGuiElement(buttonID, new GuiSimpleButton(10, 10, 40, 40, "Button"));
-        this.addGuiElement(numberID, new GuiNumberField(60, 10, 20, GuiNumberField.Type.PERCENTAGE, mc.fontRendererObj));
-        this.addGuiElement(tFieldID, new GuiEditableTextField(60 + 75 + 10, 10, 240, 20, "This is Edible!", mc.fontRendererObj));
-        this.addGuiElement(checkBID, new GuiCheckbox(10, 10 + 40 + 10, 10, 10, false));
-        this.addGuiElement(cFieldID, new GuiCustomNumberField(10, 10 + 60 + 10, 200, 15, 0));
-        this.addGuiElement(explorerID, new GuiFileExplorer(10, 105, 300, height - 60 - 10 - 105, "C:"));
+//        this.addGuiElement(sliderID, new GuiSlider(60, 40, 120, 30, GuiSlider.Type.PERCENTAGE, 50));
+//        this.addGuiElement(buttonID, new GuiSimpleButton(10, 10, 40, 40, "Button"));
+        this.addGuiElement(numberID, new GuiNumberField(60, 50, 100, 32, 10.0));
+//        this.addGuiElement(tFieldID, new GuiEditableTextField(60 + 75 + 10, 10, 240, 20, "This is Edible!", mc.fontRendererObj));
+//        this.addGuiElement(checkBID, new GuiCheckbox(10, 10 + 40 + 10, 10, 10, false));
+//        this.addGuiElement(cFieldID, new GuiCustomTextField(10, 10 + 60 + 10, 200, 15, "This is text!"));
+//        this.addGuiElement(explorerID, new GuiFileExplorer(10, 105, 300, height - 60 - 10 - 105, "C:"));
 
-        this.setSubtitle("gui.screen.example_page.description");
-    }
-
-    @Override
-    public void updateScreen()
-    {
-        super.updateScreen();
-
-        ModLogger.print(String.valueOf(((GuiCustomNumberField) this.getGui(cFieldID)).getValue()));
+        this.setSubtitle("gui.screen.example_page.description").hideBars().hideDoneButton();
     }
 }

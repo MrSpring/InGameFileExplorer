@@ -12,6 +12,34 @@ import static org.lwjgl.opengl.GL11.*;
  */
 public class DrawingHelper
 {
+    public static IIcon downArrow = new IIcon()
+    {
+        @Override
+        public Quad[] getQuads(float x, float y, float w, float h, float alpha)
+        {
+            return new Quad[]{
+                    new Quad(
+                            w / 2 + x, y + h,
+                            x + w, y,
+                            x, y,
+                            w / 2 + x, y + h)};
+        }
+    };
+
+    public static IIcon upArrow = new IIcon()
+    {
+        @Override
+        public Quad[] getQuads(float x, float y, float w, float h, float alpha)
+        {
+            return new Quad[]{
+                    new Quad(
+                            w / 2 + x, y,
+                            x + w, y + h,
+                            x, y + h,
+                            w / 2 + x, y)};
+        }
+    };
+
     public static IIcon fullscreenIcon = new IIcon()
     {
         @Override
@@ -395,7 +423,7 @@ public class DrawingHelper
         if (shadow)
             for (Quad quad : quads)
             {
-                quad.setColor(Color.LTGREY);
+                quad.setColor(Color.DKGREY);
                 quad.translate(twentiethWidth / 2, twentiethHeight / 2);
                 drawQuad(quad);
                 quad.setColor(Color.WHITE);

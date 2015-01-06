@@ -1,7 +1,7 @@
 package dk.mrspring.fileexplorer.gui.editor.json;
 
-import dk.mrspring.fileexplorer.gui.GuiCustomNumberField;
 import dk.mrspring.fileexplorer.gui.GuiCustomTextField;
+import dk.mrspring.fileexplorer.gui.GuiNumberField;
 import net.minecraft.client.Minecraft;
 
 import java.math.BigDecimal;
@@ -11,7 +11,7 @@ import java.math.BigDecimal;
  */
 public class JsonDoubleElement extends JsonEditorElement<Double>
 {
-    GuiCustomNumberField numberField, decimalField;
+    GuiNumberField numberField, decimalField;
     GuiCustomTextField nameField;
     boolean canEditName;
 
@@ -32,8 +32,8 @@ public class JsonDoubleElement extends JsonEditorElement<Double>
 
         this.nameField = new GuiCustomTextField(x, y, width / 3 - 2, 16, name);
 
-        this.numberField = new GuiCustomNumberField(x, y, width / 3 - 3, 16, number);
-        this.decimalField = new GuiCustomNumberField(x, y, width / 3 - 3, 16, decimal);
+//        this.numberField = new GuiCustomNumberField(x, y, width / 3 - 3, 16, number);
+//        this.decimalField = new GuiCustomNumberField(x, y, width / 3 - 3, 16, decimal);
     }
 
     public JsonDoubleElement(int x, int y, int maxWidth, String name, Double object)
@@ -70,13 +70,13 @@ public class JsonDoubleElement extends JsonEditorElement<Double>
 
         this.numberField.setX(xPosition + nameWidth);
         this.numberField.setY(yPosition);
-        this.numberField.setW((width - nameWidth) / 2 - 1);
+        this.numberField.setWidth((width - nameWidth) / 2 - 1);
         this.decimalField.setX(xPosition + nameWidth + ((width - nameWidth) / 2 + 1));
         this.decimalField.setY(yPosition);
-        this.decimalField.setW((width - nameWidth) / 2 - 1);
+        this.decimalField.setWidth((width - nameWidth) / 2 - 1);
 
         this.numberField.draw(minecraft, mouseX, mouseY);
-        minecraft.fontRendererObj.drawString(".", xPosition + nameWidth + this.numberField.getW(), yPosition, 0xFFFFFF, true);
+        minecraft.fontRendererObj.drawString(".", xPosition + nameWidth + 2, yPosition, 0xFFFFFF, true);
         this.decimalField.draw(minecraft, mouseX, mouseY);
     }
 
@@ -98,17 +98,17 @@ public class JsonDoubleElement extends JsonEditorElement<Double>
     @Override
     public Object getValue()
     {
-        int number = this.numberField.getValue();
-        int decimal = this.decimalField.getValue();
-
-        System.out.println("number = " + number);
-        System.out.println("decimal = " + decimal);
-
-        String doubleString = number + "." + decimal;
-
-        System.out.println("doubleString = " + doubleString);
-
-        return Double.parseDouble(doubleString);
+//        int number = this.numberField.getValue();
+//        int decimal = this.decimalField.getValue();
+//
+//        System.out.println("number = " + number);
+//        System.out.println("decimal = " + decimal);
+//
+//        String doubleString = number + "." + decimal;
+//
+//        System.out.println("doubleString = " + doubleString);
+//
+        return 0.0;
     }
 
     @Override
