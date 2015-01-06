@@ -11,6 +11,7 @@ import dk.mrspring.fileexplorer.gui.helper.DrawingHelper;
 import dk.mrspring.fileexplorer.gui.helper.GuiHelper;
 import dk.mrspring.fileexplorer.gui.interfaces.IGui;
 import dk.mrspring.fileexplorer.gui.interfaces.IMouseListener;
+import dk.mrspring.fileexplorer.loader.FileLoader;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.util.StatCollector;
@@ -47,6 +48,11 @@ public class GuiJsonViewer implements IGui, IMouseListener
         saveButton = new GuiSimpleButton(x - 62, y + 50, 50, 20, "Save");
         cancelButton = new GuiSimpleButton(x - 62, y + 80, 50, 20, "Cancel");
 
+        this.loadFromFile();
+    }
+
+    private void loadFromFile()
+    {
         try
         {
             FileReader reader = new FileReader(this.jsonFile);
@@ -228,7 +234,8 @@ public class GuiJsonViewer implements IGui, IMouseListener
 
     private void stopEditing()
     {
-
+        this.editing = false;
+        this.editor = null;
     }
 
     private void save()
@@ -239,7 +246,10 @@ public class GuiJsonViewer implements IGui, IMouseListener
             builder.setPrettyPrinting();
         Gson gson = builder.create();
         String jsonCode = gson.toJson(fromEditor);
-
+        FileLoader.writeToFile(jsonFile, jsonCode);
+        this.stopEditing();
+        this.loadFromFile();
+        System.out.println(jsonCode);
     }
 
     private void startEditing()
@@ -310,14 +320,16 @@ public class GuiJsonViewer implements IGui, IMouseListener
             int mouseWheel = dWheelRaw;
             mouseWheel /= 4;
             if (mouseWheel != 0)
-                this.addScroll(-mouseWheel);
+                if (this.editing)
+                    this.editor.handleMouseWheel(mouseX, mouseY, mouseWheel);
+                else this.addScroll(-mouseWheel);
         }
     }
 
-    public class GuiJsonEditor implements IGui
+    public class GuiJsonEditor implements IGui, IMouseListener
     {
         List<JsonEditorElement> elements;
-        int x, y, width, height;
+        int x, y, width, height, scrollHeight;
         GuiSimpleButton newBoolean, newDouble, newString, newArray, newMap;
 
         public GuiJsonEditor(GuiJsonViewer guiJsonViewer)
@@ -366,7 +378,8 @@ public class GuiJsonViewer implements IGui, IMouseListener
         @Override
         public void draw(Minecraft minecraft, int mouseX, int mouseY)
         {
-            int xOffset = 18, yOffset = 0;
+            int xOffset = 18, yOffset = -scrollHeight;
+
 
             for (JsonEditorElement element : elements)
             {
@@ -407,6 +420,9 @@ public class GuiJsonViewer implements IGui, IMouseListener
         @Override
         public void update()
         {
+            if (this.getListHeight() < height)
+                scrollHeight = 0;
+
             for (JsonEditorElement element : elements)
             {
                 element.updateElement();
@@ -470,7 +486,47 @@ public class GuiJsonViewer implements IGui, IMouseListener
 
         public Map<String, Object> toJsonMap()
         {
-            return null;
+            LinkedHashMap<String, Object> map = new LinkedHashMap<String, Object>();
+
+            for (JsonEditorElement element : elements)
+            {
+                String elementName = element.getName();
+                Object elementValue = element.getValue();
+                map.put(elementName, elementValue);
+            }
+
+            return map;
+        }
+
+        @Override
+        public void handleMouseWheel(int mouseX, int mouseY, int dWheelRaw)
+        {
+            this.addScroll(-dWheelRaw);
+        }
+
+        private void addScroll(int amount)
+        {
+            int maxScrollHeight = getMaxScrollHeight(), minScrollHeight = 0, scrollHeightAfterAddition = this.scrollHeight + amount;
+
+            if (scrollHeightAfterAddition > maxScrollHeight)
+                scrollHeightAfterAddition = maxScrollHeight;
+            else if (scrollHeightAfterAddition < minScrollHeight)
+                scrollHeightAfterAddition = minScrollHeight;
+
+            this.scrollHeight = scrollHeightAfterAddition;
+        }
+
+        private int getListHeight()
+        {
+            int height = 16;
+            for (JsonEditorElement element : elements)
+                height += element.getHeight() + 3;
+            return height;
+        }
+
+        private int getMaxScrollHeight()
+        {
+            return getListHeight() + 10 - this.height;
         }
     }
 }

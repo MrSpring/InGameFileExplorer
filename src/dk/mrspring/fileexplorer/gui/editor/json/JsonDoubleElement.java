@@ -83,7 +83,7 @@ public class JsonDoubleElement extends JsonEditorElement<Double>
     @Override
     public Object getValue()
     {
-        return 0.0;
+        return numberField.getValue();
     }
 
     @Override
