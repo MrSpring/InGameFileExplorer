@@ -124,6 +124,8 @@ public class GuiNumberField implements IGui
                 this.increase();
             else if (keyCode == Keyboard.KEY_DOWN)
                 this.decrease();
+            else if (keyCode == Keyboard.KEY_RETURN)
+                this.setFocused(false);
         }
     }
 
