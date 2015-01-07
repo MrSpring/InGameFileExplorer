@@ -566,10 +566,6 @@ public class DrawingHelper
         if (shadow)
             renderer.drawSplitString(s, x + 1, y + 1, maxLength, getShadowColor(color));
         renderer.drawSplitString(s, x, y, maxLength, color);
-        int stringWidth = renderer.getStringWidth(s);
-//        System.out.println("Drawing string: " + s);
-//        System.out.println("stringWidth = " + stringWidth);
-//        System.out.println("maxLength = " + maxLength);
         return renderer.listFormattedStringToWidth(s, maxLength).size();
     }
 

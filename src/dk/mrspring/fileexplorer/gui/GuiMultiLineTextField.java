@@ -4,6 +4,9 @@ import dk.mrspring.fileexplorer.gui.helper.Color;
 import dk.mrspring.fileexplorer.gui.helper.DrawingHelper;
 import dk.mrspring.fileexplorer.gui.interfaces.IGui;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.FontRenderer;
+
+import java.util.ArrayList;
 
 /**
  * Created by MrSpring on 10-11-2014 for In-Game File Explorer.
@@ -11,6 +14,7 @@ import net.minecraft.client.Minecraft;
 public class GuiMultiLineTextField implements IGui
 {
     int x, y, w, h;
+//    ArrayList<String> lines;
     String text;
     boolean focused;
 
@@ -22,6 +26,9 @@ public class GuiMultiLineTextField implements IGui
         this.h = h;
         this.text = text;
         this.focused = false;
+
+//        FontRenderer renderer = Minecraft.getMinecraft().fontRendererObj;
+//        lines = (ArrayList<String>) renderer.listFormattedStringToWidth(text, w - 6);
     }
 
     @Override
@@ -29,7 +36,7 @@ public class GuiMultiLineTextField implements IGui
     {
         DrawingHelper.drawButtonThingy(x, y, w, h, focused ? 1 : 0, true, Color.BLACK, 0.85F, Color.BLACK, 0.85F);
 
-        DrawingHelper.drawSplitString(minecraft.fontRendererObj, x + 3, y + 3, text, 0xFFFFFF, w - 6, true);
+        int lines = DrawingHelper.drawSplitString(minecraft.fontRendererObj, x + 3, y + 3, text, 0xFFFFFF, w - 6, true);
     }
 
     @Override
