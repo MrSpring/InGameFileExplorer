@@ -2,12 +2,18 @@ package dk.mrspring.fileexplorer.gui;
 
 import dk.mrspring.fileexplorer.gui.helper.Color;
 import dk.mrspring.fileexplorer.gui.helper.DrawingHelper;
+import dk.mrspring.fileexplorer.gui.helper.GuiHelper;
+import dk.mrspring.fileexplorer.gui.helper.TextHelper;
 import dk.mrspring.fileexplorer.gui.interfaces.IGui;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import org.lwjgl.input.Keyboard;
-import org.lwjgl.opengl.GL11;
 
+import java.awt.*;
+import java.awt.datatransfer.Clipboard;
+import java.awt.datatransfer.DataFlavor;
+import java.awt.datatransfer.UnsupportedFlavorException;
+import java.io.IOException;
 import java.util.List;
 
 /**
@@ -20,6 +26,7 @@ public class GuiMultiLineTextField implements IGui
     String line;
     boolean focused;
     int cursorPos;
+    int flashCount = 0;
 
     int cursorLine = 0, cursorRelativePos = 0;
 
@@ -37,7 +44,7 @@ public class GuiMultiLineTextField implements IGui
 
     private void loadCursorPosition(FontRenderer renderer)
     {
-        List<String> lines = renderer.listFormattedStringToWidth(text, w - 6);
+        List<String> lines = renderer.listFormattedStringToWidth(text, w - 8);
         int lineStartIndexInText = 0;
         for (int i = 0; i < lines.size(); i++)
         {
@@ -49,7 +56,8 @@ public class GuiMultiLineTextField implements IGui
             {
                 cursorRelativePos = cursorPos - lineStartIndexInText;
                 cursorLine = i;
-                this.line = (String) renderer.listFormattedStringToWidth(text, w - 6).get(cursorLine);
+                this.line = (String) renderer.listFormattedStringToWidth(text, w - 8).get(cursorLine);
+                this.flashCount = 0;
                 break;
             }
         }
@@ -64,25 +72,30 @@ public class GuiMultiLineTextField implements IGui
         minecraft.fontRendererObj.drawString("Cursor Pos: " + cursorPos, x + 3, y + 13, 0xFFFFFF, true);
         minecraft.fontRendererObj.drawString("Cursor Relative Pos: " + cursorRelativePos, x + 3, y + 23, 0xFFFFFF, true);
 
-        DrawingHelper.drawSplitString(minecraft.fontRendererObj, x + 3, y + 33, text, 0xFFFFFF, w - 6, true);
+        DrawingHelper.drawSplitString(minecraft.fontRendererObj, x + 4, y + 33, text, 0xFFFFFF, w - 8, true);
 
         String cutLine = line.substring(0, cursorRelativePos);
 
         int cursorXOffset = minecraft.fontRendererObj.getStringWidth(cutLine);
 
-        DrawingHelper.drawQuad(x + cursorXOffset + 3, y + (cursorLine * 9) + 32, 1, 9, Color.GREEN, 1F);
+        if (focused && !(flashCount > 10))
+            DrawingHelper.drawQuad(x + cursorXOffset + 4, y + (cursorLine * 9) + 32, 1, 9, Color.GREEN, 1F);
     }
 
     @Override
     public void update()
     {
-
+        flashCount++;
+        if (flashCount > 20)
+            flashCount = 0;
     }
 
     @Override
     public boolean mouseDown(int mouseX, int mouseY, int mouseButton)
     {
-        return false;
+        this.focused = GuiHelper.isMouseInBounds(mouseX, mouseY, x, y, w, h);
+        this.flashCount = 0;
+        return focused;
     }
 
     @Override
@@ -100,15 +113,91 @@ public class GuiMultiLineTextField implements IGui
     @Override
     public void handleKeyTyped(int keyCode, char character)
     {
-        if (keyCode == Keyboard.KEY_LEFT)
+        if (focused)
+            if (keyCode == Keyboard.KEY_RIGHT)
+                this.setCursorPos(this.cursorPos + 1);
+            else if (keyCode == Keyboard.KEY_LEFT)
+                this.setCursorPos(this.cursorPos - 1);
+            else if (keyCode == Keyboard.KEY_BACK)
+                this.backspace();
+            else if (keyCode == Keyboard.KEY_DELETE)
+                this.delete();
+            else if (keyCode == Keyboard.KEY_V && (Keyboard.isKeyDown(Keyboard.KEY_LCONTROL) || Keyboard.isKeyDown(Keyboard.KEY_LCONTROL)))
+                this.paste();
+            else if (keyCode == Keyboard.KEY_RETURN)
+                this.writeCharacter('\n');
+            else if (TextHelper.isKeyWritable(keyCode))
+                this.writeCharacter(character);
+    }
+
+    public void writeCharacter(char character)
+    {
+        this.writeString(String.valueOf(character));
+    }
+
+    public void writeString(String string)
+    {
+        StringBuilder builder = new StringBuilder(this.text);
+        builder.insert(this.cursorPos, string);
+        this.setText(builder.toString());
+        this.setCursorPos(this.cursorPos + string.length());
+    }
+
+    private void paste()
+    {
+        try
         {
-            cursorPos--;
-            this.loadCursorPosition(Minecraft.getMinecraft().fontRendererObj);
-        } else if (keyCode == Keyboard.KEY_RIGHT)
+            Toolkit toolkit = Toolkit.getDefaultToolkit();
+            Clipboard clipboard = toolkit.getSystemClipboard();
+            String fromClipboard = (String) clipboard.getData(DataFlavor.stringFlavor);
+            if (fromClipboard != null)
+                this.writeString(fromClipboard);
+        } catch (UnsupportedFlavorException e)
         {
-            cursorPos++;
-            this.loadCursorPosition(Minecraft.getMinecraft().fontRendererObj);
+            e.printStackTrace();
+        } catch (IOException e)
+        {
+            e.printStackTrace();
         }
+    }
+
+    private void backspace()
+    {
+        if (this.cursorPos > 0)
+        {
+            StringBuilder builder = new StringBuilder(this.text);
+            builder.delete(this.cursorPos - 1, this.cursorPos);
+            this.setText(builder.toString());
+            this.setCursorPos(cursorPos - 1);
+        }
+    }
+
+    private void delete()
+    {
+        if (this.cursorPos <= this.text.length())
+        {
+            StringBuilder builder = new StringBuilder(this.text);
+            builder.delete(this.cursorPos, this.cursorPos + 1);
+            this.setText(builder.toString());
+        }
+    }
+
+    private void setCursorPos(int cursorPos)
+    {
+        this.cursorPos = cursorPos;
+
+        if (this.cursorPos < 0)
+            this.cursorPos = 0;
+        if (this.cursorPos > text.length())
+            this.cursorPos = text.length();
+
+        this.loadCursorPosition(Minecraft.getMinecraft().fontRendererObj);
+    }
+
+    private void setText(String text)
+    {
+        this.text = text;
+        this.flashCount = 0;
     }
 /*
     int x, y;
