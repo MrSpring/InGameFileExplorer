@@ -1,10 +1,12 @@
 package dk.mrspring.fileexplorer.gui.screen;
 
-import dk.mrspring.fileexplorer.gui.*;
+import dk.mrspring.fileexplorer.LiteModFileExplorer;
+import dk.mrspring.fileexplorer.gui.GuiFileExplorer;
+import dk.mrspring.fileexplorer.gui.editor.Editor;
+import dk.mrspring.fileexplorer.gui.editor.FileType;
 import dk.mrspring.fileexplorer.gui.helper.Color;
 import dk.mrspring.fileexplorer.gui.helper.DrawingHelper;
 import dk.mrspring.fileexplorer.gui.interfaces.IGui;
-import dk.mrspring.fileexplorer.loader.FileLoader;
 
 import java.io.File;
 
@@ -57,42 +59,25 @@ public class GuiScreenFileExplorer extends GuiScreen
     {
         int lastDot = file.getPath().lastIndexOf(".");
         String extension = file.getPath().substring(lastDot);
-        GuiFile.EnumFileType fileType = GuiFile.EnumFileType.getFileTypeFor(extension);
+        FileType fileType = LiteModFileExplorer.supportedFileTypes.get(extension);
 
         if (!this.openFileType.equals(""))
-            this.removeElement(this.openFileType);
+            this.removeElement("editor");
 
-        switch (fileType)
+        Editor editor = fileType.getNewEditor(258, 10, width - 243 - 25, height - 20, file);
+        String name = fileType.getName();
+
+        if (editor != null)
         {
-            case TEXT_FILE:
-            {
-                String fileContents = FileLoader.readFile(file);
-                this.openFileType = "text_editor";
-                this.addGuiElement(this.openFileType, new GuiMultiLineTextField(258, 10, width - 243 - 25, height - 20, fileContents));
-                break;
-            }
-            case IMAGE:
-            {
-                this.openFileType = "image_viewer";
-                this.addGuiElement(this.openFileType, new GuiImageViewer(file.getPath(), 258, 10, width - 243 - 25, height - 20).enableFullscreenButton());
-//                this.mc.displayGuiScreen(new GuiScreenImageViewer("image_viewer", this, file.getPath()));
-                break;
-            }
-            case JSON:
-            {
-                this.openFileType = "json_editor";
-                this.addGuiElement(this.openFileType, new GuiJsonViewer(258, 10, width - 243 - 25, height - 20, file));
-                break;
-            }
-            default:
-                break;
+            this.openFileType = name;
+            this.addGuiElement("editor", editor);
         }
     }
 
     @Override
     public boolean updateElement(String identifier, IGui gui)
     {
-        if (identifier.equals("explorer"))
+        /*if (identifier.equals("explorer"))
             ((GuiFileExplorer) gui).setHeight(height - 10);
         else if (identifier.equals("image_viewer"))
             ((GuiImageViewer) gui).setWidth(width - 243 - 25);
@@ -100,7 +85,17 @@ public class GuiScreenFileExplorer extends GuiScreen
         {
             ((GuiJsonViewer) gui).setWidth(width - 243 - 25);
             ((GuiJsonViewer) gui).setHeight(height - 10);
+        }*/
+
+        if (identifier.equals("editor"))
+        {
+            Editor editor = (Editor) gui;
+            editor.update(258, 10, width - 243 - 25, height - 20);
         }
+
+        if (identifier.equals("explorer") && gui instanceof GuiFileExplorer)
+            ((GuiFileExplorer) gui).setHeight(height - 10);
+
         return true;
     }
 

@@ -1,14 +1,12 @@
 package dk.mrspring.fileexplorer.gui;
 
+import dk.mrspring.fileexplorer.LiteModFileExplorer;
+import dk.mrspring.fileexplorer.gui.editor.FileType;
 import dk.mrspring.fileexplorer.gui.helper.Color;
 import dk.mrspring.fileexplorer.gui.helper.DrawingHelper;
-import dk.mrspring.fileexplorer.gui.helper.IIcon;
-import dk.mrspring.fileexplorer.gui.helper.Quad;
 import net.minecraft.client.Minecraft;
 
 import java.io.File;
-import java.util.Arrays;
-import java.util.List;
 
 /**
  * Created by MrSpring on 09-11-2014 for In-Game File Explorer.
@@ -47,21 +45,24 @@ public class GuiFile extends GuiFileBase
         return this;
     }
 
-    public EnumFileType getFileType()
+    public FileType getFileType()
     {
         if (filePath != null)
         {
             int lastDot = filePath.lastIndexOf('.');
             if (lastDot < 0 || new File(filePath).isDirectory())
-                return EnumFileType.FOLDER;
+                return LiteModFileExplorer.supportedFileTypes.get("directory");
             String extension = filePath.substring(lastDot);
-            return EnumFileType.getFileTypeFor(extension);
-        } else return EnumFileType.UNKNOWN;
+            FileType type = LiteModFileExplorer.supportedFileTypes.get(extension);
+            if (type == null)
+                type = LiteModFileExplorer.supportedFileTypes.get("unknown");
+            return type;
+        } else return LiteModFileExplorer.supportedFileTypes.get("unknown");
     }
 
     public boolean isDirectory()
     {
-        return this.getFileType().equals(EnumFileType.FOLDER);
+        return this.getFileType().equals(LiteModFileExplorer.supportedFileTypes.get("directory"));
     }
 
     public void setX(int x)
@@ -222,52 +223,6 @@ public class GuiFile extends GuiFileBase
         {
             this.button.stopBeingHighlighted();
             return false;
-        }
-    }
-
-    public enum EnumFileType
-    {
-        UNKNOWN(new IIcon()
-        {
-            @Override
-            public Quad[] getQuads(float x, float y, float w, float h, float alpha)
-            {
-                return new Quad[]{new Quad(x, y, w, h)};
-            }
-        }),
-        FOLDER(DrawingHelper.folderIcon),
-        TEXT_FILE(DrawingHelper.textFileIcon, ".txt"),
-        IMAGE(DrawingHelper.imageIcon, ".png", ".jpg", ".jpeg"),
-        JSON(DrawingHelper.textFileIcon, ".json");
-
-        private EnumFileType(IIcon icon, String... fileTypes)
-        {
-            if (fileTypes == null)
-                fileTypes = new String[]{""};
-
-            this.extensions = fileTypes;
-            this.icon = icon;
-        }
-
-        final String[] extensions;
-        final IIcon icon;
-
-        public List<String> getExtensions()
-        {
-            return Arrays.asList(this.extensions);
-        }
-
-        public IIcon getIcon()
-        {
-            return icon;
-        }
-
-        public static EnumFileType getFileTypeFor(String extension)
-        {
-            for (EnumFileType type : values())
-                if (type.getExtensions().contains(extension))
-                    return type;
-            return UNKNOWN;
         }
     }
 }

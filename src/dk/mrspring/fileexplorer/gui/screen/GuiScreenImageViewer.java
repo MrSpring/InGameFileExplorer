@@ -5,6 +5,7 @@ import dk.mrspring.fileexplorer.gui.helper.Color;
 import dk.mrspring.fileexplorer.gui.helper.DrawingHelper;
 import org.lwjgl.opengl.GL11;
 
+import java.io.File;
 import java.io.IOException;
 
 /**
@@ -12,10 +13,10 @@ import java.io.IOException;
  */
 public class GuiScreenImageViewer extends GuiScreen
 {
-    final String image;
+    final File image;
     float closeMessageOpacity = 1F;
 
-    public GuiScreenImageViewer(String title, net.minecraft.client.gui.GuiScreen previousScreen, String imagePath)
+    public GuiScreenImageViewer(String title, net.minecraft.client.gui.GuiScreen previousScreen, File imagePath)
     {
         super(title, previousScreen);
         this.image = imagePath;

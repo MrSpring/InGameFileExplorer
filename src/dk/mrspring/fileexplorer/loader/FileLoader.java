@@ -1,10 +1,15 @@
 package dk.mrspring.fileexplorer.loader;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import dk.mrspring.fileexplorer.LiteModFileExplorer;
 import dk.mrspring.fileexplorer.ModLogger;
 
 import java.io.*;
+import java.lang.reflect.Type;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by MrSpring on 16-07-2014 for In-Game File Explorer.
@@ -91,5 +96,31 @@ public class FileLoader
         if (LiteModFileExplorer.config.acceptFileManipulation)
             return file.delete();
         else return false;
+    }
+
+    public static Map<String, Object> readJsonFile(File jsonFile)
+    {
+        if (LiteModFileExplorer.config.acceptFileReading)
+        {
+            Map<String, Object> jsonObject = null;
+
+            try
+            {
+                FileReader reader = new FileReader(jsonFile);
+                Gson gson = new Gson();
+                Type stringStringMap = new TypeToken<Map<String, Object>>()
+                {
+                }.getType();
+                jsonObject = gson.fromJson(reader, stringStringMap);
+            } catch (FileNotFoundException e)
+            {
+                e.printStackTrace();
+            }
+
+            if (jsonObject == null)
+                jsonObject = new HashMap<String, Object>();
+
+            return jsonObject;
+        } else return null;
     }
 }

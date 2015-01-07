@@ -1,22 +1,17 @@
 package dk.mrspring.fileexplorer.gui;
 
-import com.google.gson.Gson;
 import com.google.gson.internal.LinkedTreeMap;
-import com.google.gson.reflect.TypeToken;
 import dk.mrspring.fileexplorer.gui.helper.Color;
 import dk.mrspring.fileexplorer.gui.helper.DrawingHelper;
 import dk.mrspring.fileexplorer.gui.helper.GuiHelper;
 import dk.mrspring.fileexplorer.gui.interfaces.IGui;
 import dk.mrspring.fileexplorer.gui.interfaces.IMouseListener;
+import dk.mrspring.fileexplorer.loader.FileLoader;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
@@ -45,26 +40,16 @@ public class GuiJsonViewer implements IGui, IMouseListener
 //        saveButton = new GuiSimpleButton(x - 62, y + 50, 50, 20, "Save");
 //        cancelButton = new GuiSimpleButton(x - 62, y + 80, 50, 20, "Cancel");
 
-        this.loadFromFile();
+        this.jsonObject = FileLoader.readJsonFile(jsonFile);
     }
 
-    private void loadFromFile()
+    public GuiJsonViewer(int x, int y, int width, int height, Map<String, Object> objectMap)
     {
-        try
-        {
-            FileReader reader = new FileReader(this.jsonFile);
-            Gson gson = new Gson();
-            Type stringStringMap = new TypeToken<Map<String, Object>>()
-            {
-            }.getType();
-            jsonObject = gson.fromJson(reader, stringStringMap);
-        } catch (FileNotFoundException e)
-        {
-            e.printStackTrace();
-        }
-
-        if (jsonObject == null)
-            jsonObject = new HashMap<String, Object>();
+        this.x = x;
+        this.y = y;
+        this.width = width;
+        this.height = height;
+        this.jsonObject = objectMap;
     }
 
     @Override
@@ -293,7 +278,7 @@ public class GuiJsonViewer implements IGui, IMouseListener
 //        } else this.editButton.setY(y + height - 25);
     }
 
-    private void addScroll(int amount)
+    public void addScroll(int amount)
     {
         int maxScrollHeight = getMaxScrollHeight(), minScrollHeight = 0, scrollHeightAfterAddition = this.scrollHeight + amount;
 

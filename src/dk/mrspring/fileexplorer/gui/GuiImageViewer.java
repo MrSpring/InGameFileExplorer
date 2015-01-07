@@ -9,6 +9,7 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
 import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 
@@ -20,7 +21,7 @@ import static org.lwjgl.opengl.GL11.*;
 public class GuiImageViewer implements IGui//, IDelayedDraw
 {
     int x, y, w, h;
-    String path;
+    File file;
     BufferedImage image;
     ByteBuffer buffer;
     int textureId = -1;
@@ -30,9 +31,9 @@ public class GuiImageViewer implements IGui//, IDelayedDraw
     GuiSimpleButton fullscreenButton;
     int loadTime = 0, timeOut = 300;
 
-    public GuiImageViewer(final String path, int xPos, int yPos, int width, int height)
+    public GuiImageViewer(final File file, int xPos, int yPos, int width, int height)
     {
-        this.path = path;
+        this.file = file;
         x = xPos;
         y = yPos;
         w = width;
@@ -46,7 +47,7 @@ public class GuiImageViewer implements IGui//, IDelayedDraw
             {
                 try
                 {
-                    BufferedImage image = ImageLoader.loadImage(path);
+                    BufferedImage image = ImageLoader.loadImage(file);
                     ByteBuffer buffer = ImageLoader.loadTexture1(image);
                     GuiImageViewer.this.onImageDoneLoading(image, buffer);
                 } catch (IOException e)
@@ -61,7 +62,7 @@ public class GuiImageViewer implements IGui//, IDelayedDraw
 
         /*try
         {
-            image = ImageLoader.loadImage(path);
+            image = ImageLoader.loadImage(file);
         } catch (IOException e)
         {
             e.printStackTrace();
@@ -184,7 +185,7 @@ public class GuiImageViewer implements IGui//, IDelayedDraw
     {
         if (showFullscreenButton)
             if (fullscreenButton.mouseDown(mouseX, mouseY, mouseButton))
-                Minecraft.getMinecraft().displayGuiScreen(new GuiScreenImageViewer("Fullscreen Image Viewer", Minecraft.getMinecraft().currentScreen, path));
+                Minecraft.getMinecraft().displayGuiScreen(new GuiScreenImageViewer("Fullscreen Image Viewer", Minecraft.getMinecraft().currentScreen, file));
         return false;
     }
 
@@ -204,6 +205,21 @@ public class GuiImageViewer implements IGui//, IDelayedDraw
     public void handleKeyTyped(int keyCode, char character)
     {
 
+    }
+
+    public void setX(int x)
+    {
+        this.x = x;
+    }
+
+    public void setY(int y)
+    {
+        this.y = y;
+    }
+
+    public int getY()
+    {
+        return y;
     }
 
     /*@Override

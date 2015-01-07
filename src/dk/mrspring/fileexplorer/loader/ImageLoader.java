@@ -79,12 +79,10 @@ public class ImageLoader
         return buffer;
     }
 
-    public static BufferedImage loadImage(String path) throws IOException
+    public static BufferedImage loadImage(File file) throws IOException
     {
         if (LiteModFileExplorer.config.acceptFileReading)
-        {
-            File file = new File(path);
             return ImageIO.read(file);
-        } else return null;
+        else return null;
     }
 }

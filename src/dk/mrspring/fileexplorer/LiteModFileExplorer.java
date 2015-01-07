@@ -4,6 +4,13 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.mumfrey.liteloader.Tickable;
 import com.mumfrey.liteloader.core.LiteLoader;
+import dk.mrspring.fileexplorer.gui.editor.Editor;
+import dk.mrspring.fileexplorer.gui.editor.EditorImage;
+import dk.mrspring.fileexplorer.gui.editor.EditorJson;
+import dk.mrspring.fileexplorer.gui.editor.FileType;
+import dk.mrspring.fileexplorer.gui.helper.DrawingHelper;
+import dk.mrspring.fileexplorer.gui.helper.IIcon;
+import dk.mrspring.fileexplorer.gui.helper.Quad;
 import dk.mrspring.fileexplorer.gui.screen.*;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.settings.KeyBinding;
@@ -12,6 +19,8 @@ import org.lwjgl.input.Keyboard;
 
 import java.awt.image.BufferedImage;
 import java.io.*;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by MrSpring on 09-11-2014 for In-Game File Explorer.
@@ -28,6 +37,8 @@ public class LiteModFileExplorer implements Tickable
 
     public static BufferedImage image;
 
+    public static Map<String, FileType> supportedFileTypes;
+
     @Override
     public void onTick(Minecraft minecraft, float partialTicks, boolean inGame, boolean clock)
     {
@@ -43,7 +54,7 @@ public class LiteModFileExplorer implements Tickable
         if (openTextEditor.isPressed())
             minecraft.displayGuiScreen(new GuiScreenTextEditor("Text text text text\nMore text on a new line.\n\nEven more text.\nAnd finally, no more text! :D"));
         if (openImageViewer.isPressed())
-            minecraft.displayGuiScreen(new GuiScreenImageViewer("Image Viewer", minecraft.currentScreen, "D:\\MC Modding\\In-Game File Explorer\\jars\\liteconfig\\common\\Pick A Universe Wallpaper.png"));
+            minecraft.displayGuiScreen(new GuiScreenImageViewer("Image Viewer", minecraft.currentScreen, new File("D:\\MC Modding\\In-Game File Explorer\\jars\\liteconfig\\common\\Pick A Universe Wallpaper.png")));
     }
 
     public static void saveConfig()
@@ -107,6 +118,126 @@ public class LiteModFileExplorer implements Tickable
             if (config == null)
                 config = new Config();
         }
+
+        supportedFileTypes = new HashMap<String, FileType>();
+
+        supportedFileTypes.put(".json", new FileType()
+        {
+            @Override
+            public String[] getSupportedTypes()
+            {
+                return new String[]{".json"};
+            }
+
+            @Override
+            public Editor getNewEditor(int x, int y, int width, int height, File file)
+            {
+                return new EditorJson(x, y, width, height, file);
+            }
+
+            @Override
+            public IIcon getIcon()
+            {
+                return DrawingHelper.textFileIcon;
+            }
+
+            @Override
+            public String getName()
+            {
+                return "JSON";
+            }
+        });
+        supportedFileTypes.put("directory", new FileType()
+        {
+            @Override
+            public String[] getSupportedTypes()
+            {
+                return new String[]{"directory"};
+            }
+
+            @Override
+            public Editor getNewEditor(int x, int y, int width, int height, File file)
+            {
+                return null;
+            }
+
+            @Override
+            public IIcon getIcon()
+            {
+                return DrawingHelper.folderIcon;
+            }
+
+            @Override
+            public String getName()
+            {
+                return "FOLDER";
+            }
+        });
+        supportedFileTypes.put("unknown", new FileType()
+        {
+            @Override
+            public String[] getSupportedTypes()
+            {
+                return new String[]{"unknown"};
+            }
+
+            @Override
+            public Editor getNewEditor(int x, int y, int width, int height, File file)
+            {
+                return null;
+            }
+
+            @Override
+            public String getName()
+            {
+                return "UNKNOWN";
+            }
+
+            @Override
+            public IIcon getIcon()
+            {
+                return new IIcon()
+                {
+                    @Override
+                    public Quad[] getQuads(float x, float y, float w, float h, float alpha)
+                    {
+                        return new Quad[]{
+                                new Quad(x, y, w, h)
+                        };
+                    }
+                };
+            }
+        });
+
+        FileType tempType = new FileType()
+        {
+            @Override
+            public String[] getSupportedTypes()
+            {
+                return new String[]{".png", ".jpeg", ".jpg"};
+            }
+
+            @Override
+            public Editor getNewEditor(int x, int y, int width, int height, File file)
+            {
+                return new EditorImage(x, y, width, height, file);
+            }
+
+            @Override
+            public IIcon getIcon()
+            {
+                return DrawingHelper.imageIcon;
+            }
+
+            @Override
+            public String getName()
+            {
+                return "IMAGE_VIEWER";
+            }
+        };
+        supportedFileTypes.put(".png", tempType);
+        supportedFileTypes.put(".jpg", tempType);
+        supportedFileTypes.put(".jpeg", tempType);
     }
 
     @Override
