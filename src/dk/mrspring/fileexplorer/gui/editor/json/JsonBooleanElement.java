@@ -53,11 +53,11 @@ public class JsonBooleanElement extends JsonEditorElement<Boolean>
 
         this.nameField.setX(x);
         this.nameField.setY(y);
-        this.nameField.setW(width - 36);
+        this.nameField.setW(width - 38);
 
         if (canEditName)
         {
-            this.booleanGui.setX(x + width - 35);
+            this.booleanGui.setX(x + width - 34);
             this.nameField.draw(minecraft, mouseX, mouseY);
         } else
         {
