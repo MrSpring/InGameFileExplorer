@@ -5,6 +5,7 @@ import dk.mrspring.fileexplorer.gui.helper.DrawingHelper;
 import dk.mrspring.fileexplorer.gui.helper.GuiHelper;
 import dk.mrspring.fileexplorer.gui.helper.TextHelper;
 import dk.mrspring.fileexplorer.gui.interfaces.IGui;
+import dk.mrspring.fileexplorer.gui.interfaces.IMouseListener;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import org.lwjgl.input.Keyboard;
@@ -19,14 +20,17 @@ import java.util.List;
 /**
  * Created by MrSpring on 10-11-2014 for In-Game File Explorer.
  */
-public class GuiMultiLineTextField implements IGui
+public class GuiMultiLineTextField implements IGui, IMouseListener
 {
     int x, y, w, h;
     String text;
     String line;
-    boolean focused;
+    boolean focused, drawBackground = true;
     int cursorPos;
     int flashCount = 0;
+    int padding = 4;
+    int scrollHeight = 0;
+    int lines = 0;
 
     int cursorLine = 0, cursorRelativePos = 0;
 
@@ -42,9 +46,20 @@ public class GuiMultiLineTextField implements IGui
         this.loadCursorPosition(Minecraft.getMinecraft().fontRendererObj);
     }
 
+    public GuiMultiLineTextField hideBackground()
+    {
+        drawBackground = false;
+        padding = 0;
+        return this;
+    }
+
     private void loadCursorPosition(FontRenderer renderer)
     {
-        List<String> lines = renderer.listFormattedStringToWidth(text, w - 8);
+        int xOffset = 0;
+        if (lines * 9 > h)
+            xOffset += 4;
+
+        List<String> lines = renderer.listFormattedStringToWidth(text, w - (padding * 2) - xOffset);
         int lineStartIndexInText = 0;
         for (int i = 0; i < lines.size(); i++)
         {
@@ -56,7 +71,7 @@ public class GuiMultiLineTextField implements IGui
             {
                 cursorRelativePos = cursorPos - lineStartIndexInText;
                 cursorLine = i;
-                this.line = (String) renderer.listFormattedStringToWidth(text, w - 8).get(cursorLine);
+                this.line = (String) renderer.listFormattedStringToWidth(text, w - (padding * 2) - xOffset).get(cursorLine);
                 this.flashCount = 0;
                 break;
             }
@@ -66,20 +81,41 @@ public class GuiMultiLineTextField implements IGui
     @Override
     public void draw(Minecraft minecraft, int mouseX, int mouseY)
     {
-        DrawingHelper.drawButtonThingy(x, y, w, h, focused ? 1 : 0, true, Color.BLACK, 0.85F, Color.BLACK, 0.85F);
+        int xOffset = 0, yOffset = -scrollHeight;
+        if (lines * 9 > h)
+        {
+            this.drawScrollBar();
+            xOffset += 5;
+        }
 
-        minecraft.fontRendererObj.drawString("Cursor Line: " + cursorLine, x + 3, y + 3, 0xFFFFFF, true);
-        minecraft.fontRendererObj.drawString("Cursor Pos: " + cursorPos, x + 3, y + 13, 0xFFFFFF, true);
-        minecraft.fontRendererObj.drawString("Cursor Relative Pos: " + cursorRelativePos, x + 3, y + 23, 0xFFFFFF, true);
+        if (drawBackground)
+            DrawingHelper.drawButtonThingy(x, y, w, h, focused ? 1 : 0, true, Color.BLACK, 0.85F, Color.BLACK, 0.85F);
 
-        DrawingHelper.drawSplitString(minecraft.fontRendererObj, x + 4, y + 33, text, 0xFFFFFF, w - 8, true);
+//        minecraft.fontRendererObj.drawString("Cursor Line: " + cursorLine, x + padding + xOffset, y + padding + yOffset, 0xFFFFFF, true);
+//        minecraft.fontRendererObj.drawString("Cursor Pos: " + cursorPos, x + padding + xOffset, y + 10 + padding + yOffset, 0xFFFFFF, true);
+//        minecraft.fontRendererObj.drawString("Cursor Relative Pos: " + cursorRelativePos, x + padding + xOffset, y + 20 + padding + yOffset, 0xFFFFFF, true);
+
+        lines = DrawingHelper.drawSplitString(minecraft.fontRendererObj, x + padding + xOffset, y + padding + yOffset, text, 0xFFFFFF, w - (padding * 2) - xOffset, true);
 
         String cutLine = line.substring(0, cursorRelativePos);
 
-        int cursorXOffset = minecraft.fontRendererObj.getStringWidth(cutLine);
+        int cursorXOffset = minecraft.fontRendererObj.getStringWidth(cutLine)+xOffset;
 
         if (focused && !(flashCount > 10))
-            DrawingHelper.drawQuad(x + cursorXOffset + 4, y + (cursorLine * 9) + 32, 1, 9, Color.GREEN, 1F);
+        {
+            DrawingHelper.drawQuad(x + cursorXOffset + padding-1, y + (cursorLine * 9) + padding + yOffset-1, 1, 9, Color.GREEN, 1F);
+        }
+
+    }
+
+    private void drawScrollBar()
+    {
+        float scrollBarYRange = (h - 40);
+        float maxScrollHeight = getMaxScrollHeight();
+        float scrollProgress = (float) this.scrollHeight / maxScrollHeight;
+        float scrollBarY = scrollBarYRange * scrollProgress;
+        DrawingHelper.drawQuad(x, y + scrollBarY + 1, 2, 40, Color.DKGREY, 1F);
+        DrawingHelper.drawQuad(x - 1, y + scrollBarY, 2, 40, Color.WHITE, 1F);
     }
 
     @Override
@@ -194,10 +230,64 @@ public class GuiMultiLineTextField implements IGui
         this.loadCursorPosition(Minecraft.getMinecraft().fontRendererObj);
     }
 
-    private void setText(String text)
+    public void setText(String text, boolean resetCursorPos)
     {
         this.text = text;
         this.flashCount = 0;
+        if (resetCursorPos)
+        {
+            this.cursorPos = 0;
+            this.loadCursorPosition(Minecraft.getMinecraft().fontRendererObj);
+        }
+    }
+
+    public void setText(String text)
+    {
+        this.setText(text, false);
+    }
+
+    public void setWidth(int width)
+    {
+        this.w = width;
+    }
+
+    public void setHeight(int height)
+    {
+        this.h = height;
+    }
+
+    public String getText()
+    {
+        return text;
+    }
+
+    public void addScroll(int amount)
+    {
+        int maxScrollHeight = getMaxScrollHeight(), minScrollHeight = 0, scrollHeightAfterAddition = this.scrollHeight + amount;
+
+        if (scrollHeightAfterAddition > maxScrollHeight)
+            scrollHeightAfterAddition = maxScrollHeight;
+        else if (scrollHeightAfterAddition < minScrollHeight)
+            scrollHeightAfterAddition = minScrollHeight;
+
+        this.scrollHeight = scrollHeightAfterAddition;
+    }
+
+    private int getMaxScrollHeight()
+    {
+        return (lines * 9) - h + padding + padding;
+    }
+
+    @Override
+    public void handleMouseWheel(int mouseX, int mouseY, int dWheelRaw)
+    {
+        if (GuiHelper.isMouseInBounds(mouseX, mouseY, x, y, w, h))
+        {
+            int mouseWheel = dWheelRaw;
+            mouseWheel /= 4;
+            if (mouseWheel != 0)
+                this.addScroll(-mouseWheel);
+        }
     }
 /*
     int x, y;

@@ -4,10 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.mumfrey.liteloader.Tickable;
 import com.mumfrey.liteloader.core.LiteLoader;
-import dk.mrspring.fileexplorer.gui.editor.Editor;
-import dk.mrspring.fileexplorer.gui.editor.EditorImage;
-import dk.mrspring.fileexplorer.gui.editor.EditorJson;
-import dk.mrspring.fileexplorer.gui.editor.FileType;
+import dk.mrspring.fileexplorer.gui.editor.*;
 import dk.mrspring.fileexplorer.gui.helper.DrawingHelper;
 import dk.mrspring.fileexplorer.gui.helper.IIcon;
 import dk.mrspring.fileexplorer.gui.helper.Quad;
@@ -238,6 +235,33 @@ public class LiteModFileExplorer implements Tickable
         supportedFileTypes.put(".png", tempType);
         supportedFileTypes.put(".jpg", tempType);
         supportedFileTypes.put(".jpeg", tempType);
+
+        supportedFileTypes.put(".txt", new FileType()
+        {
+            @Override
+            public String[] getSupportedTypes()
+            {
+                return new String[]{".txt"};
+            }
+
+            @Override
+            public Editor getNewEditor(int x, int y, int width, int height, File file)
+            {
+                return new EditorText(x, y, width, height, file);
+            }
+
+            @Override
+            public IIcon getIcon()
+            {
+                return DrawingHelper.textFileIcon;
+            }
+
+            @Override
+            public String getName()
+            {
+                return "TEXT";
+            }
+        });
     }
 
     @Override
