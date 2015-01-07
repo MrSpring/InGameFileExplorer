@@ -35,10 +35,6 @@ public class EditorJson extends Editor implements IMouseListener
     GuiSimpleButton editButton;
     GuiSimpleButton saveButton, cancelButton;
     boolean editing = false;
-    private int x;
-    private int y;
-    private int width;
-    private int height;
 
     public EditorJson(int x, int y, int w, int h, File file)
     {
@@ -258,7 +254,7 @@ public class EditorJson extends Editor implements IMouseListener
             if (this.height < totalHeight)
             {
                 xOffset += 4;
-                float scrollBarYRange = (height - 50);
+                float scrollBarYRange = (height - 40);
                 float maxScrollHeight = this.getMaxScrollHeight();
                 float scrollProgress = (float) this.scrollHeight / maxScrollHeight;
                 float scrollBarY = scrollBarYRange * scrollProgress;
@@ -276,7 +272,7 @@ public class EditorJson extends Editor implements IMouseListener
 
                 yOffset += element.getHeight() + 3;
             }
-            minecraft.fontRendererObj.drawString(StatCollector.translateToLocal("gui.json_editor.add_new") + ": ", x, y + yOffset + 3, 0xFFFFFF, true);
+            minecraft.fontRendererObj.drawString(StatCollector.translateToLocal("gui.json_editor.add_new") + ": ", x + xOffset - 18, y + yOffset + 3, 0xFFFFFF, true);
 
             int textWidth = minecraft.fontRendererObj.getStringWidth(StatCollector.translateToLocal("gui.json_editor.add_new") + ": ");
 

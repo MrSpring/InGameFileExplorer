@@ -63,7 +63,7 @@ public class GuiJsonViewer implements IGui, IMouseListener
         this.jsonHeight = 0;
         for (Map.Entry<String, Object> entry : this.jsonObject.entrySet())
         {
-            int objectHeight = this.drawObject(minecraft, 5, yOffset, entry.getKey(), entry.getValue());
+            int objectHeight = this.drawObject(minecraft, 0, yOffset, entry.getKey(), entry.getValue());
             yOffset += objectHeight;
             this.jsonHeight += objectHeight;
         }
