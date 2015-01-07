@@ -23,9 +23,6 @@ public class GuiJsonViewer implements IGui, IMouseListener
     int x, y, width, height, jsonHeight, scrollHeight = 0;
     File jsonFile;
     Map<String, Object> jsonObject;
-//    GuiSimpleButton editButton;
-//    GuiSimpleButton saveButton, cancelButton;
-//    boolean editing = false;
 
     public GuiJsonViewer(int x, int y, int width, int height, File file)
     {
@@ -35,10 +32,6 @@ public class GuiJsonViewer implements IGui, IMouseListener
         this.height = height;
 
         this.jsonFile = file;
-
-//        editButton = new GuiSimpleButton(x - 62, y + height - 45, 50, 20, "Edit");
-//        saveButton = new GuiSimpleButton(x - 62, y + 50, 50, 20, "Save");
-//        cancelButton = new GuiSimpleButton(x - 62, y + 80, 50, 20, "Cancel");
 
         this.jsonObject = FileLoader.readJsonFile(jsonFile);
     }
@@ -55,10 +48,6 @@ public class GuiJsonViewer implements IGui, IMouseListener
     @Override
     public void draw(Minecraft minecraft, int mouseX, int mouseY)
     {
-//        if (!editing)
-//        {
-//            this.editButton.draw(minecraft, mouseX, mouseY);
-
         int yOffset = -scrollHeight;
         this.jsonHeight = 0;
         for (Map.Entry<String, Object> entry : this.jsonObject.entrySet())
@@ -72,12 +61,6 @@ public class GuiJsonViewer implements IGui, IMouseListener
         {
             this.drawScrollBar();
         }
-//        } else
-//        {
-//            this.editor.draw(minecraft, mouseX, mouseY);
-//            this.saveButton.draw(minecraft, mouseX, mouseY);
-//            this.cancelButton.draw(minecraft, mouseX, mouseY);
-//        }
     }
 
     private void drawScrollBar()
@@ -175,71 +158,13 @@ public class GuiJsonViewer implements IGui, IMouseListener
     {
         if (jsonHeight < height)
             scrollHeight = 0;
-
-//        if (!LiteModFileExplorer.config.acceptFileManipulation)
-//            this.saveButton.disable();
-
-//        if (editing)
-//        {
-//            this.saveButton.update();
-//            this.cancelButton.update();
-//            this.editor.update();
-//        } else
-//        {
-//            this.editButton.update();
-//        }
     }
 
     @Override
     public boolean mouseDown(int mouseX, int mouseY, int mouseButton)
     {
-//        if (!editing)
-//        {
-//            if (this.editButton.mouseDown(mouseX, mouseY, mouseButton))
-//            {
-//                this.startEditing();
-//                return true;
-//            } else return false;
-//        } else
-//        {
-//            if (this.saveButton.mouseDown(mouseX, mouseY, mouseButton))
-//            {
-//                this.save();
-//                return true;
-//            } else if (this.cancelButton.mouseDown(mouseX, mouseY, mouseButton))
-//            {
-//                this.stopEditing();
-//                return true;
-//            } else return this.editor.mouseDown(mouseX, mouseY, mouseButton);
-//        }
         return false;
     }
-
-//    private void stopEditing()
-//    {
-//        this.editing = false;
-//        this.editor = null;
-//    }
-//
-//    private void save()
-//    {
-//        Map<String, Object> fromEditor = editor.toJsonMap();
-//        GsonBuilder builder = new GsonBuilder();
-//        if (LiteModFileExplorer.config.json_usePrettyPrinting)
-//            builder.setPrettyPrinting();
-//        Gson gson = builder.create();
-//        String jsonCode = gson.toJson(fromEditor);
-//        FileLoader.writeToFile(jsonFile, jsonCode);
-//        this.stopEditing();
-//        this.loadFromFile();
-//        System.out.println(jsonCode);
-//    }
-//
-//    private void startEditing()
-//    {
-//        this.editor = new GuiJsonEditor(this);
-//        this.editing = true;
-//    }
 
     @Override
     public void mouseUp(int mouseX, int mouseY, int mouseButton)
@@ -256,26 +181,17 @@ public class GuiJsonViewer implements IGui, IMouseListener
     @Override
     public void handleKeyTyped(int keyCode, char character)
     {
-//        if (editing)
-//            this.editor.handleKeyTyped(keyCode, character);
+
     }
 
     public void setWidth(int width)
     {
         this.width = width;
-//        if (this.editing)
-//            this.editor.setWidth(width);
     }
 
     public void setHeight(int height)
     {
         this.height = height;
-//        if (this.editing)
-//        {
-//            this.editor.setHeight(height);
-//            this.saveButton.setY(y + height - 25 - 25);
-//            this.cancelButton.setY(y + height - 25);
-//        } else this.editButton.setY(y + height - 25);
     }
 
     public void addScroll(int amount)
@@ -303,8 +219,6 @@ public class GuiJsonViewer implements IGui, IMouseListener
             int mouseWheel = dWheelRaw;
             mouseWheel /= 4;
             if (mouseWheel != 0)
-//                if (this.editing)
-//                    this.editor.handleMouseWheel(mouseX, mouseY, mouseWheel);
                 this.addScroll(-mouseWheel);
         }
     }
