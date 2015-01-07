@@ -5,8 +5,10 @@ import dk.mrspring.fileexplorer.gui.helper.DrawingHelper;
 import dk.mrspring.fileexplorer.gui.interfaces.IGui;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
+import org.lwjgl.input.Keyboard;
+import org.lwjgl.opengl.GL11;
 
-import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by MrSpring on 10-11-2014 for In-Game File Explorer.
@@ -14,9 +16,12 @@ import java.util.ArrayList;
 public class GuiMultiLineTextField implements IGui
 {
     int x, y, w, h;
-//    ArrayList<String> lines;
     String text;
+    String line;
     boolean focused;
+    int cursorPos;
+
+    int cursorLine = 0, cursorRelativePos = 0;
 
     public GuiMultiLineTextField(int x, int y, int w, int h, String text)
     {
@@ -26,9 +31,28 @@ public class GuiMultiLineTextField implements IGui
         this.h = h;
         this.text = text;
         this.focused = false;
+        this.cursorPos = 0;
+        this.loadCursorPosition(Minecraft.getMinecraft().fontRendererObj);
+    }
 
-//        FontRenderer renderer = Minecraft.getMinecraft().fontRendererObj;
-//        lines = (ArrayList<String>) renderer.listFormattedStringToWidth(text, w - 6);
+    private void loadCursorPosition(FontRenderer renderer)
+    {
+        List<String> lines = renderer.listFormattedStringToWidth(text, w - 6);
+        int lineStartIndexInText = 0;
+        for (int i = 0; i < lines.size(); i++)
+        {
+            String line = lines.get(i) + "\n";
+            if (cursorPos >= lineStartIndexInText + line.length())
+            {
+                lineStartIndexInText += line.length();
+            } else
+            {
+                cursorRelativePos = cursorPos - lineStartIndexInText;
+                cursorLine = i;
+                this.line = (String) renderer.listFormattedStringToWidth(text, w - 6).get(cursorLine);
+                break;
+            }
+        }
     }
 
     @Override
@@ -36,7 +60,17 @@ public class GuiMultiLineTextField implements IGui
     {
         DrawingHelper.drawButtonThingy(x, y, w, h, focused ? 1 : 0, true, Color.BLACK, 0.85F, Color.BLACK, 0.85F);
 
-        int lines = DrawingHelper.drawSplitString(minecraft.fontRendererObj, x + 3, y + 3, text, 0xFFFFFF, w - 6, true);
+        minecraft.fontRendererObj.drawString("Cursor Line: " + cursorLine, x + 3, y + 3, 0xFFFFFF, true);
+        minecraft.fontRendererObj.drawString("Cursor Pos: " + cursorPos, x + 3, y + 13, 0xFFFFFF, true);
+        minecraft.fontRendererObj.drawString("Cursor Relative Pos: " + cursorRelativePos, x + 3, y + 23, 0xFFFFFF, true);
+
+        DrawingHelper.drawSplitString(minecraft.fontRendererObj, x + 3, y + 33, text, 0xFFFFFF, w - 6, true);
+
+        String cutLine = line.substring(0, cursorRelativePos);
+
+        int cursorXOffset = minecraft.fontRendererObj.getStringWidth(cutLine);
+
+        DrawingHelper.drawQuad(x + cursorXOffset + 3, y + (cursorLine * 9) + 32, 1, 9, Color.GREEN, 1F);
     }
 
     @Override
@@ -66,7 +100,15 @@ public class GuiMultiLineTextField implements IGui
     @Override
     public void handleKeyTyped(int keyCode, char character)
     {
-
+        if (keyCode == Keyboard.KEY_LEFT)
+        {
+            cursorPos--;
+            this.loadCursorPosition(Minecraft.getMinecraft().fontRendererObj);
+        } else if (keyCode == Keyboard.KEY_RIGHT)
+        {
+            cursorPos++;
+            this.loadCursorPosition(Minecraft.getMinecraft().fontRendererObj);
+        }
     }
 /*
     int x, y;
