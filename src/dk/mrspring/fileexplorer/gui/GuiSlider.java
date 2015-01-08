@@ -3,7 +3,7 @@ package dk.mrspring.fileexplorer.gui;
 import dk.mrspring.fileexplorer.gui.helper.Color;
 import dk.mrspring.fileexplorer.gui.helper.DrawingHelper;
 import dk.mrspring.fileexplorer.gui.helper.GuiHelper;
-import dk.mrspring.fileexplorer.gui.interfaces.Drawable;
+import dk.mrspring.fileexplorer.gui.interfaces.IDrawable;
 import dk.mrspring.fileexplorer.gui.interfaces.IDelayedDraw;
 import dk.mrspring.fileexplorer.gui.interfaces.IGui;
 import net.minecraft.client.Minecraft;
@@ -26,7 +26,7 @@ public class GuiSlider implements IGui, IDelayedDraw
     boolean dragging = false;
     int alphaProgress = 0;
     int alphaTarget = 0;
-    Drawable latestDrawable;
+    IDrawable latestDrawable;
     DecimalFormat format = new DecimalFormat("#.##");
 
     public GuiSlider(int xPos, int yPos, int width, int height, Type type, int startValue)
@@ -270,9 +270,9 @@ public class GuiSlider implements IGui, IDelayedDraw
     }
 
     @Override
-    public Drawable getDelayedDrawable()
+    public IDrawable getDelayedDrawable()
     {
-        return new Drawable()
+        return new IDrawable()
         {
             @Override
             public void draw(Minecraft minecraft, int mouseX, int mouseY)

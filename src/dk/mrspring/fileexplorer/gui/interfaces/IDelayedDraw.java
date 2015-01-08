@@ -5,5 +5,5 @@ package dk.mrspring.fileexplorer.gui.interfaces;
  */
 public interface IDelayedDraw
 {
-    public Drawable getDelayedDrawable();
+    public IDrawable getDelayedDrawable();
 }

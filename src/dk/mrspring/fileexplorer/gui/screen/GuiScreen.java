@@ -3,7 +3,7 @@ package dk.mrspring.fileexplorer.gui.screen;
 import dk.mrspring.fileexplorer.gui.*;
 import dk.mrspring.fileexplorer.gui.helper.Color;
 import dk.mrspring.fileexplorer.gui.helper.DrawingHelper;
-import dk.mrspring.fileexplorer.gui.interfaces.Drawable;
+import dk.mrspring.fileexplorer.gui.interfaces.IDrawable;
 import dk.mrspring.fileexplorer.gui.interfaces.IDelayedDraw;
 import dk.mrspring.fileexplorer.gui.interfaces.IGui;
 import dk.mrspring.fileexplorer.gui.interfaces.IMouseListener;
@@ -122,7 +122,7 @@ public class GuiScreen extends net.minecraft.client.gui.GuiScreen
             this.getGui("done_button").draw(mc, mouseX, actualMouseY);
         }*/
 
-        List<Drawable> drawables = new ArrayList<Drawable>();
+        List<IDrawable> drawables = new ArrayList<IDrawable>();
 
         for (Map.Entry<String, IGui> entry : guiHashMap.entrySet())
         {
@@ -141,7 +141,7 @@ public class GuiScreen extends net.minecraft.client.gui.GuiScreen
 
         if (drawables.size() > 0)
         {
-            for (Drawable drawable : drawables)
+            for (IDrawable drawable : drawables)
                 drawable.draw(mc, mouseX, mouseY);
         }
 
