@@ -159,7 +159,7 @@ public class JsonMapElement extends JsonEditorElement<LinkedTreeMap<String, Obje
             {
                 DrawingHelper.drawIcon(DrawingHelper.rightArrow, xPosition + 2, yPosition + 5, 6, 6, false);
                 if (LiteModFileExplorer.config.json_showCollapsedMapSize)
-                    minecraft.fontRendererObj.drawString(StatCollector.translateToLocal("gui.json_editor.mapi_size") + ": " + String.valueOf(elements.size()), xPosition, yPosition + 18, 0xFFFFFF, true);
+                    minecraft.fontRendererObj.drawString(StatCollector.translateToLocal("gui.json_editor.map_size") + ": " + String.valueOf(elements.size()), xPosition, yPosition + 18, 0xFFFFFF, true);
             }
         }
     }

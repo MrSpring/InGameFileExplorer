@@ -25,7 +25,7 @@ public class GuiScreenExamplePage extends GuiScreen
     {
         super.initGui();
 
-//        this.addGuiElement(sliderID, new GuiSlider(60, 40, 120, 30, GuiSlider.Type.PERCENTAGE, 50));
+        this.addGuiElement(sliderID, new GuiSlider(60, 40, 120, 30, 50));
 //        this.addGuiElement(buttonID, new GuiSimpleButton(10, 10, 40, 40, "Button"));
         this.addGuiElement(numberID, new GuiNumberField(60, 50, 100, 32, 10.0));
 //        this.addGuiElement(tFieldID, new GuiEditableTextField(60 + 75 + 10, 10, 240, 20, "This is Edible!", mc.fontRendererObj));

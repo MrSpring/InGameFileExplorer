@@ -299,7 +299,7 @@ public class EditorJson extends Editor implements IMouseListener
                 this.newMap.draw(minecraft, mouseX, mouseY);
             } catch (StackOverflowError error)
             {
-                DrawingHelper.drawSplitCenteredString(minecraft.fontRendererObj, w / 2 + x, y + 10, StatCollector.translateToLocal("gui.json_editor.not_enough_space"), 0xFFFFFF, w, true);
+                DrawingHelper.drawSplitCenteredString(minecraft.fontRendererObj, w / 2 + x, y + 10, StatCollector.translateToLocal("gui.json_editor.not_enough_space"), 0xFFFFFF, w);
             }
         }
 

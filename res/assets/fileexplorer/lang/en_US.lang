@@ -17,3 +17,6 @@ gui.explorer.no_files=No files found...
 gui.explorer.open=Open
 gui.explorer.refresh=Refresh
 gui.explorer.go_up=Go Up
+
+gui.image_viewer.load_failed=Loading Failed
+gui.image_viewer.loading=Loading...

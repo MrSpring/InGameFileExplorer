@@ -75,7 +75,7 @@ public class GuiScreenWelcome extends GuiScreen
         DrawingHelper.drawCenteredString(mc.fontRendererObj, width / 4, 10, StatCollector.translateToLocal("gui.screen.welcome.title"), 0xFFFFFF, true);
 
         GL11.glScalef(0.5F, 0.5F, 0.5F);
-        DrawingHelper.drawSplitCenteredString(mc.fontRendererObj, width / 2, 50, StatCollector.translateToLocal("gui.screen.welcome.message").replace("\\n", "\n"), 0xFFFFFF, width - 30, true);
+        DrawingHelper.drawSplitCenteredString(mc.fontRendererObj, width / 2, 50, StatCollector.translateToLocal("gui.screen.welcome.message").replace("\\n", "\n"), 0xFFFFFF, width - 30);
         DrawingHelper.drawSplitString(mc.fontRendererObj, 32, ((GuiCheckbox) this.getGui("accept-read")).getY() + 1, StatCollector.translateToLocal("gui.screen.welcome.i_accept.read"), 0xFFFFFF, width - 50, true);
         DrawingHelper.drawSplitString(mc.fontRendererObj, 32, ((GuiCheckbox) this.getGui("accept-write")).getY() + 1, StatCollector.translateToLocal("gui.screen.welcome.i_accept.write"), 0xFFFFFF, width - 50, true);
     }

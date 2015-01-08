@@ -5,6 +5,7 @@ import dk.mrspring.fileexplorer.gui.interfaces.IGui;
 import dk.mrspring.fileexplorer.gui.screen.GuiScreenImageViewer;
 import dk.mrspring.fileexplorer.loader.ImageLoader;
 import net.minecraft.client.Minecraft;
+import net.minecraft.util.StatCollector;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
@@ -153,8 +154,8 @@ public class GuiImageViewer implements IGui//, IDelayedDraw
             if (this.image != null && this.buffer != null)
                 this.setImage(image, buffer);
             if (failed)
-                minecraft.fontRendererObj.drawString("Failed loading... :(", x + 10, y + 10, 0xFF0000);
-            else minecraft.fontRendererObj.drawString("Loading...", x + 10, y + 10, 0x0000FF);
+                minecraft.fontRendererObj.drawString(StatCollector.translateToLocal("gui.image_viewer.load_failed"), x + 10, y + 10, 0xFF0000);
+            else minecraft.fontRendererObj.drawString(StatCollector.translateToLocal("gui.image_viewer.loading"), x + 10, y + 10, 0x0000FF);
         }
     }
 
@@ -221,44 +222,4 @@ public class GuiImageViewer implements IGui//, IDelayedDraw
     {
         return y;
     }
-
-    /*@Override
-    public Drawable getDelayedDrawable()
-    {
-        return new Drawable()
-        {
-            @Override
-            public void draw(Minecraft minecraft, int mouseX, int mouseY)
-            {
-                if (textureId != -1)
-                {
-                    GL11.glPushMatrix();
-
-                    GL11.glEnable(GL11.GL_TEXTURE_2D);
-                    GL11.glBindTexture(GL11.GL_TEXTURE_2D, textureId);
-
-                    float imageWidth = image.getWidth(), imageHeight = image.getHeight();
-
-                    float width = w;
-                    float height = width * (imageHeight / imageWidth);
-
-                    if (height > h)
-                    {
-                        height = h;
-                        //System.out.println("Height is: "+height +" width is "+imageHeight);
-                        width = height * (imageWidth / imageHeight);
-                    }
-                    DrawingHelper.drawTexturedRect(x, y, width, height, 0, 0, 512, 512, 1F);
-                    GL11.glDisable(GL11.GL_TEXTURE_2D);
-
-                    GL11.glPopMatrix();
-                } else
-                {
-                    if (image != null && buffer != null)
-                        GuiImageViewer.this.setImage(image, buffer);
-                    minecraft.fontRendererObj.drawString("Loading...", x + 10, y + 10, 0xfff);
-                }
-            }
-        };
-    }*/
 }

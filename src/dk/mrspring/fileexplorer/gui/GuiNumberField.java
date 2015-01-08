@@ -71,7 +71,7 @@ public class GuiNumberField implements IGui
             if (character == ',' || character == '.')
                 controllerOffset = xOffset;
 
-            DrawingHelper.drawSplitCenteredString(minecraft.fontRendererObj, x + w + xOffset, h / 2 + y - 4, String.valueOf(character), 0xFFFFFF, 100, true);
+            DrawingHelper.drawSplitCenteredString(minecraft.fontRendererObj, x + w + xOffset, h / 2 + y - 4, String.valueOf(character), 0xFFFFFF, 100);
             xOffset -= 8;
         }
 

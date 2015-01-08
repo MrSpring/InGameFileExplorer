@@ -67,7 +67,7 @@ public class GuiJsonViewer implements IGui, IMouseListener
         } catch (StackOverflowError error)
         {
             DrawingHelper.drawQuad(x, y, width, height, Color.BLACK, 1F);
-            DrawingHelper.drawSplitCenteredString(minecraft.fontRendererObj, width / 2 + x, y + 15, StatCollector.translateToLocal("gui.json_editor.not_enough_space").replace("\\n", "\n"), 0xFFFFFF, width-8, true);
+            DrawingHelper.drawSplitCenteredString(minecraft.fontRendererObj, width / 2 + x, y + 15, StatCollector.translateToLocal("gui.json_editor.not_enough_space").replace("\\n", "\n"), 0xFFFFFF, width-8);
         }
     }
 
@@ -144,16 +144,6 @@ public class GuiJsonViewer implements IGui, IMouseListener
         } else return 0;
     }
 
-    /**
-     * Draws a simple key, value line.
-     *
-     * @param renderer The Font Renderer object used to render the text.
-     * @param name     The name/key for the value.
-     * @param object   The value being rendered.
-     * @param x        The X position to render the key, value set.
-     * @param y        The Y position to render the key, value set.
-     * @return Returns the height of the rendered object.
-     */
     private int drawSimpleTextValue(FontRenderer renderer, String name, Object object, int x, int y)
     {
         int nameWidth = renderer.getStringWidth(name + ": ");
