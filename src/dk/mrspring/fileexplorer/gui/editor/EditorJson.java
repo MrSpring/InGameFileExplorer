@@ -144,7 +144,6 @@ public class EditorJson extends Editor implements IMouseListener
         FileLoader.writeToFile(jsonFile, jsonCode);
         this.reloadViewer();
         this.stopEditing();
-        System.out.println(jsonCode);
     }
 
     private void reloadViewer()
