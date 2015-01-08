@@ -457,7 +457,6 @@ public class DrawingHelper
 
     public static void drawVerticalGradient(float x, float y, float w, float h, Color topColor, float topAlpha, Color bottomColor, float bottomAlpha)
     {
-//        drawCustomQuad(x, y, x + w, y, x + w, y + h, x, y + h, topColor, topAlpha, topColor, topAlpha, bottomColor, bottomAlpha, bottomColor, bottomAlpha);
         drawQuad(new Quad(
                 new Vector(x, y).setColor(topColor).setAlpha(topAlpha),
                 new Vector(x + w, y).setColor(topColor).setAlpha(topAlpha),
@@ -468,7 +467,6 @@ public class DrawingHelper
 
     public static void drawHorizontalGradient(float x, float y, float w, float h, Color leftColor, float leftAlpha, Color rightColor, float rightAlpha)
     {
-//        drawCustomQuad(x, y, x + w, y, x + w, y + h, x, y + h, leftColor, leftAlpha, rightColor, rightAlpha, rightColor, rightAlpha, leftColor, leftAlpha);
         drawQuad(new Quad(
                 new Vector(x, y).setColor(leftColor).setAlpha(leftAlpha),
                 new Vector(x + w, y).setColor(rightColor).setAlpha(rightAlpha),
@@ -483,8 +481,6 @@ public class DrawingHelper
         if (enabled)
             drawVerticalGradient(x + 2, y + 2, w - 4, h - 4, startColor, alphaProgress * startAlphaMultiplier, endColor, alphaProgress * endAlphaMultiplier);
         else DrawingHelper.drawVerticalGradient(x + 2, y + 2, w - 4, h - 4, Color.LTGREY, 0.5F, Color.DKGREY, 0.8F);
-//        drawQuad(x, y, w, h, c1, a1);
-//        drawOutline(x, y, w, h, c2, a2);
     }
 
     public static void drawButtonThingy(float x, float y, float w, float h, float alphaProgress, boolean enabled, Color startColor, Color endColor)
@@ -567,7 +563,7 @@ public class DrawingHelper
         glDisable(GL_TEXTURE_2D);
         glDisable(GL_CULL_FACE);
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-        glShadeModel(7425);
+        glShadeModel(GL_SMOOTH);
 
         Tessellator tessellator = Tessellator.getInstance();
         tessellator.getWorldRenderer().startDrawingQuads();
@@ -620,13 +616,14 @@ public class DrawingHelper
     }
 
     /**
-     * @param renderer
-     * @param x
-     * @param y
-     * @param s
-     * @param color
-     * @param maxLength
-     * @param shadow
+     * Draw the String wrapped to maxLength and returns the amount of lines the String was wrapped onto.
+     * @param renderer The FontRenderer that will be used to draw the String.
+     * @param x The X coordinate to draw the String at.
+     * @param y The Y coordinate to draw the String at.
+     * @param s The String to draw.
+     * @param color The color of the String. Use 0x(HEXCODE).
+     * @param maxLength The maximum length of each line.
+     * @param shadow Set true for the String to receive a shadow, false not to.
      * @return Returns how many lines the string has been wrapped to.
      */
     public static int drawSplitString(FontRenderer renderer, int x, int y, String s, int color, int maxLength, boolean shadow)
