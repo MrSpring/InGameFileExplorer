@@ -3,6 +3,7 @@ package dk.mrspring.fileexplorer.gui.screen;
 import dk.mrspring.fileexplorer.gui.GuiImageViewer;
 import dk.mrspring.fileexplorer.gui.helper.Color;
 import dk.mrspring.fileexplorer.gui.helper.DrawingHelper;
+import net.minecraft.util.StatCollector;
 import org.lwjgl.opengl.GL11;
 
 import java.io.File;
@@ -41,8 +42,8 @@ public class GuiScreenImageViewer extends GuiScreen
         float yOffset = 16 - (int) (closeMessageOpacity * fullHeight);
         if (yOffset < 0)
             yOffset = 0;
-        DrawingHelper.drawIcon(DrawingHelper.hoverIcon, width / 4 - (mc.fontRendererObj.getStringWidth("Click to close...") / 2) - 5, -yOffset, mc.fontRendererObj.getStringWidth("Click to close...") + 10, 16, false);
-        DrawingHelper.drawCenteredString(mc.fontRendererObj, (float) width / 4, 4 - yOffset, "Click to close...", 0xFFFFFF);
+        DrawingHelper.drawIcon(DrawingHelper.hoverIcon, width / 4 - (mc.fontRendererObj.getStringWidth(StatCollector.translateToLocal("gui.screen.image_viewer.exit_fullscreen")) / 2) - 5, -yOffset, mc.fontRendererObj.getStringWidth(StatCollector.translateToLocal("gui.screen.image_viewer.exit_fullscreen")) + 10, 16, false);
+        DrawingHelper.drawCenteredString(mc.fontRendererObj, (float) width / 4, 4 - yOffset, StatCollector.translateToLocal("gui.screen.image_viewer.exit_fullscreen"), 0xFFFFFF);
         GL11.glPopMatrix();
     }
 
