@@ -32,13 +32,13 @@
     <property name="project"        value="InGameFileExplorer" />
 
     <!-- The upstream MD5 set to use when outputting your mod classes, usually liteloader -->
-    <property name="md5set"         value="mcp" />
+    <property name="md5set"         value="liteloader" />
 
     <!-- The MD5 set to *write* for downstream projects to use, uncomment this line to enable -->
     <!-- <property name="outmd5set" value="${ant.project.name}" /> -->
 
     <!-- The base MCP directory, normally 3 levels up from here but change if the build script is moved -->
-    <property name="mcp.dir"        location="..\mcp" />
+    <property name="mcp.dir"        location="..\..\.." />
 
     <!-- These directory entries should not be changed, they point at various resources below the MCP dir -->
     <property name="project.src"    location="..\src" />
@@ -52,7 +52,6 @@
     <property name="stage.dir"      location="${build.dir}/stage/${ant.project.name}/${version}" />
 
     <!-- Output file properties, change as required but in general you won't need to -->
-    <property name="file.prefix"    value="mod" />
     <property name="file.type"      value="litemod" />
 
     <!-- Path to the python executable used by MCP, change if using a non-windows OS -->
@@ -138,8 +137,8 @@
         <antcall target="contributeresources"><param name="lib" value="${project}" /></antcall>
 
         <!-- Increments and retrieves the build number. -->
-        <buildnumber file="./buildnumber.txt" />
-
+        <buildnumber file="buildnumber.txt" />
+        
         <!-- Uses the template file to build the litemod.json file and stages it to the staging  -->
         <!-- directory.                                                                          -->
         <concat destfile="${stage.dir}/litemod.json" append="false">
@@ -204,7 +203,7 @@
 
         <echo append="false" file="${temp.dir}/build.cfg" message="[OUTPUT]&#x0A;SrcClient = build/src" />
 
-        <exec executable="python" dir="${mcp.dir}">
+        <exec executable="${python}" dir="${mcp.dir}">
             <arg value="runtime/recompile.py" />
             <arg value="--client" />
             <arg value="--config" />
@@ -217,7 +216,7 @@
     <target name="reobfuscate" description="MCP reobfuscate">
         <echo level="info" message="Obfuscating classes" />
 
-        <exec executable="python" dir="${mcp.dir}">
+        <exec executable="${python}" dir="${mcp.dir}">
             <arg value="runtime/reobfuscate.py" />
             <arg value="--client" />
             <arg value="%*" />
@@ -235,8 +234,8 @@
     <target name="litemod" description="Build the litemod file">
         <echo level="info" message="Building final output" />
 
-        <mkdir dir="${dist.dir}" />
-        <jar destfile="${dist.dir}/FileExplorer-${version}.${build.number}-mc${mcversion}.${file.type}" duplicate="preserve" index="true" manifestencoding="UTF-8">
+        <mkdir dir="${dist.dir}/${version}/${mcversion}" />
+        <jar destfile="${dist.dir}/${version}/${mcversion}/FileExplorer-${version}-${mcversion}.${file.type}" duplicate="preserve" index="true" manifestencoding="UTF-8">
             <manifest>
                 <attribute name="Built-By" value="MCP (http://mcp.ocean-labs.de)" />
                 <attribute name="Implementation-Vendor" value="${author}" />

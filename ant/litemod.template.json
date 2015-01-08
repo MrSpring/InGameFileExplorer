@@ -1,7 +1,8 @@
 {
-    "name": "In-Game File Explorer",
-    "mcversion": "${litemodversion}",
-    "revision": "${build.number}",
-    "author": "${author}",
-    "description": "Allows the player to look around their computer's file system, and view/edit some file-types."
+  "name": "In-Game File Explorer",
+  "mcversion": "${litemodversion}",
+  "version": "${version}",
+  "revision": "${build.number}",
+  "author": "${author}",
+  "description": "The in-game file explorer mod allows you to look around your systems files, and view/edit some file types:\n.txt - The mod has a built in text-editor for text files. Files can be viewed, edited and saved without having to leave the game.\n.png/.jpeg - The mod also include an image viewer!\n.json - The mod includes a simple-to-use gui based in-game JSON editor."
 }
