@@ -51,18 +51,18 @@ public class GuiFile extends GuiFileBase
         {
             int lastDot = filePath.lastIndexOf('.');
             if (lastDot < 0 || new File(filePath).isDirectory())
-                return LiteModFileExplorer.supportedFileTypes.get("directory");
+                return LiteModFileExplorer.getFileType("directory");
             String extension = filePath.substring(lastDot);
-            FileType type = LiteModFileExplorer.supportedFileTypes.get(extension);
+            FileType type = LiteModFileExplorer.getFileType(extension);
             if (type == null)
-                type = LiteModFileExplorer.supportedFileTypes.get("unknown");
+                type = LiteModFileExplorer.getFileType("unknown");
             return type;
-        } else return LiteModFileExplorer.supportedFileTypes.get("unknown");
+        } else return LiteModFileExplorer.getFileType("unknown");
     }
 
     public boolean isDirectory()
     {
-        return this.getFileType().equals(LiteModFileExplorer.supportedFileTypes.get("directory"));
+        return this.getFileType().equals(LiteModFileExplorer.getFileType("directory"));
     }
 
     public void setX(int x)

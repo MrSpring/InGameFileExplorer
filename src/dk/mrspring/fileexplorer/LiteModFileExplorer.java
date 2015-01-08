@@ -34,7 +34,7 @@ public class LiteModFileExplorer implements Tickable
 
     public static BufferedImage image;
 
-    public static Map<String, FileType> supportedFileTypes;
+    private static Map<String, FileType> supportedFileTypes;
 
     @Override
     public void onTick(Minecraft minecraft, float partialTicks, boolean inGame, boolean clock)
@@ -52,6 +52,14 @@ public class LiteModFileExplorer implements Tickable
             minecraft.displayGuiScreen(new GuiScreenTextEditor("Text text text text\nMore text on a new line.\n\nEven more text.\nAnd finally, no more text! :D"));
         if (openImageViewer.isPressed())
             minecraft.displayGuiScreen(new GuiScreenImageViewer("Image Viewer", minecraft.currentScreen, new File("D:\\MC Modding\\In-Game File Explorer\\jars\\liteconfig\\common\\Pick A Universe Wallpaper.png")));
+    }
+
+    public static FileType getFileType(String extension)
+    {
+        FileType type = supportedFileTypes.get(extension);
+        if (type == null)
+            type = supportedFileTypes.get("unknown");
+        return type;
     }
 
     public static void saveConfig()

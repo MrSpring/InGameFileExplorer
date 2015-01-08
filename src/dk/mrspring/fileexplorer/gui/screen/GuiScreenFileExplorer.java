@@ -59,16 +59,15 @@ public class GuiScreenFileExplorer extends GuiScreen
     {
         int lastDot = file.getPath().lastIndexOf(".");
         String extension = file.getPath().substring(lastDot);
-        FileType fileType = LiteModFileExplorer.supportedFileTypes.get(extension);
-
-        if (!this.openFileType.equals(""))
-            this.removeElement("editor");
+        FileType fileType = LiteModFileExplorer.getFileType(extension);
 
         Editor editor = fileType.getNewEditor(258, 10, width - 243 - 25, height - 20, file);
         String name = fileType.getName();
 
         if (editor != null)
         {
+            if (!this.openFileType.equals(""))
+                this.removeElement("editor");
             this.openFileType = name;
             this.addGuiElement("editor", editor);
         }

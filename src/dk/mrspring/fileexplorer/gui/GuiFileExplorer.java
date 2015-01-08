@@ -262,7 +262,7 @@ public class GuiFileExplorer implements IGui, IMouseListener
                 if (guiFile.mouseDown(mouseX, mouseY, mouseButton) && guiFile instanceof GuiFile)
                 {
                     deleteFile.enable();
-                    if (!((GuiFile) guiFile).getFileType().equals(LiteModFileExplorer.supportedFileTypes.get("unknown")))
+                    if (!((GuiFile) guiFile).getFileType().equals(LiteModFileExplorer.getFileType("unknown")))
                         openFile.enable();
                     returnFromHere = true;
                 }
