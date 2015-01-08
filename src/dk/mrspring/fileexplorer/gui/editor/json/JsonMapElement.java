@@ -91,7 +91,8 @@ public class JsonMapElement extends JsonEditorElement<LinkedTreeMap<String, Obje
             nameField.setY(yPosition);
             nameField.setW(width - collapseWidth);
             nameField.draw(minecraft, mouseX, mouseY);
-        } else minecraft.fontRendererObj.drawString(this.getName(), xPosition, yPosition + 3, 0xFFFFFF, true);
+        } else
+            minecraft.fontRendererObj.drawString(this.getName(), xPosition + collapseWidth, yPosition + 3, 0xFFFFFF, true);
 
         collapse.setX(xPosition);
         collapse.setY(yPosition);
