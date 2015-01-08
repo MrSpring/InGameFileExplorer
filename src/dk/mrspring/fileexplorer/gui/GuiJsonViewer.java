@@ -49,31 +49,32 @@ public class GuiJsonViewer implements IGui, IMouseListener
     @Override
     public void draw(Minecraft minecraft, int mouseX, int mouseY)
     {
-        int yOffset = -scrollHeight;
+        int yOffset = -scrollHeight, xOffset = 0;
         try
         {
+            if (jsonHeight > height)
+            {
+                this.drawScrollBar();
+                xOffset = 5;
+            }
             this.jsonHeight = 0;
             for (Map.Entry<String, Object> entry : this.jsonObject.entrySet())
             {
-                int objectHeight = this.drawObject(minecraft, 0, yOffset, entry.getKey(), entry.getValue());
+                int objectHeight = this.drawObject(minecraft, xOffset, yOffset, entry.getKey(), entry.getValue());
                 yOffset += objectHeight;
                 this.jsonHeight += objectHeight;
             }
 
-            if (jsonHeight > height)
-            {
-                this.drawScrollBar();
-            }
         } catch (StackOverflowError error)
         {
             DrawingHelper.drawQuad(x, y, width, height, Color.BLACK, 1F);
-            DrawingHelper.drawSplitCenteredString(minecraft.fontRendererObj, width / 2 + x, y + 15, StatCollector.translateToLocal("gui.json_editor.not_enough_space").replace("\\n", "\n"), 0xFFFFFF, width-8);
+            DrawingHelper.drawSplitCenteredString(minecraft.fontRendererObj, width / 2 + x, y + 15, StatCollector.translateToLocal("gui.json_editor.not_enough_space").replace("\\n", "\n"), 0xFFFFFF, width - 8);
         }
     }
 
     private void drawScrollBar()
     {
-        float scrollBarYRange = (height - 50);
+        float scrollBarYRange = (height - 40);
         float maxScrollHeight = getMaxScrollHeight();
         float scrollProgress = (float) this.scrollHeight / maxScrollHeight;
         float scrollBarY = scrollBarYRange * scrollProgress;
