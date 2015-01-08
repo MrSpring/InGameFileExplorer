@@ -50,7 +50,7 @@ public class GuiCustomTextField implements IGui
         {
             int relativeCursorPos = getRelativeCursorPos(renderer);
             int minRender = 15;
-            int maxRender = w - 30;/*Math.min(w - 23, renderer.getStringWidth(text.substring(renderStart)));*/
+            int maxRender = w - 20;/*Math.min(w - 23, renderer.getStringWidth(text.substring(renderStart)));*/
             if (relativeCursorPos < minRender && renderStart > 0)
                 while (relativeCursorPos < minRender && renderStart > 0)
                 {
@@ -162,7 +162,7 @@ public class GuiCustomTextField implements IGui
     {
         if (renderEnd < text.length() || renderStart > 0)
         {
-            float scrollX = x + 3, scrollY = y + h - 3, scrollXEnd = x - 3;
+            float scrollX = x + 3, scrollY = y + h - 4, scrollXEnd = x - 3;
 
             float renderStartProgressThrough = ((float) renderStart) / ((float) text.length());
             float renderEndProgressThrough = ((float) renderEnd) / ((float) text.length());
@@ -171,6 +171,7 @@ public class GuiCustomTextField implements IGui
             scrollXEnd += w * renderEndProgressThrough;
 
             DrawingHelper.drawQuad(scrollX, scrollY, scrollXEnd - scrollX, 1, Color.WHITE, 1F);
+            DrawingHelper.drawQuad(scrollX+1, scrollY+1, scrollXEnd - scrollX, 1, Color.DKGREY, 1F);
         }
     }
 
