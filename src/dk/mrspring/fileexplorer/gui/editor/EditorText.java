@@ -26,8 +26,8 @@ public class EditorText extends Editor implements IMouseListener
 
         textField = new GuiMultiLineTextField(x, y, w, h, FileLoader.readFile(this.file)).hideBackground();
 
-        saveButton = new GuiSimpleButton(x - 62, y + h - 15, 50, 20, "Save");
-        restoreButton = new GuiSimpleButton(x - 62, y + h - 45, 50, 20, "Restore");
+        saveButton = new GuiSimpleButton(x - 62, y + h - 15, 50, 20, "gui.text_editor.save");
+        restoreButton = new GuiSimpleButton(x - 62, y + h - 45, 50, 20, "gui.text_editor.reload");
     }
 
     @Override
@@ -47,7 +47,7 @@ public class EditorText extends Editor implements IMouseListener
         this.saveButton.update();
 
         this.restoreButton.setX(x - 62);
-        this.restoreButton.setY(y + h - 45);
+        this.restoreButton.setY(y + h - 40);
         this.restoreButton.update();
     }
 

@@ -20,3 +20,6 @@ gui.explorer.go_up=Go Up
 
 gui.image_viewer.load_failed=Loading Failed
 gui.image_viewer.loading=Loading...
+
+gui.text_editor.save=Save
+gui.text_editor.reload=Restore
