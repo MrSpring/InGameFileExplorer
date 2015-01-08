@@ -248,54 +248,60 @@ public class EditorJson extends Editor implements IMouseListener
         @Override
         public void draw(Minecraft minecraft, int mouseX, int mouseY)
         {
-            int xOffset = 18, yOffset = -scrollHeight;
-
-            int totalHeight = this.getListHeight();
-            if (this.height < totalHeight)
+            try
             {
-                xOffset += 4;
-                float scrollBarYRange = (height - 40);
-                float maxScrollHeight = this.getMaxScrollHeight();
-                float scrollProgress = (float) this.scrollHeight / maxScrollHeight;
-                float scrollBarY = scrollBarYRange * scrollProgress;
-                DrawingHelper.drawQuad(x, y + scrollBarY + 1, 2, 40, Color.DKGREY, 1F);
-                DrawingHelper.drawQuad(x - 1, y + scrollBarY, 2, 40, Color.WHITE, 1F);
-            }
+                int xOffset = 18, yOffset = -scrollHeight;
 
-            for (JsonEditorElement element : elements)
+                int totalHeight = this.getListHeight();
+                if (this.height < totalHeight)
+                {
+                    xOffset += 4;
+                    float scrollBarYRange = (height - 40);
+                    float maxScrollHeight = this.getMaxScrollHeight();
+                    float scrollProgress = (float) this.scrollHeight / maxScrollHeight;
+                    float scrollBarY = scrollBarYRange * scrollProgress;
+                    DrawingHelper.drawQuad(x, y + scrollBarY + 1, 2, 40, Color.DKGREY, 1F);
+                    DrawingHelper.drawQuad(x - 1, y + scrollBarY, 2, 40, Color.WHITE, 1F);
+                }
+
+                for (JsonEditorElement element : elements)
+                {
+                    element.drawElement(x + xOffset, y + yOffset, width - xOffset, mouseX, mouseY, minecraft);
+
+                    element.getDeleteButton().setX(x + xOffset - 18);
+                    element.getDeleteButton().setY(y + yOffset);
+                    element.getDeleteButton().draw(minecraft, mouseX, mouseY);
+
+                    yOffset += element.getHeight() + 3;
+                }
+                minecraft.fontRendererObj.drawString(StatCollector.translateToLocal("gui.json_editor.add_new") + ": ", x + xOffset - 18, y + yOffset + 3, 0xFFFFFF, true);
+
+                int textWidth = minecraft.fontRendererObj.getStringWidth(StatCollector.translateToLocal("gui.json_editor.add_new") + ": ");
+
+                this.newString.setX(x + textWidth);
+                this.newString.setY(y + yOffset);
+
+                this.newBoolean.setX(x + 18 + textWidth);
+                this.newBoolean.setY(y + yOffset);
+
+                this.newDouble.setX(x + 18 + 18 + textWidth);
+                this.newDouble.setY(y + yOffset);
+
+                this.newArray.setX(x + 18 + 18 + 18 + textWidth);
+                this.newArray.setY(y + yOffset);
+
+                this.newMap.setX(x + 18 + 18 + 18 + 18 + textWidth);
+                this.newMap.setY(y + yOffset);
+
+                this.newString.draw(minecraft, mouseX, mouseY);
+                this.newBoolean.draw(minecraft, mouseX, mouseY);
+                this.newDouble.draw(minecraft, mouseX, mouseY);
+                this.newArray.draw(minecraft, mouseX, mouseY);
+                this.newMap.draw(minecraft, mouseX, mouseY);
+            } catch (StackOverflowError error)
             {
-                element.drawElement(x + xOffset, y + yOffset, width - xOffset, mouseX, mouseY, minecraft);
-
-                element.getDeleteButton().setX(x + xOffset - 18);
-                element.getDeleteButton().setY(y + yOffset);
-                element.getDeleteButton().draw(minecraft, mouseX, mouseY);
-
-                yOffset += element.getHeight() + 3;
+                DrawingHelper.drawSplitCenteredString(minecraft.fontRendererObj, w / 2 + x, y + 10, StatCollector.translateToLocal("gui.json_editor.not_enough_space"), 0xFFFFFF, w, true);
             }
-            minecraft.fontRendererObj.drawString(StatCollector.translateToLocal("gui.json_editor.add_new") + ": ", x + xOffset - 18, y + yOffset + 3, 0xFFFFFF, true);
-
-            int textWidth = minecraft.fontRendererObj.getStringWidth(StatCollector.translateToLocal("gui.json_editor.add_new") + ": ");
-
-            this.newString.setX(x + textWidth);
-            this.newString.setY(y + yOffset);
-
-            this.newBoolean.setX(x + 18 + textWidth);
-            this.newBoolean.setY(y + yOffset);
-
-            this.newDouble.setX(x + 18 + 18 + textWidth);
-            this.newDouble.setY(y + yOffset);
-
-            this.newArray.setX(x + 18 + 18 + 18 + textWidth);
-            this.newArray.setY(y + yOffset);
-
-            this.newMap.setX(x + 18 + 18 + 18 + 18 + textWidth);
-            this.newMap.setY(y + yOffset);
-
-            this.newString.draw(minecraft, mouseX, mouseY);
-            this.newBoolean.draw(minecraft, mouseX, mouseY);
-            this.newDouble.draw(minecraft, mouseX, mouseY);
-            this.newArray.draw(minecraft, mouseX, mouseY);
-            this.newMap.draw(minecraft, mouseX, mouseY);
         }
 
         @Override

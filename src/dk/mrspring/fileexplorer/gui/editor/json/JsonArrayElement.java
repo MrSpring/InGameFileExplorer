@@ -73,7 +73,8 @@ public class JsonArrayElement extends JsonEditorElement<ArrayList<Object>>
         {
             height += 19;
             for (JsonEditorElement element : elements) height += element.getHeight() + 3;
-        }
+        } else if (LiteModFileExplorer.config.json_showCollapsedArraySize)
+            height += 10;
 
         return height;
     }
@@ -154,7 +155,11 @@ public class JsonArrayElement extends JsonEditorElement<ArrayList<Object>>
         } else
         {
             if (LiteModFileExplorer.config.json_allowArrayCollapsing)
+            {
                 DrawingHelper.drawIcon(DrawingHelper.rightArrow, xPosition + 2, yPosition + 5, 6, 6, false);
+                if (LiteModFileExplorer.config.json_showCollapsedArraySize)
+                    minecraft.fontRendererObj.drawString(StatCollector.translateToLocal("gui.json_editor.array_size") + ": " + String.valueOf(elements.size()), xPosition, yPosition + 18, 0xFFFFFF, true);
+            }
         }
     }
 

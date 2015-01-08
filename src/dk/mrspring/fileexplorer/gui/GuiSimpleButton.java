@@ -5,6 +5,7 @@ import dk.mrspring.fileexplorer.gui.helper.GuiHelper;
 import dk.mrspring.fileexplorer.gui.helper.IIcon;
 import dk.mrspring.fileexplorer.gui.interfaces.IGui;
 import net.minecraft.client.Minecraft;
+import net.minecraft.util.StatCollector;
 
 /**
  * Created by MrSpring on 09-11-2014 for In-Game File Explorer.
@@ -88,8 +89,10 @@ public class GuiSimpleButton implements IGui
         if (icon != null)
             DrawingHelper.drawIcon(this.getIcon(), x + 2, y + 2, width - 4, height - 4, false);
 
-        float textY = (this.height / 2 - 4) + y, textX = (this.width / 2 - (minecraft.fontRendererObj.getStringWidth(this.text) / 2)) + x;
-        minecraft.fontRendererObj.drawStringWithShadow(this.text, textX, textY, textColor);
+        String translatedText = StatCollector.translateToLocal(this.text);
+                
+        float textY = (this.height / 2 - 4) + y, textX = (this.width / 2 - (minecraft.fontRendererObj.getStringWidth(translatedText) / 2)) + x;
+        minecraft.fontRendererObj.drawStringWithShadow(translatedText, textX, textY, textColor);
     }
 
     public GuiSimpleButton hideBackground()

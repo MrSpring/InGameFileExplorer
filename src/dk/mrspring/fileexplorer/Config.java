@@ -14,6 +14,8 @@ public class Config
     public boolean json_usePrettyPrinting = true;
     public boolean json_allowArrayCollapsing = true;
     public boolean json_allowMapCollapsing = true;
+    public boolean json_showCollapsedArraySize = true;
+    public boolean json_showCollapsedMapSize = true;
 
     public String number_format = "00000.00";
 }

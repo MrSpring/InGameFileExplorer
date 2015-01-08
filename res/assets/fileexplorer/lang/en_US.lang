@@ -6,5 +6,11 @@ gui.screen.welcome.i_accept.read=I allow the mod to read from my personal files.
 gui.screen.welcome.i_accept.write=I allow the mod to write to my personal files, and understand the possible risks.
 
 gui.json_editor.add_new=Add new
+gui.json_editor.array_size=Elements in Array
+gui.json_editor.map_size=Elements in Map
+gui.json_editor.not_enough_space=There is not enough space to render the JSON elements.\nPlease expand your Minecraft window or change the gui scale in the options menu.
 
 gui.explorer.no_files=No files found...
+gui.explorer.open=Open
+gui.explorer.refresh=Refresh
+gui.explorer.go_up=Go Up

@@ -9,6 +9,7 @@ import dk.mrspring.fileexplorer.gui.interfaces.IMouseListener;
 import dk.mrspring.fileexplorer.loader.FileLoader;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
+import net.minecraft.util.StatCollector;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -49,17 +50,24 @@ public class GuiJsonViewer implements IGui, IMouseListener
     public void draw(Minecraft minecraft, int mouseX, int mouseY)
     {
         int yOffset = -scrollHeight;
-        this.jsonHeight = 0;
-        for (Map.Entry<String, Object> entry : this.jsonObject.entrySet())
+        try
         {
-            int objectHeight = this.drawObject(minecraft, 0, yOffset, entry.getKey(), entry.getValue());
-            yOffset += objectHeight;
-            this.jsonHeight += objectHeight;
-        }
+            this.jsonHeight = 0;
+            for (Map.Entry<String, Object> entry : this.jsonObject.entrySet())
+            {
+                int objectHeight = this.drawObject(minecraft, 0, yOffset, entry.getKey(), entry.getValue());
+                yOffset += objectHeight;
+                this.jsonHeight += objectHeight;
+            }
 
-        if (jsonHeight > height)
+            if (jsonHeight > height)
+            {
+                this.drawScrollBar();
+            }
+        } catch (StackOverflowError error)
         {
-            this.drawScrollBar();
+            DrawingHelper.drawQuad(x, y, width, height, Color.BLACK, 1F);
+            DrawingHelper.drawSplitCenteredString(minecraft.fontRendererObj, width / 2 + x, y + 15, StatCollector.translateToLocal("gui.json_editor.not_enough_space").replace("\\n", "\n"), 0xFFFFFF, width-8, true);
         }
     }
 
