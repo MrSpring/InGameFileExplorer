@@ -143,7 +143,7 @@ public class LiteModFileExplorer implements Tickable
             @Override
             public IIcon getIcon()
             {
-                return DrawingHelper.textFileIcon;
+                return DrawingHelper.jsonFileIcon;
             }
 
             @Override

@@ -402,6 +402,58 @@ public class DrawingHelper
             };
         }
     };
+    public static IIcon jsonFileIcon = new IIcon()
+    {
+        @Override
+        public Quad[] getQuads(float x, float y, float w, float h, float alpha)
+        {
+            float tw = w / 10, th = h / 10;
+            float tww = w / 20, twh = h / 20;
+            return new Quad[]{
+                    new Quad(
+                            x + 2 * tw, y + th,
+                            tw, 8 * th),
+                    new Quad(
+                            x + 3 * tw, y + th,
+                            2 * tw, 3 * th),
+                    new Quad(
+                            x + 6 * tw, y + th,
+                            x + 8 * tw, y + 3 * th,
+                            x + 6 * tw, y + 3 * th,
+                            x + 6 * tw, y + th),
+                    new Quad(
+                            x + 3 * tw, y + 4 * th,
+                            5 * tw, th),
+                    new Quad(
+                            x + 7 * tw, y + 4 * th,
+                            tw, 5 * th),
+                    new Quad(
+                            x + 3 * tw, y + 8 * th + twh,
+                            4 * tw, twh),
+                    new Quad(
+                            x + 3 * tw, y + 5 * th,
+                            tww, th + twh),
+                    new Quad(
+                            x + 3 * tw, y + 7 * th,
+                            tww, th + twh),
+                    new Quad(
+                            x + 5 * tw - tww, y + 5 * th,
+                            tw, 4 * th - twh),
+                    new Quad(
+                            x + 4 * tw, y + 5 * th + twh,
+                            tww, 3 * th - twh),
+                    new Quad(
+                            x + 5 * tw + tww, y + 5 * th + twh,
+                            tww, 3 * th - twh),
+                    new Quad(
+                            x + 6 * tw + tww, y + 5 * th,
+                            tww, th + twh),
+                    new Quad(
+                            x + 6 * tw + tww, y + 7 * th,
+                            tww, th + twh)
+            };
+        }
+    };
 
     public static void drawVerticalGradient(float x, float y, float w, float h, Color topColor, float topAlpha, Color bottomColor, float bottomAlpha)
     {
