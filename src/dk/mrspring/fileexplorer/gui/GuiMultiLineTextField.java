@@ -57,8 +57,8 @@ public class GuiMultiLineTextField implements IGui, IMouseListener
     {
         int xOffset = 0;
         if (lines * 9 > h)
-            xOffset += 4;
-
+            xOffset += 5;
+        
         List<String> lines = renderer.listFormattedStringToWidth(text, w - (padding * 2) - xOffset);
         int lineStartIndexInText = 0;
         for (int i = 0; i < lines.size(); i++)

@@ -49,8 +49,8 @@ public class GuiCustomTextField implements IGui
         if (renderer.getStringWidth(text) > w - 8)
         {
             int relativeCursorPos = getRelativeCursorPos(renderer);
-            int minRender = renderer.getStringWidth(text.substring(renderStart, renderStart + 4));
-            int maxRender = Math.min(w - 23, renderer.getStringWidth(text.substring(renderStart)));
+            int minRender = 15;
+            int maxRender = w - 30;/*Math.min(w - 23, renderer.getStringWidth(text.substring(renderStart)));*/
             if (relativeCursorPos < minRender && renderStart > 0)
                 while (relativeCursorPos < minRender && renderStart > 0)
                 {
@@ -64,7 +64,7 @@ public class GuiCustomTextField implements IGui
                     renderStart++;
                     this.loadRenderEnd(renderer);
                     relativeCursorPos = getRelativeCursorPos(renderer);
-                    maxRender = Math.min(w - 23, renderer.getStringWidth(text.substring(renderStart)));
+                    /*maxRender = Math.min(w - 23, renderer.getStringWidth(text.substring(renderStart)));*/
                 }
 
             this.loadRenderEnd(renderer);

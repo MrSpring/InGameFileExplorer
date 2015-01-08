@@ -206,9 +206,9 @@ public class GuiScreen extends net.minecraft.client.gui.GuiScreen
                 String identifier = entry.getKey();
                 IGui gui = entry.getValue();
 
-                if (identifier.equals("done_button") && gui.mouseDown(mouseX, mouseY, mouseButton))
+                /*if (identifier.equals("done_button") && gui.mouseDown(mouseX, mouseY, mouseButton))
                     mc.displayGuiScreen(this.previousScreen);
-                else if (gui.mouseDown(mouseX, mouseY, mouseButton))
+                else */if (gui.mouseDown(mouseX, mouseY, mouseButton))
                     this.guiClicked(identifier, gui, mouseX, mouseY, mouseButton);
             }
         } catch (Exception e)
