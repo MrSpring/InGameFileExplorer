@@ -95,6 +95,22 @@ public class DrawingHelper
                             w / 2 + x, y)};
         }
     };
+
+    public static IIcon rightArrow = new IIcon()
+    {
+        @Override
+        public Quad[] getQuads(float x, float y, float w, float h, float alpha)
+        {
+            return new Quad[]{
+                    new Quad(
+                            x + w, h / 2 + y,
+                            x, y + h,
+                            x, y,
+                            x + w, h / 2 + y)
+            };
+        }
+    };
+
     public static IIcon fullscreenIcon = new IIcon()
     {
         @Override

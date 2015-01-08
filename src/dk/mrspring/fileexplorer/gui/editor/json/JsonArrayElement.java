@@ -9,7 +9,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.util.StatCollector;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 
 /**
  * Created by MrSpring on 30-12-2014 for In-Game File Explorer.
@@ -18,8 +17,8 @@ public class JsonArrayElement extends JsonEditorElement<ArrayList<Object>>
 {
     GuiCustomTextField nameField;
     ArrayList<JsonEditorElement> elements;
-    GuiSimpleButton newBoolean, newDouble, newString, newArray, newMap;
-    boolean canEditName;
+    GuiSimpleButton newBoolean, newDouble, newString, newArray, newMap, collapse;
+    boolean canEditName, collapsed = false;
 
     public JsonArrayElement(int x, int y, int maxWidth, String name, ArrayList<Object> list, boolean canEditName)
     {
@@ -30,13 +29,14 @@ public class JsonArrayElement extends JsonEditorElement<ArrayList<Object>>
         if (width > 200)
             width = 200;
 
-        nameField = new GuiCustomTextField(x, y, width, 16, name);
+        nameField = new GuiCustomTextField(x + 12, y, width - 12, 16, name);
         elements = new ArrayList<JsonEditorElement>();
         newString = new GuiSimpleButton(x, y, 16, 16, "S");
         newBoolean = new GuiSimpleButton(x, y, 16, 16, "B");
         newDouble = new GuiSimpleButton(x, y, 16, 16, "D");
         newArray = new GuiSimpleButton(x, y, 16, 16, "A");
         newMap = new GuiSimpleButton(x, y, 16, 16, "M");
+        collapse = new GuiSimpleButton(x, y, 10, 16, "");
 
         for (int i = 0; i < list.size(); i++)
         {
@@ -62,8 +62,14 @@ public class JsonArrayElement extends JsonEditorElement<ArrayList<Object>>
     @Override
     public int getHeight()
     {
-        int height = 19 + 16;
-        for (JsonEditorElement element : elements) height += element.getHeight() + 3;
+        int height = 19;
+
+        if (!collapsed)
+        {
+            height += 16;
+            for (JsonEditorElement element : elements) height += element.getHeight() + 3;
+        }
+
         return height;
     }
 
@@ -76,63 +82,72 @@ public class JsonArrayElement extends JsonEditorElement<ArrayList<Object>>
 
         if (this.canEditName)
         {
-            nameField.setX(xPosition);
+            nameField.setX(xPosition + 12);
             nameField.setY(yPosition);
-            nameField.setW(width);
+            nameField.setW(width - 12);
             nameField.draw(minecraft, mouseX, mouseY);
-        } else minecraft.fontRendererObj.drawString(this.getName(), xPosition, yPosition + 3, 0xFFFFFF, true);
+        } else minecraft.fontRendererObj.drawString(this.getName(), xPosition + 12, yPosition + 3, 0xFFFFFF, true);
+
+        collapse.setX(xPosition);
+        collapse.setY(yPosition);
 
         int yOffset = 16 + 3, xOffset = 18;
 
-        Iterator<JsonEditorElement> iterator = elements.iterator();
-        while (iterator.hasNext())
+        if (!collapsed)
         {
-            JsonEditorElement element = iterator.next();
-            element.drawElement(xPosition + xOffset, yPosition + yOffset, maxWidth - xOffset, mouseX, mouseY, minecraft);
+            DrawingHelper.drawIcon(DrawingHelper.downArrow, xPosition + 2, yPosition + 5, 6, 6, false);
 
-            element.getDeleteButton().setX(xPosition + xOffset - 18);
-            element.getDeleteButton().setY(yPosition + yOffset);
-            element.getDeleteButton().draw(minecraft, mouseX, mouseY);
+            for (JsonEditorElement element : elements)
+            {
+                element.drawElement(xPosition + xOffset, yPosition + yOffset, maxWidth - xOffset, mouseX, mouseY, minecraft);
 
-            int height = element.getHeight();
+                element.getDeleteButton().setX(xPosition + xOffset - 18);
+                element.getDeleteButton().setY(yPosition + yOffset);
+                element.getDeleteButton().draw(minecraft, mouseX, mouseY);
 
-            DrawingHelper.drawQuad(xPosition - 8, yPosition + yOffset + 1, 1, height + 3, Color.DKGREY, 1F);
-            DrawingHelper.drawQuad(xPosition - 9, yPosition + yOffset, 1, height + 3, Color.WHITE, 1F);
+                int height = element.getHeight();
+
+                DrawingHelper.drawQuad(xPosition - 8, yPosition + yOffset + 1, 1, height + 3, Color.DKGREY, 1F);
+                DrawingHelper.drawQuad(xPosition - 9, yPosition + yOffset, 1, height + 3, Color.WHITE, 1F);
+                DrawingHelper.drawQuad(xPosition - 7, yPosition + yOffset + 7, 5, 1, Color.DKGREY, 1F);
+                DrawingHelper.drawQuad(xPosition - 8, yPosition + yOffset + 6, 5, 1, Color.WHITE, 1F);
+
+                yOffset += element.getHeight() + 3;
+            }
+
+            DrawingHelper.drawQuad(xPosition - 8, yPosition + yOffset + 1, 1, 7, Color.DKGREY, 1F);
+            DrawingHelper.drawQuad(xPosition - 9, yPosition + yOffset, 1, 7, Color.WHITE, 1F);
             DrawingHelper.drawQuad(xPosition - 7, yPosition + yOffset + 7, 5, 1, Color.DKGREY, 1F);
             DrawingHelper.drawQuad(xPosition - 8, yPosition + yOffset + 6, 5, 1, Color.WHITE, 1F);
 
-            yOffset += element.getHeight() + 3;
+            minecraft.fontRendererObj.drawString(StatCollector.translateToLocal("gui.json_editor.add_new") + ": ", xPosition, yPosition + yOffset + 3, 0xFFFFFF, true);
+
+            int textWidth = minecraft.fontRendererObj.getStringWidth(StatCollector.translateToLocal("gui.json_editor.add_new") + ": ");
+
+            this.newString.setX(xPosition + textWidth);
+            this.newString.setY(yPosition + yOffset);
+
+            this.newBoolean.setX(xPosition + 18 + textWidth);
+            this.newBoolean.setY(yPosition + yOffset);
+
+            this.newDouble.setX(xPosition + 18 + 18 + textWidth);
+            this.newDouble.setY(yPosition + yOffset);
+
+            this.newArray.setX(xPosition + 18 + 18 + 18 + textWidth);
+            this.newArray.setY(yPosition + yOffset);
+
+            this.newMap.setX(xPosition + 18 + 18 + 18 + 18 + textWidth);
+            this.newMap.setY(yPosition + yOffset);
+
+            this.newString.draw(minecraft, mouseX, mouseY);
+            this.newBoolean.draw(minecraft, mouseX, mouseY);
+            this.newDouble.draw(minecraft, mouseX, mouseY);
+            this.newArray.draw(minecraft, mouseX, mouseY);
+            this.newMap.draw(minecraft, mouseX, mouseY);
+        } else
+        {
+            DrawingHelper.drawIcon(DrawingHelper.rightArrow, xPosition + 2, yPosition + 5, 6, 6, false);
         }
-
-        DrawingHelper.drawQuad(xPosition - 8, yPosition + yOffset + 1, 1, 7, Color.DKGREY, 1F);
-        DrawingHelper.drawQuad(xPosition - 9, yPosition + yOffset, 1, 7, Color.WHITE, 1F);
-        DrawingHelper.drawQuad(xPosition - 7, yPosition + yOffset + 7, 5, 1, Color.DKGREY, 1F);
-        DrawingHelper.drawQuad(xPosition - 8, yPosition + yOffset + 6, 5, 1, Color.WHITE, 1F);
-
-        minecraft.fontRendererObj.drawString(StatCollector.translateToLocal("gui.json_editor.add_new") + ": ", xPosition, yPosition + yOffset + 3, 0xFFFFFF, true);
-
-        int textWidth = minecraft.fontRendererObj.getStringWidth(StatCollector.translateToLocal("gui.json_editor.add_new") + ": ");
-
-        this.newString.setX(xPosition + textWidth);
-        this.newString.setY(yPosition + yOffset);
-
-        this.newBoolean.setX(xPosition + 18 + textWidth);
-        this.newBoolean.setY(yPosition + yOffset);
-
-        this.newDouble.setX(xPosition + 18 + 18 + textWidth);
-        this.newDouble.setY(yPosition + yOffset);
-
-        this.newArray.setX(xPosition + 18 + 18 + 18 + textWidth);
-        this.newArray.setY(yPosition + yOffset);
-
-        this.newMap.setX(xPosition + 18 + 18 + 18 + 18 + textWidth);
-        this.newMap.setY(yPosition + yOffset);
-
-        this.newString.draw(minecraft, mouseX, mouseY);
-        this.newBoolean.draw(minecraft, mouseX, mouseY);
-        this.newDouble.draw(minecraft, mouseX, mouseY);
-        this.newArray.draw(minecraft, mouseX, mouseY);
-        this.newMap.draw(minecraft, mouseX, mouseY);
     }
 
     @Override
@@ -165,6 +180,8 @@ public class JsonArrayElement extends JsonEditorElement<ArrayList<Object>>
                 this.elements.add(new JsonArrayElement(0, 0, 0, "name", new ArrayList<Object>(), false));
             else if (this.newMap.mouseDown(mouseX, mouseY, mouseButton))
                 this.elements.add(new JsonMapElement(0, 0, 0, "name", new LinkedTreeMap<String, Object>(), false));
+            else if (this.collapse.mouseDown(mouseX, mouseY, mouseButton))
+                this.collapsed = !collapsed;
         }
         return returns;
     }
