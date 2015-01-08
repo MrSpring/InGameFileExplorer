@@ -184,6 +184,15 @@ public class GuiCustomTextField implements IGui
     public boolean mouseDown(int mouseX, int mouseY, int mouseButton)
     {
         focused = GuiHelper.isMouseInBounds(mouseX, mouseY, x, y, w, h);
+
+        if (focused)
+        {
+            String rendering = text.substring(renderStart, renderEnd);
+            FontRenderer renderer = Minecraft.getMinecraft().fontRendererObj;
+            String clicked = renderer.trimStringToWidth(rendering, mouseX - x);
+            setCursorPos(this.renderStart + clicked.length(), false);
+        }
+
         return focused;
     }
 
