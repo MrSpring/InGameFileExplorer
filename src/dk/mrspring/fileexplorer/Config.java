@@ -12,6 +12,7 @@ public class Config
     public boolean printDebug = true;
 
     public boolean json_usePrettyPrinting = true;
+    public boolean json_allowArrayCollapsing = true;
     public boolean json_allowMapCollapsing = true;
 
     public String number_format = "00000.00";

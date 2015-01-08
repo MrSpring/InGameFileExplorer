@@ -1,6 +1,7 @@
 package dk.mrspring.fileexplorer.gui.editor.json;
 
 import com.google.gson.internal.LinkedTreeMap;
+import dk.mrspring.fileexplorer.LiteModFileExplorer;
 import dk.mrspring.fileexplorer.gui.GuiCustomTextField;
 import dk.mrspring.fileexplorer.gui.GuiSimpleButton;
 import dk.mrspring.fileexplorer.gui.helper.Color;
@@ -19,17 +20,21 @@ public class JsonArrayElement extends JsonEditorElement<ArrayList<Object>>
     ArrayList<JsonEditorElement> elements;
     GuiSimpleButton newBoolean, newDouble, newString, newArray, newMap, collapse;
     boolean canEditName, collapsed = false;
+    int collapseWidth = 12;
 
     public JsonArrayElement(int x, int y, int maxWidth, String name, ArrayList<Object> list, boolean canEditName)
     {
         super(x, y, maxWidth, name, list);
         this.canEditName = canEditName;
 
+        if (!LiteModFileExplorer.config.json_allowArrayCollapsing)
+            collapseWidth = 0;
+
         int width = maxWidth;
         if (width > 200)
             width = 200;
 
-        nameField = new GuiCustomTextField(x + 12, y, width - 12, 16, name);
+        nameField = new GuiCustomTextField(x + collapseWidth, y, width - collapseWidth, 16, name);
         elements = new ArrayList<JsonEditorElement>();
         newString = new GuiSimpleButton(x, y, 16, 16, "S");
         newBoolean = new GuiSimpleButton(x, y, 16, 16, "B");
@@ -82,11 +87,11 @@ public class JsonArrayElement extends JsonEditorElement<ArrayList<Object>>
 
         if (this.canEditName)
         {
-            nameField.setX(xPosition + 12);
+            nameField.setX(xPosition + collapseWidth);
             nameField.setY(yPosition);
-            nameField.setW(width - 12);
+            nameField.setW(width - collapseWidth);
             nameField.draw(minecraft, mouseX, mouseY);
-        } else minecraft.fontRendererObj.drawString(this.getName(), xPosition + 12, yPosition + 3, 0xFFFFFF, true);
+        } else minecraft.fontRendererObj.drawString(this.getName(), xPosition + collapseWidth, yPosition + 3, 0xFFFFFF, true);
 
         collapse.setX(xPosition);
         collapse.setY(yPosition);
@@ -95,7 +100,8 @@ public class JsonArrayElement extends JsonEditorElement<ArrayList<Object>>
 
         if (!collapsed)
         {
-            DrawingHelper.drawIcon(DrawingHelper.downArrow, xPosition + 2, yPosition + 5, 6, 6, false);
+            if (LiteModFileExplorer.config.json_allowArrayCollapsing)
+                DrawingHelper.drawIcon(DrawingHelper.downArrow, xPosition + 2, yPosition + 5, 6, 6, false);
 
             for (JsonEditorElement element : elements)
             {
@@ -146,7 +152,8 @@ public class JsonArrayElement extends JsonEditorElement<ArrayList<Object>>
             this.newMap.draw(minecraft, mouseX, mouseY);
         } else
         {
-            DrawingHelper.drawIcon(DrawingHelper.rightArrow, xPosition + 2, yPosition + 5, 6, 6, false);
+            if (LiteModFileExplorer.config.json_allowArrayCollapsing)
+                DrawingHelper.drawIcon(DrawingHelper.rightArrow, xPosition + 2, yPosition + 5, 6, 6, false);
         }
     }
 
@@ -180,7 +187,7 @@ public class JsonArrayElement extends JsonEditorElement<ArrayList<Object>>
                 this.elements.add(new JsonArrayElement(0, 0, 0, "name", new ArrayList<Object>(), false));
             else if (this.newMap.mouseDown(mouseX, mouseY, mouseButton))
                 this.elements.add(new JsonMapElement(0, 0, 0, "name", new LinkedTreeMap<String, Object>(), false));
-            else if (this.collapse.mouseDown(mouseX, mouseY, mouseButton))
+            else if (this.collapse.mouseDown(mouseX, mouseY, mouseButton) && LiteModFileExplorer.config.json_allowArrayCollapsing)
                 this.collapsed = !collapsed;
         }
         return returns;
