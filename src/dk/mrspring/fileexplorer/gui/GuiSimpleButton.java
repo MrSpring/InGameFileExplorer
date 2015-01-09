@@ -91,7 +91,7 @@ public class GuiSimpleButton implements IGui
 
         String translatedText = StatCollector.translateToLocal(this.text);
                 
-        float textY = (this.height / 2 - 4) + y, textX = (this.width / 2 - (minecraft.fontRendererObj.getStringWidth(translatedText) / 2)) + x;
+        int textY = (this.height / 2 - 4) + y, textX = (this.width / 2 - (minecraft.fontRendererObj.getStringWidth(translatedText) / 2)) + x;
         minecraft.fontRendererObj.drawStringWithShadow(translatedText, textX, textY, textColor);
     }
 
