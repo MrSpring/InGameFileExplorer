@@ -197,21 +197,6 @@ public class LiteModFileExplorer implements Tickable
             {
                 return "UNKNOWN";
             }
-
-            @Override
-            public IIcon getIcon()
-            {
-                return new IIcon()
-                {
-                    @Override
-                    public Quad[] getQuads(float x, float y, float w, float h, float alpha)
-                    {
-                        return new Quad[]{
-                                new Quad(x, y, w, h)
-                        };
-                    }
-                };
-            }
         });
 
         FileType tempType = new FileType()
@@ -268,6 +253,26 @@ public class LiteModFileExplorer implements Tickable
             public String getName()
             {
                 return "TEXT";
+            }
+        });
+        supportedFileTypes.put(".mp3", new FileType()
+        {
+            @Override
+            public String[] getSupportedTypes()
+            {
+                return new String[]{".mp3"};
+            }
+
+            @Override
+            public Editor getNewEditor(int x, int y, int width, int height, File file)
+            {
+                return new EditorMP3(x,y,width,height,file);
+            }
+
+            @Override
+            public String getName()
+            {
+                return "MUSIC_PLAYER";
             }
         });
     }

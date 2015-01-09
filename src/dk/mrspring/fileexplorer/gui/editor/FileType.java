@@ -1,5 +1,6 @@
 package dk.mrspring.fileexplorer.gui.editor;
 
+import dk.mrspring.fileexplorer.gui.helper.DrawingHelper;
 import dk.mrspring.fileexplorer.gui.helper.IIcon;
 
 import java.util.Arrays;
@@ -20,6 +21,6 @@ public abstract class FileType implements IFileType
 
     public IIcon getIcon()
     {
-        return null;
+        return DrawingHelper.unknownIcon;
     }
 }

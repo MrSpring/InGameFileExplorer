@@ -12,6 +12,17 @@ import static org.lwjgl.opengl.GL11.*;
  */
 public class DrawingHelper
 {
+    public static IIcon unknownIcon = new IIcon()
+    {
+        @Override
+        public Quad[] getQuads(float x, float y, float w, float h, float alpha)
+        {
+            return new Quad[]{
+                    new Quad(x, y, w, h)
+            };
+        }
+    };
+    
     public static IIcon newFileIcon = new IIcon()
     {
         @Override
