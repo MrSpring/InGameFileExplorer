@@ -1,2 +1,25 @@
-gui.screen.example_page.name=Eksempel Side
-gui.screen.example_page.description=Prøv nogle seje nye Gui funktioner
+gui.screen.example_page.name=Example Page
+gui.screen.example_page.description=Play around with some cool Gui features!
+
+gui.screen.welcome.title=Velkommen
+gui.screen.welcome.message=Tak fordi du downloadede In-Game File Explorer modden, af MrSpring.\nFør du kan begynde at bruge modden, skal du acceptere de nedenstående betengelser:
+gui.screen.welcome.i_accept.read=Jeg tillader modden at læse fra mine filer.
+gui.screen.welcome.i_accept.write=Jeg tillader modden at skrive til mine filer, og forstår de eventuelle risici.
+
+gui.screen.image_viewer.exit_fullscreen=Klik for at lukke...
+
+gui.json_editor.add_new=Tilføj ny
+gui.json_editor.array_size=Elementer i Arrayen
+gui.json_editor.map_size=Elementer i Mappet
+gui.json_editor.not_enough_space=Der er ikke nok skærmplads til at vise JSON elementerne.\nUdvid dit Minecraft vindue eller skift Gui størrelsen i indstillingerne.
+
+gui.explorer.no_files=Der blev ikke fundet nogle filer...
+gui.explorer.open=Åben
+gui.explorer.refresh=Genindlæs
+gui.explorer.go_up=Gå op
+
+gui.image_viewer.load_failed=Loading Fejlede
+gui.image_viewer.loading=Loader...
+
+gui.text_editor.save=Gem
+gui.text_editor.reload=Genindlæs
