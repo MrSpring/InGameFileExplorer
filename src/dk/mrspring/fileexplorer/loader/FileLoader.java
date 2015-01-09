@@ -19,6 +19,7 @@ public class FileLoader
     public static void addFiles(String path, List<File> fileList, boolean addSubFiles)
     {
         if (LiteModFileExplorer.config.acceptFileReading)
+        {
             try
             {
                 File directory = new File(path);
@@ -37,6 +38,10 @@ public class FileLoader
             {
                 e.printStackTrace();
             }
+        } else
+        {
+            ModLogger.printDebug("Failed to load from folder: " + new File(path).getPath() + ", user has not accepted file reading!");
+        }
     }
 
     public static String readFile(File file)
@@ -88,14 +93,22 @@ public class FileLoader
                 e.printStackTrace();
                 return false;
             }
-        } else return false;
+        } else
+        {
+            ModLogger.printDebug("Failed to write to file: " + file.getPath() + ", user has not accepted file manipulation!");
+            return false;
+        }
     }
 
     public static boolean deleteFile(File file)
     {
         if (LiteModFileExplorer.config.acceptFileManipulation)
             return file.delete();
-        else return false;
+        else
+        {
+            ModLogger.printDebug("Failed to delete file: " + file.getPath() + ", user has not accepted file manipulation!");
+            return false;
+        }
     }
 
     public static Map<String, Object> readJsonFile(File jsonFile)
@@ -121,6 +134,9 @@ public class FileLoader
                 jsonObject = new HashMap<String, Object>();
 
             return jsonObject;
-        } else return null;
+        } else {
+            ModLogger.printDebug("Failed to load JSON from file: " + jsonFile.getPath() + ", user has not accepted file reading!");
+            return null;
+        }
     }
 }

@@ -1,6 +1,7 @@
 package dk.mrspring.fileexplorer.loader;
 
 import dk.mrspring.fileexplorer.LiteModFileExplorer;
+import dk.mrspring.fileexplorer.ModLogger;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL12;
 
@@ -83,6 +84,9 @@ public class ImageLoader
     {
         if (LiteModFileExplorer.config.acceptFileReading)
             return ImageIO.read(file);
-        else return null;
+        else {
+            ModLogger.printDebug("Failed to load image from file: " + file.getPath() + ", user has not accepted file reading!");
+            return null;
+        }
     }
 }
