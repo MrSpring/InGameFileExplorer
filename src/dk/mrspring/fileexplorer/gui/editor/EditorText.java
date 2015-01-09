@@ -1,5 +1,6 @@
 package dk.mrspring.fileexplorer.gui.editor;
 
+import dk.mrspring.fileexplorer.LiteModFileExplorer;
 import dk.mrspring.fileexplorer.gui.GuiMultiLineTextField;
 import dk.mrspring.fileexplorer.gui.GuiSimpleButton;
 import dk.mrspring.fileexplorer.gui.interfaces.IMouseListener;
@@ -27,6 +28,7 @@ public class EditorText extends Editor implements IMouseListener
         textField = new GuiMultiLineTextField(x, y, w, h, FileLoader.readFile(this.file)).hideBackground();
 
         saveButton = new GuiSimpleButton(x - 62, y + h - 15, 50, 20, "gui.text_editor.save");
+        saveButton.setEnabled(LiteModFileExplorer.config.acceptFileManipulation);
         restoreButton = new GuiSimpleButton(x - 62, y + h - 45, 50, 20, "gui.text_editor.reload");
     }
 
