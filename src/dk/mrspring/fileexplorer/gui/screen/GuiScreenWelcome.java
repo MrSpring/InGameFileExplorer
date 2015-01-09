@@ -3,9 +3,9 @@ package dk.mrspring.fileexplorer.gui.screen;
 import dk.mrspring.fileexplorer.LiteModFileExplorer;
 import dk.mrspring.fileexplorer.gui.GuiCheckbox;
 import dk.mrspring.fileexplorer.gui.GuiSimpleButton;
-import dk.mrspring.fileexplorer.gui.interfaces.IGui;
 import dk.mrspring.fileexplorer.gui.helper.Color;
 import dk.mrspring.fileexplorer.gui.helper.DrawingHelper;
+import dk.mrspring.fileexplorer.gui.interfaces.IGui;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.StatCollector;
 import org.apache.commons.io.FileUtils;
@@ -111,11 +111,8 @@ public class GuiScreenWelcome extends GuiScreen
 
             try
             {
-                File file = new File("igfe-terms.txt");
-                if (file.exists())
-                    file.delete();
-
-                FileUtils.copyURLToFile(new URL("http://mrspring.dk/mods/igfe/conditions.txt"), file);
+                File file = new File("igfe-conditions-" + Minecraft.getMinecraft().gameSettings.language + ".txt");
+                FileUtils.copyURLToFile(new URL("http://mrspring.dk/mods/igfe/conditions.php?lang=" + Minecraft.getMinecraft().gameSettings.language), file, 2500, 2500);
                 if (file.exists())
                     this.currentText = FileUtils.readFileToString(file);
             } catch (MalformedURLException e)
