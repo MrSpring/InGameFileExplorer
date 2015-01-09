@@ -39,11 +39,11 @@ public class GuiScreenImageViewer extends GuiScreen
         GL11.glPushMatrix();
         GL11.glScalef(2, 2, 1);
         float fullHeight = 30;
-        float yOffset = 16 - (int) (closeMessageOpacity * fullHeight);
+        int yOffset = 16 - (int) (closeMessageOpacity * fullHeight);
         if (yOffset < 0)
             yOffset = 0;
         DrawingHelper.drawIcon(DrawingHelper.hoverIcon, width / 4 - (mc.fontRendererObj.getStringWidth(StatCollector.translateToLocal("gui.screen.image_viewer.exit_fullscreen")) / 2) - 5, -yOffset, mc.fontRendererObj.getStringWidth(StatCollector.translateToLocal("gui.screen.image_viewer.exit_fullscreen")) + 10, 16, false);
-        DrawingHelper.drawCenteredString(mc.fontRendererObj, (float) width / 4, 4 - yOffset, StatCollector.translateToLocal("gui.screen.image_viewer.exit_fullscreen"), 0xFFFFFF);
+        DrawingHelper.drawCenteredString(mc.fontRendererObj, width / 4, 4 - yOffset, StatCollector.translateToLocal("gui.screen.image_viewer.exit_fullscreen"), 0xFFFFFF);
         GL11.glPopMatrix();
     }
 

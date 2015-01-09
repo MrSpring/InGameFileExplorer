@@ -589,17 +589,17 @@ public class DrawingHelper
         drawQuad(new Quad(x, y, width, height).setColor(color).setAlpha(alpha));
     }
 
-    public static void drawCenteredString(FontRenderer renderer, float x, float y, String s, int color, boolean shadow)
+    public static void drawCenteredString(FontRenderer renderer, int x, int y, String s, int color, boolean shadow)
     {
         renderer.drawString(s, x - (renderer.getStringWidth(s) / 2), y, color, shadow);
     }
 
-    public static void drawCenteredString(FontRenderer renderer, float x, float y, String s, int color)
+    public static void drawCenteredString(FontRenderer renderer, int x, int y, String s, int color)
     {
         drawCenteredString(renderer, x, y, s, color, true);
     }
 
-    public static int drawSplitCenteredString(FontRenderer renderer, float x, float y, String s, int color, int maxLength, boolean shadow)
+    public static int drawSplitCenteredString(FontRenderer renderer, int x, int y, String s, int color, int maxLength, boolean shadow)
     {
         List<String> lines = renderer.listFormattedStringToWidth(s, maxLength);
         for (int i = 0; i < lines.size(); i++)
@@ -610,7 +610,7 @@ public class DrawingHelper
         return lines.size();
     }
 
-    public static int drawSplitCenteredString(FontRenderer renderer, float x, float y, String s, int colot, int maxLength)
+    public static int drawSplitCenteredString(FontRenderer renderer, int x, int y, String s, int colot, int maxLength)
     {
         return drawSplitCenteredString(renderer, x, y, s, colot, maxLength, true);
     }

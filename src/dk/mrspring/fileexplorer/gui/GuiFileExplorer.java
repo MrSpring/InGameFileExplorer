@@ -147,7 +147,7 @@ public class GuiFileExplorer implements IGui, IMouseListener
             if (this.showControls)
                 textMaxLength -= 75;
 
-            float textX = x + textMaxLength / 2, textY = y + 10;
+            int textX = x + textMaxLength / 2, textY = y + 10;
             DrawingHelper.drawSplitCenteredString(minecraft.fontRendererObj, textX, textY, StatCollector.translateToLocal("gui.explorer.no_files"), 0xFFFFFF, textMaxLength);
         }
 
