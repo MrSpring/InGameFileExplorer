@@ -47,9 +47,9 @@ public class EditorJson extends Editor implements IMouseListener
         viewer = new GuiJsonViewer(x, y, w, h, json);
         editor = new GuiJsonEditor(x, y, w, h, json);
 
-        editButton = new GuiSimpleButton(x - 62, y + h - 45, 50, 20, "Edit");
-        saveButton = new GuiSimpleButton(x - 62, y + h - 15, 50, 20, "Save");
-        cancelButton = new GuiSimpleButton(x - 62, y + h - 45, 50, 20, "Cancel");
+        editButton = new GuiSimpleButton(x - 62, y + h - 45, 50, 20, "gui.json_editor.edit");
+        saveButton = new GuiSimpleButton(x - 62, y + h - 15, 50, 20, "gui.json_editor.save");
+        cancelButton = new GuiSimpleButton(x - 62, y + h - 45, 50, 20, "gui.json_editor.cancel");
     }
 
     @Override

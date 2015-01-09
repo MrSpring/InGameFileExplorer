@@ -12,6 +12,9 @@ gui.json_editor.add_new=Tilføj ny
 gui.json_editor.array_size=Elementer i Arrayen
 gui.json_editor.map_size=Elementer i Mappet
 gui.json_editor.not_enough_space=Der er ikke nok skærmplads til at vise JSON elementerne.\nUdvid dit Minecraft vindue eller skift Gui størrelsen i indstillingerne.
+gui.json_editor.edit=Rediger
+gui.json_editor.save=Gem
+gui.json_editor.cancel=Annuller
 
 gui.explorer.no_files=Der blev ikke fundet nogle filer...
 gui.explorer.open=Åben
