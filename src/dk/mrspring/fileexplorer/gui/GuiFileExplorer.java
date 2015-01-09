@@ -179,7 +179,6 @@ public class GuiFileExplorer implements IGui, IMouseListener
         this.newFolder.setX(xPos);
         this.newFolder.setY(y + 50);
         this.newFolder.draw(minecraft, mouseX, mouseY);
-
         this.deleteFile.setX(xPos + 30);
         this.deleteFile.setY(y + 50);
         this.deleteFile.draw(minecraft, mouseX, mouseY);
@@ -192,7 +191,9 @@ public class GuiFileExplorer implements IGui, IMouseListener
     @Override
     public void update()
     {
-
+        if (!LiteModFileExplorer.config.acceptFileManipulation)
+            this.deleteFile.disable();
+        
         int totalHeight = this.guiFiles.size() * 35;
         if (totalHeight < this.h)
             scrollHeight = 0;
@@ -350,6 +351,7 @@ public class GuiFileExplorer implements IGui, IMouseListener
                     this.currentPath = file.toString();
                     this.refreshList();
                     this.openFile.disable();
+                    this.deleteFile.disable();
                     this.scrollHeight = 0;
                 } else
                 {

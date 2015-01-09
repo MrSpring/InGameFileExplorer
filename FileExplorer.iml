@@ -13,7 +13,7 @@
     <orderEntry type="module-library">
       <library>
         <CLASSES>
-          <root url="jar://$MCP_LOC_1710$/jars/libraries/org/lwjgl/lwjgl/lwjgl/2.9.1/lwjgl-2.9.1.jar!/" />
+          <root url="jar://$MCP_LOC_180$/jars/libraries/org/lwjgl/lwjgl/lwjgl/2.9.1/lwjgl-2.9.1.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES>
@@ -24,7 +24,7 @@
     <orderEntry type="module-library">
       <library>
         <CLASSES>
-          <root url="jar://$MCP_LOC_1710$/jars/libraries/com/google/code/gson/gson/2.2.4/gson-2.2.4.jar!/" />
+          <root url="jar://$MCP_LOC_180$/jars/libraries/com/google/code/gson/gson/2.2.4/gson-2.2.4.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES>
@@ -35,7 +35,7 @@
     <orderEntry type="module-library">
       <library>
         <CLASSES>
-          <root url="jar://$MCP_LOC_1710$/jars/libraries/commons-io/commons-io/2.4/commons-io-2.4.jar!/" />
+          <root url="jar://$MCP_LOC_180$/jars/libraries/commons-io/commons-io/2.4/commons-io-2.4.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -44,7 +44,7 @@
     <orderEntry type="module-library">
       <library>
         <CLASSES>
-          <root url="jar://$MCP_LOC_1710$/jars/libraries/org/apache/logging/log4j/log4j-api/2.0-beta9/log4j-api-2.0-beta9.jar!/" />
+          <root url="jar://$MCP_LOC_180$/jars/libraries/org/apache/logging/log4j/log4j-api/2.0-beta9/log4j-api-2.0-beta9.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -53,7 +53,7 @@
     <orderEntry type="module-library">
       <library>
         <CLASSES>
-          <root url="jar://$MCP_LOC_1710$/jars/libraries/org/apache/commons/commons-lang3/3.1/commons-lang3-3.1.jar!/" />
+          <root url="jar://$MCP_LOC_180$/jars/libraries/org/apache/commons/commons-lang3/3.3.2/commons-lang3-3.3.2.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES>
