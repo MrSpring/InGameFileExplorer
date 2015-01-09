@@ -125,9 +125,9 @@ public class GuiCustomTextField implements IGui
                 minecraft.fontRendererObj.drawStringWithShadow(String.valueOf(character), x + 4 + xOffset, textY, 0xFFFFFF);
 
                 if (i + renderStart == cursorPos && focused)
-                    minecraft.fontRendererObj.drawString("|", x + xOffset + 3F, textY, 0xFF0000, false);
+                    minecraft.fontRendererObj.drawString("|", x + xOffset + 3, textY, 0xFF0000, false);
                 else if (i + renderStart + 1 == cursorPos && focused)
-                    minecraft.fontRendererObj.drawString("|", x + xOffset + 3F + minecraft.fontRendererObj.getCharWidth(character), textY, 0xFF0000, false);
+                    minecraft.fontRendererObj.drawString("|", x + xOffset + 3 + minecraft.fontRendererObj.getCharWidth(character), textY, 0xFF0000, false);
 
                 if (i + renderStart == selectionEnd)
                     selectionWidth = xOffset - selectionX + 1;
