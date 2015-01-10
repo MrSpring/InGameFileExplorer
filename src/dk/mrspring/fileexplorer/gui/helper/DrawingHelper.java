@@ -454,6 +454,36 @@ public class DrawingHelper
             };
         }
     };
+    public static IIcon unknownIcon = new IIcon()
+    {
+        @Override
+        public Quad[] getQuads(float x, float y, float w, float h, float alpha)
+        {
+            float tw = w / 10, th = h / 10;
+            float tww = w / 20, twh = h / 20;
+            return new Quad[]{
+                    new Quad(x + 4 * tw + tww, y + 8 * th,
+                            tw, th),
+                    new Quad(x + 4 * tw + tww, y + 5 * th,
+                            tw, 2 * th),
+                    new Quad(x + 5 * tw + tww, y + 4 * th,
+                            tw, th),
+                    new Quad(x + 6 * tw, y + 4 * th - twh,
+                            tw, th),
+                    new Quad(x + 5 * tw, y + 4 * th + twh,
+                            tw, th),
+                    new Quad(x + 6 * tw + tww, y + 2 * th,
+                            tw, 2 * th),
+                    new Quad(x + 6 * tw, y + th + twh,
+                            tw, th),
+                    new Quad(x + 3 * tw + tww, y + th,
+                            3 * tw, th),
+                    new Quad(x + 2 * tw + tww, y + 2 * th,
+                            tw, th),
+                    new Quad(x + 3 * tw, y + 1 * th + twh,
+                            tw, th)};
+        }
+    };
 
     public static void drawVerticalGradient(float x, float y, float w, float h, Color topColor, float topAlpha, Color bottomColor, float bottomAlpha)
     {
@@ -617,13 +647,14 @@ public class DrawingHelper
 
     /**
      * Draw the String wrapped to maxLength and returns the amount of lines the String was wrapped onto.
-     * @param renderer The FontRenderer that will be used to draw the String.
-     * @param x The X coordinate to draw the String at.
-     * @param y The Y coordinate to draw the String at.
-     * @param s The String to draw.
-     * @param color The color of the String. Use 0x(HEXCODE).
+     *
+     * @param renderer  The FontRenderer that will be used to draw the String.
+     * @param x         The X coordinate to draw the String at.
+     * @param y         The Y coordinate to draw the String at.
+     * @param s         The String to draw.
+     * @param color     The color of the String. Use 0x(HEXCODE).
      * @param maxLength The maximum length of each line.
-     * @param shadow Set true for the String to receive a shadow, false not to.
+     * @param shadow    Set true for the String to receive a shadow, false not to.
      * @return Returns how many lines the string has been wrapped to.
      */
     public static int drawSplitString(FontRenderer renderer, int x, int y, String s, int color, int maxLength, boolean shadow)

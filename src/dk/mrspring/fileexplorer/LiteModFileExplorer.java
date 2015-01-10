@@ -201,16 +201,7 @@ public class LiteModFileExplorer implements Tickable
             @Override
             public IIcon getIcon()
             {
-                return new IIcon()
-                {
-                    @Override
-                    public Quad[] getQuads(float x, float y, float w, float h, float alpha)
-                    {
-                        return new Quad[]{
-                                new Quad(x, y, w, h)
-                        };
-                    }
-                };
+                return DrawingHelper.unknownIcon;
             }
         });
 
