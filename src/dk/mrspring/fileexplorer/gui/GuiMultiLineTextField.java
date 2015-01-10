@@ -58,7 +58,7 @@ public class GuiMultiLineTextField implements IGui, IMouseListener
         int xOffset = 0;
         if (lines * 9 > h)
             xOffset += 5;
-        
+
         List<String> lines = renderer.listFormattedStringToWidth(text, w - (padding * 2) - xOffset);
         int lineStartIndexInText = 0;
         for (int i = 0; i < lines.size(); i++)
@@ -92,10 +92,9 @@ public class GuiMultiLineTextField implements IGui, IMouseListener
             DrawingHelper.drawButtonThingy(x, y, w, h, focused ? 1 : 0, true, Color.BLACK, 0.85F, Color.BLACK, 0.85F);
         lines = DrawingHelper.drawSplitString(minecraft.fontRendererObj, x + padding + xOffset, y + padding + yOffset, text, 0xFFFFFF, w - (padding * 2) - xOffset, true);
         String cutLine = line.substring(0, cursorRelativePos);
-        int cursorXOffset = minecraft.fontRendererObj.getStringWidth(cutLine)+xOffset;
+        int cursorXOffset = minecraft.fontRendererObj.getStringWidth(cutLine) + xOffset;
         if (focused && !(flashCount > 10))
-            DrawingHelper.drawQuad(x + cursorXOffset + padding - 1, y + (cursorLine * 9) + padding + yOffset - 1, 1, 9, Color.GREEN, 1F);
-
+            minecraft.fontRendererObj.drawString("|", x + cursorXOffset + padding - 1, y + (cursorLine * 9) + padding + yOffset, 0xFF0000, false);
     }
 
     private void drawScrollBar()

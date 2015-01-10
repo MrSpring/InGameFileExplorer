@@ -27,6 +27,7 @@ public class GuiCustomTextField implements IGui
     int renderStart, renderEnd;
     String text;
     boolean focused;
+    int flashCount = 0;
 
     public GuiCustomTextField(int x, int y, int width, int height, String startText)
     {
@@ -125,9 +126,14 @@ public class GuiCustomTextField implements IGui
                 minecraft.fontRendererObj.drawStringWithShadow(String.valueOf(character), x + 4 + xOffset, textY, 0xFFFFFF);
 
                 if (i + renderStart == cursorPos && focused)
-                    minecraft.fontRendererObj.drawString("|", x + xOffset + 3, textY, 0xFF0000, false);
-                else if (i + renderStart + 1 == cursorPos && focused)
-                    minecraft.fontRendererObj.drawString("|", x + xOffset + 3 + minecraft.fontRendererObj.getCharWidth(character), textY, 0xFF0000, false);
+                {
+                    if (!(flashCount > 10))
+                        minecraft.fontRendererObj.drawString("|", x + xOffset + 3, textY, 0xFF0000, false);
+                } else if (i + renderStart + 1 == cursorPos && focused && !(flashCount > 10))
+                {
+                    if (!(flashCount > 10))
+                        minecraft.fontRendererObj.drawString("|", x + xOffset + 3 + minecraft.fontRendererObj.getCharWidth(character), textY, 0xFF0000, false);
+                }
 
                 if (i + renderStart == selectionEnd)
                     selectionWidth = xOffset - selectionX + 1;
@@ -171,14 +177,19 @@ public class GuiCustomTextField implements IGui
             scrollXEnd += w * renderEndProgressThrough;
 
             DrawingHelper.drawQuad(scrollX, scrollY, scrollXEnd - scrollX, 1, Color.WHITE, 1F);
-            DrawingHelper.drawQuad(scrollX+1, scrollY+1, scrollXEnd - scrollX, 1, Color.DKGREY, 1F);
+            DrawingHelper.drawQuad(scrollX + 1, scrollY + 1, scrollXEnd - scrollX, 1, Color.DKGREY, 1F);
         }
     }
 
     @Override
     public void update()
     {
-
+        if (focused)
+        {
+            flashCount++;
+            if (flashCount > 20)
+                flashCount = 0;
+        }
     }
 
     @Override
@@ -192,6 +203,7 @@ public class GuiCustomTextField implements IGui
             FontRenderer renderer = Minecraft.getMinecraft().fontRendererObj;
             String clicked = renderer.trimStringToWidth(rendering, mouseX - x);
             setCursorPos(this.renderStart + clicked.length(), false);
+            flashCount = 0;
         }
 
         return focused;
@@ -219,6 +231,7 @@ public class GuiCustomTextField implements IGui
                 if (!(Keyboard.isKeyDown(Keyboard.KEY_LSHIFT) || Keyboard.isKeyDown(Keyboard.KEY_RSHIFT)))
                     this.selectionStartPos = newCursorPos;
             } else this.selectionStartPos = newCursorPos;
+            flashCount = 0;
         }
         this.loadRenderLimits(Minecraft.getMinecraft().fontRendererObj);
     }
@@ -266,6 +279,7 @@ public class GuiCustomTextField implements IGui
     public void setText(String text)
     {
         this.text = text;
+        flashCount = 0;
     }
 
     public String getText()

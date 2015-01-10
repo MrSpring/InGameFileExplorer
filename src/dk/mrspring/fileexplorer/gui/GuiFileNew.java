@@ -46,6 +46,7 @@ public class GuiFileNew extends GuiFileBase
         super.update();
         this.createButton.update();
         this.cancelButton.update();
+        this.nameField.update();
     }
 
     @Override
