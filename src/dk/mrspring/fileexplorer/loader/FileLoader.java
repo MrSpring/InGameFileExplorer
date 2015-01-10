@@ -113,30 +113,23 @@ public class FileLoader
 
     public static Map<String, Object> readJsonFile(File jsonFile)
     {
-        if (LiteModFileExplorer.config.acceptFileReading)
+        String fromFile = readFile(jsonFile);
+        Map<String, Object> jsonObject = new HashMap<String, Object>();
+        if (!fromFile.equals(""))
         {
-            Map<String, Object> jsonObject = null;
-
             try
             {
-                FileReader reader = new FileReader(jsonFile);
                 Gson gson = new Gson();
                 Type stringStringMap = new TypeToken<Map<String, Object>>()
                 {
                 }.getType();
-                jsonObject = gson.fromJson(reader, stringStringMap);
-            } catch (FileNotFoundException e)
+                jsonObject = gson.fromJson(fromFile, stringStringMap);
+            } catch (Exception e)
             {
+                ModLogger.printDebug("Failed reading from JSON file: " + jsonFile.getPath());
                 e.printStackTrace();
             }
-
-            if (jsonObject == null)
-                jsonObject = new HashMap<String, Object>();
-
-            return jsonObject;
-        } else {
-            ModLogger.printDebug("Failed to load JSON from file: " + jsonFile.getPath() + ", user has not accepted file reading!");
-            return null;
         }
+        return jsonObject;
     }
 }
