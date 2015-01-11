@@ -26,7 +26,7 @@ public class GuiCustomTextField implements IGui
     int selectionStartPos = 0;
     int renderStart, renderEnd;
     String text;
-    boolean focused;
+    boolean focused, enabled = true;
     int flashCount = 0;
 
     public GuiCustomTextField(int x, int y, int width, int height, String startText)
@@ -40,6 +40,17 @@ public class GuiCustomTextField implements IGui
         renderEnd = Minecraft.getMinecraft().fontRendererObj.trimStringToWidth(text, w - 8).length();
     }
 
+    public GuiCustomTextField setEnabled(boolean isEnabled)
+    {
+        this.enabled = isEnabled;
+        return this;
+    }
+
+    public boolean isEnabled()
+    {
+        return enabled;
+    }
+
     private int getRelativeCursorPos(FontRenderer renderer)
     {
         return renderer.getStringWidth(text.substring(renderStart, cursorPos));
@@ -51,7 +62,7 @@ public class GuiCustomTextField implements IGui
         {
             int relativeCursorPos = getRelativeCursorPos(renderer);
             int minRender = 15;
-            int maxRender = w - 20;/*Math.min(w - 23, renderer.getStringWidth(text.substring(renderStart)));*/
+            int maxRender = w - 20;
             if (relativeCursorPos < minRender && renderStart > 0)
                 while (relativeCursorPos < minRender && renderStart > 0)
                 {
@@ -65,7 +76,6 @@ public class GuiCustomTextField implements IGui
                     renderStart++;
                     this.loadRenderEnd(renderer);
                     relativeCursorPos = getRelativeCursorPos(renderer);
-                    /*maxRender = Math.min(w - 23, renderer.getStringWidth(text.substring(renderStart)));*/
                 }
 
             this.loadRenderEnd(renderer);
@@ -91,7 +101,7 @@ public class GuiCustomTextField implements IGui
     @Override
     public void draw(Minecraft minecraft, int mouseX, int mouseY)
     {
-        DrawingHelper.drawButtonThingy(x, y, w, h, focused ? 1 : 0, true, Color.BLACK, 0.85F, Color.BLACK, 0.85F);
+        DrawingHelper.drawButtonThingy(x, y, w, h, focused || !isEnabled() ? 1 : 0, isEnabled(), Color.BLACK, 0.85F, Color.BLACK, 0.85F);
 
         if (renderEnd > text.length() || renderStart < 0)
             this.loadRenderLimits(minecraft.fontRendererObj);
@@ -123,13 +133,13 @@ public class GuiCustomTextField implements IGui
 
                 char character = characters[i];
 
-                minecraft.fontRendererObj.drawStringWithShadow(String.valueOf(character), x + 4 + xOffset, textY, 0xFFFFFF);
+                minecraft.fontRendererObj.drawStringWithShadow(String.valueOf(character), x + 4 + xOffset, textY, isEnabled() ? 0xFFFFFF : 0xCCCCCC);
 
-                if (i + renderStart == cursorPos && focused)
+                if (i + renderStart == cursorPos && focused && isEnabled())
                 {
                     if (!(flashCount > 10))
                         minecraft.fontRendererObj.drawString("|", x + xOffset + 3, textY, 0xFF0000, false);
-                } else if (i + renderStart + 1 == cursorPos && focused && !(flashCount > 10))
+                } else if (i + renderStart + 1 == cursorPos && focused && isEnabled() && !(flashCount > 10))
                 {
                     if (!(flashCount > 10))
                         minecraft.fontRendererObj.drawString("|", x + xOffset + 3 + minecraft.fontRendererObj.getCharWidth(character), textY, 0xFF0000, false);
@@ -184,7 +194,7 @@ public class GuiCustomTextField implements IGui
     @Override
     public void update()
     {
-        if (focused)
+        if (focused && isEnabled())
         {
             flashCount++;
             if (flashCount > 20)
@@ -197,7 +207,7 @@ public class GuiCustomTextField implements IGui
     {
         focused = GuiHelper.isMouseInBounds(mouseX, mouseY, x, y, w, h);
 
-        if (focused)
+        if (focused && isEnabled())
         {
             String rendering = text.substring(renderStart, renderEnd);
             FontRenderer renderer = Minecraft.getMinecraft().fontRendererObj;
@@ -239,7 +249,7 @@ public class GuiCustomTextField implements IGui
     @Override
     public void handleKeyTyped(int keyCode, char character)
     {
-        if (focused)
+        if (focused && isEnabled())
             if (keyCode == Keyboard.KEY_RIGHT)
             {
                 this.setCursorPos(this.cursorPos + 1, true);
