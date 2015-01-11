@@ -633,10 +633,10 @@ public class DrawingHelper
     {
         int localY = y;
         List<String> lines = renderer.listFormattedStringToWidth(s, maxLength);
-        
+
         if (verticalCenter)
             localY -= ((lines.size() * 9) / 2);
-        
+
         for (int i = 0; i < lines.size(); i++)
         {
             String line = lines.get(i);
@@ -658,6 +658,11 @@ public class DrawingHelper
     public static int drawSplitCenteredString(FontRenderer renderer, int x, int y, String s, int color, int maxLength)
     {
         return drawSplitCenteredString(renderer, x, y, s, color, maxLength, true);
+    }
+
+    public static int drawSplitString(FontRenderer renderer, int x, int y, String s, int color, int maxLength)
+    {
+        return drawSplitString(renderer, x, y, s, color, maxLength, true);
     }
 
     /**
