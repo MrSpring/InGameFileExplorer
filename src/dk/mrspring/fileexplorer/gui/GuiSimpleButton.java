@@ -16,7 +16,7 @@ public class GuiSimpleButton implements IGui
     String text;
     IIcon icon;
 
-    boolean wasMouseHoveringLastFrame = false, isEnabled = true, highlight = false, drawBackground = true;
+    boolean wasMouseHoveringLastFrame = false, isEnabled = true, highlight = false, drawBackground = true, autoHeight = false;
     int alphaProgress = 0;
     int alphaTarget = 0;
 
@@ -29,6 +29,12 @@ public class GuiSimpleButton implements IGui
         this.height = height;
 
         this.text = message;
+    }
+
+    public GuiSimpleButton setAutoHeight(boolean auto)
+    {
+        this.autoHeight = auto;
+        return this;
     }
 
     public GuiSimpleButton setIcon(IIcon icon)
@@ -90,9 +96,12 @@ public class GuiSimpleButton implements IGui
             DrawingHelper.drawIcon(this.getIcon(), x + 2, y + 2, width - 4, height - 4, false);
 
         String translatedText = StatCollector.translateToLocal(this.text);
-                
-        int textY = (this.height / 2 - 4) + y, textX = (this.width / 2 - (minecraft.fontRendererObj.getStringWidth(translatedText) / 2)) + x;
-        minecraft.fontRendererObj.drawStringWithShadow(translatedText, textX, textY, textColor);
+
+        int textY = (this.height / 2) + y, textX = (this.width / 2) + x;
+//        minecraft.fontRendererObj.drawStringWithShadow(translatedText, textX, textY, textColor);
+        int lines = DrawingHelper.drawSplitCenteredString(minecraft.fontRendererObj, textX, textY, translatedText, textColor, true, width - 6, true);
+        if (autoHeight)
+            this.setHeight(lines * 9 + 6);
     }
 
     public GuiSimpleButton hideBackground()

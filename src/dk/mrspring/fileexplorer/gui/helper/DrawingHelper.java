@@ -629,20 +629,35 @@ public class DrawingHelper
         drawCenteredString(renderer, x, y, s, color, true);
     }
 
-    public static int drawSplitCenteredString(FontRenderer renderer, int x, int y, String s, int color, int maxLength, boolean shadow)
+    public static int drawSplitCenteredString(FontRenderer renderer, int x, int y, String s, int color, boolean verticalCenter, int maxLength, boolean shadow)
     {
+        int localY = y;
         List<String> lines = renderer.listFormattedStringToWidth(s, maxLength);
+        
+        if (verticalCenter)
+            localY -= ((lines.size() * 9) / 2);
+        
         for (int i = 0; i < lines.size(); i++)
         {
             String line = lines.get(i);
-            drawCenteredString(renderer, x, y + (i * 9), line, color, shadow);
+            drawCenteredString(renderer, x, localY + (i * 9), line, color, shadow);
         }
         return lines.size();
     }
 
-    public static int drawSplitCenteredString(FontRenderer renderer, int x, int y, String s, int colot, int maxLength)
+    public static int drawSplitCenteredString(FontRenderer renderer, int x, int y, String s, int color, int maxLength, boolean shadow)
     {
-        return drawSplitCenteredString(renderer, x, y, s, colot, maxLength, true);
+        return drawSplitCenteredString(renderer, x, y, s, color, false, maxLength, shadow);
+    }
+
+    public static int drawSplitCenteredString(FontRenderer renderer, int x, int y, String s, int color, boolean verticalCenter, int maxLength)
+    {
+        return drawSplitCenteredString(renderer, x, y, s, color, verticalCenter, maxLength, true);
+    }
+
+    public static int drawSplitCenteredString(FontRenderer renderer, int x, int y, String s, int color, int maxLength)
+    {
+        return drawSplitCenteredString(renderer, x, y, s, color, maxLength, true);
     }
 
     /**
