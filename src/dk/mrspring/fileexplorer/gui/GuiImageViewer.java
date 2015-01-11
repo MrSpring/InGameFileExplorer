@@ -6,7 +6,6 @@ import dk.mrspring.fileexplorer.gui.screen.GuiScreenImageViewer;
 import dk.mrspring.fileexplorer.loader.ImageLoader;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.StatCollector;
-import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
 import java.awt.image.BufferedImage;
@@ -129,7 +128,9 @@ public class GuiImageViewer implements IGui//, IDelayedDraw
     {
         if (textureId != -1 && !failed)
         {
-            glBindTexture(GL11.GL_TEXTURE_2D, textureId);
+            glPushMatrix();
+
+            glBindTexture(GL_TEXTURE_2D, textureId);
             float imageWidth = image.getWidth(), imageHeight = image.getHeight();
             float width = w;
             float height = width * (imageHeight / imageWidth);
@@ -142,6 +143,8 @@ public class GuiImageViewer implements IGui//, IDelayedDraw
             if (center)
                 DrawingHelper.drawTexturedRect(x + ((w - width) / 2), y + ((h - height) / 2), width, height, 0, 0, 512, 512, 1F);
             else DrawingHelper.drawTexturedRect(x, y, width, height, 0, 0, 512, 512, 1F);
+
+            glPopMatrix();
             if (showFullscreenButton)
             {
                 fullscreenButton.setX(x + (int) width - 20);
@@ -155,7 +158,8 @@ public class GuiImageViewer implements IGui//, IDelayedDraw
                 this.setImage(image, buffer);
             if (failed)
                 minecraft.fontRendererObj.drawString(StatCollector.translateToLocal("gui.image_viewer.load_failed"), x + 10, y + 10, 0xFF0000);
-            else minecraft.fontRendererObj.drawString(StatCollector.translateToLocal("gui.image_viewer.loading"), x + 10, y + 10, 0x0000FF);
+            else
+                minecraft.fontRendererObj.drawString(StatCollector.translateToLocal("gui.image_viewer.loading"), x + 10, y + 10, 0x0000FF);
         }
     }
 
@@ -221,5 +225,20 @@ public class GuiImageViewer implements IGui//, IDelayedDraw
     public int getY()
     {
         return y;
+    }
+
+    public int getX()
+    {
+        return x;
+    }
+
+    public int getHeight()
+    {
+        return h;
+    }
+
+    public int getWidth()
+    {
+        return w;
     }
 }
