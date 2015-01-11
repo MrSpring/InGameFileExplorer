@@ -1,3 +1,10 @@
+gui.config_panel.file_explorer.title=In-Game File Explorer Configuration
+gui.config_panel.file_explorer.start_folder=Start Folder
+gui.config_panel.file_explorer.take_backup=Take Automatic Backup
+gui.config_panel.file_explorer.backup_folder=Backup Folder
+gui.config_panel.file_explorer.clean_backup=Clean Backup Folder
+gui.config_panel.file_explorer.clean_backup_warning=§4WARNING!§r This cannot be undone!
+
 gui.screen.example_page.name=Example Page
 gui.screen.example_page.description=Play around with some cool Gui features!
 

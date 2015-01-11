@@ -2,8 +2,11 @@ package dk.mrspring.fileexplorer;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.mumfrey.liteloader.Configurable;
 import com.mumfrey.liteloader.Tickable;
 import com.mumfrey.liteloader.core.LiteLoader;
+import com.mumfrey.liteloader.modconfig.ConfigPanel;
+import dk.mrspring.fileexplorer.backup.BackupManager;
 import dk.mrspring.fileexplorer.gui.editor.*;
 import dk.mrspring.fileexplorer.gui.helper.DrawingHelper;
 import dk.mrspring.fileexplorer.gui.helper.IIcon;
@@ -22,7 +25,7 @@ import java.util.Map;
 /**
  * Created by MrSpring on 09-11-2014 for In-Game File Explorer.
  */
-public class LiteModFileExplorer implements Tickable
+public class LiteModFileExplorer implements Tickable, Configurable
 {
     public static KeyBinding openExampleGui = new KeyBinding("key.file_explorer.open_gui", Keyboard.KEY_F, "key.categories.litemods");
     public static KeyBinding openFileExplorer = new KeyBinding("key.file_explorer.open_explorer", Keyboard.KEY_G, "key.categories.litemods");
@@ -31,6 +34,8 @@ public class LiteModFileExplorer implements Tickable
 
     public static Config config;
     public static File configFile;
+
+    public static BackupManager backupManager;
 
     public static BufferedImage image;
 
@@ -84,6 +89,29 @@ public class LiteModFileExplorer implements Tickable
         }
     }
 
+    public static void saveBackupList()
+    {
+        try
+        {
+            File backupListFile = new File(config.backupLocation + "/backup_index.json");
+            if (!backupListFile.exists())
+                backupListFile.createNewFile();
+            GsonBuilder gsonBuilder = new GsonBuilder();
+            if (config.json_usePrettyPrinting)
+                gsonBuilder.setPrettyPrinting();
+            Gson gson = gsonBuilder.create();
+            String jsonCode = gson.toJson(backupManager);
+            FileWriter fileWriter = new FileWriter(backupListFile);
+            BufferedWriter writer = new BufferedWriter(fileWriter);
+            writer.write(jsonCode);
+            writer.close();
+            fileWriter.close();
+        } catch (IOException e)
+        {
+            e.printStackTrace();
+        }
+    }
+
     @Override
     public String getVersion()
     {
@@ -122,6 +150,27 @@ public class LiteModFileExplorer implements Tickable
             e.printStackTrace();
             if (config == null)
                 config = new Config();
+        }
+
+        try
+        {
+            File backupListFile = new File(config.backupLocation + "/backup_index.json");
+            if (backupListFile.exists())
+            {
+                Gson gson = new Gson();
+                FileReader reader = new FileReader(backupListFile);
+                backupManager = gson.fromJson(reader, BackupManager.class);
+                saveBackupList();
+            } else
+            {
+                backupManager = new BackupManager();
+                saveBackupList();
+            }
+        } catch (Exception e)
+        {
+            e.printStackTrace();
+            if (backupManager == null)
+                backupManager = new BackupManager();
         }
 
         FileLoader.takeBackup(configFile, new File(config.backupLocation));
@@ -275,5 +324,11 @@ public class LiteModFileExplorer implements Tickable
     public String getName()
     {
         return "In-Game File Explorer";
+    }
+
+    @Override
+    public Class<? extends ConfigPanel> getConfigPanelClass()
+    {
+        return FileExplorerConfigPanel.class;
     }
 }
