@@ -4,9 +4,13 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import dk.mrspring.fileexplorer.LiteModFileExplorer;
 import dk.mrspring.fileexplorer.ModLogger;
+import org.apache.commons.io.FileUtils;
 
 import java.io.*;
 import java.lang.reflect.Type;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -82,6 +86,7 @@ public class FileLoader
     {
         if (LiteModFileExplorer.config.acceptFileManipulation)
         {
+            takeBackup(file);
             try
             {
                 FileWriter writer = new FileWriter(file);
@@ -103,8 +108,10 @@ public class FileLoader
     public static boolean deleteFile(File file)
     {
         if (LiteModFileExplorer.config.acceptFileManipulation)
+        {
+            takeBackup(file);
             return file.delete();
-        else
+        } else
         {
             ModLogger.printDebug("Failed to delete file: " + file.getPath() + ", user has not accepted file manipulation!");
             return false;
@@ -131,5 +138,30 @@ public class FileLoader
             }
         }
         return jsonObject;
+    }
+
+    public static void takeBackup(File toBackup)
+    {
+        takeBackup(toBackup, new File(LiteModFileExplorer.config.backupLocation));
+    }
+
+    public static void takeBackup(File toBackup, File backupDesination)
+    {
+        System.out.println("toBackup.getPath() = " + toBackup.getPath());
+        System.out.println("backupDesination.getPath() = " + backupDesination.getPath());
+
+        backupDesination.mkdirs();
+        DateFormat format = new SimpleDateFormat();
+        Date currentDate = new Date();
+        File backupDestFile = new File(backupDesination.getPath() + "/" + toBackup.getName().replace(".", "-") + "-" + format.format(currentDate).replace(" ", "-").replace(":", "-") + ".backup").getAbsoluteFile();
+        System.out.println("backupDestFile.getPath() = " + backupDestFile.getPath());
+        try
+        {
+            backupDestFile.createNewFile();
+            FileUtils.copyFile(toBackup, backupDestFile);
+        } catch (IOException e)
+        {
+            e.printStackTrace();
+        }
     }
 }

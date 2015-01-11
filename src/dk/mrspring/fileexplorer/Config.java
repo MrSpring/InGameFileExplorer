@@ -10,6 +10,8 @@ public class Config
     public boolean acceptFileManipulation = false;
     public boolean acceptFileReading = false;
     public boolean printDebug = true;
+    public boolean automaticBackup = true;
+    public String backupLocation = "igfe-backup";
 
     public boolean json_usePrettyPrinting = true;
     public boolean json_allowArrayCollapsing = true;

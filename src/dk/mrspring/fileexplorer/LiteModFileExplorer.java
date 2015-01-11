@@ -7,8 +7,8 @@ import com.mumfrey.liteloader.core.LiteLoader;
 import dk.mrspring.fileexplorer.gui.editor.*;
 import dk.mrspring.fileexplorer.gui.helper.DrawingHelper;
 import dk.mrspring.fileexplorer.gui.helper.IIcon;
-import dk.mrspring.fileexplorer.gui.helper.Quad;
 import dk.mrspring.fileexplorer.gui.screen.*;
+import dk.mrspring.fileexplorer.loader.FileLoader;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.settings.KeyBinding;
 import org.apache.logging.log4j.LogManager;
@@ -123,6 +123,8 @@ public class LiteModFileExplorer implements Tickable
             if (config == null)
                 config = new Config();
         }
+
+        FileLoader.takeBackup(configFile, new File(config.backupLocation));
 
         supportedFileTypes = new HashMap<String, FileType>();
 
