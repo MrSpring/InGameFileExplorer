@@ -45,7 +45,7 @@ public class LiteModFileExplorer implements Tickable, Configurable
     public void onTick(Minecraft minecraft, float partialTicks, boolean inGame, boolean clock)
     {
         if (openExampleGui.isPressed())
-            minecraft.displayGuiScreen(new GuiScreenExamplePage(minecraft.currentScreen));
+            minecraft.displayGuiScreen(new GuiScreenBackupManager("Backup Manager", minecraft.currentScreen));
         if (openFileExplorer.isPressed())
         {
             if (config.showWelcomeScreen)
@@ -112,6 +112,32 @@ public class LiteModFileExplorer implements Tickable, Configurable
         }
     }
 
+    public static void loadBackupList()
+    {
+        try
+        {
+            File backupListFile = new File(config.backupLocation + "/backup_index.json");
+            if (backupListFile.exists())
+            {
+                Gson gson = new Gson();
+                FileReader reader = new FileReader(backupListFile);
+                backupManager = gson.fromJson(reader, BackupManager.class);
+                saveBackupList();
+            } else
+            {
+                new File(config.backupLocation).mkdirs();
+                backupListFile.createNewFile();
+                backupManager = new BackupManager();
+                saveBackupList();
+            }
+        } catch (Exception e)
+        {
+            e.printStackTrace();
+            if (backupManager == null)
+                backupManager = new BackupManager();
+        }
+    }
+
     @Override
     public String getVersion()
     {
@@ -152,28 +178,10 @@ public class LiteModFileExplorer implements Tickable, Configurable
                 config = new Config();
         }
 
-        try
-        {
-            File backupListFile = new File(config.backupLocation + "/backup_index.json");
-            if (backupListFile.exists())
-            {
-                Gson gson = new Gson();
-                FileReader reader = new FileReader(backupListFile);
-                backupManager = gson.fromJson(reader, BackupManager.class);
-                saveBackupList();
-            } else
-            {
-                backupManager = new BackupManager();
-                saveBackupList();
-            }
-        } catch (Exception e)
-        {
-            e.printStackTrace();
-            if (backupManager == null)
-                backupManager = new BackupManager();
-        }
+        loadBackupList();
 
-        FileLoader.takeBackup(configFile, new File(config.backupLocation));
+//        FileLoader.takeBackup(configFile);
+//        FileLoader.takeBackup(new File("crash-reports"));
 
         supportedFileTypes = new HashMap<String, FileType>();
 

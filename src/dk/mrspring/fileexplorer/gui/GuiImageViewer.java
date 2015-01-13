@@ -28,8 +28,11 @@ public class GuiImageViewer implements IGui//, IDelayedDraw
     boolean failed = false;
     boolean showFullscreenButton = false;
     boolean center = false;
+    boolean showBorder = false;
     GuiSimpleButton fullscreenButton;
     int loadTime = 0, timeOut = 300;
+    String caption;
+    int captionLines = 0, captionExtraHeight = 0;
 
     public GuiImageViewer(final File file, int xPos, int yPos, int width, int height)
     {
@@ -38,7 +41,7 @@ public class GuiImageViewer implements IGui//, IDelayedDraw
         y = yPos;
         w = width;
         h = height;
-        fullscreenButton = new GuiSimpleButton(x, y, 20, 20, "");
+        fullscreenButton = new GuiSimpleButton(x, y, 20, 20, "").setIcon(DrawingHelper.fullscreenIcon);
 
         Thread thread = new Thread(new Runnable()
         {
@@ -59,16 +62,13 @@ public class GuiImageViewer implements IGui//, IDelayedDraw
         });
 
         thread.start();
+    }
 
-        /*try
-        {
-            image = ImageLoader.loadImage(file);
-        } catch (IOException e)
-        {
-            e.printStackTrace();
-        }
-        this.setImage(image);*/
-        //textureId=ImageLoader.loadTexture(this.image);
+    public GuiImageViewer setCaption(String caption)
+    {
+        this.caption = caption;
+        showBorder = true;
+        return this;
     }
 
     public GuiImageViewer centerImage()
@@ -130,27 +130,39 @@ public class GuiImageViewer implements IGui//, IDelayedDraw
         {
             glPushMatrix();
 
-            glBindTexture(GL_TEXTURE_2D, textureId);
-            float imageWidth = image.getWidth(), imageHeight = image.getHeight();
-            float width = w;
-            float height = width * (imageHeight / imageWidth);
+            float[] imageSize = getImageSize();
+            float imageX = x, imageY = y, imageWidth = imageSize[0], imageHeight = imageSize[1];
 
-            if (height > h)
-            {
-                height = h;
-                width = height * (imageWidth / imageHeight);
-            }
             if (center)
-                DrawingHelper.drawTexturedRect(x + ((w - width) / 2), y + ((h - height) / 2), width, height, 0, 0, 512, 512, 1F);
-            else DrawingHelper.drawTexturedRect(x, y, width, height, 0, 0, 512, 512, 1F);
+            {
+                imageX += ((w - imageWidth) / 2);
+                imageY += ((h - imageHeight) / 2);
+            }
 
+            if (showBorder)
+            {
+                DrawingHelper.drawIcon(DrawingHelper.hoverIcon, imageX, imageY, imageWidth, imageHeight + captionLines * 9 + captionExtraHeight, false);
+                imageX += 3;
+                imageY += 3;
+                imageWidth -= 6;
+                imageHeight -= 6;
+            }
+
+            if (!caption.equals(""))
+            {
+                captionLines = DrawingHelper.drawSplitCenteredString(minecraft.fontRendererObj, (int) imageX + (int) (imageWidth / 2), (int) imageY + (int) imageHeight, this.caption, 0xFFFFFF, (int) imageWidth, true);
+                captionExtraHeight = 4;
+            }
+
+            glBindTexture(GL_TEXTURE_2D, textureId);
+            DrawingHelper.drawTexturedRect(imageX, imageY, imageWidth, imageHeight, 0, 0, 512, 512, 1F);
             glPopMatrix();
             if (showFullscreenButton)
             {
-                fullscreenButton.setX(x + (int) width - 20);
-                fullscreenButton.setY(y + (int) height - 20);
+                fullscreenButton.setX(x + (int) imageWidth - 20);
+                fullscreenButton.setY(y + (int) imageHeight - 20);
                 fullscreenButton.draw(minecraft, mouseX, mouseY);
-                DrawingHelper.drawIcon(DrawingHelper.fullscreenIcon, x + (int) width - 19, y + (int) height - 19, 18, 18, false);
+//                DrawingHelper.drawIcon(DrawingHelper.fullscreenIcon, x + (int) imageWidth - 19, y + (int) imageSize[1] - 19, 18, 18, false);
             }
         } else
         {
@@ -240,5 +252,23 @@ public class GuiImageViewer implements IGui//, IDelayedDraw
     public int getWidth()
     {
         return w;
+    }
+
+    public float[] getImageSize()
+    {
+        if (image != null)
+        {
+            float imageWidth = image.getWidth(), imageHeight = image.getHeight();
+            float width = w;
+            float height = width * (imageHeight / imageWidth);
+
+            if (height > h)
+            {
+                height = h;
+                width = height * (imageWidth / imageHeight);
+            }
+
+            return new float[]{width, height};
+        } else return new float[]{1, 1};
     }
 }
