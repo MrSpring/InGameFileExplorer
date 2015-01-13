@@ -1,5 +1,6 @@
 package dk.mrspring.fileexplorer.gui;
 
+import com.mumfrey.liteloader.gl.GLClippingPlanes;
 import dk.mrspring.fileexplorer.gui.helper.Color;
 import dk.mrspring.fileexplorer.gui.helper.DrawingHelper;
 import dk.mrspring.fileexplorer.gui.helper.GuiHelper;
@@ -53,6 +54,13 @@ public class GuiMultiLineTextField implements IGui, IMouseListener
         return this;
     }
 
+    public GuiMultiLineTextField showBackground()
+    {
+        drawBackground = true;
+        padding = 4;
+        return this;
+    }
+
     private void loadCursorPosition(FontRenderer renderer)
     {
         int xOffset = 0;
@@ -83,28 +91,34 @@ public class GuiMultiLineTextField implements IGui, IMouseListener
     {
         int xOffset = 0, yOffset = -scrollHeight;
         if (lines * 9 > h)
-        {
-            this.drawScrollBar();
             xOffset += 5;
-        }
-
+        
         if (drawBackground)
             DrawingHelper.drawButtonThingy(x, y, w, h, focused ? 1 : 0, true, Color.BLACK, 0.85F, Color.BLACK, 0.85F);
+        
+        GLClippingPlanes.glEnableClipping(x, x + w, y + padding, y + h - padding);
+        
         lines = DrawingHelper.drawSplitString(minecraft.fontRendererObj, x + padding + xOffset, y + padding + yOffset, text, 0xFFFFFF, w - (padding * 2) - xOffset, true);
         String cutLine = line.substring(0, cursorRelativePos);
         int cursorXOffset = minecraft.fontRendererObj.getStringWidth(cutLine) + xOffset;
+        
         if (focused && !(flashCount > 10))
             minecraft.fontRendererObj.drawString("|", x + cursorXOffset + padding - 1, y + (cursorLine * 9) + padding + yOffset, 0xFF0000, false);
+
+        if (lines * 9 > h)
+            this.drawScrollBar();
+
+        GLClippingPlanes.glDisableClipping();
     }
 
     private void drawScrollBar()
     {
-        float scrollBarYRange = (h - 40);
+        float scrollBarYRange = (h - 40 - (padding * 2));
         float maxScrollHeight = getMaxScrollHeight();
         float scrollProgress = (float) this.scrollHeight / maxScrollHeight;
-        float scrollBarY = scrollBarYRange * scrollProgress;
-        DrawingHelper.drawQuad(x, y + scrollBarY + 1, 2, 40, Color.DKGREY, 1F);
-        DrawingHelper.drawQuad(x - 1, y + scrollBarY, 2, 40, Color.WHITE, 1F);
+        float scrollBarY = scrollBarYRange * scrollProgress + padding;
+        DrawingHelper.drawQuad(x + padding, y + scrollBarY + 1, 2, 40, Color.DKGREY, 1F);
+        DrawingHelper.drawQuad(x + padding - 1, y + scrollBarY, 2, 40, Color.WHITE, 1F);
     }
 
     @Override

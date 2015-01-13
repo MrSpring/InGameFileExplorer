@@ -39,6 +39,15 @@ public class GuiScreenBackupManager extends GuiScreen
     }
 
     @Override
+    public void guiClicked(String identifier, IGui gui, int mouseX, int mouseY, int mouseButton)
+    {
+        if (identifier.equals("done"))
+        {
+            mc.displayGuiScreen(this.previousScreen);
+        } else super.guiClicked(identifier, gui, mouseX, mouseY, mouseButton);
+    }
+
+    @Override
     public boolean drawGui(String identifier, IGui gui)
     {
         return super.drawGui(identifier, gui);
