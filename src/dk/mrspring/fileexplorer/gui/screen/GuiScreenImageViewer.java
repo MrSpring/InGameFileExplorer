@@ -1,8 +1,8 @@
 package dk.mrspring.fileexplorer.gui.screen;
 
 import dk.mrspring.fileexplorer.gui.GuiImageViewer;
-import dk.mrspring.fileexplorer.gui.helper.Color;
-import dk.mrspring.fileexplorer.gui.helper.DrawingHelper;
+import dk.mrspring.fileexplorer.helper.Color;
+import dk.mrspring.fileexplorer.helper.DrawingHelper;
 import net.minecraft.util.StatCollector;
 import org.lwjgl.opengl.GL11;
 

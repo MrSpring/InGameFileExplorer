@@ -1,7 +1,7 @@
 package dk.mrspring.fileexplorer.gui.editor;
 
-import dk.mrspring.fileexplorer.gui.helper.DrawingHelper;
-import dk.mrspring.fileexplorer.gui.helper.IIcon;
+import dk.mrspring.fileexplorer.helper.DrawingHelper;
+import dk.mrspring.fileexplorer.helper.IIcon;
 
 import java.util.Arrays;
 

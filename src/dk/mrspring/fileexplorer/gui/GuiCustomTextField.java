@@ -1,9 +1,9 @@
 package dk.mrspring.fileexplorer.gui;
 
-import dk.mrspring.fileexplorer.gui.helper.Color;
-import dk.mrspring.fileexplorer.gui.helper.DrawingHelper;
-import dk.mrspring.fileexplorer.gui.helper.GuiHelper;
-import dk.mrspring.fileexplorer.gui.helper.TextHelper;
+import dk.mrspring.fileexplorer.helper.Color;
+import dk.mrspring.fileexplorer.helper.DrawingHelper;
+import dk.mrspring.fileexplorer.helper.GuiHelper;
+import dk.mrspring.fileexplorer.helper.TextHelper;
 import dk.mrspring.fileexplorer.gui.interfaces.IGui;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
@@ -19,7 +19,7 @@ import java.io.IOException;
 /**
  * Created by MrSpring on 14-11-2014 for In-Game File Explorer.
  */
-public class GuiCustomTextField implements IGui
+public class GuiCustomTextField implements IGui // TODO: Rewrite using ClippingPlanes
 {
     int x, y, w, h;
     int cursorPos = 0;

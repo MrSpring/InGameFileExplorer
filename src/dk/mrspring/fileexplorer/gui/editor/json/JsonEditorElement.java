@@ -1,7 +1,7 @@
 package dk.mrspring.fileexplorer.gui.editor.json;
 
 import dk.mrspring.fileexplorer.gui.GuiSimpleButton;
-import dk.mrspring.fileexplorer.gui.helper.DrawingHelper;
+import dk.mrspring.fileexplorer.helper.DrawingHelper;
 
 /**
  * Created by MrSpring on 30-12-2014 for In-Game File Explorer.

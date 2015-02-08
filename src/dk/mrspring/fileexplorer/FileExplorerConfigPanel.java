@@ -91,14 +91,7 @@ public class FileExplorerConfigPanel implements ConfigPanel
         this.backupPositionField.mouseDown(mouseX, mouseY, mouseButton);
         if (this.cleanBackup.mouseDown(mouseX, mouseY, mouseButton))
         {
-            try
-            {
-                FileUtils.deleteDirectory(new File(LiteModFileExplorer.config.backupLocation));
-            } catch (IOException e)
-            {
-                e.printStackTrace();
-            }
-            LiteModFileExplorer.loadBackupList();
+            LiteModFileExplorer.resetBackupList();
         }
     }
 

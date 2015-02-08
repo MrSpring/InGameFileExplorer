@@ -3,8 +3,9 @@ package dk.mrspring.fileexplorer.gui.screen;
 import dk.mrspring.fileexplorer.LiteModFileExplorer;
 import dk.mrspring.fileexplorer.backup.BackupEntry;
 import dk.mrspring.fileexplorer.gui.GuiSimpleButton;
-import dk.mrspring.fileexplorer.gui.helper.DrawingHelper;
 import dk.mrspring.fileexplorer.gui.interfaces.IGui;
+import dk.mrspring.fileexplorer.helper.DrawingHelper;
+import dk.mrspring.fileexplorer.loader.FileLoader;
 import net.minecraft.client.Minecraft;
 
 import java.util.ArrayList;
@@ -95,7 +96,11 @@ public class GuiScreenBackupManager extends GuiScreen
             for (GuiBackupEntry entry : backupEntries)
             {
                 if (entry.mouseDown(mouseX, mouseY, mouseButton))
-                    LiteModFileExplorer.backupManager.restoreBackup(entry.backupID);
+                {
+                    BackupEntry backupEntry = LiteModFileExplorer.backupManager.restoreBackup(entry.backupID);
+                    if (backupEntry != null)
+                        FileLoader.restoreBackup(backupEntry);
+                }
             }
             return false;
         }

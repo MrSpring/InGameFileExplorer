@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import dk.mrspring.fileexplorer.LiteModFileExplorer;
 import dk.mrspring.fileexplorer.ModLogger;
+import dk.mrspring.fileexplorer.backup.BackupEntry;
 import org.apache.commons.io.FileUtils;
 
 import java.io.*;
@@ -140,23 +141,87 @@ public class FileLoader
     public static void takeBackup(File toBackup)
     {
         File backupDestFile = LiteModFileExplorer.backupManager.registerBackup(toBackup);
-        if (!toBackup.isDirectory())
-            try
+        try
+        {
+            if (!toBackup.isDirectory())
             {
-                backupDestFile.createNewFile();
+//                backupDestFile.createNewFile();
                 FileUtils.copyFile(toBackup, backupDestFile);
-            } catch (IOException e)
+            } else
             {
-                e.printStackTrace();
-            }
-        else
-            try
-            {
-                backupDestFile.mkdir();
+//                backupDestFile.mkdir();
                 FileUtils.copyDirectory(toBackup, backupDestFile);
-            } catch (IOException e)
-            {
-                e.printStackTrace();
             }
+            LiteModFileExplorer.saveBackupList();
+        } catch (IOException e)
+        {
+            e.printStackTrace();
+        }
+    }
+
+    public static void restoreBackup(BackupEntry entry)
+    {
+        File backupFile = entry.getBackupFile(), originalFile = entry.getOriginalFile();
+        if (!backupFile.exists())
+            return;
+
+        try
+        {
+            if (backupFile.isDirectory())
+            {
+                ModLogger.printDebug("Copying directory: " + backupFile.getPath() + ", to: " + originalFile.getPath());
+                FileUtils.copyDirectory(backupFile, originalFile);
+            } else
+            {
+                ModLogger.printDebug("Copying file: " + backupFile.getPath() + ", to: " + originalFile.getPath());
+                FileUtils.copyFile(backupFile, originalFile);
+            }
+            backupFile.delete();
+        } catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+
+        LiteModFileExplorer.saveBackupList();
+
+        /*
+        for (BackupEntry entry : entries)
+        {
+            if (entry.backup_id == backupID)
+            {
+                File backup = entry.getBackupFile();
+                File original = entry.getOriginalFile();
+
+                original.delete();
+                boolean restored = false;
+                if (backup.isDirectory())
+                    try
+                    {
+                        ModLogger.printDebug("Copying directory: " + backup.getPath() + ", to: " + original.getPath());
+                        FileUtils.copyDirectory(backup, original);
+                        restored = true;
+                    } catch (IOException e)
+                    {
+                        e.printStackTrace();
+                    }
+                else
+                    try
+                    {
+                        ModLogger.printDebug("Copying file: " + backup.getPath() + ", to: " + original.getPath());
+                        FileUtils.copyFile(backup, original);
+                        restored = true;
+                    } catch (IOException e)
+                    {
+                        e.printStackTrace();
+                    }
+
+                if (restored)
+                {
+                    backup.delete();
+                    entries.remove(entry);
+                    return;
+                }
+            }
+        }*/
     }
 }

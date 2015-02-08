@@ -2,8 +2,8 @@ package dk.mrspring.fileexplorer.gui;
 
 import dk.mrspring.fileexplorer.LiteModFileExplorer;
 import dk.mrspring.fileexplorer.gui.editor.FileType;
-import dk.mrspring.fileexplorer.gui.helper.Color;
-import dk.mrspring.fileexplorer.gui.helper.DrawingHelper;
+import dk.mrspring.fileexplorer.helper.Color;
+import dk.mrspring.fileexplorer.helper.DrawingHelper;
 import net.minecraft.client.Minecraft;
 
 import java.io.File;

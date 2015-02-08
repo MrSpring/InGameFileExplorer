@@ -1,9 +1,9 @@
 package dk.mrspring.fileexplorer.gui;
 
 import com.google.gson.internal.LinkedTreeMap;
-import dk.mrspring.fileexplorer.gui.helper.Color;
-import dk.mrspring.fileexplorer.gui.helper.DrawingHelper;
-import dk.mrspring.fileexplorer.gui.helper.GuiHelper;
+import dk.mrspring.fileexplorer.helper.Color;
+import dk.mrspring.fileexplorer.helper.DrawingHelper;
+import dk.mrspring.fileexplorer.helper.GuiHelper;
 import dk.mrspring.fileexplorer.gui.interfaces.IGui;
 import dk.mrspring.fileexplorer.gui.interfaces.IMouseListener;
 import dk.mrspring.fileexplorer.loader.FileLoader;

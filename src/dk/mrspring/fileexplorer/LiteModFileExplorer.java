@@ -8,12 +8,12 @@ import com.mumfrey.liteloader.core.LiteLoader;
 import com.mumfrey.liteloader.modconfig.ConfigPanel;
 import dk.mrspring.fileexplorer.backup.BackupManager;
 import dk.mrspring.fileexplorer.gui.editor.*;
-import dk.mrspring.fileexplorer.gui.helper.DrawingHelper;
-import dk.mrspring.fileexplorer.gui.helper.IIcon;
 import dk.mrspring.fileexplorer.gui.screen.*;
-import dk.mrspring.fileexplorer.loader.FileLoader;
+import dk.mrspring.fileexplorer.helper.DrawingHelper;
+import dk.mrspring.fileexplorer.helper.IIcon;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.settings.KeyBinding;
+import org.apache.commons.io.FileUtils;
 import org.apache.logging.log4j.LogManager;
 import org.lwjgl.input.Keyboard;
 
@@ -89,52 +89,45 @@ public class LiteModFileExplorer implements Tickable, Configurable
         }
     }
 
+    public static File getBackupFile()
+    {
+        return new File(config.backupLocation + "/backup_index.json");
+    }
+
+    public static File getBackupDirectory()
+    {
+        return new File(LiteModFileExplorer.config.backupLocation);
+    }
+
     public static void saveBackupList()
     {
-        try
-        {
-            File backupListFile = new File(config.backupLocation + "/backup_index.json");
-            if (!backupListFile.exists())
-                backupListFile.createNewFile();
-            GsonBuilder gsonBuilder = new GsonBuilder();
-            if (config.json_usePrettyPrinting)
-                gsonBuilder.setPrettyPrinting();
-            Gson gson = gsonBuilder.create();
-            String jsonCode = gson.toJson(backupManager);
-            FileWriter fileWriter = new FileWriter(backupListFile);
-            BufferedWriter writer = new BufferedWriter(fileWriter);
-            writer.write(jsonCode);
-            writer.close();
-            fileWriter.close();
-        } catch (IOException e)
-        {
-            e.printStackTrace();
-        }
+        System.out.println("Saving list.");
+        File backupListFile = getBackupFile();
+        backupManager.saveManagerToFile(backupListFile);
     }
 
     public static void loadBackupList()
     {
+        File backupListFile = getBackupFile();
+        backupManager = BackupManager.getFromFile(backupListFile);
+        if (backupManager == null)
+            backupManager = new BackupManager();
+    }
+
+    public static void resetBackupList()
+    {
         try
         {
-            File backupListFile = new File(config.backupLocation + "/backup_index.json");
-            if (backupListFile.exists())
-            {
-                Gson gson = new Gson();
-                FileReader reader = new FileReader(backupListFile);
-                backupManager = gson.fromJson(reader, BackupManager.class);
-                saveBackupList();
-            } else
-            {
-                new File(config.backupLocation).mkdirs();
+            FileUtils.deleteDirectory(getBackupDirectory());
+            File backupListFile = getBackupFile();
+            if (!backupListFile.exists())
                 backupListFile.createNewFile();
-                backupManager = new BackupManager();
-                saveBackupList();
-            }
-        } catch (Exception e)
+            backupManager = new BackupManager();
+            saveBackupList();
+        } catch (IOException e)
         {
+
             e.printStackTrace();
-            if (backupManager == null)
-                backupManager = new BackupManager();
         }
     }
 

@@ -1,4 +1,4 @@
-package dk.mrspring.fileexplorer.gui.helper;
+package dk.mrspring.fileexplorer.helper;
 
 import java.util.ArrayList;
 

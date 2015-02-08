@@ -1,4 +1,4 @@
-package dk.mrspring.fileexplorer.gui.helper;
+package dk.mrspring.fileexplorer.helper;
 
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.renderer.Tessellator;

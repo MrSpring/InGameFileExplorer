@@ -1,10 +1,10 @@
 package dk.mrspring.fileexplorer.gui;
 
 import com.mumfrey.liteloader.gl.GLClippingPlanes;
-import dk.mrspring.fileexplorer.gui.helper.Color;
-import dk.mrspring.fileexplorer.gui.helper.DrawingHelper;
-import dk.mrspring.fileexplorer.gui.helper.GuiHelper;
-import dk.mrspring.fileexplorer.gui.helper.TextHelper;
+import dk.mrspring.fileexplorer.helper.Color;
+import dk.mrspring.fileexplorer.helper.DrawingHelper;
+import dk.mrspring.fileexplorer.helper.GuiHelper;
+import dk.mrspring.fileexplorer.helper.TextHelper;
 import dk.mrspring.fileexplorer.gui.interfaces.IGui;
 import dk.mrspring.fileexplorer.gui.interfaces.IMouseListener;
 import net.minecraft.client.Minecraft;

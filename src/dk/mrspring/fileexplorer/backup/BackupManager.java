@@ -1,11 +1,12 @@
 package dk.mrspring.fileexplorer.backup;
 
+import com.google.gson.Gson;
 import dk.mrspring.fileexplorer.LiteModFileExplorer;
-import dk.mrspring.fileexplorer.ModLogger;
-import org.apache.commons.io.FileUtils;
+import dk.mrspring.fileexplorer.helper.GsonHelper;
 
 import java.io.File;
-import java.io.IOException;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -22,49 +23,74 @@ public class BackupManager
         int id = (int) (new Date().getTime() / 1000);
         BackupEntry entry = new BackupEntry(fileToBackup, id);
         entries.add(entry);
-        LiteModFileExplorer.saveBackupList();
         return new File(LiteModFileExplorer.config.backupLocation + "/" + id + ".backup");
-    }
+    }/*
 
     public void restoreBackup(int backupID)
     {
+        BackupEntry entry = this.getEntryForID(backupID);
+        if (entry == null)
+            return;
+        this.entries.remove(entry);
+        FileLoader.restoreBackup(entry.getBackupFile(), entry.getOriginalFile());
+    }
+*/
+
+    public BackupEntry restoreBackup(int backupID)
+    {
         for (BackupEntry entry : entries)
-        {
             if (entry.backup_id == backupID)
             {
-                File backup = entry.getBackupFile();
-                File original = entry.getOriginalFile();
-
-                original.delete();
-                boolean restored = false;
-                if (backup.isDirectory())
-                    try
-                    {
-                        ModLogger.printDebug("Copying directory: " + backup.getPath() + ", to: " + original.getPath());
-                        FileUtils.copyDirectory(backup, original);
-                        restored = true;
-                    } catch (IOException e)
-                    {
-                        e.printStackTrace();
-                    }
-                else
-                    try
-                    {
-                        ModLogger.printDebug("Copying file: " + backup.getPath() + ", to: " + original.getPath());
-                        FileUtils.copyFile(backup, original);
-                        restored = true;
-                    } catch (IOException e)
-                    {
-                        e.printStackTrace();
-                    }
-
-                if (restored)
-                {
-                    backup.delete();
-                    entries.remove(entry);
-                    return;
-                }
+                entries.remove(entry);
+                return entry;
             }
+        return null;
+    }
+
+    public void loadManagerFromFile(File file)
+    {
+        BackupManager fromFile = getFromFile(file);
+        if (fromFile != null)
+            this.entries = fromFile.entries;
+    }
+
+    public void saveManagerToFile(File file)
+    {
+        writeToFile(file, this);
+    }
+
+    public static BackupManager writeToFile(File file, BackupManager manager)
+    {
+        try
+        {
+            file.getParentFile().mkdirs();
+            file.createNewFile();
+            Gson gson = GsonHelper.getPrettyPrintingGson();
+            String json = gson.toJson(manager);
+            FileWriter writer = new FileWriter(file);
+            writer.write(json);
+            writer.close();
+            return manager;
+        } catch (Exception e)
+        {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public static BackupManager getFromFile(File file)
+    {
+        try
+        {
+            if (!file.exists())
+                return null;
+            Gson gson = new Gson();
+            FileReader reader = new FileReader(file);
+            return gson.fromJson(reader, BackupManager.class);
+        } catch (Exception e)
+        {
+            e.printStackTrace();
+            return null;
         }
     }
 }

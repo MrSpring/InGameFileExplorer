@@ -4,8 +4,8 @@ import com.google.gson.internal.LinkedTreeMap;
 import dk.mrspring.fileexplorer.LiteModFileExplorer;
 import dk.mrspring.fileexplorer.gui.GuiCustomTextField;
 import dk.mrspring.fileexplorer.gui.GuiSimpleButton;
-import dk.mrspring.fileexplorer.gui.helper.Color;
-import dk.mrspring.fileexplorer.gui.helper.DrawingHelper;
+import dk.mrspring.fileexplorer.helper.Color;
+import dk.mrspring.fileexplorer.helper.DrawingHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.StatCollector;
 
