@@ -119,8 +119,8 @@ public class GuiFileExplorer implements IGui, IMouseListener
         if (showControls)
         {
             width -= 75;
-            DrawingHelper.drawQuad(x + width + 5 + 6, y + 6, 1, h - 10, Color.DKGREY, 1F);
-            DrawingHelper.drawQuad(x + width + 5 + 6 + 61, y + 6, 1, h - 10, Color.DKGREY, 1F);
+            DrawingHelper.drawQuad(x + width + 5 + 6, y + 6, 1, h - 10, Color.DK_GREY, 1F);
+            DrawingHelper.drawQuad(x + width + 5 + 6 + 61, y + 6, 1, h - 10, Color.DK_GREY, 1F);
 
             DrawingHelper.drawQuad(x + width + 5 + 5, y + 5, 1, h - 10, Color.WHITE, 1F);
             DrawingHelper.drawQuad(x + width + 5 + 5 + 61, y + 5, 1, h - 10, Color.WHITE, 1F);
@@ -158,7 +158,7 @@ public class GuiFileExplorer implements IGui, IMouseListener
             float maxScrollHeight = this.getMaxScrollHeight();
             float scrollProgress = (float) this.scrollHeight / maxScrollHeight;
             float scrollBarY = scrollBarYRange * scrollProgress;
-            DrawingHelper.drawQuad(x, y + scrollBarY + 1, 2, 40, Color.DKGREY, 1F);
+            DrawingHelper.drawQuad(x, y + scrollBarY + 1, 2, 40, Color.DK_GREY, 1F);
             DrawingHelper.drawQuad(x - 1, y + scrollBarY, 2, 40, Color.WHITE, 1F);
         }
 

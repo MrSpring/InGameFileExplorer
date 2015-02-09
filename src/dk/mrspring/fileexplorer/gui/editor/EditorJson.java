@@ -259,7 +259,7 @@ public class EditorJson extends Editor implements IMouseListener
                     float maxScrollHeight = this.getMaxScrollHeight();
                     float scrollProgress = (float) this.scrollHeight / maxScrollHeight;
                     float scrollBarY = scrollBarYRange * scrollProgress;
-                    DrawingHelper.drawQuad(x, y + scrollBarY + 1, 2, 40, Color.DKGREY, 1F);
+                    DrawingHelper.drawQuad(x, y + scrollBarY + 1, 2, 40, Color.DK_GREY, 1F);
                     DrawingHelper.drawQuad(x - 1, y + scrollBarY, 2, 40, Color.WHITE, 1F);
                 }
 

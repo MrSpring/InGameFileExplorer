@@ -77,7 +77,7 @@ public class GuiScreen extends net.minecraft.client.gui.GuiScreen
         if (this.drawSubTitle())
             this.drawCenteredSubTitle();
 
-        DrawingHelper.drawQuad(underlinePosX + 1, textPosY + 9, titleWidth + (underlineOverflow * 2), 1, Color.DKGREY, 1F);
+        DrawingHelper.drawQuad(underlinePosX + 1, textPosY + 9, titleWidth + (underlineOverflow * 2), 1, Color.DK_GREY, 1F);
         DrawingHelper.drawQuad(underlinePosX, textPosY + 8, titleWidth + (underlineOverflow * 2), 1, Color.WHITE, 1F);
     }
 

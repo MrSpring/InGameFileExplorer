@@ -134,7 +134,7 @@ public class GuiFile extends GuiFileBase
         DrawingHelper.drawIcon(this.getFileType().getIcon(), x - ((iconSize - w) / 2), y, iconSize, iconSize);
 
         DrawingHelper.drawQuad(x, y + h - nameHeight, w, 1, Color.WHITE, 1F);
-        DrawingHelper.drawQuad(x, y + h - nameHeight - 1, w, 1, Color.LTGREY, 1F);
+        DrawingHelper.drawQuad(x, y + h - nameHeight - 1, w, 1, Color.LT_GREY, 1F);
         if (wrapName())
         {
             minecraft.fontRendererObj.drawSplitString(this.getShortFileName(), x + 5, nameY + 1, w - 8, 0x4C4C4C);
@@ -165,7 +165,7 @@ public class GuiFile extends GuiFileBase
 
         iconSize = height;
 
-        DrawingHelper.drawQuad(x + iconSize - 2, y + 1, 1, height - 2, Color.LTGREY, 1F);
+        DrawingHelper.drawQuad(x + iconSize - 2, y + 1, 1, height - 2, Color.LT_GREY, 1F);
         DrawingHelper.drawQuad(x + iconSize - 1, y + 1, 1, height - 2, Color.WHITE, 1F);
 
         DrawingHelper.drawIcon(this.getFileType().getIcon(), x, y, iconSize, iconSize, false);

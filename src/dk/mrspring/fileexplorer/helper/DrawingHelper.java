@@ -172,8 +172,8 @@ public class DrawingHelper
                     new Quad(x + w - 1, y + 1, 1, h - 2, Color.BLACK, alpha),
                     new Quad(x + 1, y + 1, w - 2, 1, Color.WHITE, 1F),
                     new Quad(x + 1, y + 2, 1, h - 4, Color.WHITE, 1F),
-                    new Quad(x + w - 2, y + 2, 1, h - 3, Color.LTGREY, 1F),
-                    new Quad(x + 1, y + h - 2, w - 3, 1, Color.LTGREY, 1F)
+                    new Quad(x + w - 2, y + 2, 1, h - 3, Color.LT_GREY, 1F),
+                    new Quad(x + 1, y + h - 2, w - 3, 1, Color.LT_GREY, 1F)
             };
         }
     };
@@ -510,7 +510,7 @@ public class DrawingHelper
         drawIcon(hoverIcon, x, y, w, h, 0.25F, false);
         if (enabled)
             drawVerticalGradient(x + 2, y + 2, w - 4, h - 4, startColor, alphaProgress * startAlphaMultiplier, endColor, alphaProgress * endAlphaMultiplier);
-        else DrawingHelper.drawVerticalGradient(x + 2, y + 2, w - 4, h - 4, Color.LTGREY, 0.5F, Color.DKGREY, 0.8F);
+        else DrawingHelper.drawVerticalGradient(x + 2, y + 2, w - 4, h - 4, Color.LT_GREY, 0.5F, Color.DK_GREY, 0.8F);
     }
 
     public static void drawButtonThingy(float x, float y, float w, float h, float alphaProgress, boolean enabled, Color startColor, Color endColor)
@@ -527,8 +527,8 @@ public class DrawingHelper
     {
         drawQuad(x, y, w, 1, Color.WHITE, a);
         drawQuad(x, y, 1, h, Color.WHITE, a);
-        drawQuad(x + w - 1, y, 1, h, Color.LTGREY, a);
-        drawQuad(x, y + h - 1, w, 1, Color.LTGREY, a);
+        drawQuad(x + w - 1, y, 1, h, Color.LT_GREY, a);
+        drawQuad(x, y + h - 1, w, 1, Color.LT_GREY, a);
     }
 
     public static void drawTexturedRect(float x, float y, float width, float height, int u, int v, int u2, int v2, float alpha)
@@ -572,7 +572,7 @@ public class DrawingHelper
         if (shadow)
             for (Quad quad : quads)
             {
-                quad.setColor(Color.DKGREY);
+                quad.setColor(Color.DK_GREY);
                 quad.translate(twentiethWidth / 2, twentiethHeight / 2);
                 drawQuad(quad);
                 quad.setColor(Color.WHITE);

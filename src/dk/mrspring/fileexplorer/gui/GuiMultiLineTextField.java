@@ -117,7 +117,7 @@ public class GuiMultiLineTextField implements IGui, IMouseListener
         float maxScrollHeight = getMaxScrollHeight();
         float scrollProgress = (float) this.scrollHeight / maxScrollHeight;
         float scrollBarY = scrollBarYRange * scrollProgress + padding;
-        DrawingHelper.drawQuad(x + padding, y + scrollBarY + 1, 2, 40, Color.DKGREY, 1F);
+        DrawingHelper.drawQuad(x + padding, y + scrollBarY + 1, 2, 40, Color.DK_GREY, 1F);
         DrawingHelper.drawQuad(x + padding - 1, y + scrollBarY, 2, 40, Color.WHITE, 1F);
     }
 

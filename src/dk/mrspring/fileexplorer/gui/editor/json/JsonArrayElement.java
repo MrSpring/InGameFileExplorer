@@ -115,17 +115,17 @@ public class JsonArrayElement extends JsonEditorElement<ArrayList<Object>>
 
                 int height = element.getHeight();
 
-                DrawingHelper.drawQuad(xPosition - 8, yPosition + yOffset + 1, 1, height + 3, Color.DKGREY, 1F);
+                DrawingHelper.drawQuad(xPosition - 8, yPosition + yOffset + 1, 1, height + 3, Color.DK_GREY, 1F);
                 DrawingHelper.drawQuad(xPosition - 9, yPosition + yOffset, 1, height + 3, Color.WHITE, 1F);
-                DrawingHelper.drawQuad(xPosition - 7, yPosition + yOffset + 7, 5, 1, Color.DKGREY, 1F);
+                DrawingHelper.drawQuad(xPosition - 7, yPosition + yOffset + 7, 5, 1, Color.DK_GREY, 1F);
                 DrawingHelper.drawQuad(xPosition - 8, yPosition + yOffset + 6, 5, 1, Color.WHITE, 1F);
 
                 yOffset += element.getHeight() + 3;
             }
 
-            DrawingHelper.drawQuad(xPosition - 8, yPosition + yOffset + 1, 1, 7, Color.DKGREY, 1F);
+            DrawingHelper.drawQuad(xPosition - 8, yPosition + yOffset + 1, 1, 7, Color.DK_GREY, 1F);
             DrawingHelper.drawQuad(xPosition - 9, yPosition + yOffset, 1, 7, Color.WHITE, 1F);
-            DrawingHelper.drawQuad(xPosition - 7, yPosition + yOffset + 7, 5, 1, Color.DKGREY, 1F);
+            DrawingHelper.drawQuad(xPosition - 7, yPosition + yOffset + 7, 5, 1, Color.DK_GREY, 1F);
             DrawingHelper.drawQuad(xPosition - 8, yPosition + yOffset + 6, 5, 1, Color.WHITE, 1F);
 
             minecraft.fontRendererObj.drawString(StatCollector.translateToLocal("gui.json_editor.add_new") + ": ", xPosition, yPosition + yOffset + 3, 0xFFFFFF, true);

@@ -187,7 +187,7 @@ public class GuiCustomTextField implements IGui // TODO: Rewrite using ClippingP
             scrollXEnd += w * renderEndProgressThrough;
 
             DrawingHelper.drawQuad(scrollX, scrollY, scrollXEnd - scrollX, 1, Color.WHITE, 1F);
-            DrawingHelper.drawQuad(scrollX + 1, scrollY + 1, scrollXEnd - scrollX, 1, Color.DKGREY, 1F);
+            DrawingHelper.drawQuad(scrollX + 1, scrollY + 1, scrollXEnd - scrollX, 1, Color.DK_GREY, 1F);
         }
     }
 
