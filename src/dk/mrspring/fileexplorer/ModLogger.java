@@ -9,14 +9,26 @@ public class ModLogger
 {
     public static Logger logger;
 
-    public static void print(Object... message)
+    public static void print(String message, Throwable throwable)
     {
-        logger.info(message);
+        if (throwable != null)
+            logger.info(message, throwable);
+        else logger.info(message);
     }
 
-    public static void printDebug(Object... message)
+    public static void print(String message)
+    {
+        print(message, null);
+    }
+
+    public static void printDebug(String message, Throwable throwable)
     {
         if (LiteModFileExplorer.config.printDebug)
-            print(message);
+            print(message, throwable);
+    }
+
+    public static void printDebug(String message)
+    {
+        printDebug(message, null);
     }
 }
