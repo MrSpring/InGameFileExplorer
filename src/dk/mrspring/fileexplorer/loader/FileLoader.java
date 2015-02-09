@@ -107,8 +107,18 @@ public class FileLoader
     {
         if (LiteModFileExplorer.config.acceptFileManipulation)
         {
-            takeBackup(file);
-            return file.delete();
+            try
+            {
+                takeBackup(file);
+                if (file.isDirectory())
+                    FileUtils.deleteDirectory(file);
+                else file.delete();
+                return true;
+            } catch (Exception e)
+            {
+                ModLogger.printDebug("Failed to delete file: " + file.getAbsolutePath() + ", an exception has been thrown:", e);
+                return false;
+            }
         } else
         {
             ModLogger.printDebug("Failed to delete file: " + file.getPath() + ", user has not accepted file manipulation!");
