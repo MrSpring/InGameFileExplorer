@@ -10,6 +10,7 @@ import dk.mrspring.fileexplorer.backup.BackupManager;
 import dk.mrspring.fileexplorer.gui.editor.*;
 import dk.mrspring.fileexplorer.gui.screen.*;
 import dk.mrspring.fileexplorer.helper.DrawingHelper;
+import dk.mrspring.fileexplorer.helper.FileSorter;
 import dk.mrspring.fileexplorer.helper.IIcon;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.settings.KeyBinding;
@@ -61,10 +62,19 @@ public class LiteModFileExplorer implements Tickable, Configurable
 
     public static FileType getFileType(String extension)
     {
+        if (extension == null)
+            return supportedFileTypes.get("unknown");
+        else if (extension.isEmpty())
+            return supportedFileTypes.get("directory");
         FileType type = supportedFileTypes.get(extension);
         if (type == null)
             type = supportedFileTypes.get("unknown");
         return type;
+    }
+
+    public static FileSorter.SortingType getDefaultSortingType()
+    {
+        return config.file_sorting_type;
     }
 
     public static void saveConfig()
@@ -313,6 +323,8 @@ public class LiteModFileExplorer implements Tickable, Configurable
                 return "TEXT";
             }
         });
+
+        FileSorter.load();
     }
 
     @Override

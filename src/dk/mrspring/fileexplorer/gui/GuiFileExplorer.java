@@ -1,11 +1,12 @@
 package dk.mrspring.fileexplorer.gui;
 
 import dk.mrspring.fileexplorer.LiteModFileExplorer;
-import dk.mrspring.fileexplorer.helper.Color;
-import dk.mrspring.fileexplorer.helper.DrawingHelper;
-import dk.mrspring.fileexplorer.helper.GuiHelper;
 import dk.mrspring.fileexplorer.gui.interfaces.IGui;
 import dk.mrspring.fileexplorer.gui.interfaces.IMouseListener;
+import dk.mrspring.fileexplorer.helper.Color;
+import dk.mrspring.fileexplorer.helper.DrawingHelper;
+import dk.mrspring.fileexplorer.helper.FileSorter;
+import dk.mrspring.fileexplorer.helper.GuiHelper;
 import dk.mrspring.fileexplorer.loader.FileLoader;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.StatCollector;
@@ -193,7 +194,7 @@ public class GuiFileExplorer implements IGui, IMouseListener
     {
         if (!LiteModFileExplorer.config.acceptFileManipulation)
             this.deleteFile.disable();
-        
+
         int totalHeight = this.guiFiles.size() * 35;
         if (totalHeight < this.h)
             scrollHeight = 0;
@@ -368,9 +369,11 @@ public class GuiFileExplorer implements IGui, IMouseListener
     {
         this.guiFiles = new ArrayList<GuiFileBase>();
 
-        List<File> filesAtCurrentPath = new ArrayList<File>();
+        File[] filesAtCurrentPath = FileLoader.getFileInFolder(new File(currentPath), false);
 
-        FileLoader.addFiles(currentPath, filesAtCurrentPath, false);
+//        FileLoader.addFiles(currentPath, filesAtCurrentPath, false);
+
+        FileSorter.sortFiles(filesAtCurrentPath, LiteModFileExplorer.getDefaultSortingType());
 
         for (File file : filesAtCurrentPath)
         {

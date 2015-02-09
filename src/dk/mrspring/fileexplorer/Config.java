@@ -1,5 +1,7 @@
 package dk.mrspring.fileexplorer;
 
+import dk.mrspring.fileexplorer.helper.FileSorter;
+
 /**
  * Created by MrSpring on 08-12-2014 for In-Game File Explorer.
  */
@@ -12,6 +14,8 @@ public class Config
     public boolean printDebug = true;
     public boolean automaticBackup = true;
     public String backupLocation = "igfe-backup";
+    public FileSorter.SortingType file_sorting_type = FileSorter.SortingType.NAME;
+    public boolean sort_folders = true;
 
     public boolean json_usePrettyPrinting = true;
     public boolean json_allowArrayCollapsing = true;

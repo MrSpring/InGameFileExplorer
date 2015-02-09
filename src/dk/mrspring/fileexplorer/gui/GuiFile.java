@@ -51,7 +51,9 @@ public class GuiFile extends GuiFileBase
         if (filePath != null)
         {
             String extension = FileLoader.getFileExtension(new File(filePath), true);
-            return LiteModFileExplorer.getFileType(extension);
+            if (extension.equals("") || new File(filePath).isDirectory())
+                return LiteModFileExplorer.getFileType("directory");
+            else return LiteModFileExplorer.getFileType(extension);
         } else return LiteModFileExplorer.getFileType("unknown");
     }
 

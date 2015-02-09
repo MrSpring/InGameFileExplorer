@@ -9,22 +9,21 @@ import org.apache.commons.io.FileUtils;
 
 import java.io.*;
 import java.lang.reflect.Type;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by MrSpring on 16-07-2014 for In-Game File Explorer.
  */
 public class FileLoader
 {
-    public static void addFiles(String path, List<File> fileList, boolean addSubFiles)
+    public static File[] getFileInFolder(File directory, boolean addSubFiles)
     {
+        List<File> fileList = new ArrayList<File>();
+
         if (LiteModFileExplorer.config.acceptFileReading)
         {
             try
             {
-                File directory = new File(path);
                 ModLogger.printDebug("Adding files from folder: " + directory.getPath() + ", add sub files: " + addSubFiles);
                 String[] directoryContents = directory.list();
 
@@ -36,14 +35,28 @@ public class FileLoader
                     if (file.isDirectory() && addSubFiles)
                         addFiles(file.getPath(), fileList, true);
                 }
+
+                return fileList.toArray(new File[fileList.size()]);
             } catch (Exception e)
             {
                 e.printStackTrace();
             }
         } else
         {
-            ModLogger.printDebug("Failed to load from folder: " + new File(path).getPath() + ", user has not accepted file reading!");
+            ModLogger.print("Failed to load from folder: " + directory.getPath() + ", user has not accepted file reading!");
         }
+
+        return null;
+    }
+
+    public static void addFiles(File directory, List<File> fileList, boolean addSubFiles)
+    {
+        Collections.addAll(fileList, getFileInFolder(directory, addSubFiles));
+    }
+
+    public static void addFiles(String path, List<File> fileList, boolean addSubFiles)
+    {
+        addFiles(new File(path), fileList, addSubFiles);
     }
 
     public static String readFile(File file)
@@ -75,7 +88,7 @@ public class FileLoader
             }
         else
         {
-            ModLogger.printDebug("Failed to load from file: " + file.getPath() + ", user has not accepted file reading!");
+            ModLogger.print("Failed to load from file: " + file.getPath() + ", user has not accepted file reading!");
             return "";
         }
     }
