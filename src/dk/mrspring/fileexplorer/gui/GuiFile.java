@@ -4,6 +4,7 @@ import dk.mrspring.fileexplorer.LiteModFileExplorer;
 import dk.mrspring.fileexplorer.gui.editor.FileType;
 import dk.mrspring.fileexplorer.helper.Color;
 import dk.mrspring.fileexplorer.helper.DrawingHelper;
+import dk.mrspring.fileexplorer.loader.FileLoader;
 import net.minecraft.client.Minecraft;
 
 import java.io.File;
@@ -49,20 +50,14 @@ public class GuiFile extends GuiFileBase
     {
         if (filePath != null)
         {
-            int lastDot = filePath.lastIndexOf('.');
-            if (lastDot < 0 || new File(filePath).isDirectory())
-                return LiteModFileExplorer.getFileType("directory");
-            String extension = filePath.substring(lastDot);
-            FileType type = LiteModFileExplorer.getFileType(extension);
-            if (type == null)
-                type = LiteModFileExplorer.getFileType("unknown");
-            return type;
+            String extension = FileLoader.getFileExtension(new File(filePath), true);
+            return LiteModFileExplorer.getFileType(extension);
         } else return LiteModFileExplorer.getFileType("unknown");
     }
 
     public boolean isDirectory()
     {
-        return this.getFileType().equals(LiteModFileExplorer.getFileType("directory"));
+        return new File(filePath).isDirectory();
     }
 
     public void setX(int x)

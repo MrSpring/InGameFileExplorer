@@ -154,14 +154,9 @@ public class FileLoader
         try
         {
             if (!toBackup.isDirectory())
-            {
-//                backupDestFile.createNewFile();
                 FileUtils.copyFile(toBackup, backupDestFile);
-            } else
-            {
-//                backupDestFile.mkdir();
+            else
                 FileUtils.copyDirectory(toBackup, backupDestFile);
-            }
             LiteModFileExplorer.saveBackupList();
         } catch (IOException e)
         {
@@ -193,45 +188,14 @@ public class FileLoader
         }
 
         LiteModFileExplorer.saveBackupList();
+    }
 
-        /*
-        for (BackupEntry entry : entries)
-        {
-            if (entry.backup_id == backupID)
-            {
-                File backup = entry.getBackupFile();
-                File original = entry.getOriginalFile();
-
-                original.delete();
-                boolean restored = false;
-                if (backup.isDirectory())
-                    try
-                    {
-                        ModLogger.printDebug("Copying directory: " + backup.getPath() + ", to: " + original.getPath());
-                        FileUtils.copyDirectory(backup, original);
-                        restored = true;
-                    } catch (IOException e)
-                    {
-                        e.printStackTrace();
-                    }
-                else
-                    try
-                    {
-                        ModLogger.printDebug("Copying file: " + backup.getPath() + ", to: " + original.getPath());
-                        FileUtils.copyFile(backup, original);
-                        restored = true;
-                    } catch (IOException e)
-                    {
-                        e.printStackTrace();
-                    }
-
-                if (restored)
-                {
-                    backup.delete();
-                    entries.remove(entry);
-                    return;
-                }
-            }
-        }*/
+    public static String getFileExtension(File file, boolean keepDot)
+    {
+        String fileName = file.getName();
+        int lastIndexOf = fileName.lastIndexOf(".");
+        if (lastIndexOf != -1)
+            return fileName.substring(lastIndexOf + (keepDot ? 0 : 1));
+        else return "";
     }
 }

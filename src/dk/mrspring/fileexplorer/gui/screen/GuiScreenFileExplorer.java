@@ -7,6 +7,7 @@ import dk.mrspring.fileexplorer.gui.editor.FileType;
 import dk.mrspring.fileexplorer.helper.Color;
 import dk.mrspring.fileexplorer.helper.DrawingHelper;
 import dk.mrspring.fileexplorer.gui.interfaces.IGui;
+import dk.mrspring.fileexplorer.loader.FileLoader;
 
 import java.io.File;
 
@@ -56,8 +57,7 @@ public class GuiScreenFileExplorer extends GuiScreen
 
     public void openFile(File file)
     {
-        int lastDot = file.getPath().lastIndexOf(".");
-        String extension = file.getPath().substring(lastDot);
+        String extension = FileLoader.getFileExtension(file, true);
         FileType fileType = LiteModFileExplorer.getFileType(extension);
 
         Editor editor = fileType.getNewEditor(258, 10, width - 243 - 25, height - 20, file);
