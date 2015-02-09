@@ -9,12 +9,12 @@ public class ModLogger
 {
     public static Logger logger;
 
-    public static void print(String message)
+    public static void print(Object... message)
     {
         logger.info(message);
     }
 
-    public static void printDebug(String message)
+    public static void printDebug(Object... message)
     {
         if (LiteModFileExplorer.config.printDebug)
             print(message);
