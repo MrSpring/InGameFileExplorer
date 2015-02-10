@@ -33,6 +33,6 @@ public class GuiScreenExamplePage extends GuiScreen
         this.addGuiElement(cFieldID, new GuiCustomTextField(10, 10 + 60 + 10, 200, 15, "Long Text! Long Text! Long Text! Long Text! Long Text! Long Text! Long Text! Long Text! Long Text! Long Text! Long Text! Long Text! Long Text! Long Text! Long Text! Long Text! Long Text! Long Text! Long Text! Long Text! Long Text! Long Text! Long Text! Long Text! Long Text!"));
 //        this.addGuiElement(explorerID, new GuiFileExplorer(10, 105, 300, height - 60 - 10 - 105, "C:"));
 
-        this.setSubtitle("gui.screen.example_page.description").hideBars().hideDoneButton();
+        this.setSubtitle("gui.screen.example_page.description").hideBars().hideDoneButton().enableRepeats();
     }
 }
