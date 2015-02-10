@@ -13,6 +13,12 @@ gui.screen.welcome.message=Thanks for installing the In-Game File Explorer mod, 
 gui.screen.welcome.i_accept.read=I allow the mod to read from my personal files.
 gui.screen.welcome.i_accept.write=I allow the mod to write to my personal files, and understand the possible risks.
 
+gui.screen.save_before_closing.title=Save before closing?
+gui.screen.save_before_closing.message=The changes you have made to:###has not been saved!\nDo you wish to save these changes before closing?
+gui.screen.save_before_closing.save=Save
+gui.screen.save_before_closing.dont_save=Don't Save
+gui.screen.save_before_closing.cancel=Cancel
+
 gui.screen.image_viewer.exit_fullscreen=Click to close...
 
 gui.json_editor.add_new=Add new
