@@ -8,4 +8,8 @@ public interface IEditor
     public void update(int x, int y, int width, int height);
 
     public boolean hasUnsavedChanges();
+
+    public String getOpenFileName();
+
+    public void save();
 }

@@ -86,10 +86,17 @@ public class EditorText extends Editor implements IMouseListener
         this.textField.setText(fromFile, true);
     }
 
-    private void save()
+    @Override
+    public void save()
     {
         FileLoader.writeToFile(this.file, this.textField.getText());
         this.lastSave = this.textField.getText();
+    }
+
+    @Override
+    public String getOpenFileName()
+    {
+        return file.getName();
     }
 
     @Override

@@ -15,12 +15,14 @@ public class EditorImage extends Editor
     private int y;
     private int width;
     private int height;
+    String fileName;
 
     public EditorImage(int x, int y, int w, int h, File file)
     {
         super(x, y, w, h);
 
         this.imageViewer = new GuiImageViewer(file, x, y, w, h).enableFullscreenButton();
+        fileName = file.getName();
     }
 
     @Override
@@ -72,5 +74,16 @@ public class EditorImage extends Editor
     public boolean hasUnsavedChanges()
     {
         return false;
+    }
+
+    @Override
+    public String getOpenFileName()
+    {
+        return fileName;
+    }
+
+    @Override
+    public void save()
+    {
     }
 }

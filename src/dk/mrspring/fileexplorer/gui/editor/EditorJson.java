@@ -133,7 +133,7 @@ public class EditorJson extends Editor implements IMouseListener
         this.editing = false;
     }
 
-    private void save()
+    public void save()
     {
         Map<String, Object> fromEditor = editor.toJsonMap();
         GsonBuilder builder = new GsonBuilder();
@@ -162,6 +162,12 @@ public class EditorJson extends Editor implements IMouseListener
     {
         this.reloadEditor();
         this.editing = true;
+    }
+
+    @Override
+    public String getOpenFileName()
+    {
+        return jsonFile.getName();
     }
 
     @Override
