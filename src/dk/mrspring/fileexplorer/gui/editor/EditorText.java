@@ -14,6 +14,7 @@ import java.io.File;
  */
 public class EditorText extends Editor implements IMouseListener
 {
+    String lastSave;
     GuiMultiLineTextField textField;
 
     GuiSimpleButton saveButton, restoreButton;
@@ -25,11 +26,18 @@ public class EditorText extends Editor implements IMouseListener
 
         this.file = file;
 
-        textField = new GuiMultiLineTextField(x, y, w, h, FileLoader.readFile(this.file)).hideBackground();
+        lastSave = FileLoader.readFile(this.file);
+        textField = new GuiMultiLineTextField(x, y, w, h, lastSave).hideBackground();
 
         saveButton = new GuiSimpleButton(x - 62, y + h - 15, 50, 20, "gui.text_editor.save");
         saveButton.setEnabled(LiteModFileExplorer.config.acceptFileManipulation);
         restoreButton = new GuiSimpleButton(x - 62, y + h - 45, 50, 20, "gui.text_editor.reload");
+    }
+
+    @Override
+    public boolean hasUnsavedChanges()
+    {
+        return !textField.getText().equals(lastSave);
     }
 
     @Override
@@ -81,6 +89,7 @@ public class EditorText extends Editor implements IMouseListener
     private void save()
     {
         FileLoader.writeToFile(this.file, this.textField.getText());
+        this.lastSave = this.textField.getText();
     }
 
     @Override

@@ -7,11 +7,11 @@ import dk.mrspring.fileexplorer.LiteModFileExplorer;
 import dk.mrspring.fileexplorer.gui.GuiJsonViewer;
 import dk.mrspring.fileexplorer.gui.GuiSimpleButton;
 import dk.mrspring.fileexplorer.gui.editor.json.*;
+import dk.mrspring.fileexplorer.gui.interfaces.IGui;
+import dk.mrspring.fileexplorer.gui.interfaces.IMouseListener;
 import dk.mrspring.fileexplorer.helper.Color;
 import dk.mrspring.fileexplorer.helper.DrawingHelper;
 import dk.mrspring.fileexplorer.helper.GuiHelper;
-import dk.mrspring.fileexplorer.gui.interfaces.IGui;
-import dk.mrspring.fileexplorer.gui.interfaces.IMouseListener;
 import dk.mrspring.fileexplorer.loader.FileLoader;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.StatCollector;
@@ -162,6 +162,12 @@ public class EditorJson extends Editor implements IMouseListener
     {
         this.reloadEditor();
         this.editing = true;
+    }
+
+    @Override
+    public boolean hasUnsavedChanges()
+    {
+        return editing;
     }
 
     @Override

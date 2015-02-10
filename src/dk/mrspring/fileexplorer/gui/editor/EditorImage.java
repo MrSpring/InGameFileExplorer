@@ -67,4 +67,10 @@ public class EditorImage extends Editor
     {
 
     }
+
+    @Override
+    public boolean hasUnsavedChanges()
+    {
+        return false;
+    }
 }

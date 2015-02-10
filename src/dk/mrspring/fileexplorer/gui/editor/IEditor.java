@@ -6,4 +6,6 @@ package dk.mrspring.fileexplorer.gui.editor;
 public interface IEditor
 {
     public void update(int x, int y, int width, int height);
+
+    public boolean hasUnsavedChanges();
 }
