@@ -59,7 +59,7 @@ public class GuiScreenFileExplorer extends GuiScreen
         String extension = FileLoader.getFileExtension(file, true);
         FileType fileType = LiteModFileExplorer.getFileType(extension);
 
-        Editor editor = fileType.getNewEditor(258, 10, width - 243 - 25, height - 20, file);
+        Editor editor = fileType.getNewEditor(258, 5, width - 243 - 20, height - 10, file);
         String name = fileType.getName();
 
         if (editor != null)
@@ -77,7 +77,7 @@ public class GuiScreenFileExplorer extends GuiScreen
         if (identifier.equals("editor"))
         {
             Editor editor = (Editor) gui;
-            editor.update(258, 10, width - 243 - 25, height - 20);
+            editor.update(258, 5, width - 243 - 20, height - 10);
         }
 
         if (identifier.equals("explorer") && gui instanceof GuiFileExplorer)
