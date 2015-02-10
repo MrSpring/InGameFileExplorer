@@ -173,6 +173,10 @@ public class GuiCustomTextField implements IGui // TODO: Rewrite using ClippingP
             this.copyText();
         else if (keyCode == Keyboard.KEY_X && isCtrlDown())
             this.cutText();
+        else if (keyCode == Keyboard.KEY_HOME)
+            this.setCursorPos(0);
+        else if (keyCode == Keyboard.KEY_END)
+            this.setCursorPos(getText().length());
         else if (TextHelper.isKeyWritable(keyCode))
             this.writeCharacter(character);
     }
