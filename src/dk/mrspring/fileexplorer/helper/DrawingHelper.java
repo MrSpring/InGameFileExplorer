@@ -603,7 +603,7 @@ public class DrawingHelper
         for (Vector vector : vectors)
         {
             tessellator.getWorldRenderer().setColorRGBA_F(vector.getColor().getRed(), vector.getColor().getGreen(), vector.getColor().getBlue(), vector.getAlpha());
-            tessellator.getWorldRenderer().addVertex(vector.getX(), vector.getY(), 0);
+            tessellator.getWorldRenderer().addVertex(vector.getX(), vector.getY(), 0); // TODO: Use Z from vector
         }
 
         tessellator.draw();

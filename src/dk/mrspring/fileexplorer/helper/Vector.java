@@ -5,7 +5,7 @@ package dk.mrspring.fileexplorer.helper;
  */
 public class Vector
 {
-    float x, y;
+    float x, y; // TODO: Z
     Color color = Color.WHITE;
     float alpha = 1F;
 

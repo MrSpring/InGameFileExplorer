@@ -27,10 +27,10 @@ public class GuiScreenExamplePage extends GuiScreen
 
         this.addGuiElement(sliderID, new GuiSlider(60, 40, 120, 30, 50));
 //        this.addGuiElement(buttonID, new GuiSimpleButton(10, 10, 40, 40, "Button"));
-        this.addGuiElement(numberID, new GuiNumberField(60, 50, 100, 32, 10.0));
+//        this.addGuiElement(numberID, new GuiNumberField(60, 50, 100, 32, 10.0));
 //        this.addGuiElement(tFieldID, new GuiEditableTextField(60 + 75 + 10, 10, 240, 20, "This is Edible!", mc.fontRendererObj));
 //        this.addGuiElement(checkBID, new GuiCheckbox(10, 10 + 40 + 10, 10, 10, false));
-//        this.addGuiElement(cFieldID, new GuiCustomTextField(10, 10 + 60 + 10, 200, 15, "This is text!"));
+        this.addGuiElement(cFieldID, new GuiCustomTextField(10, 10 + 60 + 10, 200, 15, "Long Text! Long Text! Long Text! Long Text! Long Text! Long Text! Long Text! Long Text! Long Text! Long Text! Long Text! Long Text! Long Text! Long Text! Long Text! Long Text! Long Text! Long Text! Long Text! Long Text! Long Text! Long Text! Long Text! Long Text! Long Text!"));
 //        this.addGuiElement(explorerID, new GuiFileExplorer(10, 105, 300, height - 60 - 10 - 105, "C:"));
 
         this.setSubtitle("gui.screen.example_page.description").hideBars().hideDoneButton();

@@ -1,26 +1,168 @@
 package dk.mrspring.fileexplorer.gui;
 
+import com.mumfrey.liteloader.gl.GLClippingPlanes;
+import dk.mrspring.fileexplorer.gui.interfaces.IGui;
 import dk.mrspring.fileexplorer.helper.Color;
 import dk.mrspring.fileexplorer.helper.DrawingHelper;
 import dk.mrspring.fileexplorer.helper.GuiHelper;
-import dk.mrspring.fileexplorer.helper.TextHelper;
-import dk.mrspring.fileexplorer.gui.interfaces.IGui;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.FontRenderer;
 import org.lwjgl.input.Keyboard;
-
-import java.awt.*;
-import java.awt.datatransfer.Clipboard;
-import java.awt.datatransfer.DataFlavor;
-import java.awt.datatransfer.StringSelection;
-import java.awt.datatransfer.UnsupportedFlavorException;
-import java.io.IOException;
+import org.lwjgl.opengl.GL11;
 
 /**
  * Created by MrSpring on 14-11-2014 for In-Game File Explorer.
  */
 public class GuiCustomTextField implements IGui // TODO: Rewrite using ClippingPlanes
 {
+    String text;
+    int x, y, w, h;
+    boolean focused, enabled = true;
+    int selectionStartPos = 0;
+    int cursorPos = 0;
+    int scroll = 0;
+    final int PADDING = 3;
+
+    public GuiCustomTextField(int x, int y, int width, int height, String text)
+    {
+        this.x = x;
+        this.y = y;
+        this.w = width;
+        this.h = height;
+        this.text = text;
+    }
+
+    @Override
+    public void draw(Minecraft minecraft, int mouseX, int mouseY)
+    {
+//        cursorPos = 0;
+
+        int renderOffset = 0;
+
+        float backgroundAlpha = 0.25F;
+        if (focused)
+            backgroundAlpha = 0.8F;
+        if (!enabled)
+            backgroundAlpha = 0.25F;
+
+        DrawingHelper.drawQuad(x + 1, y, w - 2, h, Color.BLACK, backgroundAlpha);
+        DrawingHelper.drawQuad(x, y + 1, 1, h - 2, Color.BLACK, backgroundAlpha);
+        DrawingHelper.drawQuad(x + w - 1, y + 1, 1, h - 2, Color.BLACK, backgroundAlpha);
+
+        DrawingHelper.drawQuad(x + 1, y + 1, w - 2, 1, Color.WHITE, 1F);
+        DrawingHelper.drawQuad(x + 1, y + h - 2, w - 2, 1, Color.LT_GREY, 1F);
+        DrawingHelper.drawQuad(x + 1, y + 1, 1, h - 3, Color.WHITE, 1F);
+        DrawingHelper.drawQuad(x + w - 2, y + 2, 1, h - 3, Color.LT_GREY, 1F);
+
+        GLClippingPlanes.glEnableClipping(x + PADDING, x + w - PADDING, y + PADDING, y + h - PADDING);
+
+        GL11.glPushMatrix();
+
+        minecraft.fontRendererObj.drawString(getText(), x + PADDING - scroll, y + PADDING, 0xFFFFFF, false);
+
+        int cursorX = 0;
+        if (cursorPos > 0 && cursorPos < getText().length())
+            cursorX = minecraft.fontRendererObj.getStringWidth(getText().substring(0, cursorPos));
+        else if (cursorPos == getText().length())
+            cursorX = minecraft.fontRendererObj.getStringWidth(getText());
+
+        GL11.glPopMatrix();
+
+        GLClippingPlanes.glDisableClipping();
+
+        minecraft.fontRendererObj.drawString("|", x + cursorX + PADDING - 1 - scroll, y + PADDING, 0xFF0000, false);
+    }
+
+    public void setEnabled(boolean enabled)
+    {
+        this.enabled = enabled;
+    }
+
+    public void setX(int x)
+    {
+        this.x = x;
+    }
+
+    public void setY(int y)
+    {
+        this.y = y;
+    }
+
+    public void setW(int w)
+    {
+        this.w = w;
+    }
+
+    public void setH(int h)
+    {
+        this.h = h;
+    }
+
+    public String getText()
+    {
+        return text;
+    }
+
+    public void setText(String text)
+    {
+        this.text = text;
+    }
+
+    @Override
+    public void update()
+    {
+
+    }
+
+    @Override
+    public boolean mouseDown(int mouseX, int mouseY, int mouseButton)
+    {
+        focused = GuiHelper.isMouseInBounds(mouseX, mouseY, x, y, w, h);
+        return focused;
+    }
+
+    @Override
+    public void mouseUp(int mouseX, int mouseY, int mouseButton)
+    {
+
+    }
+
+    @Override
+    public void mouseClickMove(int mouseX, int mouseY, int mouseButton, long timeSinceClick)
+    {
+
+    }
+
+    @Override
+    public void handleKeyTyped(int keyCode, char character)
+    {
+        if (keyCode == Keyboard.KEY_RIGHT)
+            setCursorPos(cursorPos + 1);
+        else if (keyCode == Keyboard.KEY_LEFT)
+            setCursorPos(cursorPos - 1);
+    }
+
+    private void setCursorPos(int newCursorPosition)
+    {
+        if (newCursorPosition < 0)
+            this.cursorPos = 0;
+        else if (newCursorPosition > getText().length())
+            this.cursorPos = getText().length();
+        else this.cursorPos = newCursorPosition;
+
+        int renderWindowMin = scroll;
+        int renderWindowMax = renderWindowMin + w - (2 * PADDING);
+
+        int cursorRenderPosition = Minecraft.getMinecraft().fontRendererObj.getStringWidth(getText().substring(0, cursorPos));
+
+        if (cursorRenderPosition > (renderWindowMax - (2 * PADDING)))
+            scroll = cursorRenderPosition - (w - (4 * PADDING));
+        else if (cursorRenderPosition < renderWindowMin + (2 * PADDING))
+            scroll = cursorRenderPosition - (2 * PADDING);
+
+        if (scroll < 0)
+            scroll = 0;
+    }
+/*
     int x, y, w, h;
     int cursorPos = 0;
     int selectionStartPos = 0;
@@ -447,4 +589,5 @@ public class GuiCustomTextField implements IGui // TODO: Rewrite using ClippingP
     {
         return h;
     }
+*/
 }

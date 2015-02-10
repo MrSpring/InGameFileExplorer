@@ -46,7 +46,7 @@ public class LiteModFileExplorer implements Tickable, Configurable
     public void onTick(Minecraft minecraft, float partialTicks, boolean inGame, boolean clock)
     {
         if (openExampleGui.isPressed())
-            minecraft.displayGuiScreen(new GuiScreenBackupManager("Backup Manager", minecraft.currentScreen));
+            minecraft.displayGuiScreen(new GuiScreenExamplePage(minecraft.currentScreen));//minecraft.displayGuiScreen(new GuiScreenBackupManager("Backup Manager", minecraft.currentScreen));
         if (openFileExplorer.isPressed())
         {
             if (config.showWelcomeScreen)
