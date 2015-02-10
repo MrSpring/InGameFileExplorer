@@ -108,6 +108,11 @@ public class GuiCustomTextField implements IGui // TODO: Rewrite using ClippingP
         return text;
     }
 
+    public String getSelection()
+    {
+        return getText().substring(Math.min(selectionStart, cursorPos), Math.max(selectionStart, cursorPos));
+    }
+
     public void setText(String text)
     {
         this.text = text;
@@ -162,28 +167,14 @@ public class GuiCustomTextField implements IGui // TODO: Rewrite using ClippingP
             this.handleDelete(false);
         else if (keyCode == Keyboard.KEY_DELETE)
             this.handleDelete(true);
+        else if (keyCode == Keyboard.KEY_V && isCtrlDown())
+            this.pasteText();
+        else if (keyCode == Keyboard.KEY_C && isCtrlDown())
+            this.copyText();
+        else if (keyCode == Keyboard.KEY_X && isCtrlDown())
+            this.cutText();
         else if (TextHelper.isKeyWritable(keyCode))
             this.writeCharacter(character);
-    }
-
-    private void delete(int deleteStart, int deleteEnd)
-    {
-        StringBuilder builder = new StringBuilder(getText());
-        builder.delete(deleteStart, deleteEnd);
-        setText(builder.toString());
-        setCursorPos(deleteStart);
-    }
-
-    private void delete(int amount)
-    {
-        delete(Math.min(cursorPos + amount, cursorPos), Math.max(cursorPos + amount, cursorPos));
-    }
-
-    private void handleDelete(boolean isDeleteKey)
-    {
-        if (selectionStart != cursorPos)
-            delete(Math.min(selectionStart, cursorPos), Math.max(selectionStart, cursorPos));
-        else delete(isDeleteKey ? 1 : -1);
     }
 
     private boolean isShiftDown()
@@ -191,10 +182,54 @@ public class GuiCustomTextField implements IGui // TODO: Rewrite using ClippingP
         return Keyboard.isKeyDown(Keyboard.KEY_LSHIFT) || Keyboard.isKeyDown(Keyboard.KEY_RSHIFT);
     }
 
+    private boolean isCtrlDown()
+    {
+        return Keyboard.isKeyDown(Keyboard.KEY_LCONTROL) || Keyboard.isKeyDown(Keyboard.KEY_RCONTROL);
+    }
+
+    private void delete(int deleteStart, int deleteEnd)
+    {
+        int actualStart = Math.max(deleteStart, 0);
+        StringBuilder builder = new StringBuilder(getText());
+        builder.delete(actualStart, Math.min(getText().length(), deleteEnd));
+        setText(builder.toString());
+        setCursorPos(actualStart);
+    }
+
+    private void delete(int amount)
+    {
+        delete(Math.min(cursorPos + amount, cursorPos), Math.max(cursorPos + amount, cursorPos));
+    }
+
+    private void deleteSelection()
+    {
+        delete(Math.min(selectionStart, cursorPos), Math.max(selectionStart, cursorPos));
+    }
+
+    private void handleDelete(boolean isDeleteKey)
+    {
+        if (selectionStart != cursorPos)
+            deleteSelection();
+        else delete(isDeleteKey ? 1 : -1);
+    }
+
     private void pasteText()
     {
         String fromClipboard = ClipboardHelper.paste();
         this.writeString(fromClipboard);
+    }
+
+    private void copyText()
+    {
+        String selection = this.getSelection();
+        if (!selection.isEmpty())
+            ClipboardHelper.copy(selection);
+    }
+
+    private void cutText()
+    {
+        this.copyText();
+        this.deleteSelection();
     }
 
     public void setCursorPos(int cursorPos)
