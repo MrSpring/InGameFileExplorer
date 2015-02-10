@@ -2,9 +2,7 @@ package dk.mrspring.fileexplorer.gui;
 
 import com.mumfrey.liteloader.gl.GLClippingPlanes;
 import dk.mrspring.fileexplorer.gui.interfaces.IGui;
-import dk.mrspring.fileexplorer.helper.Color;
-import dk.mrspring.fileexplorer.helper.DrawingHelper;
-import dk.mrspring.fileexplorer.helper.GuiHelper;
+import dk.mrspring.fileexplorer.helper.*;
 import net.minecraft.client.Minecraft;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
@@ -17,7 +15,7 @@ public class GuiCustomTextField implements IGui // TODO: Rewrite using ClippingP
     String text;
     int x, y, w, h;
     boolean focused, enabled = true;
-    int selectionStartPos = 0;
+    int selectionStart = 0;
     int cursorPos = 0;
     int scroll = 0;
     final int PADDING = 3;
@@ -34,10 +32,6 @@ public class GuiCustomTextField implements IGui // TODO: Rewrite using ClippingP
     @Override
     public void draw(Minecraft minecraft, int mouseX, int mouseY)
     {
-//        cursorPos = 0;
-
-        int renderOffset = 0;
-
         float backgroundAlpha = 0.25F;
         if (focused)
             backgroundAlpha = 0.8F;
@@ -53,8 +47,20 @@ public class GuiCustomTextField implements IGui // TODO: Rewrite using ClippingP
         DrawingHelper.drawQuad(x + 1, y + 1, 1, h - 3, Color.WHITE, 1F);
         DrawingHelper.drawQuad(x + w - 2, y + 2, 1, h - 3, Color.LT_GREY, 1F);
 
-        GLClippingPlanes.glEnableClipping(x + PADDING, x + w - PADDING, y + PADDING, y + h - PADDING);
+        if (selectionStart != cursorPos)
+        {
+            int minSelectionOrCursor = Math.min(cursorPos, selectionStart);
+            int maxSelectionOrCursor = Math.max(cursorPos, selectionStart);
 
+            int selectionRenderStart = minecraft.fontRendererObj.getStringWidth(getText().substring(0, minSelectionOrCursor));
+            int selectionRenderWidth = minecraft.fontRendererObj.getStringWidth(getText().substring(minSelectionOrCursor, maxSelectionOrCursor));
+
+            GLClippingPlanes.glEnableClipping(x + PADDING - 1, x + w - PADDING + 1, y, y + h);
+            DrawingHelper.drawQuad(x + PADDING + selectionRenderStart - scroll - 1, y + PADDING - 1, selectionRenderWidth + 1, h - (2 * PADDING) + 2, Color.BLUE, 0.9F);
+            GLClippingPlanes.glDisableClipping();
+        }
+
+        GLClippingPlanes.glEnableClipping(x + PADDING, x + w - PADDING, y + PADDING, y + h - PADDING);
         GL11.glPushMatrix();
 
         minecraft.fontRendererObj.drawString(getText(), x + PADDING - scroll, y + PADDING, 0xFFFFFF, false);
@@ -107,6 +113,19 @@ public class GuiCustomTextField implements IGui // TODO: Rewrite using ClippingP
         this.text = text;
     }
 
+    public void writeString(String string)
+    {
+        StringBuilder builder = new StringBuilder(getText());
+        builder.insert(cursorPos, string);
+        setText(builder.toString());
+        setCursorPos(cursorPos + string.length());
+    }
+
+    public void writeCharacter(char character)
+    {
+        this.writeString(String.valueOf(character));
+    }
+
     @Override
     public void update()
     {
@@ -136,18 +155,63 @@ public class GuiCustomTextField implements IGui // TODO: Rewrite using ClippingP
     public void handleKeyTyped(int keyCode, char character)
     {
         if (keyCode == Keyboard.KEY_RIGHT)
-            setCursorPos(cursorPos + 1);
+            setCursorPos(cursorPos + 1, !isShiftDown());
         else if (keyCode == Keyboard.KEY_LEFT)
-            setCursorPos(cursorPos - 1);
+            setCursorPos(cursorPos - 1, !isShiftDown());
+        else if (keyCode == Keyboard.KEY_BACK)
+            this.handleDelete(false);
+        else if (keyCode == Keyboard.KEY_DELETE)
+            this.handleDelete(true);
+        else if (TextHelper.isKeyWritable(keyCode))
+            this.writeCharacter(character);
     }
 
-    private void setCursorPos(int newCursorPosition)
+    private void delete(int deleteStart, int deleteEnd)
+    {
+        StringBuilder builder = new StringBuilder(getText());
+        builder.delete(deleteStart, deleteEnd);
+        setText(builder.toString());
+        setCursorPos(deleteStart);
+    }
+
+    private void delete(int amount)
+    {
+        delete(Math.min(cursorPos + amount, cursorPos), Math.max(cursorPos + amount, cursorPos));
+    }
+
+    private void handleDelete(boolean isDeleteKey)
+    {
+        if (selectionStart != cursorPos)
+            delete(Math.min(selectionStart, cursorPos), Math.max(selectionStart, cursorPos));
+        else delete(isDeleteKey ? 1 : -1);
+    }
+
+    private boolean isShiftDown()
+    {
+        return Keyboard.isKeyDown(Keyboard.KEY_LSHIFT) || Keyboard.isKeyDown(Keyboard.KEY_RSHIFT);
+    }
+
+    private void pasteText()
+    {
+        String fromClipboard = ClipboardHelper.paste();
+        this.writeString(fromClipboard);
+    }
+
+    public void setCursorPos(int cursorPos)
+    {
+        this.setCursorPos(cursorPos, true);
+    }
+
+    public void setCursorPos(int newCursorPosition, boolean moveSelection)
     {
         if (newCursorPosition < 0)
             this.cursorPos = 0;
         else if (newCursorPosition > getText().length())
             this.cursorPos = getText().length();
         else this.cursorPos = newCursorPosition;
+
+        if (moveSelection)
+            this.selectionStart = cursorPos;
 
         int renderWindowMin = scroll;
         int renderWindowMax = renderWindowMin + w - (2 * PADDING);
