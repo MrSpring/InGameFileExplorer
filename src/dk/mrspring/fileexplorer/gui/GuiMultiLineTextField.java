@@ -1,12 +1,11 @@
 package dk.mrspring.fileexplorer.gui;
 
 import com.mumfrey.liteloader.gl.GLClippingPlanes;
+import dk.mrspring.fileexplorer.gui.interfaces.IGui;
+import dk.mrspring.fileexplorer.gui.interfaces.IMouseListener;
 import dk.mrspring.fileexplorer.helper.Color;
 import dk.mrspring.fileexplorer.helper.DrawingHelper;
 import dk.mrspring.fileexplorer.helper.GuiHelper;
-import dk.mrspring.fileexplorer.helper.TextHelper;
-import dk.mrspring.fileexplorer.gui.interfaces.IGui;
-import dk.mrspring.fileexplorer.gui.interfaces.IMouseListener;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import org.lwjgl.input.Keyboard;
@@ -92,16 +91,16 @@ public class GuiMultiLineTextField implements IGui, IMouseListener
         int xOffset = 0, yOffset = -scrollHeight;
         if (lines * 9 > h)
             xOffset += 5;
-        
+
         if (drawBackground)
             DrawingHelper.drawButtonThingy(x, y, w, h, focused ? 1 : 0, true, Color.BLACK, 0.85F, Color.BLACK, 0.85F);
-        
+
         GLClippingPlanes.glEnableClipping(x, x + w, y + padding, y + h - padding);
-        
+
         lines = DrawingHelper.drawSplitString(minecraft.fontRendererObj, x + padding + xOffset, y + padding + yOffset, text, 0xFFFFFF, w - (padding * 2) - xOffset, true);
         String cutLine = line.substring(0, cursorRelativePos);
         int cursorXOffset = minecraft.fontRendererObj.getStringWidth(cutLine) + xOffset;
-        
+
         if (focused && !(flashCount > 10))
             minecraft.fontRendererObj.drawString("|", x + cursorXOffset + padding - 1, y + (cursorLine * 9) + padding + yOffset, 0xFF0000, false);
 
@@ -165,7 +164,7 @@ public class GuiMultiLineTextField implements IGui, IMouseListener
                 this.paste();
             else if (keyCode == Keyboard.KEY_RETURN)
                 this.writeCharacter('\n');
-            else if (TextHelper.isKeyWritable(keyCode))
+            else if (!Character.isISOControl(character))
                 this.writeCharacter(character);
     }
 

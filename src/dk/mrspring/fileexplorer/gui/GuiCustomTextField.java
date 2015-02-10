@@ -2,10 +2,14 @@ package dk.mrspring.fileexplorer.gui;
 
 import com.mumfrey.liteloader.gl.GLClippingPlanes;
 import dk.mrspring.fileexplorer.gui.interfaces.IGui;
-import dk.mrspring.fileexplorer.helper.*;
+import dk.mrspring.fileexplorer.helper.ClipboardHelper;
+import dk.mrspring.fileexplorer.helper.Color;
+import dk.mrspring.fileexplorer.helper.DrawingHelper;
+import dk.mrspring.fileexplorer.helper.GuiHelper;
 import net.minecraft.client.Minecraft;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
+import sun.text.normalizer.UTF16;
 
 /**
  * Created by MrSpring on 14-11-2014 for In-Game File Explorer.
@@ -32,20 +36,7 @@ public class GuiCustomTextField implements IGui
     @Override
     public void draw(Minecraft minecraft, int mouseX, int mouseY)
     {
-        float backgroundAlpha = 0.25F;
-        if (focused)
-            backgroundAlpha = 0.8F;
-        if (!enabled)
-            backgroundAlpha = 0.25F;
-
-        DrawingHelper.drawQuad(x + 1, y, w - 2, h, Color.BLACK, backgroundAlpha);
-        DrawingHelper.drawQuad(x, y + 1, 1, h - 2, Color.BLACK, backgroundAlpha);
-        DrawingHelper.drawQuad(x + w - 1, y + 1, 1, h - 2, Color.BLACK, backgroundAlpha);
-
-        DrawingHelper.drawQuad(x + 1, y + 1, w - 2, 1, Color.WHITE, 1F);
-        DrawingHelper.drawQuad(x + 1, y + h - 2, w - 2, 1, Color.LT_GREY, 1F);
-        DrawingHelper.drawQuad(x + 1, y + 1, 1, h - 3, Color.WHITE, 1F);
-        DrawingHelper.drawQuad(x + w - 2, y + 2, 1, h - 3, Color.LT_GREY, 1F);
+        DrawingHelper.drawButtonThingy(x, y, w, h, focused || !enabled ? 1 : 0, enabled, Color.BLACK, 0.85F, Color.BLACK, 0.85F);
 
         if (selectionStart != cursorPos)
         {
@@ -184,7 +175,7 @@ public class GuiCustomTextField implements IGui
                 this.setCursorPos(0);
             else if (keyCode == Keyboard.KEY_END)
                 this.setCursorPos(getText().length());
-            else if (TextHelper.isKeyWritable(keyCode))
+            else if (!Character.isISOControl(character))
                 this.writeCharacter(character);
     }
 

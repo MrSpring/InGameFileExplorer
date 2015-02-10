@@ -72,6 +72,12 @@ public class GuiScreen extends net.minecraft.client.gui.GuiScreen
         return this;
     }
 
+    @Override
+    public void onGuiClosed()
+    {
+        Keyboard.enableRepeatEvents(false);
+    }
+
     public void removeElement(String identifier)
     {
         if (this.guiHashMap.containsKey(identifier))
