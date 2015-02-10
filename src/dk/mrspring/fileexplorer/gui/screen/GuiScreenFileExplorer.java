@@ -42,8 +42,7 @@ public class GuiScreenFileExplorer extends GuiScreen
                 }
             }));
 
-            this.hideBars();
-            this.hideTitle();
+            this.hideBars().hideTitle().enableRepeats();
             initialized = true;
         }
     }

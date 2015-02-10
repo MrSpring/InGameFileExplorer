@@ -9,7 +9,6 @@ import dk.mrspring.fileexplorer.helper.GuiHelper;
 import net.minecraft.client.Minecraft;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
-import sun.text.normalizer.UTF16;
 
 /**
  * Created by MrSpring on 14-11-2014 for In-Game File Explorer.
@@ -175,6 +174,8 @@ public class GuiCustomTextField implements IGui
                 this.setCursorPos(0);
             else if (keyCode == Keyboard.KEY_END)
                 this.setCursorPos(getText().length());
+            else if (keyCode == Keyboard.KEY_RETURN)
+                this.focused = false;
             else if (!Character.isISOControl(character))
                 this.writeCharacter(character);
     }
