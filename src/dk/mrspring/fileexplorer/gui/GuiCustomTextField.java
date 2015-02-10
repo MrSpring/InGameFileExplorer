@@ -63,7 +63,9 @@ public class GuiCustomTextField implements IGui
         GLClippingPlanes.glEnableClipping(x + PADDING, x + w - PADDING, y + PADDING, y + h - PADDING);
         GL11.glPushMatrix();
 
-        minecraft.fontRendererObj.drawString(getText(), x + PADDING - scroll, y + PADDING, 0xFFFFFF, false);
+        int textY = y + (h / 2) - 4; // TODO: Add the scrollbar
+
+        minecraft.fontRendererObj.drawString(getText(), x + PADDING - scroll, textY, 0xFFFFFF, false);
 
         int cursorX = 0;
         if (focused)
@@ -79,7 +81,7 @@ public class GuiCustomTextField implements IGui
         GLClippingPlanes.glDisableClipping();
 
         if (focused)
-            minecraft.fontRendererObj.drawString("|", x + cursorX + PADDING - 1 - scroll, y + PADDING, 0xFF0000, false);
+            minecraft.fontRendererObj.drawString("|", x + cursorX + PADDING - 1 - scroll, textY, 0xFF0000, false);
     }
 
     public void setEnabled(boolean enabled)
@@ -163,7 +165,7 @@ public class GuiCustomTextField implements IGui
     @Override
     public void handleKeyTyped(int keyCode, char character)
     {
-        if (focused)
+        if (focused) // TODO: Add blinking cursor
             if (keyCode == Keyboard.KEY_RIGHT)
                 setCursorPos(cursorPos + 1, !isShiftDown());
             else if (keyCode == Keyboard.KEY_LEFT)
