@@ -1,13 +1,14 @@
 package dk.mrspring.fileexplorer.gui.screen;
 
-import dk.mrspring.fileexplorer.gui.*;
-import dk.mrspring.fileexplorer.helper.Color;
-import dk.mrspring.fileexplorer.helper.DrawingHelper;
-import dk.mrspring.fileexplorer.gui.interfaces.IDrawable;
+import dk.mrspring.fileexplorer.gui.GuiSimpleButton;
 import dk.mrspring.fileexplorer.gui.interfaces.IDelayedDraw;
+import dk.mrspring.fileexplorer.gui.interfaces.IDrawable;
 import dk.mrspring.fileexplorer.gui.interfaces.IGui;
 import dk.mrspring.fileexplorer.gui.interfaces.IMouseListener;
+import dk.mrspring.fileexplorer.helper.Color;
+import dk.mrspring.fileexplorer.helper.DrawingHelper;
 import net.minecraft.util.StatCollector;
+import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
 
@@ -30,6 +31,7 @@ public class GuiScreen extends net.minecraft.client.gui.GuiScreen
     private int barHeight = 30;
     protected net.minecraft.client.gui.GuiScreen previousScreen;
     private int mouseXAtLastFrame = 0, mouseYAtLastFrame = 0;
+    boolean repeats = false;
 
     public GuiScreen(String title, net.minecraft.client.gui.GuiScreen previousScreen)
     {
@@ -51,6 +53,23 @@ public class GuiScreen extends net.minecraft.client.gui.GuiScreen
     {
         if (!this.guiHashMap.containsKey(identifier))
             this.guiHashMap.put(identifier, gui);
+    }
+
+    public GuiScreen enableRepeats()
+    {
+        return this.setRepeats(true);
+    }
+
+    public GuiScreen disableRepeats()
+    {
+        return this.setRepeats(false);
+    }
+
+    public GuiScreen setRepeats(boolean repeats)
+    {
+        this.repeats = repeats;
+        Keyboard.enableRepeatEvents(repeats);
+        return this;
     }
 
     public void removeElement(String identifier)
@@ -208,12 +227,22 @@ public class GuiScreen extends net.minecraft.client.gui.GuiScreen
 
                 /*if (identifier.equals("done_button") && gui.mouseDown(mouseX, mouseY, mouseButton))
                     mc.displayGuiScreen(this.previousScreen);
-                else */if (gui.mouseDown(mouseX, mouseY, mouseButton))
+                else */
+                if (gui.mouseDown(mouseX, mouseY, mouseButton))
                     this.guiClicked(identifier, gui, mouseX, mouseY, mouseButton);
             }
         } catch (Exception e)
         {
             e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void handleKeyboardInput() throws IOException
+    {
+        if (Keyboard.getEventKeyState())
+        {
+            this.keyTyped(Keyboard.getEventCharacter(), Keyboard.getEventKey());
         }
     }
 
