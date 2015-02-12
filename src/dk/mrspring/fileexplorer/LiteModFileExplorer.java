@@ -9,12 +9,10 @@ import com.mumfrey.liteloader.modconfig.ConfigPanel;
 import dk.mrspring.fileexplorer.backup.BackupManager;
 import dk.mrspring.fileexplorer.gui.editor.*;
 import dk.mrspring.fileexplorer.gui.screen.*;
-import dk.mrspring.fileexplorer.gui.screen.GuiScreen;
 import dk.mrspring.fileexplorer.helper.DrawingHelper;
 import dk.mrspring.fileexplorer.helper.FileSorter;
 import dk.mrspring.fileexplorer.helper.IIcon;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.*;
 import net.minecraft.client.settings.KeyBinding;
 import org.apache.commons.io.FileUtils;
 import org.apache.logging.log4j.LogManager;
@@ -48,28 +46,28 @@ public class LiteModFileExplorer implements Tickable, Configurable
     public void onTick(Minecraft minecraft, float partialTicks, boolean inGame, boolean clock)
     {
         if (openExampleGui.isPressed())
-            minecraft.displayGuiScreen(new GuiScreenConfirmClose("Confirm", minecraft.currentScreen, new GuiScreenConfirmClose.ResultHandler()
-            {
-                @Override
-                public void save(net.minecraft.client.gui.GuiScreen parentScreen)
-                {
-
-                }
-
-                @Override
-                public void dontSave(net.minecraft.client.gui.GuiScreen parentScreen)
-                {
-
-                }
-
-                @Override
-                public void cancel(net.minecraft.client.gui.GuiScreen parentScreen)
-                {
-
-                }
-            }, "TextFile.txt"));
-        //minecraft.displayGuiScreen(new GuiScreenExamplePage(minecraft.currentScreen));
-        //minecraft.displayGuiScreen(new GuiScreenBackupManager("Backup Manager", minecraft.currentScreen));
+//            minecraft.displayGuiScreen(new GuiScreenConfirmClose("Confirm", minecraft.currentScreen, new GuiScreenConfirmClose.ResultHandler()
+//            {
+//                @Override
+//                public void save(net.minecraft.client.gui.GuiScreen parentScreen)
+//                {
+//
+//                }
+//
+//                @Override
+//                public void dontSave(net.minecraft.client.gui.GuiScreen parentScreen)
+//                {
+//
+//                }
+//
+//                @Override
+//                public void cancel(net.minecraft.client.gui.GuiScreen parentScreen)
+//                {
+//
+//                }
+//            }, "TextFile.txt"));
+            //minecraft.displayGuiScreen(new GuiScreenExamplePage(minecraft.currentScreen));
+            minecraft.displayGuiScreen(new GuiScreenBackupManager("Backup Manager", minecraft.currentScreen));
         if (openFileExplorer.isPressed())
         {
             if (config.showWelcomeScreen)
@@ -152,11 +150,7 @@ public class LiteModFileExplorer implements Tickable, Configurable
         try
         {
             FileUtils.deleteDirectory(getBackupDirectory());
-            File backupListFile = getBackupFile();
-            if (!backupListFile.exists())
-                backupListFile.createNewFile();
             backupManager = new BackupManager();
-            saveBackupList();
         } catch (IOException e)
         {
 
