@@ -8,6 +8,7 @@ import dk.mrspring.fileexplorer.loader.FileLoader;
 import net.minecraft.client.Minecraft;
 
 import java.io.File;
+import java.util.List;
 
 /**
  * Created by MrSpring on 09-11-2014 for In-Game File Explorer.
@@ -139,36 +140,24 @@ public class GuiFile extends GuiFileBase
         } else minecraft.fontRendererObj.drawString(this.getShortFileName(), x + 4, nameY, 0xFFFFFF, true);
     }
 
-    private void renderBigList(Minecraft minecraft)
+    private void renderBigList(Minecraft minecraft, int mouseX, int mouseY)
     {
-        float height = h;
-        float minimumHeightFor2Lines = 20;
+        float iconSize = 20;
+        List<String> lines = minecraft.fontRendererObj.listFormattedStringToWidth(getShortFileName(), w - (int) iconSize);
 
-        float iconSize = height;
+        this.h = lines.size() * 9 + (20 - 9);
 
-        int nameWidth = minecraft.fontRendererObj.getStringWidth(this.getShortFileName());
-        int nameY = y + h / 2 - 4;
+        button.setWidth(w);
+        button.setHeight(h);
+        button.setX(x);
+        button.setY(y);
+        button.draw(minecraft, mouseX, mouseY);
 
-        int maxNameWidth = w - (int) iconSize - 6;
+        DrawingHelper.drawQuad(x + iconSize - 2, y + 1, 1, h - 2, Color.LT_GREY, 1F);
+        DrawingHelper.drawQuad(x + iconSize - 1, y + 1, 1, h - 2, Color.WHITE, 1F);
 
-        if (nameWidth > maxNameWidth)
-        {
-            if (height < minimumHeightFor2Lines)
-                height = minimumHeightFor2Lines;
-
-            nameY -= 4;
-            button.setHeight((int) height);
-        }
-
-        iconSize = height;
-
-        DrawingHelper.drawQuad(x + iconSize - 2, y + 1, 1, height - 2, Color.LT_GREY, 1F);
-        DrawingHelper.drawQuad(x + iconSize - 1, y + 1, 1, height - 2, Color.WHITE, 1F);
-
-        DrawingHelper.drawIcon(this.getFileType().getIcon(), x, y, iconSize, iconSize, false);
-
-//        minecraft.fontRendererObj.drawSplitString(this.getShortFileName(), x + (int) iconSize + 3, nameY, w - (int) iconSize - 6, 0xFFFFFF);
-        DrawingHelper.drawSplitString(minecraft.fontRendererObj, x + (int) iconSize + 3, nameY, this.getShortFileName(), 0xFFFFFF, w - (int) iconSize - 6, true);
+        DrawingHelper.drawIcon(this.getFileType().getIcon(), x + 2, y + 2 + (h / 2 - (iconSize / 2)), iconSize - 4, iconSize - 4, false);
+        DrawingHelper.drawSplitString(minecraft.fontRendererObj, x + (int) iconSize + 3, y + 6, this.getShortFileName(), 0xFFFFFF, w - (int) iconSize - 6, true);
     }
 
     private void renderList(Minecraft minecraft)
@@ -180,7 +169,7 @@ public class GuiFile extends GuiFileBase
     public void draw(Minecraft minecraft, int mouseX, int mouseY)
     {
         //DrawingHelper.drawButtonThingy(x, y, w, h, Color.BLACK, 0.25F, Color.WHITE, 1F);
-        button.draw(minecraft, mouseX, mouseY);
+//        button.draw(minecraft, mouseX, mouseY);
 
         RenderType type = this.getRenderType();
         switch (type)
@@ -189,7 +178,7 @@ public class GuiFile extends GuiFileBase
                 renderSquare(minecraft);
                 break;
             case LONG_GRID:
-                renderBigList(minecraft);
+                renderBigList(minecraft, mouseX, mouseY);
                 break;
             case LIST:
                 renderList(minecraft);
