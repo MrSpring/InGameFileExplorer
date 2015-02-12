@@ -16,7 +16,7 @@ public class GuiFileNew extends GuiFileBase
     {
         super(x, y, w, h);
 
-        this.nameField = new GuiCustomTextField(x + 5, y + 5, w - 20, h - 10, "Enter File Name");
+        this.nameField = new GuiCustomTextField(x, y, w - 20, h - 10, "Enter File Name");
 
         this.createButton = new GuiSimpleButton(x + w - 5 - 10, y + (h / 2) - 5, 10, 10, "");
         this.cancelButton = new GuiSimpleButton(x + w - 5, y + (h / 2) - 4, 10, 10, "");
@@ -29,15 +29,15 @@ public class GuiFileNew extends GuiFileBase
     {
         super.draw(minecraft, mouseX, mouseY);
 
-        if (h >= 30)
-            DrawingHelper.drawButtonThingy(x, y, w, h, 0, true);
+//        if (h >= 30)
+//            DrawingHelper.drawButtonThingy(x, y, w, h, 0, true);
         this.nameField.draw(minecraft, mouseX, mouseY);
 
         this.createButton.draw(minecraft, mouseX, mouseY);
-        DrawingHelper.drawIcon(DrawingHelper.checkMarkIcon, createButton.getX() + 2, createButton.getY() + 2, 6, 6, false);
+        DrawingHelper.drawIcon(DrawingHelper.checkMarkIcon, createButton.getX() + ((float) createButton.getWidth() / 2) - 3, createButton.getY() + ((float) createButton.getHeight() / 2) - 3, 6, 6, false);
 
         this.cancelButton.draw(minecraft, mouseX, mouseY);
-        DrawingHelper.drawIcon(DrawingHelper.crossIcon, cancelButton.getX() + 2, cancelButton.getY() + 2, 6, 6, false);
+        DrawingHelper.drawIcon(DrawingHelper.crossIcon, cancelButton.getX() + ((float) cancelButton.getWidth() / 2) - 3, cancelButton.getY() + ((float) cancelButton.getHeight() / 2) - 3, 6, 6, false);
     }
 
     @Override
@@ -100,20 +100,26 @@ public class GuiFileNew extends GuiFileBase
     {
         if (h >= 30)
         {
-            this.cancelButton.setX(x + w - 5 - 9);
-            this.cancelButton.setY(y + h - 14);
-            this.createButton.setX(x + w - 5 - 9);
-            this.createButton.setY(y + 4);
-            this.nameField.setX(x + 5);
-            this.nameField.setY(y + 5);
-            this.nameField.setW(w - 22);
-            this.nameField.setH(h - 10);
+            this.cancelButton.setWidth(h / 2 - 2);
+            this.cancelButton.setHeight(h / 2 - 2);
+            this.cancelButton.setX(x + w - cancelButton.getWidth());
+            this.cancelButton.setY(y + h - cancelButton.getHeight());
+            this.createButton.setWidth(h / 2 - 2);
+            this.createButton.setHeight(h / 2 - 2);
+            this.createButton.setX(x + w - createButton.getWidth());
+            this.createButton.setY(y);
+            this.nameField.setX(x);
+            this.nameField.setY(y);
+            this.nameField.setW(w - createButton.getWidth() - 3);
+            this.nameField.setH(h);
         } else
         {
             this.createButton.setX(x + w - 22);
-            this.createButton.setY(y + (h / 2) - 5);
+            this.createButton.setY(y);
+            this.createButton.setHeight(h);
             this.cancelButton.setX(x + w - 10);
-            this.cancelButton.setY(y + (h / 2) - 5);
+            this.cancelButton.setY(y);
+            this.cancelButton.setHeight(h);
             this.nameField.setX(x);
             this.nameField.setY(y);
             this.nameField.setW(w - 24);
