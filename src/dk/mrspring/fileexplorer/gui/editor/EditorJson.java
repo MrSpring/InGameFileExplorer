@@ -47,9 +47,9 @@ public class EditorJson extends Editor implements IMouseListener
         viewer = new GuiJsonViewer(x, y, w, h, json);
         editor = new GuiJsonEditor(x, y, w, h, json);
 
-        editButton = new GuiSimpleButton(x - 62, y + h - 45, 50, 20, "gui.json_editor.edit");
-        saveButton = new GuiSimpleButton(x - 62, y + h - 15, 50, 20, "gui.json_editor.save");
-        cancelButton = new GuiSimpleButton(x - 62, y + h - 45, 50, 20, "gui.json_editor.cancel");
+        editButton = new GuiSimpleButton(x - 62, y + h - 50, 50, 20, "gui.json_editor.edit");
+        saveButton = new GuiSimpleButton(x - 62, y + h - 20, 50, 20, "gui.json_editor.save");
+        cancelButton = new GuiSimpleButton(x - 62, y + h - 50, 50, 20, "gui.json_editor.cancel");
     }
 
     @Override
@@ -80,11 +80,11 @@ public class EditorJson extends Editor implements IMouseListener
 
         if (editing)
         {
-            this.saveButton.setY(y + h - 15);
+            this.saveButton.setY(y + h - 20);
             this.saveButton.setX(x - 62);
             this.saveButton.update();
 
-            this.cancelButton.setY(y + h - 40);
+            this.cancelButton.setY(y + h - 45);
             this.cancelButton.setX(x - 62);
             this.cancelButton.update();
 
@@ -93,7 +93,7 @@ public class EditorJson extends Editor implements IMouseListener
             this.editor.update();
         } else
         {
-            this.editButton.setY(y + h - 15);
+            this.editButton.setY(y + h - 20);
             this.editButton.setX(x - 62);
             this.editButton.update();
 
