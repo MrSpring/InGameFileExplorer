@@ -2,6 +2,7 @@ package dk.mrspring.fileexplorer.gui.screen;
 
 import dk.mrspring.fileexplorer.LiteModFileExplorer;
 import dk.mrspring.fileexplorer.backup.BackupEntry;
+import dk.mrspring.fileexplorer.backup.BackupManager;
 import dk.mrspring.fileexplorer.gui.GuiSimpleButton;
 import dk.mrspring.fileexplorer.gui.interfaces.IGui;
 import dk.mrspring.fileexplorer.helper.DrawingHelper;
@@ -9,6 +10,7 @@ import dk.mrspring.fileexplorer.loader.FileLoader;
 import net.minecraft.client.Minecraft;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -30,7 +32,7 @@ public class GuiScreenBackupManager extends GuiScreen
 
         this.hideBars().hideTitle();
         this.addGuiElement("done", new GuiSimpleButton(width - 40 - 10, height - 20 - 10, 40, 20, "Done"));
-        this.addGuiElement("list", new GuiBackupList(10, 10, Math.min(width - 20, 220), height - 20));
+        this.addGuiElement("list", new GuiBackupList(10, 10, Math.min(width - 20, 220), height - 20, LiteModFileExplorer.backupManager));
     }
 
     @Override
@@ -59,7 +61,7 @@ public class GuiScreenBackupManager extends GuiScreen
         int x, y, width, height;
         List<GuiBackupEntry> backupEntries;
 
-        public GuiBackupList(int x, int y, int width, int height)
+        public GuiBackupList(int x, int y, int width, int height, BackupManager manager)
         {
             this.x = x;
             this.y = y;
@@ -68,8 +70,7 @@ public class GuiScreenBackupManager extends GuiScreen
 
             backupEntries = new ArrayList<GuiBackupEntry>();
 
-            for (BackupEntry entry : LiteModFileExplorer.backupManager.entries)
-                backupEntries.add(new GuiBackupEntry(entry));
+            updateList(manager);
         }
 
         @Override
@@ -83,6 +84,12 @@ public class GuiScreenBackupManager extends GuiScreen
             }
         }
 
+        public void updateList(BackupManager manager)
+        {
+            for (BackupEntry entry : manager.entries)
+                backupEntries.add(new GuiBackupEntry(entry));
+        }
+
         @Override
         public void update()
         {
@@ -93,13 +100,17 @@ public class GuiScreenBackupManager extends GuiScreen
         @Override
         public boolean mouseDown(int mouseX, int mouseY, int mouseButton)
         {
-            for (GuiBackupEntry entry : backupEntries)
+            for (Iterator<GuiBackupEntry> iterator = backupEntries.iterator(); iterator.hasNext(); )
             {
+                GuiBackupEntry entry = iterator.next();
                 if (entry.mouseDown(mouseX, mouseY, mouseButton))
                 {
                     BackupEntry backupEntry = LiteModFileExplorer.backupManager.restoreBackup(entry.backupID);
                     if (backupEntry != null)
+                    {
                         FileLoader.restoreBackup(backupEntry);
+                        iterator.remove();
+                    }
                 }
             }
             return false;
