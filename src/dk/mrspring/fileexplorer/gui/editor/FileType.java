@@ -1,7 +1,7 @@
 package dk.mrspring.fileexplorer.gui.editor;
 
-import dk.mrspring.fileexplorer.helper.DrawingHelper;
-import dk.mrspring.fileexplorer.helper.IIcon;
+import dk.mrspring.fileexplorer.LiteModFileExplorer;
+import dk.mrspring.llcore.Icon;
 
 import java.util.Arrays;
 
@@ -19,8 +19,8 @@ public abstract class FileType implements IFileType
         } else return super.equals(obj);
     }
 
-    public IIcon getIcon()
+    public Icon getIcon()
     {
-        return DrawingHelper.unknownIcon;
+        return LiteModFileExplorer.core.getIcon("unknown");
     }
 }

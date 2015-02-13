@@ -9,11 +9,13 @@ import com.mumfrey.liteloader.modconfig.ConfigPanel;
 import dk.mrspring.fileexplorer.backup.BackupManager;
 import dk.mrspring.fileexplorer.gui.editor.*;
 import dk.mrspring.fileexplorer.gui.screen.*;
-import dk.mrspring.fileexplorer.helper.DrawingHelper;
 import dk.mrspring.fileexplorer.helper.FileSorter;
-import dk.mrspring.fileexplorer.helper.IIcon;
+import dk.mrspring.fileexplorer.loader.FileLoader;
+import dk.mrspring.llcore.Icon;
+import dk.mrspring.llcore.LLCore;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.settings.KeyBinding;
+import net.minecraft.util.ResourceLocation;
 import org.apache.commons.io.FileUtils;
 import org.apache.logging.log4j.LogManager;
 import org.lwjgl.input.Keyboard;
@@ -41,6 +43,8 @@ public class LiteModFileExplorer implements Tickable, Configurable
     public static BufferedImage image;
 
     private static Map<String, FileType> supportedFileTypes;
+
+    public static LLCore core;
 
     @Override
     public void onTick(Minecraft minecraft, float partialTicks, boolean inGame, boolean clock)
@@ -97,6 +101,196 @@ public class LiteModFileExplorer implements Tickable, Configurable
     {
         return config.file_sorting_type;
     }
+
+    @Override
+    public void init(File configPath)
+    {
+        core = new LLCore("fileexplorer");
+        core.setFileLoader(new FileLoader());
+        core.loadIcon(new ResourceLocation("fileexplorer", "unknown"));
+        core.loadIcon(new ResourceLocation("fileexplorer", "json"));
+        core.loadIcon(new ResourceLocation("fileexplorer", "txt"));
+        core.loadIcon(new ResourceLocation("fileexplorer", "image"));
+        core.loadIcon(new ResourceLocation("fileexplorer", "folder"));
+
+        LiteLoader.getInput().registerKeyBinding(openExampleGui);
+        LiteLoader.getInput().registerKeyBinding(openFileExplorer);
+        LiteLoader.getInput().registerKeyBinding(openTextEditor);
+        LiteLoader.getInput().registerKeyBinding(openImageViewer);
+
+        String configFilePath = configPath.getPath() + File.separator + "InGameFileExplorer.json";
+        configFile = new File(configFilePath);
+
+        ModLogger.logger = LogManager.getLogger("InGameFileExplorer");
+
+        try
+        {
+            if (configFile.exists())
+            {
+                Gson gson = new Gson();
+                FileReader reader = new FileReader(configFile);
+                config = gson.fromJson(reader, Config.class);
+                saveConfig();
+                ModLogger.printDebug("Loaded config from file: " + configFile.getPath() + ", debug messages are enabled! Get ready for spam!");
+            } else
+            {
+                config = new Config();
+                saveConfig();
+            }
+        } catch (Exception e)
+        {
+            e.printStackTrace();
+            if (config == null)
+                config = new Config();
+        }
+
+        loadBackupList();
+
+//        FileLoader.takeBackup(configFile);
+//        FileLoader.takeBackup(new File("crash-reports"));
+
+        supportedFileTypes = new HashMap<String, FileType>();
+
+        supportedFileTypes.put(".json", new FileType()
+        {
+            @Override
+            public String[] getSupportedTypes()
+            {
+                return new String[]{".json"};
+            }
+
+            @Override
+            public Editor getNewEditor(int x, int y, int width, int height, File file)
+            {
+                return new EditorJson(x, y, width, height, file);
+            }
+
+            @Override
+            public Icon getIcon()
+            {
+                return core.getIcon("json");
+            }
+
+            @Override
+            public String getName()
+            {
+                return "JSON";
+            }
+        });
+        supportedFileTypes.put("directory", new FileType()
+        {
+            @Override
+            public String[] getSupportedTypes()
+            {
+                return new String[]{"directory"};
+            }
+
+            @Override
+            public Editor getNewEditor(int x, int y, int width, int height, File file)
+            {
+                return null;
+            }
+
+            @Override
+            public Icon getIcon()
+            {
+                return core.getIcon("folder");
+            }
+
+            @Override
+            public String getName()
+            {
+                return "FOLDER";
+            }
+        });
+        supportedFileTypes.put("unknown", new FileType()
+        {
+            @Override
+            public String[] getSupportedTypes()
+            {
+                return new String[]{"unknown"};
+            }
+
+            @Override
+            public Editor getNewEditor(int x, int y, int width, int height, File file)
+            {
+                return null;
+            }
+
+            @Override
+            public String getName()
+            {
+                return "UNKNOWN";
+            }
+
+            @Override
+            public Icon getIcon()
+            {
+                return core.getIcon("unknown");
+            }
+        });
+
+        FileType tempType = new FileType()
+        {
+            @Override
+            public String[] getSupportedTypes()
+            {
+                return new String[]{".png", ".jpeg", ".jpg"};
+            }
+
+            @Override
+            public Editor getNewEditor(int x, int y, int width, int height, File file)
+            {
+                return new EditorImage(x, y, width, height, file);
+            }
+
+            @Override
+            public Icon getIcon()
+            {
+                return core.getIcon("image");
+            }
+
+            @Override
+            public String getName()
+            {
+                return "IMAGE_VIEWER";
+            }
+        };
+        supportedFileTypes.put(".png", tempType);
+        supportedFileTypes.put(".jpg", tempType);
+        supportedFileTypes.put(".jpeg", tempType);
+
+        supportedFileTypes.put(".txt", new FileType()
+        {
+            @Override
+            public String[] getSupportedTypes()
+            {
+                return new String[]{".txt"};
+            }
+
+            @Override
+            public Editor getNewEditor(int x, int y, int width, int height, File file)
+            {
+                return new EditorText(x, y, width, height, file);
+            }
+
+            @Override
+            public Icon getIcon()
+            {
+                return core.getIcon("txt");
+            }
+
+            @Override
+            public String getName()
+            {
+                return "TEXT";
+            }
+        });
+
+        FileSorter.load();
+    }
+
+//    }
 
     public static void saveConfig()
     {
@@ -162,186 +356,6 @@ public class LiteModFileExplorer implements Tickable, Configurable
     public String getVersion()
     {
         return "0.1.0-BETA";
-    }
-
-    @Override
-    public void init(File configPath)
-    {
-        LiteLoader.getInput().registerKeyBinding(openExampleGui);
-        LiteLoader.getInput().registerKeyBinding(openFileExplorer);
-        LiteLoader.getInput().registerKeyBinding(openTextEditor);
-        LiteLoader.getInput().registerKeyBinding(openImageViewer);
-
-        String configFilePath = configPath.getPath() + File.separator + "InGameFileExplorer.json";
-        configFile = new File(configFilePath);
-
-        ModLogger.logger = LogManager.getLogger("InGameFileExplorer");
-
-        try
-        {
-            if (configFile.exists())
-            {
-                Gson gson = new Gson();
-                FileReader reader = new FileReader(configFile);
-                config = gson.fromJson(reader, Config.class);
-                saveConfig();
-                ModLogger.printDebug("Loaded config from file: " + configFile.getPath() + ", debug messages are enabled! Get ready for spam!");
-            } else
-            {
-                config = new Config();
-                saveConfig();
-            }
-        } catch (Exception e)
-        {
-            e.printStackTrace();
-            if (config == null)
-                config = new Config();
-        }
-
-        loadBackupList();
-
-//        FileLoader.takeBackup(configFile);
-//        FileLoader.takeBackup(new File("crash-reports"));
-
-        supportedFileTypes = new HashMap<String, FileType>();
-
-        supportedFileTypes.put(".json", new FileType()
-        {
-            @Override
-            public String[] getSupportedTypes()
-            {
-                return new String[]{".json"};
-            }
-
-            @Override
-            public Editor getNewEditor(int x, int y, int width, int height, File file)
-            {
-                return new EditorJson(x, y, width, height, file);
-            }
-
-            @Override
-            public IIcon getIcon()
-            {
-                return DrawingHelper.jsonFileIcon;
-            }
-
-            @Override
-            public String getName()
-            {
-                return "JSON";
-            }
-        });
-        supportedFileTypes.put("directory", new FileType()
-        {
-            @Override
-            public String[] getSupportedTypes()
-            {
-                return new String[]{"directory"};
-            }
-
-            @Override
-            public Editor getNewEditor(int x, int y, int width, int height, File file)
-            {
-                return null;
-            }
-
-            @Override
-            public IIcon getIcon()
-            {
-                return DrawingHelper.folderIcon;
-            }
-
-            @Override
-            public String getName()
-            {
-                return "FOLDER";
-            }
-        });
-        supportedFileTypes.put("unknown", new FileType()
-        {
-            @Override
-            public String[] getSupportedTypes()
-            {
-                return new String[]{"unknown"};
-            }
-
-            @Override
-            public Editor getNewEditor(int x, int y, int width, int height, File file)
-            {
-                return null;
-            }
-
-            @Override
-            public String getName()
-            {
-                return "UNKNOWN";
-            }
-
-            @Override
-            public IIcon getIcon()
-            {
-                return DrawingHelper.unknownIcon;
-            }
-        });
-
-        FileType tempType = new FileType()
-        {
-            @Override
-            public String[] getSupportedTypes()
-            {
-                return new String[]{".png", ".jpeg", ".jpg"};
-            }
-
-            @Override
-            public Editor getNewEditor(int x, int y, int width, int height, File file)
-            {
-                return new EditorImage(x, y, width, height, file);
-            }
-
-            @Override
-            public IIcon getIcon()
-            {
-                return DrawingHelper.imageIcon;
-            }
-
-            @Override
-            public String getName()
-            {
-                return "IMAGE_VIEWER";
-            }
-        };
-        supportedFileTypes.put(".png", tempType);
-        supportedFileTypes.put(".jpg", tempType);
-        supportedFileTypes.put(".jpeg", tempType);
-
-        supportedFileTypes.put(".txt", new FileType()
-        {
-            @Override
-            public String[] getSupportedTypes()
-            {
-                return new String[]{".txt"};
-            }
-
-            @Override
-            public Editor getNewEditor(int x, int y, int width, int height, File file)
-            {
-                return new EditorText(x, y, width, height, file);
-            }
-
-            @Override
-            public IIcon getIcon()
-            {
-                return DrawingHelper.textFileIcon;
-            }
-
-            @Override
-            public String getName()
-            {
-                return "TEXT";
-            }
-        });
-
-        FileSorter.load();
     }
 
     @Override

@@ -2,9 +2,6 @@ package dk.mrspring.fileexplorer.gui.screen;
 
 import dk.mrspring.fileexplorer.gui.GuiSimpleButton;
 import dk.mrspring.fileexplorer.gui.interfaces.IGui;
-import dk.mrspring.fileexplorer.helper.Color;
-import dk.mrspring.fileexplorer.helper.DrawingHelper;
-import net.minecraft.util.StatCollector;
 
 /**
  * Created by Konrad on 10-02-2015.
@@ -36,23 +33,23 @@ public class GuiScreenConfirmClose extends GuiScreen
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks)
     {
-        DrawingHelper.drawIcon(DrawingHelper.hoverIcon, width / 2 - 100, height / 2 - 70, 200, 140, false);
-
-        String translatedMessage = StatCollector.translateToLocal("gui.screen.save_before_closing.message").replace("\\n", "\n");
-        String preFileName = translatedMessage.split("###")[0];
-        String postFileName = translatedMessage.split("###")[1];
-
-        DrawingHelper.drawSplitCenteredString(mc.fontRendererObj, width / 2, height / 2 - 60, StatCollector.translateToLocal("gui.screen.save_before_closing.title"), 0xFFFFFF, 190, true);
-        int preLines = DrawingHelper.drawSplitCenteredString(mc.fontRendererObj, width / 2, height / 2 - 40, preFileName, 0xFFFFFF, 190, true);
-
-        DrawingHelper.drawQuad(width / 2 - 100 + 11, height / 2 - 35 + (preLines * 9), 200 - 22, 15, Color.BLACK, 1F);
-        DrawingHelper.drawQuad(width / 2 - 100 + 10, height / 2 - 35 + (preLines * 9) + 1, 1, 13, Color.BLACK, 1F);
-        DrawingHelper.drawQuad(width / 2 + 100 - 11, height / 2 - 35 + (preLines * 9) + 1, 1, 13, Color.BLACK, 1F);
-
-        DrawingHelper.drawSplitCenteredString(mc.fontRendererObj, width / 2, height / 2 - 32 + (preLines * 9), fileName, 0xFFFFFF, 190, true);
-
-        DrawingHelper.drawSplitCenteredString(mc.fontRendererObj, width / 2, height / 2 - 30 + (preLines * 9) + 14, postFileName, 0xFFFFFF, 190, true);
-
+//        DrawingHelper.drawIcon(DrawingHelper.hoverIcon, width / 2 - 100, height / 2 - 70, 200, 140, false);
+//
+//        String translatedMessage = StatCollector.translateToLocal("gui.screen.save_before_closing.message").replace("\\n", "\n");
+//        String preFileName = translatedMessage.split("###")[0];
+//        String postFileName = translatedMessage.split("###")[1];
+//
+//        DrawingHelper.drawSplitCenteredString(mc.fontRendererObj, width / 2, height / 2 - 60, StatCollector.translateToLocal("gui.screen.save_before_closing.title"), 0xFFFFFF, 190, true);
+//        int preLines = DrawingHelper.drawSplitCenteredString(mc.fontRendererObj, width / 2, height / 2 - 40, preFileName, 0xFFFFFF, 190, true);
+//
+//        DrawingHelper.drawQuad(width / 2 - 100 + 11, height / 2 - 35 + (preLines * 9), 200 - 22, 15, Color.BLACK, 1F);
+//        DrawingHelper.drawQuad(width / 2 - 100 + 10, height / 2 - 35 + (preLines * 9) + 1, 1, 13, Color.BLACK, 1F);
+//        DrawingHelper.drawQuad(width / 2 + 100 - 11, height / 2 - 35 + (preLines * 9) + 1, 1, 13, Color.BLACK, 1F);
+//
+//        DrawingHelper.drawSplitCenteredString(mc.fontRendererObj, width / 2, height / 2 - 32 + (preLines * 9), fileName, 0xFFFFFF, 190, true);
+//
+//        DrawingHelper.drawSplitCenteredString(mc.fontRendererObj, width / 2, height / 2 - 30 + (preLines * 9) + 14, postFileName, 0xFFFFFF, 190, true);
+//
         super.drawScreen(mouseX, mouseY, partialTicks);
     }
 

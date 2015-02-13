@@ -1,9 +1,12 @@
 package dk.mrspring.fileexplorer.gui;
 
-import dk.mrspring.fileexplorer.helper.DrawingHelper;
+import dk.mrspring.fileexplorer.LiteModFileExplorer;
 import dk.mrspring.fileexplorer.gui.interfaces.IGui;
 import dk.mrspring.fileexplorer.gui.screen.GuiScreenImageViewer;
+import dk.mrspring.fileexplorer.helper.DrawingHelper;
 import dk.mrspring.fileexplorer.loader.ImageLoader;
+import dk.mrspring.llcore.Quad;
+import dk.mrspring.llcore.Vector;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.StatCollector;
 import org.lwjgl.opengl.GL12;
@@ -41,7 +44,7 @@ public class GuiImageViewer implements IGui//, IDelayedDraw
         y = yPos;
         w = width;
         h = height;
-        fullscreenButton = new GuiSimpleButton(x, y, 20, 20, "").setIcon(DrawingHelper.fullscreenIcon);
+        fullscreenButton = new GuiSimpleButton(x, y, 20, 20, "").setIcon(LiteModFileExplorer.core.getIcon("fullscreen"));
 
         Thread thread = new Thread(new Runnable()
         {
@@ -141,7 +144,7 @@ public class GuiImageViewer implements IGui//, IDelayedDraw
 
             if (showBorder)
             {
-                DrawingHelper.drawIcon(DrawingHelper.hoverIcon, imageX, imageY, imageWidth, imageHeight + captionLines * 9 + captionExtraHeight, false);
+                DrawingHelper.drawButtonThingy(new Quad(imageX, imageY, imageWidth, imageHeight + (captionLines * 9) + captionExtraHeight), 0, false);
                 imageX += 3;
                 imageY += 3;
                 imageWidth -= 6;
@@ -150,12 +153,16 @@ public class GuiImageViewer implements IGui//, IDelayedDraw
 
             if (!caption.equals(""))
             {
-                captionLines = DrawingHelper.drawSplitCenteredString(minecraft.fontRendererObj, (int) imageX + (int) (imageWidth / 2), (int) imageY + (int) imageHeight, this.caption, 0xFFFFFF, (int) imageWidth, true);
+                captionLines = LiteModFileExplorer.core.getDrawingHelper().drawText(this.caption, new Vector(imageX + (imageWidth / 2), imageY + imageHeight), 0xFFFFFF, true, (int) imageWidth, dk.mrspring.llcore.DrawingHelper.VerticalTextAlignment.CENTER, dk.mrspring.llcore.DrawingHelper.HorizontalTextAlignment.TOP);
                 captionExtraHeight = 4;
             }
 
             glBindTexture(GL_TEXTURE_2D, textureId);
-            DrawingHelper.drawTexturedRect(imageX, imageY, imageWidth, imageHeight, 0, 0, 512, 512, 1F);
+            LiteModFileExplorer.core.getDrawingHelper().drawShape(new Quad(
+                    new Vector(imageX, imageY, 0, 0),
+                    new Vector(imageX + imageWidth, imageY, 512, 0),
+                    new Vector(imageX + imageWidth, imageY + imageHeight, 512, 512),
+                    new Vector(imageX, imageY + imageHeight, 0, 512)));
             glPopMatrix();
             if (showFullscreenButton)
             {

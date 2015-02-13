@@ -1,6 +1,8 @@
 package dk.mrspring.fileexplorer.gui;
 
-import dk.mrspring.fileexplorer.helper.DrawingHelper;
+import dk.mrspring.fileexplorer.LiteModFileExplorer;
+import dk.mrspring.llcore.DrawingHelper;
+import dk.mrspring.llcore.Quad;
 import net.minecraft.client.Minecraft;
 
 /**
@@ -29,15 +31,15 @@ public class GuiFileNew extends GuiFileBase
     {
         super.draw(minecraft, mouseX, mouseY);
 
-//        if (h >= 30)
-//            DrawingHelper.drawButtonThingy(x, y, w, h, 0, true);
+        DrawingHelper helper = LiteModFileExplorer.core.getDrawingHelper();
+
         this.nameField.draw(minecraft, mouseX, mouseY);
 
         this.createButton.draw(minecraft, mouseX, mouseY);
-        DrawingHelper.drawIcon(DrawingHelper.checkMarkIcon, createButton.getX() + ((float) createButton.getWidth() / 2) - 3, createButton.getY() + ((float) createButton.getHeight() / 2) - 3, 6, 6, false);
+        helper.drawIcon(LiteModFileExplorer.core.getIcon("check_mark"), new Quad(createButton.getX() + ((float) createButton.getWidth() / 2) - 3, createButton.getY() + ((float) createButton.getHeight() / 2) - 3, 6, 6));
 
         this.cancelButton.draw(minecraft, mouseX, mouseY);
-        DrawingHelper.drawIcon(DrawingHelper.crossIcon, cancelButton.getX() + ((float) cancelButton.getWidth() / 2) - 3, cancelButton.getY() + ((float) cancelButton.getHeight() / 2) - 3, 6, 6, false);
+        helper.drawIcon(LiteModFileExplorer.core.getIcon("cross"), new Quad(cancelButton.getX() + ((float) cancelButton.getWidth() / 2) - 3, cancelButton.getY() + ((float) cancelButton.getHeight() / 2) - 3, 6, 6));
     }
 
     @Override

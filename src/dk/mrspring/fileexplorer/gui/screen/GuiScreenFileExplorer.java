@@ -4,10 +4,10 @@ import dk.mrspring.fileexplorer.LiteModFileExplorer;
 import dk.mrspring.fileexplorer.gui.GuiFileExplorer;
 import dk.mrspring.fileexplorer.gui.editor.Editor;
 import dk.mrspring.fileexplorer.gui.editor.FileType;
-import dk.mrspring.fileexplorer.helper.Color;
-import dk.mrspring.fileexplorer.helper.DrawingHelper;
 import dk.mrspring.fileexplorer.gui.interfaces.IGui;
 import dk.mrspring.fileexplorer.loader.FileLoader;
+import dk.mrspring.llcore.Color;
+import dk.mrspring.llcore.Quad;
 
 import java.io.File;
 
@@ -50,13 +50,13 @@ public class GuiScreenFileExplorer extends GuiScreen
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks)
     {
-        DrawingHelper.drawQuad(0, 0, width, height, Color.BLACK, 0.5F);
+        LiteModFileExplorer.core.getDrawingHelper().drawShape(new Quad(0, 0, width, height).setColor(Color.BLACK).setAlpha(0.5F));
         super.drawScreen(mouseX, mouseY, partialTicks);
     }
 
     public void openFile(File file)
     {
-        String extension = FileLoader.getFileExtension(file, true);
+        String extension = FileLoader.getFileExtension(file.getName(), true);
         FileType fileType = LiteModFileExplorer.getFileType(extension);
 
         Editor editor = fileType.getNewEditor(258, 5, width - 243 - 20, height - 10, file);

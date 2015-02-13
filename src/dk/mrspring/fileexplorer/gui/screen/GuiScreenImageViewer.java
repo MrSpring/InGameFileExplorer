@@ -1,8 +1,11 @@
 package dk.mrspring.fileexplorer.gui.screen;
 
+import dk.mrspring.fileexplorer.LiteModFileExplorer;
 import dk.mrspring.fileexplorer.gui.GuiImageViewer;
-import dk.mrspring.fileexplorer.helper.Color;
-import dk.mrspring.fileexplorer.helper.DrawingHelper;
+import dk.mrspring.llcore.Color;
+import dk.mrspring.llcore.DrawingHelper;
+import dk.mrspring.llcore.Quad;
+import dk.mrspring.llcore.Vector;
 import net.minecraft.util.StatCollector;
 import org.lwjgl.opengl.GL11;
 
@@ -34,7 +37,8 @@ public class GuiScreenImageViewer extends GuiScreen
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks)
     {
-        DrawingHelper.drawQuad(0, 0, width, height, Color.BLACK, 1F);
+        DrawingHelper helper = LiteModFileExplorer.core.getDrawingHelper();
+        helper.drawShape(new Quad(0, 0, width, height).setColor(Color.BLACK));
         super.drawScreen(mouseX, mouseY, partialTicks);
         GL11.glPushMatrix();
         GL11.glScalef(2, 2, 1);
@@ -42,8 +46,9 @@ public class GuiScreenImageViewer extends GuiScreen
         int yOffset = 16 - (int) (closeMessageOpacity * fullHeight);
         if (yOffset < 0)
             yOffset = 0;
-        DrawingHelper.drawIcon(DrawingHelper.hoverIcon, width / 4 - (mc.fontRendererObj.getStringWidth(StatCollector.translateToLocal("gui.screen.image_viewer.exit_fullscreen")) / 2) - 5, -yOffset, mc.fontRendererObj.getStringWidth(StatCollector.translateToLocal("gui.screen.image_viewer.exit_fullscreen")) + 10, 16, false);
-        DrawingHelper.drawCenteredString(mc.fontRendererObj, width / 4, 4 - yOffset, StatCollector.translateToLocal("gui.screen.image_viewer.exit_fullscreen"), 0xFFFFFF);
+//        helper.drawIcon(DrawingHelper.hoverIcon, width / 4 - (mc.fontRendererObj.getStringWidth(StatCollector.translateToLocal("gui.screen.image_viewer.exit_fullscreen")) / 2) - 5, -yOffset, mc.fontRendererObj.getStringWidth(StatCollector.translateToLocal("gui.screen.image_viewer.exit_fullscreen")) + 10, 16, false);
+        dk.mrspring.fileexplorer.helper.DrawingHelper.drawButtonThingy(new Quad(width / 4 - (mc.fontRendererObj.getStringWidth(StatCollector.translateToLocal("gui.screen.image_viewer.exit_fullscreen")) / 2) - 5, -yOffset, mc.fontRendererObj.getStringWidth(StatCollector.translateToLocal("gui.screen.image_viewer.exit_fullscreen")) + 10, 16), 0, false);
+        helper.drawText(StatCollector.translateToLocal("gui.screen.image_viewer.exit_fullscreen"), new Vector(width / 4, 4 - yOffset), 0xFFFFFF, true, -1, DrawingHelper.VerticalTextAlignment.CENTER, DrawingHelper.HorizontalTextAlignment.TOP);
         GL11.glPopMatrix();
     }
 

@@ -1,7 +1,5 @@
 package dk.mrspring.fileexplorer.gui.editor;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.google.gson.internal.LinkedTreeMap;
 import dk.mrspring.fileexplorer.LiteModFileExplorer;
 import dk.mrspring.fileexplorer.gui.GuiJsonViewer;
@@ -9,18 +7,17 @@ import dk.mrspring.fileexplorer.gui.GuiSimpleButton;
 import dk.mrspring.fileexplorer.gui.editor.json.*;
 import dk.mrspring.fileexplorer.gui.interfaces.IGui;
 import dk.mrspring.fileexplorer.gui.interfaces.IMouseListener;
-import dk.mrspring.fileexplorer.helper.Color;
-import dk.mrspring.fileexplorer.helper.DrawingHelper;
 import dk.mrspring.fileexplorer.helper.GuiHelper;
-import dk.mrspring.fileexplorer.loader.FileLoader;
+import dk.mrspring.llcore.Color;
+import dk.mrspring.llcore.DrawingHelper;
+import dk.mrspring.llcore.Quad;
+import dk.mrspring.llcore.Vector;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.StatCollector;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.io.IOException;
+import java.util.*;
 
 /**
  * Created by MrSpring on 07-01-2015 for In-Game File Explorer.
@@ -42,7 +39,15 @@ public class EditorJson extends Editor implements IMouseListener
 
         this.jsonFile = file;
 
-        Map<String, Object> json = FileLoader.readJsonFile(jsonFile);
+        Map<String, Object> json = new HashMap<String, Object>();
+        try
+        {
+            String jsonCode = LiteModFileExplorer.core.getFileLoader().getContentsFromFile(jsonFile);
+            json = LiteModFileExplorer.core.getJsonHandler().loadFromJson(jsonCode, HashMap.class);
+        } catch (Exception e)
+        {
+            e.printStackTrace();
+        }
 
         viewer = new GuiJsonViewer(x, y, w, h, json);
         editor = new GuiJsonEditor(x, y, w, h, json);
@@ -136,25 +141,43 @@ public class EditorJson extends Editor implements IMouseListener
     public void save()
     {
         Map<String, Object> fromEditor = editor.toJsonMap();
-        GsonBuilder builder = new GsonBuilder();
-        if (LiteModFileExplorer.config.json_usePrettyPrinting)
-            builder.setPrettyPrinting();
-        Gson gson = builder.create();
-        String jsonCode = gson.toJson(fromEditor);
-        FileLoader.writeToFile(jsonFile, jsonCode);
+        String jsonCode = LiteModFileExplorer.core.getJsonHandler().toJson(fromEditor);
+        try
+        {
+            LiteModFileExplorer.core.getFileLoader().writeToFile(jsonFile, jsonCode);
+        } catch (Exception e)
+        {
+            e.printStackTrace();
+        }
         this.reloadViewer();
         this.stopEditing();
     }
 
     private void reloadViewer()
     {
-        Map<String, Object> json = FileLoader.readJsonFile(jsonFile);
+        Map<String, Object> json = new HashMap<String, Object>();
+        try
+        {
+            String jsonCode = LiteModFileExplorer.core.getFileLoader().getContentsFromFile(jsonFile);
+            json = LiteModFileExplorer.core.getJsonHandler().loadFromJson(jsonCode, HashMap.class);
+        } catch (IOException e)
+        {
+            e.printStackTrace();
+        }
         viewer = new GuiJsonViewer(x, y, w, h, json);
     }
 
     private void reloadEditor()
     {
-        Map<String, Object> json = FileLoader.readJsonFile(jsonFile);
+        Map<String, Object> json = new HashMap<String, Object>();
+        try
+        {
+            String jsonCode = LiteModFileExplorer.core.getFileLoader().getContentsFromFile(jsonFile);
+            json = LiteModFileExplorer.core.getJsonHandler().loadFromJson(jsonCode, HashMap.class);
+        } catch (IOException e)
+        {
+            e.printStackTrace();
+        }
         editor = new GuiJsonEditor(x, y, w, h, json);
     }
 
@@ -271,8 +294,10 @@ public class EditorJson extends Editor implements IMouseListener
                     float maxScrollHeight = this.getMaxScrollHeight();
                     float scrollProgress = (float) this.scrollHeight / maxScrollHeight;
                     float scrollBarY = scrollBarYRange * scrollProgress;
-                    DrawingHelper.drawQuad(x, y + scrollBarY + 1, 2, 40, Color.DK_GREY, 1F);
-                    DrawingHelper.drawQuad(x - 1, y + scrollBarY, 2, 40, Color.WHITE, 1F);
+                    LiteModFileExplorer.core.getDrawingHelper().drawShape(new Quad(x, y + scrollBarY + 1, 2, 40).setColor(Color.DK_GREY));
+                    LiteModFileExplorer.core.getDrawingHelper().drawShape(new Quad(x - 1, y + scrollBarY, 2, 40).setColor(Color.WHITE));
+//                    DrawingHelper.drawQuad(x, y + scrollBarY + 1, 2, 40, Color.DK_GREY, 1F);
+//                    DrawingHelper.drawQuad(x - 1, y + scrollBarY, 2, 40, Color.WHITE, 1F);
                 }
 
                 for (JsonEditorElement element : elements)
@@ -311,7 +336,7 @@ public class EditorJson extends Editor implements IMouseListener
                 this.newMap.draw(minecraft, mouseX, mouseY);
             } catch (StackOverflowError error)
             {
-                DrawingHelper.drawSplitCenteredString(minecraft.fontRendererObj, w / 2 + x, y + 10, StatCollector.translateToLocal("gui.json_editor.not_enough_space"), 0xFFFFFF, w);
+                LiteModFileExplorer.core.getDrawingHelper().drawText(StatCollector.translateToLocal("gui.json_editor.not_enough_space"), new Vector(w / 2 + x, y + 10), 0xFFFFFF, true, w, DrawingHelper.VerticalTextAlignment.CENTER, DrawingHelper.HorizontalTextAlignment.TOP);
             }
         }
 

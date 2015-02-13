@@ -4,8 +4,9 @@ import com.google.gson.internal.LinkedTreeMap;
 import dk.mrspring.fileexplorer.LiteModFileExplorer;
 import dk.mrspring.fileexplorer.gui.GuiCustomTextField;
 import dk.mrspring.fileexplorer.gui.GuiSimpleButton;
-import dk.mrspring.fileexplorer.helper.Color;
-import dk.mrspring.fileexplorer.helper.DrawingHelper;
+import dk.mrspring.llcore.Color;
+import dk.mrspring.llcore.DrawingHelper;
+import dk.mrspring.llcore.Quad;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.StatCollector;
 
@@ -83,6 +84,8 @@ public class JsonMapElement extends JsonEditorElement<LinkedTreeMap<String, Obje
     @Override
     public void drawElement(int xPosition, int yPosition, int maxWidth, int mouseX, int mouseY, Minecraft minecraft)
     {
+        DrawingHelper helper = LiteModFileExplorer.core.getDrawingHelper();
+
         int width = maxWidth;
         if (width > 400)
             width = 400;
@@ -104,7 +107,7 @@ public class JsonMapElement extends JsonEditorElement<LinkedTreeMap<String, Obje
         if (!collapsed)
         {
             if (LiteModFileExplorer.config.json_allowMapCollapsing)
-                DrawingHelper.drawIcon(DrawingHelper.downArrow, xPosition + 2, yPosition + 5, 6, 6, false);
+                helper.drawIcon(LiteModFileExplorer.core.getIcon("arrow_down"), new Quad(xPosition + 2, yPosition + 5, 6, 6));
 
             for (JsonEditorElement element : elements)
             {
@@ -116,18 +119,18 @@ public class JsonMapElement extends JsonEditorElement<LinkedTreeMap<String, Obje
 
                 int height = element.getHeight();
 
-                DrawingHelper.drawQuad(xPosition - 8, yPosition + yOffset + 1, 1, height + 3, Color.DK_GREY, 1F);
-                DrawingHelper.drawQuad(xPosition - 9, yPosition + yOffset, 1, height + 3, Color.WHITE, 1F);
-                DrawingHelper.drawQuad(xPosition - 7, yPosition + yOffset + 7, 5, 1, Color.DK_GREY, 1F);
-                DrawingHelper.drawQuad(xPosition - 8, yPosition + yOffset + 6, 5, 1, Color.WHITE, 1F);
+                helper.drawShape(new Quad(xPosition - 8, yPosition + yOffset + 1, 1, height + 3).setColor(Color.DK_GREY));
+                helper.drawShape(new Quad(xPosition - 9, yPosition + yOffset, 1, height + 3).setColor(Color.WHITE));
+                helper.drawShape(new Quad(xPosition - 7, yPosition + yOffset + 7, 5, 1).setColor(Color.DK_GREY));
+                helper.drawShape(new Quad(xPosition - 8, yPosition + yOffset + 6, 5, 1).setColor(Color.WHITE));
 
                 yOffset += element.getHeight() + 3;
             }
 
-            DrawingHelper.drawQuad(xPosition - 8, yPosition + yOffset + 1, 1, 7, Color.DK_GREY, 1F);
-            DrawingHelper.drawQuad(xPosition - 9, yPosition + yOffset, 1, 7, Color.WHITE, 1F);
-            DrawingHelper.drawQuad(xPosition - 7, yPosition + yOffset + 7, 5, 1, Color.DK_GREY, 1F);
-            DrawingHelper.drawQuad(xPosition - 8, yPosition + yOffset + 6, 5, 1, Color.WHITE, 1F);
+            helper.drawShape(new Quad(xPosition - 8, yPosition + yOffset + 1, 1, 7).setColor(Color.DK_GREY));
+            helper.drawShape(new Quad(xPosition - 9, yPosition + yOffset, 1, 7).setColor(Color.WHITE));
+            helper.drawShape(new Quad(xPosition - 7, yPosition + yOffset + 7, 5, 1).setColor(Color.DK_GREY));
+            helper.drawShape(new Quad(xPosition - 8, yPosition + yOffset + 6, 5, 1).setColor(Color.WHITE));
 
             minecraft.fontRendererObj.drawString(StatCollector.translateToLocal("gui.json_editor.add_new") + ": ", xPosition, yPosition + yOffset + 3, 0xFFFFFF, true);
 
@@ -157,7 +160,7 @@ public class JsonMapElement extends JsonEditorElement<LinkedTreeMap<String, Obje
         {
             if (LiteModFileExplorer.config.json_allowMapCollapsing)
             {
-                DrawingHelper.drawIcon(DrawingHelper.rightArrow, xPosition + 2, yPosition + 5, 6, 6, false);
+                helper.drawIcon(LiteModFileExplorer.core.getIcon("arrow_right"), new Quad(xPosition + 2, yPosition + 5, 6, 6));
                 if (LiteModFileExplorer.config.json_showCollapsedMapSize)
                     minecraft.fontRendererObj.drawString(StatCollector.translateToLocal("gui.json_editor.map_size") + ": " + String.valueOf(elements.size()), xPosition, yPosition + 18, 0xFFFFFF, true);
             }

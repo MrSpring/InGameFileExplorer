@@ -1,11 +1,13 @@
 package dk.mrspring.fileexplorer.gui;
 
-import dk.mrspring.fileexplorer.helper.Color;
-import dk.mrspring.fileexplorer.helper.DrawingHelper;
-import dk.mrspring.fileexplorer.helper.GuiHelper;
+import dk.mrspring.fileexplorer.LiteModFileExplorer;
 import dk.mrspring.fileexplorer.gui.interfaces.IDelayedDraw;
 import dk.mrspring.fileexplorer.gui.interfaces.IDrawable;
 import dk.mrspring.fileexplorer.gui.interfaces.IGui;
+import dk.mrspring.fileexplorer.helper.DrawingHelper;
+import dk.mrspring.fileexplorer.helper.GuiHelper;
+import dk.mrspring.llcore.Quad;
+import dk.mrspring.llcore.Vector;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 
@@ -49,17 +51,17 @@ public class GuiSlider implements IGui, IDelayedDraw
     @Override
     public void draw(Minecraft minecraft, int mouseX, int mouseY)
     {
-        DrawingHelper.drawButtonThingy(x, y + 1, width, height - 2, 0, true);
+        DrawingHelper.drawButtonThingy(new Quad(x, y + 1, width, height - 2), ((float) alphaProgress) / 10, true);
         float sliderWidth = 10F, sliderHeight = height, sliderXPos = x, sliderYPos = y;
         float progress = (((float) this.getValue()) / this.maximum);
         sliderXPos += progress * this.width - (sliderWidth * progress);
-        DrawingHelper.drawButtonThingy(sliderXPos, sliderYPos, sliderWidth, sliderHeight, 0, true);
+        DrawingHelper.drawButtonThingy(new Quad(sliderXPos, sliderYPos, sliderWidth, sliderHeight), 0, false);
         if (GuiHelper.isMouseInBounds(mouseX, mouseY, x, y, width, height))
             alphaTarget = 10;
         else alphaTarget = 0;
 
-        if (alphaProgress != 0)
-            DrawingHelper.drawVerticalGradient(sliderXPos + 2, sliderYPos + 2, sliderWidth - 4, sliderHeight - 4, Color.CYAN, ((float) alphaProgress) / 10 * 0.5F, Color.BLUE, ((float) alphaProgress) / 10 * 0.7F);
+//        if (alphaProgress != 0)
+//LiteModFileExplorer.core.getDrawingHelper().drawShape(sliderXPos + 2, sliderYPos + 2, sliderWidth - 4, sliderHeight - 4, Color.CYAN, ((float) alphaProgress) / 10 * 0.5F, Color.BLUE, ((float) alphaProgress) / 10 * 0.7F);
     }
 
     @Override
@@ -133,7 +135,7 @@ public class GuiSlider implements IGui, IDelayedDraw
     private void drawHoveringText(String line, int mouseX, int mouseY, FontRenderer fontRendererObj)
     {
         int lineWidth = fontRendererObj.getStringWidth(line) + 7;
-        DrawingHelper.drawIcon(DrawingHelper.hoverIcon, mouseX, mouseY - 16, lineWidth, 16, false);
-        DrawingHelper.drawCenteredString(fontRendererObj, mouseX + (lineWidth / 2)+1, mouseY - 12, line, 0xFFFFFF, true);
+        DrawingHelper.drawButtonThingy(new Quad(mouseX, mouseY - 16, lineWidth, 16), 0, false);
+        LiteModFileExplorer.core.getDrawingHelper().drawText(line, new Vector(mouseX + (lineWidth / 2) + 1, mouseY - 12), 0xFFFFFF, true, -1, dk.mrspring.llcore.DrawingHelper.VerticalTextAlignment.LEFT, dk.mrspring.llcore.DrawingHelper.HorizontalTextAlignment.TOP);
     }
 }

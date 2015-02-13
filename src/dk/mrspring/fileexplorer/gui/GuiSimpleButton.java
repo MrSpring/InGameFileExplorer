@@ -1,9 +1,12 @@
 package dk.mrspring.fileexplorer.gui;
 
+import dk.mrspring.fileexplorer.LiteModFileExplorer;
+import dk.mrspring.fileexplorer.gui.interfaces.IGui;
 import dk.mrspring.fileexplorer.helper.DrawingHelper;
 import dk.mrspring.fileexplorer.helper.GuiHelper;
-import dk.mrspring.fileexplorer.helper.IIcon;
-import dk.mrspring.fileexplorer.gui.interfaces.IGui;
+import dk.mrspring.llcore.Icon;
+import dk.mrspring.llcore.Quad;
+import dk.mrspring.llcore.Vector;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.StatCollector;
 
@@ -14,7 +17,7 @@ public class GuiSimpleButton implements IGui
 {
     int x, y, width, height;
     String text;
-    IIcon icon;
+    Icon icon;
 
     boolean wasMouseHoveringLastFrame = false, isEnabled = true, highlight = false, drawBackground = true, autoHeight = false;
     int alphaProgress = 0;
@@ -37,13 +40,13 @@ public class GuiSimpleButton implements IGui
         return this;
     }
 
-    public GuiSimpleButton setIcon(IIcon icon)
+    public GuiSimpleButton setIcon(Icon icon)
     {
         this.icon = icon;
         return this;
     }
 
-    public IIcon getIcon()
+    public Icon getIcon()
     {
         return icon;
     }
@@ -88,18 +91,17 @@ public class GuiSimpleButton implements IGui
         else alphaTarget = 0;
 
         int textColor = 0xFFFFFF;
-        DrawingHelper.drawButtonThingy(x, y, width, height, (float) alphaProgress / 10, isEnabled);
+        DrawingHelper.drawButtonThingy(new Quad(x, y, width, height), (float) alphaProgress / 10, isEnabled);
         if (!isEnabled)
             textColor = 0xAFAFAF;
 
         if (icon != null)
-            DrawingHelper.drawIcon(this.getIcon(), x + 2, y + 2, width - 4, height - 4, false);
+            LiteModFileExplorer.core.getDrawingHelper().drawIcon(this.getIcon(), new Quad(x + 2, y + 2, width - 4, height - 4));
 
         String translatedText = StatCollector.translateToLocal(this.text);
 
         int textY = (this.height / 2) + y, textX = (this.width / 2) + x;
-//        minecraft.fontRendererObj.drawStringWithShadow(translatedText, textX, textY, textColor);
-        int lines = DrawingHelper.drawSplitCenteredString(minecraft.fontRendererObj, textX, textY, translatedText, textColor, true, width - 6, true);
+        int lines = LiteModFileExplorer.core.getDrawingHelper().drawText(translatedText, new Vector(textX, textY), textColor, true, width - 6, dk.mrspring.llcore.DrawingHelper.VerticalTextAlignment.CENTER, dk.mrspring.llcore.DrawingHelper.HorizontalTextAlignment.CENTER);
         if (autoHeight)
             this.setHeight(lines * 9 + 6);
     }

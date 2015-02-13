@@ -2,9 +2,11 @@ package dk.mrspring.fileexplorer.gui;
 
 import dk.mrspring.fileexplorer.LiteModFileExplorer;
 import dk.mrspring.fileexplorer.gui.editor.FileType;
-import dk.mrspring.fileexplorer.helper.Color;
-import dk.mrspring.fileexplorer.helper.DrawingHelper;
 import dk.mrspring.fileexplorer.loader.FileLoader;
+import dk.mrspring.llcore.Color;
+import dk.mrspring.llcore.DrawingHelper;
+import dk.mrspring.llcore.Quad;
+import dk.mrspring.llcore.Vector;
 import net.minecraft.client.Minecraft;
 
 import java.io.File;
@@ -51,7 +53,7 @@ public class GuiFile extends GuiFileBase
     {
         if (filePath != null)
         {
-            String extension = FileLoader.getFileExtension(new File(filePath), true);
+            String extension = FileLoader.getFileExtension(new File(filePath).getName(), true);
             if (extension.equals("") || new File(filePath).isDirectory())
                 return LiteModFileExplorer.getFileType("directory");
             else return LiteModFileExplorer.getFileType(extension);
@@ -129,10 +131,12 @@ public class GuiFile extends GuiFileBase
             nameHeight += 9;
             nameY -= 9;
         }
-        DrawingHelper.drawIcon(this.getFileType().getIcon(), x - ((iconSize - w) / 2), y, iconSize, iconSize);
 
-        DrawingHelper.drawQuad(x, y + h - nameHeight, w, 1, Color.WHITE, 1F);
-        DrawingHelper.drawQuad(x, y + h - nameHeight - 1, w, 1, Color.LT_GREY, 1F);
+        DrawingHelper helper = LiteModFileExplorer.core.getDrawingHelper();
+        helper.drawIcon(this.getFileType().getIcon(), new Quad(x - ((iconSize - w) / 2), y, iconSize, iconSize));
+
+        helper.drawShape(new Quad(x, y + h - nameHeight, w, 1).setColor(Color.WHITE));
+        helper.drawShape(new Quad(x, y + h - nameHeight - 1, w, 1).setColor(Color.LT_GREY));
         if (wrapName())
         {
             minecraft.fontRendererObj.drawSplitString(this.getShortFileName(), x + 5, nameY + 1, w - 8, 0x4C4C4C);
@@ -153,11 +157,13 @@ public class GuiFile extends GuiFileBase
         button.setY(y);
         button.draw(minecraft, mouseX, mouseY);
 
-        DrawingHelper.drawQuad(x + iconSize - 2, y + 1, 1, h - 2, Color.LT_GREY, 1F);
-        DrawingHelper.drawQuad(x + iconSize - 1, y + 1, 1, h - 2, Color.WHITE, 1F);
+        DrawingHelper helper = LiteModFileExplorer.core.getDrawingHelper();
 
-        DrawingHelper.drawIcon(this.getFileType().getIcon(), x + 2, y + 2 + (h / 2 - (iconSize / 2)), iconSize - 4, iconSize - 4, false);
-        DrawingHelper.drawSplitString(minecraft.fontRendererObj, x + (int) iconSize + 3, y + 6, this.getShortFileName(), 0xFFFFFF, w - (int) iconSize - 6, true);
+        helper.drawShape(new Quad(x + iconSize - 2, y + 1, 1, h - 2).setColor(Color.LT_GREY));
+        helper.drawShape(new Quad(x + iconSize - 1, y + 1, 1, h - 2).setColor(Color.WHITE));
+
+        helper.drawIcon(this.getFileType().getIcon(), new Quad(x + 2, y + 2 + (h / 2 - (iconSize / 2)), iconSize - 4, iconSize - 4));
+        helper.drawText(this.getShortFileName(), new Vector(x + (int) iconSize + 3, y + (h / 2)), 0xFFFFFF, true, w - (int) iconSize - 6, DrawingHelper.VerticalTextAlignment.LEFT, DrawingHelper.HorizontalTextAlignment.CENTER);
     }
 
     private void renderList(Minecraft minecraft)

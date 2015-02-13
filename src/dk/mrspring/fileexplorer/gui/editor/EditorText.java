@@ -4,10 +4,10 @@ import dk.mrspring.fileexplorer.LiteModFileExplorer;
 import dk.mrspring.fileexplorer.gui.GuiMultiLineTextField;
 import dk.mrspring.fileexplorer.gui.GuiSimpleButton;
 import dk.mrspring.fileexplorer.gui.interfaces.IMouseListener;
-import dk.mrspring.fileexplorer.loader.FileLoader;
 import net.minecraft.client.Minecraft;
 
 import java.io.File;
+import java.io.IOException;
 
 /**
  * Created by MrSpring on 07-01-2015 for In-Game File Explorer.
@@ -26,7 +26,13 @@ public class EditorText extends Editor implements IMouseListener
 
         this.file = file;
 
-        lastSave = FileLoader.readFile(this.file);
+        try
+        {
+            lastSave = LiteModFileExplorer.core.getFileLoader().getContentsFromFile(file);
+        } catch (IOException e)
+        {
+            e.printStackTrace();
+        }
         textField = new GuiMultiLineTextField(x, y, w, h, lastSave).hideBackground();
 
         saveButton = new GuiSimpleButton(x - 62, y + h - 15, 50, 20, "gui.text_editor.save");
@@ -82,15 +88,27 @@ public class EditorText extends Editor implements IMouseListener
 
     private void restoreFromFile()
     {
-        String fromFile = FileLoader.readFile(this.file);
-        this.textField.setText(fromFile, true);
+        try
+        {
+            String fromFile = LiteModFileExplorer.core.getFileLoader().getContentsFromFile(this.file);
+            this.textField.setText(fromFile, true);
+        } catch (IOException e)
+        {
+            e.printStackTrace();
+        }
     }
 
     @Override
     public void save()
     {
-        FileLoader.writeToFile(this.file, this.textField.getText());
-        this.lastSave = this.textField.getText();
+        try
+        {
+            LiteModFileExplorer.core.getFileLoader().writeToFile(this.file, this.textField.getText());
+            this.lastSave = this.textField.getText();
+        } catch (IOException e)
+        {
+            e.printStackTrace();
+        }
     }
 
     @Override

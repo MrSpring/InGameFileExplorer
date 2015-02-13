@@ -1,7 +1,8 @@
 package dk.mrspring.fileexplorer.gui;
 
-import dk.mrspring.fileexplorer.helper.DrawingHelper;
+import dk.mrspring.fileexplorer.LiteModFileExplorer;
 import dk.mrspring.fileexplorer.gui.interfaces.IGui;
+import dk.mrspring.llcore.Quad;
 import net.minecraft.client.Minecraft;
 
 /**
@@ -30,7 +31,7 @@ public class GuiCheckbox implements IGui
     {
         button.draw(minecraft, mouseX, mouseY);
         if (isChecked())
-            DrawingHelper.drawIcon(DrawingHelper.checkMarkIcon, x + 2, y + 2, w - 4, h - 4);
+            LiteModFileExplorer.core.getDrawingHelper().drawIcon(LiteModFileExplorer.core.getIcon("check_mark"), new Quad(x + 2, y + 2, w - 4, h - 4));
     }
 
     @Override

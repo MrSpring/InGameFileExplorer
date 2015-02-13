@@ -1,20 +1,18 @@
 package dk.mrspring.fileexplorer.gui;
 
 import com.mumfrey.liteloader.gl.GLClippingPlanes;
+import dk.mrspring.fileexplorer.LiteModFileExplorer;
 import dk.mrspring.fileexplorer.gui.interfaces.IGui;
 import dk.mrspring.fileexplorer.gui.interfaces.IMouseListener;
-import dk.mrspring.fileexplorer.helper.Color;
 import dk.mrspring.fileexplorer.helper.DrawingHelper;
 import dk.mrspring.fileexplorer.helper.GuiHelper;
+import dk.mrspring.llcore.Color;
+import dk.mrspring.llcore.Quad;
+import dk.mrspring.llcore.Vector;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import org.lwjgl.input.Keyboard;
 
-import java.awt.*;
-import java.awt.datatransfer.Clipboard;
-import java.awt.datatransfer.DataFlavor;
-import java.awt.datatransfer.UnsupportedFlavorException;
-import java.io.IOException;
 import java.util.List;
 
 /**
@@ -93,11 +91,11 @@ public class GuiMultiLineTextField implements IGui, IMouseListener
             xOffset += 5;
 
         if (drawBackground)
-            DrawingHelper.drawButtonThingy(x, y, w, h, focused ? 1 : 0, true, Color.BLACK, 0.85F, Color.BLACK, 0.85F);
+            DrawingHelper.drawButtonThingy(new Quad(x, y, w, h), focused ? 1 : 0, true, Color.BLACK, 0.85F, Color.BLACK, 0.85F);
 
         GLClippingPlanes.glEnableClipping(x, x + w, y + padding, y + h - padding);
 
-        lines = DrawingHelper.drawSplitString(minecraft.fontRendererObj, x + padding + xOffset, y + padding + yOffset, text, 0xFFFFFF, w - (padding * 2) - xOffset, true);
+        lines = LiteModFileExplorer.core.getDrawingHelper().drawText(text, new Vector(x + padding + xOffset, y + padding + yOffset), 0xFFFFFF, true, w - (padding * 2) - xOffset, dk.mrspring.llcore.DrawingHelper.VerticalTextAlignment.LEFT, dk.mrspring.llcore.DrawingHelper.HorizontalTextAlignment.TOP);
         String cutLine = line.substring(0, cursorRelativePos);
         int cursorXOffset = minecraft.fontRendererObj.getStringWidth(cutLine) + xOffset;
 
@@ -116,8 +114,8 @@ public class GuiMultiLineTextField implements IGui, IMouseListener
         float maxScrollHeight = getMaxScrollHeight();
         float scrollProgress = (float) this.scrollHeight / maxScrollHeight;
         float scrollBarY = scrollBarYRange * scrollProgress + padding;
-        DrawingHelper.drawQuad(x + padding, y + scrollBarY + 1, 3, 40, Color.DK_GREY, 1F);
-        DrawingHelper.drawQuad(x + padding - 1, y + scrollBarY, 3, 40, Color.WHITE, 1F);
+        LiteModFileExplorer.core.getDrawingHelper().drawShape(new Quad(x + padding, y + scrollBarY + 1, 3, 40).setColor(Color.DK_GREY));
+        LiteModFileExplorer.core.getDrawingHelper().drawShape(new Quad(x + padding - 1, y + scrollBarY, 3, 40).setColor(dk.mrspring.llcore.Color.DK_GREY));
     }
 
     @Override
@@ -183,20 +181,9 @@ public class GuiMultiLineTextField implements IGui, IMouseListener
 
     private void paste()
     {
-        try
-        {
-            Toolkit toolkit = Toolkit.getDefaultToolkit();
-            Clipboard clipboard = toolkit.getSystemClipboard();
-            String fromClipboard = (String) clipboard.getData(DataFlavor.stringFlavor);
-            if (fromClipboard != null)
-                this.writeString(fromClipboard);
-        } catch (UnsupportedFlavorException e)
-        {
-            e.printStackTrace();
-        } catch (IOException e)
-        {
-            e.printStackTrace();
-        }
+        String fromClipboard = LiteModFileExplorer.core.getClipboardHelper().paste();
+        if (fromClipboard != null)
+            this.writeString(fromClipboard);
     }
 
     private void backspace()

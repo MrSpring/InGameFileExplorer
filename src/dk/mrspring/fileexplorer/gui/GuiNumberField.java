@@ -1,10 +1,12 @@
 package dk.mrspring.fileexplorer.gui;
 
 import dk.mrspring.fileexplorer.LiteModFileExplorer;
-import dk.mrspring.fileexplorer.helper.Color;
+import dk.mrspring.fileexplorer.gui.interfaces.IGui;
 import dk.mrspring.fileexplorer.helper.DrawingHelper;
 import dk.mrspring.fileexplorer.helper.GuiHelper;
-import dk.mrspring.fileexplorer.gui.interfaces.IGui;
+import dk.mrspring.llcore.Color;
+import dk.mrspring.llcore.Quad;
+import dk.mrspring.llcore.Vector;
 import net.minecraft.client.Minecraft;
 import org.apache.commons.lang3.ArrayUtils;
 import org.lwjgl.input.Keyboard;
@@ -58,7 +60,7 @@ public class GuiNumberField implements IGui
     @Override
     public void draw(Minecraft minecraft, int mouseX, int mouseY)
     {
-        DrawingHelper.drawButtonThingy(x, y, w, h, focused ? 1 : 0, true, Color.BLACK, 0.85F, Color.BLACK, 0.85F);
+        DrawingHelper.drawButtonThingy(new Quad(x, y, w, h), focused ? 1 : 0, true, Color.BLACK, 0.85F, Color.BLACK, 0.85F);
 
         String formattedDouble = format.format(value.doubleValue());
         char[] characters = formattedDouble.toCharArray();
@@ -71,7 +73,7 @@ public class GuiNumberField implements IGui
             if (character == ',' || character == '.')
                 controllerOffset = xOffset;
 
-            DrawingHelper.drawSplitCenteredString(minecraft.fontRendererObj, x + w + xOffset, h / 2 + y - 4, String.valueOf(character), 0xFFFFFF, 100);
+            LiteModFileExplorer.core.getDrawingHelper().drawText(String.valueOf(character), new Vector(x + w + xOffset, h / 2 + y - 4), 0xFFFFFF, true, 100, dk.mrspring.llcore.DrawingHelper.VerticalTextAlignment.CENTER, dk.mrspring.llcore.DrawingHelper.HorizontalTextAlignment.TOP);
             xOffset -= 8;
         }
 
@@ -81,8 +83,8 @@ public class GuiNumberField implements IGui
 
     private void drawControllers(int xOffset)
     {
-        DrawingHelper.drawIcon(DrawingHelper.downArrow, x + w + xOffset - 3, h / 2 + y + 5, 6, 6, false);
-        DrawingHelper.drawIcon(DrawingHelper.upArrow, x + w + xOffset - 3, h / 2 + y - 4 - 8, 6, 6, false);
+        LiteModFileExplorer.core.getDrawingHelper().drawIcon(LiteModFileExplorer.core.getIcon("arrow_down"), new Quad(x + w + xOffset - 3, h / 2 + y + 5, 6, 6));
+        LiteModFileExplorer.core.getDrawingHelper().drawIcon(LiteModFileExplorer.core.getIcon("arrow_down"), new Quad(x + w + xOffset - 3, h / 2 + y - 4 - 8, 6, 6));
     }
 
     @Override

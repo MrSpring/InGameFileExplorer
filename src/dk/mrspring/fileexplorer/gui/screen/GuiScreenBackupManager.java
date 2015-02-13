@@ -5,8 +5,9 @@ import dk.mrspring.fileexplorer.backup.BackupEntry;
 import dk.mrspring.fileexplorer.backup.BackupManager;
 import dk.mrspring.fileexplorer.gui.GuiSimpleButton;
 import dk.mrspring.fileexplorer.gui.interfaces.IGui;
-import dk.mrspring.fileexplorer.helper.DrawingHelper;
-import dk.mrspring.fileexplorer.loader.FileLoader;
+import dk.mrspring.llcore.DrawingHelper;
+import dk.mrspring.llcore.Quad;
+import dk.mrspring.llcore.Vector;
 import net.minecraft.client.Minecraft;
 
 import java.util.ArrayList;
@@ -108,7 +109,7 @@ public class GuiScreenBackupManager extends GuiScreen
                     BackupEntry backupEntry = LiteModFileExplorer.backupManager.restoreBackup(entry.backupID);
                     if (backupEntry != null)
                     {
-                        FileLoader.restoreBackup(backupEntry);
+//                        FileLoader.restoreBackup(backupEntry);
                         iterator.remove();
                     }
                 }
@@ -153,15 +154,17 @@ public class GuiScreenBackupManager extends GuiScreen
 
         public int draw(Minecraft minecraft, int mouseX, int mouseY, int xPosition, int yPosition, int width)
         {
-            DrawingHelper.drawIcon(DrawingHelper.hoverIcon, xPosition, yPosition, width, this.height, false);
+            dk.mrspring.fileexplorer.helper.DrawingHelper.drawButtonThingy(new Quad(xPosition, yPosition, width, this.height), 0, false);
 
             restoreButton.setX(xPosition + width - restoreButton.getWidth() - 4);
             restoreButton.setY(yPosition + 4);
 
             restoreButton.draw(minecraft, mouseX, mouseY);
 
-            int nameLines = DrawingHelper.drawSplitString(minecraft.fontRendererObj, xPosition + 5, yPosition + 5, name, 0xFFFFFF, width - 10 - restoreButton.getWidth());
-            int dateLines = DrawingHelper.drawSplitString(minecraft.fontRendererObj, xPosition + 5, yPosition + 5 + 3 + (nameLines * 9), date, 0xFFFFFF, width - 10 - restoreButton.getWidth());
+            DrawingHelper helper = LiteModFileExplorer.core.getDrawingHelper();
+
+            int nameLines = helper.drawText(name, new Vector(xPosition + 5, yPosition + 5), 0xFFFFFF, true, width - 10 - restoreButton.getWidth(), DrawingHelper.VerticalTextAlignment.LEFT, DrawingHelper.HorizontalTextAlignment.TOP);
+            int dateLines = helper.drawText(date, new Vector(xPosition + 5, yPosition + 5 + 3 + (nameLines * 9)), 0xFFFFFF, true, width - 10 - restoreButton.getWidth(), DrawingHelper.VerticalTextAlignment.LEFT, DrawingHelper.HorizontalTextAlignment.TOP);
 
             height = (nameLines * 9) + (dateLines * 9) + 12;
             restoreButton.setHeight(height - 8);

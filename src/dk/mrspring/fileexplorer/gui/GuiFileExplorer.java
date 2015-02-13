@@ -3,11 +3,12 @@ package dk.mrspring.fileexplorer.gui;
 import dk.mrspring.fileexplorer.LiteModFileExplorer;
 import dk.mrspring.fileexplorer.gui.interfaces.IGui;
 import dk.mrspring.fileexplorer.gui.interfaces.IMouseListener;
-import dk.mrspring.fileexplorer.helper.Color;
 import dk.mrspring.fileexplorer.helper.DrawingHelper;
 import dk.mrspring.fileexplorer.helper.FileSorter;
 import dk.mrspring.fileexplorer.helper.GuiHelper;
-import dk.mrspring.fileexplorer.loader.FileLoader;
+import dk.mrspring.llcore.Color;
+import dk.mrspring.llcore.Quad;
+import dk.mrspring.llcore.Vector;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.StatCollector;
 
@@ -52,8 +53,8 @@ public class GuiFileExplorer implements IGui, IMouseListener
 
         openFile = new GuiSimpleButton(x, y, 50, 20, "gui.explorer.open").disable();
         refreshList = new GuiSimpleButton(x, y, 50, 20, "gui.explorer.refresh");
-        newFolder = new GuiSimpleButton(x, y, 20, 20, "").setIcon(DrawingHelper.newFileIcon);
-        deleteFile = new GuiSimpleButton(x + 30, y, 20, 20, "").setIcon(DrawingHelper.deleteIcon).disable();
+        newFolder = new GuiSimpleButton(x, y, 20, 20, "").setIcon(LiteModFileExplorer.core.getIcon("new_file"));
+        deleteFile = new GuiSimpleButton(x + 30, y, 20, 20, "").setIcon(LiteModFileExplorer.core.getIcon("delete_file")).disable();
         upOne = new GuiSimpleButton(x, y, 50, 20, "gui.explorer.go_up");
 
         this.newFolder.setEnabled(LiteModFileExplorer.config.acceptFileManipulation);
@@ -114,17 +115,19 @@ public class GuiFileExplorer implements IGui, IMouseListener
     {
         int width = w;
 
+        dk.mrspring.llcore.DrawingHelper helper = LiteModFileExplorer.core.getDrawingHelper();
+
         if (showBackground)
-            DrawingHelper.drawButtonThingy(x, y, w, h, 0, true);
+            DrawingHelper.drawButtonThingy(new Quad(x, y, w, h), 0, true);
 
         if (showControls)
         {
             width -= 75;
-            DrawingHelper.drawQuad(x + width + 5 + 6, y + 6, 1, h - 10, Color.DK_GREY, 1F);
-            DrawingHelper.drawQuad(x + width + 5 + 6 + 61, y + 6, 1, h - 10, Color.DK_GREY, 1F);
+            helper.drawShape(new Quad(x + width + 5 + 6, y + 6, 1, h - 10).setColor(Color.DK_GREY));
+            helper.drawShape(new Quad(x + width + 5 + 6 + 61, y + 6, 1, h - 10).setColor(Color.DK_GREY));
 
-            DrawingHelper.drawQuad(x + width + 5 + 5, y + 5, 1, h - 10, Color.WHITE, 1F);
-            DrawingHelper.drawQuad(x + width + 5 + 5 + 61, y + 5, 1, h - 10, Color.WHITE, 1F);
+            helper.drawShape(new Quad(x + width + 5 + 5, y + 5, 1, h - 10).setColor(Color.WHITE));
+            helper.drawShape(new Quad(x + width + 5 + 5 + 61, y + 5, 1, h - 10).setColor(Color.WHITE));
             this.drawControls(minecraft, mouseX, mouseY, x + width + 5 + 11);
         }
         int yOffset = -scrollHeight, xOffset = 5;
@@ -149,7 +152,7 @@ public class GuiFileExplorer implements IGui, IMouseListener
                 textMaxLength -= 75;
 
             int textX = x + textMaxLength / 2, textY = y + 10;
-            DrawingHelper.drawSplitCenteredString(minecraft.fontRendererObj, textX, textY, StatCollector.translateToLocal("gui.explorer.no_files"), 0xFFFFFF, textMaxLength);
+            helper.drawText(StatCollector.translateToLocal("gui.explorer.no_files"), new Vector(textX, textY), 0xFFFFFF, true, textMaxLength, dk.mrspring.llcore.DrawingHelper.VerticalTextAlignment.CENTER, dk.mrspring.llcore.DrawingHelper.HorizontalTextAlignment.TOP);
         }
 
         int totalHeight = this.getListHeight();
@@ -159,8 +162,8 @@ public class GuiFileExplorer implements IGui, IMouseListener
             float maxScrollHeight = this.getMaxScrollHeight();
             float scrollProgress = (float) this.scrollHeight / maxScrollHeight;
             float scrollBarY = scrollBarYRange * scrollProgress;
-            DrawingHelper.drawQuad(x, y + scrollBarY + 1, 2, 40, Color.DK_GREY, 1F);
-            DrawingHelper.drawQuad(x - 1, y + scrollBarY, 2, 40, Color.WHITE, 1F);
+            helper.drawShape(new Quad(x, y + scrollBarY + 1, 2, 40).setColor(Color.DK_GREY));
+            helper.drawShape(new Quad(x - 1, y + scrollBarY, 2, 40).setColor(Color.WHITE));
         }
 
         if (this.drawPath)
@@ -321,10 +324,16 @@ public class GuiFileExplorer implements IGui, IMouseListener
 
     private void deleteFile(File file)
     {
-        if (file != null)
-            if (file.exists())
-                if (FileLoader.deleteFile(file))
-                    this.refreshList();
+        try
+        {
+            if (file != null)
+                if (file.exists())
+                    if (LiteModFileExplorer.core.getFileLoader().deleteFile(file))
+                        this.refreshList();
+        } catch (Exception e)
+        {
+            e.printStackTrace();
+        }
     }
 
     private boolean openSelectedFile()
@@ -369,7 +378,7 @@ public class GuiFileExplorer implements IGui, IMouseListener
     {
         this.guiFiles = new ArrayList<GuiFileBase>();
 
-        File[] filesAtCurrentPath = FileLoader.getFileInFolder(new File(currentPath), false);
+        File[] filesAtCurrentPath = LiteModFileExplorer.core.getFileLoader().getFilesInFolder(new File(currentPath), false);
 
 //        FileLoader.addFiles(currentPath, filesAtCurrentPath, false);
 

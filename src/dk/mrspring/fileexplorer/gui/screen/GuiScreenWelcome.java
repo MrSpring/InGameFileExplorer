@@ -4,11 +4,13 @@ import com.mumfrey.liteloader.gl.GLClippingPlanes;
 import dk.mrspring.fileexplorer.LiteModFileExplorer;
 import dk.mrspring.fileexplorer.gui.GuiCheckbox;
 import dk.mrspring.fileexplorer.gui.GuiSimpleButton;
-import dk.mrspring.fileexplorer.helper.Color;
-import dk.mrspring.fileexplorer.helper.DrawingHelper;
-import dk.mrspring.fileexplorer.helper.GuiHelper;
 import dk.mrspring.fileexplorer.gui.interfaces.IGui;
 import dk.mrspring.fileexplorer.gui.interfaces.IMouseListener;
+import dk.mrspring.fileexplorer.helper.GuiHelper;
+import dk.mrspring.llcore.DrawingHelper;
+import dk.mrspring.llcore.Color;
+import dk.mrspring.llcore.Quad;
+import dk.mrspring.llcore.Vector;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.StatCollector;
 import org.apache.commons.io.FileUtils;
@@ -70,17 +72,19 @@ public class GuiScreenWelcome extends GuiScreen
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks)
     {
-        DrawingHelper.drawIcon(DrawingHelper.hoverIcon, 10, 10, width - 20, height - 20, false);
+        dk.mrspring.fileexplorer.helper.DrawingHelper.drawButtonThingy(new Quad(10, 10, width - 20, height - 20), 1, true, Color.BLACK, 0.9F, Color.BLACK, 0.9F);
 
         super.drawScreen(mouseX, mouseY, partialTicks);
 
+        DrawingHelper helper = LiteModFileExplorer.core.getDrawingHelper();
+
         GL11.glScalef(2, 2, 2);
-        DrawingHelper.drawCenteredString(mc.fontRendererObj, width / 4, 10, StatCollector.translateToLocal("gui.screen.welcome.title"), 0xFFFFFF, true);
+        helper.drawText(StatCollector.translateToLocal("gui.screen.welcome.title"), new Vector(width / 4, 10), 0xFFFFFF, true, -1, DrawingHelper.VerticalTextAlignment.CENTER, DrawingHelper.HorizontalTextAlignment.TOP);
 
         GL11.glScalef(0.5F, 0.5F, 0.5F);
-        DrawingHelper.drawSplitCenteredString(mc.fontRendererObj, width / 2, 50, StatCollector.translateToLocal("gui.screen.welcome.message").replace("\\n", "\n"), 0xFFFFFF, width - 30);
-        DrawingHelper.drawSplitString(mc.fontRendererObj, 32, ((GuiCheckbox) this.getGui("accept-read")).getY() + 1, StatCollector.translateToLocal("gui.screen.welcome.i_accept.read"), 0xFFFFFF, width - 50, true);
-        DrawingHelper.drawSplitString(mc.fontRendererObj, 32, ((GuiCheckbox) this.getGui("accept-write")).getY() + 1, StatCollector.translateToLocal("gui.screen.welcome.i_accept.write"), 0xFFFFFF, width - 50, true);
+        helper.drawText(StatCollector.translateToLocal("gui.screen.welcome.message").replace("\\n", "\n"), new Vector(width / 2, 50), 0xFFFFFF, true, width - 30, DrawingHelper.VerticalTextAlignment.CENTER, DrawingHelper.HorizontalTextAlignment.TOP);
+        helper.drawText(StatCollector.translateToLocal("gui.screen.welcome.i_accept.read"), new Vector(32, ((GuiCheckbox) this.getGui("accept-read")).getY() + 1), 0xFFFFFF, true, width - 50, DrawingHelper.VerticalTextAlignment.LEFT, DrawingHelper.HorizontalTextAlignment.TOP);
+        helper.drawText(StatCollector.translateToLocal("gui.screen.welcome.i_accept.write"), new Vector(32, ((GuiCheckbox) this.getGui("accept-write")).getY() + 1), 0xFFFFFF, true, width - 50, DrawingHelper.VerticalTextAlignment.LEFT, DrawingHelper.HorizontalTextAlignment.TOP);
     }
 
     @Override
@@ -135,15 +139,16 @@ public class GuiScreenWelcome extends GuiScreen
         @Override
         public void draw(Minecraft minecraft, int mouseX, int mouseY)
         {
+            DrawingHelper helper = LiteModFileExplorer.core.getDrawingHelper();
 
-            DrawingHelper.drawQuad(x + 1, y, w - 2, h, Color.BLACK, 0.5F);
-            DrawingHelper.drawQuad(x, y + 1, 1, h - 2, Color.BLACK, 0.5F);
-            DrawingHelper.drawQuad(x + w - 1, y + 1, 1, h - 2, Color.BLACK, 0.5F);
+            helper.drawShape(new Quad(x + 1, y, w - 2, h).setColor(Color.BLACK).setAlpha(0.5F));
+            helper.drawShape(new Quad(x, y + 1, 1, h - 2).setColor(Color.BLACK).setAlpha(0.5F));
+            helper.drawShape(new Quad(x + w - 1, y + 1, 1, h - 2).setColor(Color.BLACK).setAlpha(0.5F));
 
             GL11.glPushMatrix();
             GLClippingPlanes.glEnableClipping(x + 1, x + w - 1, y + 1, y + h - 1);
             GL11.glTranslatef(0, scrollHeight, 0);
-            lines = DrawingHelper.drawSplitString(minecraft.fontRendererObj, x + 5, y + 5, currentText, 0xFFFFFF, w - 10, true);
+            lines = helper.drawText(currentText, new Vector(x + 5, y + 5), 0xFFFFFF, true, w - 10, DrawingHelper.VerticalTextAlignment.LEFT, DrawingHelper.HorizontalTextAlignment.CENTER);
             GLClippingPlanes.glDisableClipping();
             GL11.glPopMatrix();
 
@@ -154,7 +159,7 @@ public class GuiScreenWelcome extends GuiScreen
                 float range = h - 2 - scrollBarHeight;
                 float scrollProgress = (float) this.scrollHeight / linesHeight;
                 float scrollBarY = range * scrollProgress;
-                DrawingHelper.drawQuad(x, y + scrollBarY, 2, scrollHeight, Color.WHITE, 1F);
+                helper.drawShape(new Quad(x, y + scrollBarY, 2, scrollHeight).setColor(Color.WHITE));
             }
         }
 
@@ -201,7 +206,7 @@ public class GuiScreenWelcome extends GuiScreen
 
         private void addScroll(int height)
         {
-            int maxScroll = lines * 9-5, minScroll = 0;
+            int maxScroll = lines * 9 - 5, minScroll = 0;
 
             if (scrollHeight + height > maxScroll)
                 scrollHeight = maxScroll;

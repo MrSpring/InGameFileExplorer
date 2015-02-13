@@ -1,12 +1,14 @@
 package dk.mrspring.fileexplorer.gui.screen;
 
+import dk.mrspring.fileexplorer.LiteModFileExplorer;
 import dk.mrspring.fileexplorer.gui.GuiSimpleButton;
 import dk.mrspring.fileexplorer.gui.interfaces.IDelayedDraw;
 import dk.mrspring.fileexplorer.gui.interfaces.IDrawable;
 import dk.mrspring.fileexplorer.gui.interfaces.IGui;
 import dk.mrspring.fileexplorer.gui.interfaces.IMouseListener;
-import dk.mrspring.fileexplorer.helper.Color;
-import dk.mrspring.fileexplorer.helper.DrawingHelper;
+import dk.mrspring.llcore.Color;
+import dk.mrspring.llcore.DrawingHelper;
+import dk.mrspring.llcore.Quad;
 import net.minecraft.util.StatCollector;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
@@ -102,8 +104,12 @@ public class GuiScreen extends net.minecraft.client.gui.GuiScreen
         if (this.drawSubTitle())
             this.drawCenteredSubTitle();
 
-        DrawingHelper.drawQuad(underlinePosX + 1, textPosY + 9, titleWidth + (underlineOverflow * 2), 1, Color.DK_GREY, 1F);
-        DrawingHelper.drawQuad(underlinePosX, textPosY + 8, titleWidth + (underlineOverflow * 2), 1, Color.WHITE, 1F);
+//        DrawingHelper.drawQuad(underlinePosX + 1, textPosY + 9, titleWidth + (underlineOverflow * 2), 1, Color.DK_GREY, 1F);
+//        DrawingHelper.drawQuad(underlinePosX, textPosY + 8, titleWidth + (underlineOverflow * 2), 1, Color.WHITE, 1F);
+
+        DrawingHelper helper = LiteModFileExplorer.core.getDrawingHelper();
+        helper.drawShape(new Quad(underlinePosX + 1, textPosY + 9, titleWidth + (underlineOverflow * 2), 1).setColor(Color.DK_GREY));
+        helper.drawShape(new Quad(underlinePosX, textPosY + 8, titleWidth + (underlineOverflow * 2), 1).setColor(Color.DK_GREY));
     }
 
     public void drawCenteredSubTitle()
@@ -127,11 +133,12 @@ public class GuiScreen extends net.minecraft.client.gui.GuiScreen
 
         if (this.showBars)
         {
-            DrawingHelper.drawQuad(0, 0, width, barHeight - 1, Color.BLACK, 0.75F);
-            DrawingHelper.drawQuad(0, height - barHeight + 1, width, barHeight - 1, Color.BLACK, 0.75F);
+            DrawingHelper helper = LiteModFileExplorer.core.getDrawingHelper();
+            helper.drawShape(new Quad(0, 0, width, barHeight - 1).setColor(Color.BLACK).setAlpha(0.75F));
+            helper.drawShape(new Quad(0, height - barHeight + 1, width, barHeight - 1).setColor(Color.BLACK).setAlpha(0.75F));
 
-            DrawingHelper.drawQuad(0, barHeight - 1, width, 1, Color.WHITE, 1F);
-            DrawingHelper.drawQuad(0, height - barHeight, width, 1, Color.WHITE, 1F);
+            helper.drawShape(new Quad(0, barHeight - 1, width, 1).setColor(Color.WHITE));
+            helper.drawShape(new Quad(0, height - barHeight, width, 1).setColor(Color.WHITE));
 
             if (this.drawCenteredTitle)
                 this.drawCenteredTitle();

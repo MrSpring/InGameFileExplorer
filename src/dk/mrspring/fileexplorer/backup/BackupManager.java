@@ -2,7 +2,6 @@ package dk.mrspring.fileexplorer.backup;
 
 import com.google.gson.Gson;
 import dk.mrspring.fileexplorer.LiteModFileExplorer;
-import dk.mrspring.fileexplorer.helper.GsonHelper;
 
 import java.io.File;
 import java.io.FileReader;
@@ -65,8 +64,7 @@ public class BackupManager
         {
             file.getParentFile().mkdirs();
             file.createNewFile();
-            Gson gson = GsonHelper.getPrettyPrintingGson();
-            String json = gson.toJson(manager);
+            String json = LiteModFileExplorer.core.getJsonHandler().toJson(manager);
             FileWriter writer = new FileWriter(file);
             writer.write(json);
             writer.close();

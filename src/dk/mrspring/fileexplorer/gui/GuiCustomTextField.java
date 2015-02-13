@@ -1,11 +1,12 @@
 package dk.mrspring.fileexplorer.gui;
 
 import com.mumfrey.liteloader.gl.GLClippingPlanes;
+import dk.mrspring.fileexplorer.LiteModFileExplorer;
 import dk.mrspring.fileexplorer.gui.interfaces.IGui;
-import dk.mrspring.fileexplorer.helper.ClipboardHelper;
-import dk.mrspring.fileexplorer.helper.Color;
 import dk.mrspring.fileexplorer.helper.DrawingHelper;
 import dk.mrspring.fileexplorer.helper.GuiHelper;
+import dk.mrspring.llcore.Color;
+import dk.mrspring.llcore.Quad;
 import net.minecraft.client.Minecraft;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
@@ -35,7 +36,7 @@ public class GuiCustomTextField implements IGui
     @Override
     public void draw(Minecraft minecraft, int mouseX, int mouseY)
     {
-        DrawingHelper.drawButtonThingy(x, y, w, h, focused || !enabled ? 1 : 0, enabled, Color.BLACK, 0.85F, Color.BLACK, 0.85F);
+        DrawingHelper.drawButtonThingy(new Quad(x, y, w, h), focused || !enabled ? 1 : 0, enabled, Color.BLACK, 0.85F, Color.BLACK, 0.85F);
 
         if (selectionStart != cursorPos)
         {
@@ -46,7 +47,7 @@ public class GuiCustomTextField implements IGui
             int selectionRenderWidth = minecraft.fontRendererObj.getStringWidth(getText().substring(minSelectionOrCursor, maxSelectionOrCursor));
 
             GLClippingPlanes.glEnableClipping(x + PADDING - 1, x + w - PADDING + 1, y, y + h);
-            DrawingHelper.drawQuad(x + PADDING + selectionRenderStart - scroll - 1, y + PADDING - 1, selectionRenderWidth + 1, h - (2 * PADDING) + 2, Color.BLUE, 0.9F);
+            LiteModFileExplorer.core.getDrawingHelper().drawShape(new Quad(x + PADDING + selectionRenderStart - scroll - 1, y + PADDING - 1, selectionRenderWidth + 1, h - (2 * PADDING) + 2).setColor(Color.BLUE).setAlpha(0.9F));
             GLClippingPlanes.glDisableClipping();
         }
 
@@ -218,7 +219,7 @@ public class GuiCustomTextField implements IGui
 
     private void pasteText()
     {
-        String fromClipboard = ClipboardHelper.paste();
+        String fromClipboard = LiteModFileExplorer.core.getClipboardHelper().paste();
         this.writeString(fromClipboard);
     }
 
@@ -226,7 +227,7 @@ public class GuiCustomTextField implements IGui
     {
         String selection = this.getSelection();
         if (!selection.isEmpty())
-            ClipboardHelper.copy(selection);
+            LiteModFileExplorer.core.getClipboardHelper().copy(selection);
     }
 
     private void cutText()

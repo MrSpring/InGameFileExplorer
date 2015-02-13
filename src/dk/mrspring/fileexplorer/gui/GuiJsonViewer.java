@@ -1,18 +1,21 @@
 package dk.mrspring.fileexplorer.gui;
 
 import com.google.gson.internal.LinkedTreeMap;
-import dk.mrspring.fileexplorer.helper.Color;
-import dk.mrspring.fileexplorer.helper.DrawingHelper;
+import dk.mrspring.fileexplorer.LiteModFileExplorer;
+import dk.mrspring.llcore.Color;
+import dk.mrspring.llcore.DrawingHelper;
 import dk.mrspring.fileexplorer.helper.GuiHelper;
 import dk.mrspring.fileexplorer.gui.interfaces.IGui;
 import dk.mrspring.fileexplorer.gui.interfaces.IMouseListener;
-import dk.mrspring.fileexplorer.loader.FileLoader;
+import dk.mrspring.llcore.Quad;
+import dk.mrspring.llcore.Vector;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.util.StatCollector;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
@@ -34,7 +37,14 @@ public class GuiJsonViewer implements IGui, IMouseListener
 
         this.jsonFile = file;
 
-        this.jsonObject = FileLoader.readJsonFile(jsonFile);
+        try
+        {
+            String jsonCode = LiteModFileExplorer.core.getFileLoader().getContentsFromFile(jsonFile);
+            jsonObject = LiteModFileExplorer.core.getJsonHandler().loadFromJson(jsonCode, HashMap.class);
+        } catch (Exception e)
+        {
+            e.printStackTrace();
+        }
     }
 
     public GuiJsonViewer(int x, int y, int width, int height, Map<String, Object> objectMap)
@@ -67,8 +77,9 @@ public class GuiJsonViewer implements IGui, IMouseListener
 
         } catch (StackOverflowError error)
         {
-            DrawingHelper.drawQuad(x, y, width, height, Color.BLACK, 1F);
-            DrawingHelper.drawSplitCenteredString(minecraft.fontRendererObj, width / 2 + x, y + 15, StatCollector.translateToLocal("gui.json_editor.not_enough_space").replace("\\n", "\n"), 0xFFFFFF, width - 8);
+            DrawingHelper helper = LiteModFileExplorer.core.getDrawingHelper();
+            helper.drawShape(new Quad(x, y, width, height).setColor(Color.BLACK));
+            helper.drawText(StatCollector.translateToLocal("gui.json_editor.not_enough_space").replace("\\n", "\n"), new Vector(width / 2 + x, y + 15), 0xFFFFFF, false, width - 8, DrawingHelper.VerticalTextAlignment.CENTER, DrawingHelper.HorizontalTextAlignment.TOP);
         }
     }
 
@@ -78,8 +89,9 @@ public class GuiJsonViewer implements IGui, IMouseListener
         float maxScrollHeight = getMaxScrollHeight();
         float scrollProgress = (float) this.scrollHeight / maxScrollHeight;
         float scrollBarY = scrollBarYRange * scrollProgress;
-        DrawingHelper.drawQuad(x, y + scrollBarY + 1, 2, 40, Color.DK_GREY, 1F);
-        DrawingHelper.drawQuad(x - 1, y + scrollBarY, 2, 40, Color.WHITE, 1F);
+        DrawingHelper helper = LiteModFileExplorer.core.getDrawingHelper();
+        helper.drawShape(new Quad(x, y + scrollBarY + 1, 2, 40).setColor(Color.DK_GREY));
+        helper.drawShape(new Quad(x - 1, y + scrollBarY, 2, 40).setColor(Color.WHITE));
     }
 
     /**
@@ -94,6 +106,7 @@ public class GuiJsonViewer implements IGui, IMouseListener
      */
     private int drawObject(Minecraft minecraft, int xOffset, int yOffset, String name, Object object)
     {
+        DrawingHelper helper = LiteModFileExplorer.core.getDrawingHelper();
         if (object instanceof String || object instanceof Boolean || object instanceof Double)
         {
             return this.drawSimpleTextValue(minecraft.fontRendererObj, name, object, x + xOffset, y + yOffset);
@@ -111,11 +124,11 @@ public class GuiJsonViewer implements IGui, IMouseListener
                 float lineHeight = objectHeight;
                 if (i == list.size() - 1)
                     lineHeight = 5F;
-                DrawingHelper.drawQuad(x + xOffset + 1, y + yOffset + height + 1, 1, lineHeight, Color.DK_GREY, 1F);
-                DrawingHelper.drawQuad(x + xOffset, y + yOffset + height, 1, lineHeight, Color.WHITE, 1F);
+                helper.drawShape(new Quad(x + xOffset + 1, y + yOffset + height + 1, 1, lineHeight).setColor(Color.DK_GREY));
+                helper.drawShape(new Quad(x + xOffset, y + yOffset + height, 1, lineHeight).setColor(Color.WHITE));
 
-                DrawingHelper.drawQuad(x + xOffset + 2, y + yOffset + height + 5, 3, 1, Color.DK_GREY, 1F);
-                DrawingHelper.drawQuad(x + xOffset + 1, y + yOffset + height + 4, 3, 1, Color.WHITE, 1F);
+                helper.drawShape(new Quad(x + xOffset + 2, y + yOffset + height + 5, 3, 1).setColor(Color.DK_GREY));
+                helper.drawShape(new Quad(x + xOffset + 1, y + yOffset + height + 4, 3, 1).setColor(Color.WHITE));
                 height += objectHeight;
             }
             return height;
@@ -134,11 +147,11 @@ public class GuiJsonViewer implements IGui, IMouseListener
                 float lineHeight = objectHeight;
                 if (!iterator.hasNext())
                     lineHeight = 5F;
-                DrawingHelper.drawQuad(x + xOffset + 1, y + yOffset + height + 1, 1, lineHeight, Color.DK_GREY, 1F);
-                DrawingHelper.drawQuad(x + xOffset, y + yOffset + height, 1, lineHeight, Color.WHITE, 1F);
+                helper.drawShape(new Quad(x + xOffset + 1, y + yOffset + height + 1, 1, lineHeight).setColor(Color.DK_GREY));
+                helper.drawShape(new Quad(x + xOffset, y + yOffset + height, 1, lineHeight).setColor(Color.WHITE));
 
-                DrawingHelper.drawQuad(x + xOffset + 2, y + yOffset + height + 5, 3, 1, Color.DK_GREY, 1F);
-                DrawingHelper.drawQuad(x + xOffset + 1, y + yOffset + height + 4, 3, 1, Color.WHITE, 1F);
+                helper.drawShape(new Quad(x + xOffset + 2, y + yOffset + height + 5, 3, 1).setColor(Color.DK_GREY));
+                helper.drawShape(new Quad(x + xOffset + 1, y + yOffset + height + 4, 3, 1).setColor(Color.WHITE));
                 height += objectHeight;
             }
             return height;
@@ -149,7 +162,7 @@ public class GuiJsonViewer implements IGui, IMouseListener
     {
         int nameWidth = renderer.getStringWidth(name + ": ");
         renderer.drawString(name + ": ", x, y, 0xFFFFFF, true);
-        return (9 * DrawingHelper.drawSplitString(renderer, x + nameWidth, y, String.valueOf(object), 0xFFFFFF, width - nameWidth - (x - this.x), true)) + 2;
+        return (9 * LiteModFileExplorer.core.getDrawingHelper().drawText(String.valueOf(object), new Vector(x + nameWidth, y), 0xFFFFFF, true, width - nameWidth - (x - this.x), DrawingHelper.VerticalTextAlignment.LEFT, DrawingHelper.HorizontalTextAlignment.TOP)) + 2;
     }
 
     @Override

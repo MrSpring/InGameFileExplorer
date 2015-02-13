@@ -35,7 +35,7 @@ public class FileSorter
             @Override
             public int compare(File o1, File o2)
             {
-                String ext1 = FileLoader.getFileExtension(o1, false), ext2 = FileLoader.getFileExtension(o2, false);
+                String ext1 = FileLoader.getFileExtension(o1.getName(), false), ext2 = FileLoader.getFileExtension(o2.getName(), false);
                 return ext1.compareToIgnoreCase(ext2);
             }
         });

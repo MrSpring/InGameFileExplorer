@@ -1,6 +1,6 @@
 package dk.mrspring.fileexplorer.gui;
 
-import dk.mrspring.fileexplorer.helper.DrawingHelper;
+import dk.mrspring.fileexplorer.LiteModFileExplorer;
 import dk.mrspring.fileexplorer.gui.interfaces.IGui;
 import net.minecraft.client.Minecraft;
 
@@ -24,8 +24,8 @@ public class GuiBoolean implements IGui
 
         this.value = startValue;
 
-        this.trueButton = new GuiSimpleButton(x, y, 16, 16, "").setIcon(DrawingHelper.checkMarkIcon);
-        this.falseButton = new GuiSimpleButton(x + 18, y, 16, 16, "").setIcon(DrawingHelper.crossIcon);
+        this.trueButton = new GuiSimpleButton(x, y, 16, 16, "").setIcon(LiteModFileExplorer.core.getIcon("check_mark"));
+        this.falseButton = new GuiSimpleButton(x + 18, y, 16, 16, "").setIcon(LiteModFileExplorer.core.getIcon("cross"));
 
         this.reloadButtons();
     }
