@@ -14,7 +14,9 @@ public class FileLoader extends dk.mrspring.llcore.FileLoader
     public static String getFileExtension(String fileName, boolean keepDot)
     {
         int lastDot = fileName.lastIndexOf('.');
-        return fileName.substring(lastDot + (keepDot ? 0 : 1));
+        if (lastDot == -1)
+            return "";
+        else return fileName.substring(lastDot + (keepDot ? 0 : 1));
     }
 
     @Override
