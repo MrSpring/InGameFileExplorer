@@ -5,10 +5,12 @@ import dk.mrspring.fileexplorer.backup.BackupEntry;
 import dk.mrspring.fileexplorer.backup.BackupManager;
 import dk.mrspring.fileexplorer.gui.GuiSimpleButton;
 import dk.mrspring.fileexplorer.gui.interfaces.IGui;
+import dk.mrspring.llcore.Color;
 import dk.mrspring.llcore.DrawingHelper;
 import dk.mrspring.llcore.Quad;
 import dk.mrspring.llcore.Vector;
 import net.minecraft.client.Minecraft;
+import net.minecraft.util.ResourceLocation;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -39,7 +41,20 @@ public class GuiScreenBackupManager extends GuiScreen
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks)
     {
+        LiteModFileExplorer.core.getDrawingHelper().drawShape(new Quad(0, 0, width, height).setColor(Color.BLACK).setAlpha(0.5F));
         super.drawScreen(mouseX, mouseY, partialTicks);
+        float imageWidth = width - 220 - 30;
+        if (imageWidth > 20)
+        {
+            mc.getTextureManager().bindTexture(new ResourceLocation("fileexplorer", "cats/cat.png"));
+            DrawingHelper helper = LiteModFileExplorer.core.getDrawingHelper();
+            float maxImageHeight = height - 20 - 30;
+            float imageHeight = Math.min((((float) 456 / (float) 600) * imageWidth), maxImageHeight);
+            imageWidth = (600F / 456F) * imageHeight;
+            helper.setAllowTextures(true);
+            LiteModFileExplorer.core.getDrawingHelper().drawTexturedShape(new Quad(240, 10, imageWidth, imageHeight).setColor(Color.BLACK));
+            helper.setAllowTextures(false);
+        }
     }
 
     @Override
