@@ -5,6 +5,7 @@ import dk.mrspring.fileexplorer.LiteModFileExplorer;
 import dk.mrspring.fileexplorer.gui.interfaces.IGui;
 import dk.mrspring.fileexplorer.helper.GuiHelper;
 import dk.mrspring.llcore.Color;
+import dk.mrspring.llcore.DrawingHelper;
 import dk.mrspring.llcore.Quad;
 import net.minecraft.client.Minecraft;
 import org.lwjgl.input.Keyboard;
@@ -72,6 +73,28 @@ public class GuiCustomTextField implements IGui
 
         if (focused)
             minecraft.fontRendererObj.drawString("|", x + cursorX + PADDING - 1 - scroll, textY, 0xFF0000, false);
+
+        this.drawScrollBar(minecraft);
+    }
+
+    private void drawScrollBar(Minecraft minecraft)
+    {
+        DrawingHelper helper = LiteModFileExplorer.core.getDrawingHelper();
+
+        float scrollX = x + PADDING, scrollY = y + h - PADDING - 1, scrollXEnd = x - 2 * PADDING;
+
+        int textWidth = minecraft.fontRendererObj.getStringWidth(getText());
+        float renderStartProgressThrough = (float) scroll / (float) textWidth;
+        float renderEndProgressThrough = (((float) scroll + w - (2 * PADDING)) / (float) textWidth);
+
+        scrollX += w * renderStartProgressThrough;
+        scrollXEnd += Math.min(w * renderEndProgressThrough, w+PADDING);
+
+        float scrollWidth = scrollXEnd - scrollX;
+
+        if (scrollWidth < w - (2 * PADDING))
+            helper.drawShape(new Quad(scrollX, scrollY, scrollWidth, 1));
+//        helper.drawShape(new Quad(scrollX + 1, scrollY + 1, scrollXEnd - scrollX, 1).setColor(Color.DK_GREY));
     }
 
     public void setEnabled(boolean enabled)
