@@ -123,11 +123,13 @@ public class GuiFileExplorer implements IGui, IMouseListener
         if (showControls)
         {
             width -= 75;
-            helper.drawShape(new Quad(x + width + 5 + 6, y + 6, 1, h - 10).setColor(Color.DK_GREY));
-            helper.drawShape(new Quad(x + width + 5 + 6 + 61, y + 6, 1, h - 10).setColor(Color.DK_GREY));
+            helper.drawVerticalLine(new Vector(x + width + 10, y + 6), h - 10, 1, true)
+                    .drawVerticalLine(new Vector(x + width + 10 + 61, y + 6), h - 10, 1, true);
+//            helper.drawShape(new Quad(x + width + 5 + 6, y + 6, 1, h - 10).setColor(Color.DK_GREY));
+//            helper.drawShape(new Quad(x + width + 5 + 6 + 61, y + 6, 1, h - 10).setColor(Color.DK_GREY));
 
-            helper.drawShape(new Quad(x + width + 5 + 5, y + 5, 1, h - 10).setColor(Color.WHITE));
-            helper.drawShape(new Quad(x + width + 5 + 5 + 61, y + 5, 1, h - 10).setColor(Color.WHITE));
+//            helper.drawShape(new Quad(x + width + 5 + 5, y + 5, 1, h - 10).setColor(Color.WHITE));
+//            helper.drawShape(new Quad(x + width + 5 + 5 + 61, y + 5, 1, h - 10).setColor(Color.WHITE));
             this.drawControls(minecraft, mouseX, mouseY, x + width + 5 + 11);
         }
         int yOffset = -scrollHeight, xOffset = 5;
