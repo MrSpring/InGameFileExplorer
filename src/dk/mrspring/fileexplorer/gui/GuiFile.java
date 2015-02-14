@@ -10,7 +10,6 @@ import dk.mrspring.llcore.Vector;
 import net.minecraft.client.Minecraft;
 
 import java.io.File;
-import java.util.List;
 
 /**
  * Created by MrSpring on 09-11-2014 for In-Game File Explorer.
@@ -53,7 +52,7 @@ public class GuiFile extends GuiFileBase
     {
         if (filePath != null)
         {
-            String extension = FileLoader.getFileExtension(new File(filePath).getName(), true);
+            String extension = FileLoader.getFileExtension(filePath, true);
             if (extension.equals("") || new File(filePath).isDirectory())
                 return LiteModFileExplorer.getFileType("directory");
             else return LiteModFileExplorer.getFileType(extension);
@@ -147,9 +146,6 @@ public class GuiFile extends GuiFileBase
     private void renderBigList(Minecraft minecraft, int mouseX, int mouseY)
     {
         float iconSize = 20;
-        List<String> lines = minecraft.fontRendererObj.listFormattedStringToWidth(getShortFileName(), w - (int) iconSize);
-
-        this.h = lines.size() * 9 + (20 - 9);
 
         button.setWidth(w);
         button.setHeight(h);
@@ -159,11 +155,14 @@ public class GuiFile extends GuiFileBase
 
         DrawingHelper helper = LiteModFileExplorer.core.getDrawingHelper();
 
+        int lines = helper.drawText(this.getShortFileName(), new Vector(x + (int) iconSize + 3, y + (h / 2)), 0xFFFFFF, true, w - (int) iconSize - 6, DrawingHelper.VerticalTextAlignment.LEFT, DrawingHelper.HorizontalTextAlignment.CENTER);
+        this.h = lines * 9 + (20 - 9);
+
         helper.drawShape(new Quad(x + iconSize - 2, y + 1, 1, h - 2).setColor(Color.LT_GREY));
         helper.drawShape(new Quad(x + iconSize - 1, y + 1, 1, h - 2).setColor(Color.WHITE));
 
         helper.drawIcon(this.getFileType().getIcon(), new Quad(x + 2, y + 2 + (h / 2 - (iconSize / 2)), iconSize - 4, iconSize - 4));
-        helper.drawText(this.getShortFileName(), new Vector(x + (int) iconSize + 3, y + (h / 2)), 0xFFFFFF, true, w - (int) iconSize - 6, DrawingHelper.VerticalTextAlignment.LEFT, DrawingHelper.HorizontalTextAlignment.CENTER);
+
     }
 
     private void renderList(Minecraft minecraft)
