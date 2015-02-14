@@ -2,7 +2,6 @@ package dk.mrspring.fileexplorer.gui;
 
 import dk.mrspring.fileexplorer.LiteModFileExplorer;
 import dk.mrspring.fileexplorer.gui.interfaces.IGui;
-import dk.mrspring.fileexplorer.helper.DrawingHelper;
 import dk.mrspring.fileexplorer.helper.GuiHelper;
 import dk.mrspring.llcore.Icon;
 import dk.mrspring.llcore.Quad;
@@ -91,7 +90,7 @@ public class GuiSimpleButton implements IGui
         else alphaTarget = 0;
 
         int textColor = 0xFFFFFF;
-        DrawingHelper.drawButtonThingy(new Quad(x, y, width, height), (float) alphaProgress / 10, isEnabled);
+        LiteModFileExplorer.core.getDrawingHelper().drawButtonThingy(new Quad(x, y, width, height), (float) alphaProgress / 10, isEnabled);
         if (!isEnabled)
             textColor = 0xAFAFAF;
 

@@ -2,7 +2,6 @@ package dk.mrspring.fileexplorer.gui;
 
 import dk.mrspring.fileexplorer.LiteModFileExplorer;
 import dk.mrspring.fileexplorer.gui.interfaces.IGui;
-import dk.mrspring.fileexplorer.helper.DrawingHelper;
 import dk.mrspring.fileexplorer.helper.GuiHelper;
 import dk.mrspring.llcore.Color;
 import dk.mrspring.llcore.Quad;
@@ -60,7 +59,7 @@ public class GuiNumberField implements IGui
     @Override
     public void draw(Minecraft minecraft, int mouseX, int mouseY)
     {
-        DrawingHelper.drawButtonThingy(new Quad(x, y, w, h), focused ? 1 : 0, true, Color.BLACK, 0.85F, Color.BLACK, 0.85F);
+        LiteModFileExplorer.core.getDrawingHelper().drawButtonThingy(new Quad(x, y, w, h), focused ? 1 : 0, true, Color.BLACK, 0.85F, Color.BLACK, 0.85F);
 
         String formattedDouble = format.format(value.doubleValue());
         char[] characters = formattedDouble.toCharArray();

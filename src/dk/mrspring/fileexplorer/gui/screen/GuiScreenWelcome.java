@@ -72,11 +72,11 @@ public class GuiScreenWelcome extends GuiScreen
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks)
     {
-        dk.mrspring.fileexplorer.helper.DrawingHelper.drawButtonThingy(new Quad(10, 10, width - 20, height - 20), 1, true, Color.BLACK, 0.9F, Color.BLACK, 0.9F);
+        DrawingHelper helper = LiteModFileExplorer.core.getDrawingHelper();
+
+        helper.drawButtonThingy(new Quad(10, 10, width - 20, height - 20), 1, true, Color.BLACK, 0.9F, Color.BLACK, 0.9F);
 
         super.drawScreen(mouseX, mouseY, partialTicks);
-
-        DrawingHelper helper = LiteModFileExplorer.core.getDrawingHelper();
 
         GL11.glScalef(2, 2, 2);
         helper.drawText(StatCollector.translateToLocal("gui.screen.welcome.title"), new Vector(width / 4, 10), 0xFFFFFF, true, -1, DrawingHelper.VerticalTextAlignment.CENTER, DrawingHelper.HorizontalTextAlignment.TOP);

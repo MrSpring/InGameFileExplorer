@@ -3,7 +3,6 @@ package dk.mrspring.fileexplorer.gui;
 import dk.mrspring.fileexplorer.LiteModFileExplorer;
 import dk.mrspring.fileexplorer.gui.interfaces.IGui;
 import dk.mrspring.fileexplorer.gui.screen.GuiScreenImageViewer;
-import dk.mrspring.fileexplorer.helper.DrawingHelper;
 import dk.mrspring.fileexplorer.loader.ImageLoader;
 import dk.mrspring.llcore.Quad;
 import dk.mrspring.llcore.Vector;
@@ -144,7 +143,7 @@ public class GuiImageViewer implements IGui//, IDelayedDraw
 
             if (showBorder)
             {
-                DrawingHelper.drawButtonThingy(new Quad(imageX, imageY, imageWidth, imageHeight + (captionLines * 9) + captionExtraHeight), 0, false);
+                LiteModFileExplorer.core.getDrawingHelper().drawButtonThingy(new Quad(imageX, imageY, imageWidth, imageHeight + (captionLines * 9) + captionExtraHeight), 0, false);
                 imageX += 3;
                 imageY += 3;
                 imageWidth -= 6;

@@ -4,7 +4,6 @@ import com.mumfrey.liteloader.gl.GLClippingPlanes;
 import dk.mrspring.fileexplorer.LiteModFileExplorer;
 import dk.mrspring.fileexplorer.gui.interfaces.IGui;
 import dk.mrspring.fileexplorer.gui.interfaces.IMouseListener;
-import dk.mrspring.fileexplorer.helper.DrawingHelper;
 import dk.mrspring.fileexplorer.helper.GuiHelper;
 import dk.mrspring.llcore.Color;
 import dk.mrspring.llcore.Quad;
@@ -91,7 +90,7 @@ public class GuiMultiLineTextField implements IGui, IMouseListener
             xOffset += 5;
 
         if (drawBackground)
-            DrawingHelper.drawButtonThingy(new Quad(x, y, w, h), focused ? 1 : 0, true, Color.BLACK, 0.85F, Color.BLACK, 0.85F);
+            LiteModFileExplorer.core.getDrawingHelper().drawButtonThingy(new Quad(x, y, w, h), focused ? 1 : 0, true, Color.BLACK, 0.85F, Color.BLACK, 0.85F);
 
         GLClippingPlanes.glEnableClipping(x, x + w, y + padding, y + h - padding);
 

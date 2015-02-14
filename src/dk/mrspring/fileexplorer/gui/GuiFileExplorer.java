@@ -3,10 +3,10 @@ package dk.mrspring.fileexplorer.gui;
 import dk.mrspring.fileexplorer.LiteModFileExplorer;
 import dk.mrspring.fileexplorer.gui.interfaces.IGui;
 import dk.mrspring.fileexplorer.gui.interfaces.IMouseListener;
-import dk.mrspring.fileexplorer.helper.DrawingHelper;
 import dk.mrspring.fileexplorer.helper.FileSorter;
 import dk.mrspring.fileexplorer.helper.GuiHelper;
 import dk.mrspring.llcore.Color;
+import dk.mrspring.llcore.DrawingHelper;
 import dk.mrspring.llcore.Quad;
 import dk.mrspring.llcore.Vector;
 import net.minecraft.client.Minecraft;
@@ -115,10 +115,10 @@ public class GuiFileExplorer implements IGui, IMouseListener
     {
         int width = w;
 
-        dk.mrspring.llcore.DrawingHelper helper = LiteModFileExplorer.core.getDrawingHelper();
+        DrawingHelper helper = LiteModFileExplorer.core.getDrawingHelper();
 
         if (showBackground)
-            DrawingHelper.drawButtonThingy(new Quad(x, y, w, h), 0, true);
+            helper.drawButtonThingy(new Quad(x, y, w, h), 0, true);
 
         if (showControls)
         {

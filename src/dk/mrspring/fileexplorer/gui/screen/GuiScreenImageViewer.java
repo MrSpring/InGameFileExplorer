@@ -47,7 +47,7 @@ public class GuiScreenImageViewer extends GuiScreen
         if (yOffset < 0)
             yOffset = 0;
 //        helper.drawIcon(DrawingHelper.hoverIcon, width / 4 - (mc.fontRendererObj.getStringWidth(StatCollector.translateToLocal("gui.screen.image_viewer.exit_fullscreen")) / 2) - 5, -yOffset, mc.fontRendererObj.getStringWidth(StatCollector.translateToLocal("gui.screen.image_viewer.exit_fullscreen")) + 10, 16, false);
-        dk.mrspring.fileexplorer.helper.DrawingHelper.drawButtonThingy(new Quad(width / 4 - (mc.fontRendererObj.getStringWidth(StatCollector.translateToLocal("gui.screen.image_viewer.exit_fullscreen")) / 2) - 5, -yOffset, mc.fontRendererObj.getStringWidth(StatCollector.translateToLocal("gui.screen.image_viewer.exit_fullscreen")) + 10, 16), 0, false);
+        helper.drawButtonThingy(new Quad(width / 4 - (mc.fontRendererObj.getStringWidth(StatCollector.translateToLocal("gui.screen.image_viewer.exit_fullscreen")) / 2) - 5, -yOffset, mc.fontRendererObj.getStringWidth(StatCollector.translateToLocal("gui.screen.image_viewer.exit_fullscreen")) + 10, 16), 0, false);
         helper.drawText(StatCollector.translateToLocal("gui.screen.image_viewer.exit_fullscreen"), new Vector(width / 4, 4 - yOffset), 0xFFFFFF, true, -1, DrawingHelper.VerticalTextAlignment.CENTER, DrawingHelper.HorizontalTextAlignment.TOP);
         GL11.glPopMatrix();
     }

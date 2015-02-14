@@ -154,14 +154,14 @@ public class GuiScreenBackupManager extends GuiScreen
 
         public int draw(Minecraft minecraft, int mouseX, int mouseY, int xPosition, int yPosition, int width)
         {
-            dk.mrspring.fileexplorer.helper.DrawingHelper.drawButtonThingy(new Quad(xPosition, yPosition, width, this.height), 0, false);
+            DrawingHelper helper = LiteModFileExplorer.core.getDrawingHelper();
+
+            helper.drawButtonThingy(new Quad(xPosition, yPosition, width, this.height), 0, false);
 
             restoreButton.setX(xPosition + width - restoreButton.getWidth() - 4);
             restoreButton.setY(yPosition + 4);
 
             restoreButton.draw(minecraft, mouseX, mouseY);
-
-            DrawingHelper helper = LiteModFileExplorer.core.getDrawingHelper();
 
             int nameLines = helper.drawText(name, new Vector(xPosition + 5, yPosition + 5), 0xFFFFFF, true, width - 10 - restoreButton.getWidth(), DrawingHelper.VerticalTextAlignment.LEFT, DrawingHelper.HorizontalTextAlignment.TOP);
             int dateLines = helper.drawText(date, new Vector(xPosition + 5, yPosition + 5 + 3 + (nameLines * 9)), 0xFFFFFF, true, width - 10 - restoreButton.getWidth(), DrawingHelper.VerticalTextAlignment.LEFT, DrawingHelper.HorizontalTextAlignment.TOP);

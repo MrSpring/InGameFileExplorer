@@ -3,7 +3,6 @@ package dk.mrspring.fileexplorer.gui;
 import com.mumfrey.liteloader.gl.GLClippingPlanes;
 import dk.mrspring.fileexplorer.LiteModFileExplorer;
 import dk.mrspring.fileexplorer.gui.interfaces.IGui;
-import dk.mrspring.fileexplorer.helper.DrawingHelper;
 import dk.mrspring.fileexplorer.helper.GuiHelper;
 import dk.mrspring.llcore.Color;
 import dk.mrspring.llcore.Quad;
@@ -36,7 +35,7 @@ public class GuiCustomTextField implements IGui
     @Override
     public void draw(Minecraft minecraft, int mouseX, int mouseY)
     {
-        DrawingHelper.drawButtonThingy(new Quad(x, y, w, h), focused || !enabled ? 1 : 0, enabled, Color.BLACK, 0.85F, Color.BLACK, 0.85F);
+        LiteModFileExplorer.core.getDrawingHelper().drawButtonThingy(new Quad(x, y, w, h), focused || !enabled ? 1 : 0, enabled, Color.BLACK, 0.85F, Color.BLACK, 0.85F);
 
         if (selectionStart != cursorPos)
         {
