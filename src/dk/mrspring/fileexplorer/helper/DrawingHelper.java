@@ -28,9 +28,9 @@ public class DrawingHelper
             if (enabled && alphaProgress > 0)
                 helper.drawShape(new Quad(
                         new Vector(x + 2, y + 2, startColor, alphaProgress * startAlpha),
-                        new Vector(x + w - 4, y + 2, startColor, alphaProgress * startAlpha),
-                        new Vector(x + w - 4, y + h - 4, endColor, alphaProgress * endAlpha),
-                        new Vector(x + 2, y + h - 4, endColor, alphaProgress * endAlpha)));
+                        new Vector(x + w - 2, y + 2, startColor, alphaProgress * startAlpha),
+                        new Vector(x + w - 2, y + h - 2, endColor, alphaProgress * endAlpha),
+                        new Vector(x + 2, y + h - 2, endColor, alphaProgress * endAlpha)));
         } catch (Exception e)
         {
             e.printStackTrace();
