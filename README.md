@@ -1,4 +1,4 @@
-# Requires LiteLoader 1.8 to run!
+# Requires [LiteLoader](http://liteloader.com) 1.8 and latest [LLCore](https://github.com/MrSpring/LLCore) to run!
 
 The in-game file explorer mod allows you to look around your systems file, and view/edit some file types.
 These include:  
