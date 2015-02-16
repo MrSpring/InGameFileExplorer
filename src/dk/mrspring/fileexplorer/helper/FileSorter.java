@@ -103,7 +103,7 @@ public class FileSorter
     private static void sortByName(File[] files)
     {
         sortUsingComparator(files, nameComparator);
-        if (LiteModFileExplorer.config.sort_folders)
+        if (LiteModFileExplorer.config.sortFolders)
             sortFolders(files);
     }
 

@@ -5,6 +5,7 @@ import dk.mrspring.fileexplorer.gui.interfaces.IGui;
 import dk.mrspring.fileexplorer.gui.interfaces.IMouseListener;
 import dk.mrspring.fileexplorer.helper.FileSorter;
 import dk.mrspring.fileexplorer.helper.GuiHelper;
+import dk.mrspring.fileexplorer.loader.FileLoader;
 import dk.mrspring.llcore.Color;
 import dk.mrspring.llcore.DrawingHelper;
 import dk.mrspring.llcore.Quad;
@@ -380,7 +381,7 @@ public class GuiFileExplorer implements IGui, IMouseListener
     {
         this.guiFiles = new ArrayList<GuiFileBase>();
 
-        File[] filesAtCurrentPath = LiteModFileExplorer.core.getFileLoader().getFilesInFolder(new File(currentPath), false);
+        File[] filesAtCurrentPath = LiteModFileExplorer.core.getFileLoader().getFilesInFolder(new File(currentPath), false, FileLoader.DEFAULT_FILTER);
 
 //        FileLoader.addFiles(currentPath, filesAtCurrentPath, false);
 

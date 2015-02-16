@@ -3,6 +3,7 @@ package dk.mrspring.fileexplorer.loader;
 import dk.mrspring.fileexplorer.LiteModFileExplorer;
 
 import java.io.File;
+import java.io.FileFilter;
 import java.io.IOException;
 import java.util.List;
 
@@ -11,6 +12,23 @@ import java.util.List;
  */
 public class FileLoader extends dk.mrspring.llcore.FileLoader
 {
+    public static final FileFilter DEFAULT_FILTER = new FileFilter()
+    {
+        @Override
+        public boolean accept(File pathname)
+        {
+            if (pathname.isDirectory())
+                return true;
+            if (!LiteModFileExplorer.config.hideNonEditableFiles)
+                return true;
+            else
+            {
+                String extension = getFileExtension(pathname.getName(), true);
+                return LiteModFileExplorer.canEditFile(extension);
+            }
+        }
+    };
+
     public static String getFileExtension(String fileName, boolean keepDot)
     {
         int lastDot = fileName.lastIndexOf('.');
@@ -20,10 +38,10 @@ public class FileLoader extends dk.mrspring.llcore.FileLoader
     }
 
     @Override
-    public void addFilesToList(File folder, List<File> fileList, boolean addSubFolders)
+    public void addFilesToList(File folder, List<File> fileList, boolean addSubFolders, FileFilter filter)
     {
         if (LiteModFileExplorer.config.acceptFileReading)
-            super.addFilesToList(folder, fileList, addSubFolders);
+            super.addFilesToList(folder, fileList, addSubFolders, filter);
     }
 
     @Override
