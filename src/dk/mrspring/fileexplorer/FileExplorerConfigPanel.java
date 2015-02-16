@@ -7,10 +7,8 @@ import dk.mrspring.fileexplorer.gui.GuiCustomTextField;
 import dk.mrspring.fileexplorer.gui.GuiSimpleButton;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.StatCollector;
-import org.apache.commons.io.FileUtils;
 
 import java.io.File;
-import java.io.IOException;
 
 /**
  * Created by MrSpring on 11-01-2015 for In-Game File Explorer - 1.8.0.
@@ -25,10 +23,11 @@ public class FileExplorerConfigPanel implements ConfigPanel
     @Override
     public void onPanelShown(ConfigPanelHost host)
     {
+        Config startConfig = LiteModFileExplorer.config;
         Minecraft mc = Minecraft.getMinecraft();
-        startPositionField = new GuiCustomTextField(mc.fontRendererObj.getStringWidth(StatCollector.translateToLocal("gui.config_panel.file_explorer.start_folder") + ": "), 0, host.getWidth() - mc.fontRendererObj.getStringWidth(StatCollector.translateToLocal("gui.config_panel.file_explorer.start_folder") + ": "), 16, LiteModFileExplorer.config.startLocation);
-        takeAutoBackup = new GuiCheckbox(mc.fontRendererObj.getStringWidth(StatCollector.translateToLocal("gui.config_panel.file_explorer.take_backup") + ": "), 20, 12, 12, LiteModFileExplorer.config.automaticBackup);
-        backupPositionField = new GuiCustomTextField(mc.fontRendererObj.getStringWidth(StatCollector.translateToLocal("gui.config_panel.file_explorer.backup_folder") + ": "), 36, host.getWidth() - mc.fontRendererObj.getStringWidth(StatCollector.translateToLocal("gui.config_panel.file_explorer.backup_folder") + ": "), 16, new File(LiteModFileExplorer.config.backupLocation).getAbsolutePath());
+        startPositionField = new GuiCustomTextField(mc.fontRendererObj.getStringWidth(StatCollector.translateToLocal("gui.config_panel.file_explorer.start_folder") + ": "), 0, host.getWidth() - mc.fontRendererObj.getStringWidth(StatCollector.translateToLocal("gui.config_panel.file_explorer.start_folder") + ": "), 16, startConfig.startLocation);
+        takeAutoBackup = new GuiCheckbox(mc.fontRendererObj.getStringWidth(StatCollector.translateToLocal("gui.config_panel.file_explorer.take_backup") + ": "), 20, 12, 12, startConfig.automaticBackup);
+        backupPositionField = new GuiCustomTextField(mc.fontRendererObj.getStringWidth(StatCollector.translateToLocal("gui.config_panel.file_explorer.backup_folder") + ": "), 36, host.getWidth() - mc.fontRendererObj.getStringWidth(StatCollector.translateToLocal("gui.config_panel.file_explorer.backup_folder") + ": "), 16, new File(startConfig.backupLocation).getAbsolutePath());
         cleanBackup = new GuiSimpleButton(0, 60, 75, 26, "gui.config_panel.file_explorer.clean_backup").setAutoHeight(true);
     }
 
@@ -80,7 +79,14 @@ public class FileExplorerConfigPanel implements ConfigPanel
     @Override
     public void onPanelHidden()
     {
-
+        LiteModFileExplorer.config.startLocation = startPositionField.getText();
+        LiteModFileExplorer.config.automaticBackup = takeAutoBackup.isChecked();
+        File newFile = new File(backupPositionField.getText());
+        File oldFile = new File(LiteModFileExplorer.config.backupLocation);
+        if (!newFile.getAbsolutePath().equals(oldFile.getAbsolutePath()))
+            LiteModFileExplorer.config.backupLocation = backupPositionField.getText();
+        LiteModFileExplorer.config.validateValues();
+        LiteModFileExplorer.saveConfig();
     }
 
     @Override
