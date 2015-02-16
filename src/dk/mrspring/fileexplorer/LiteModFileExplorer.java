@@ -135,6 +135,7 @@ public class LiteModFileExplorer implements Tickable, Configurable
                 Gson gson = new Gson();
                 FileReader reader = new FileReader(configFile);
                 config = gson.fromJson(reader, Config.class);
+                config.validateValues();
                 saveConfig();
                 ModLogger.printDebug("Loaded config from file: " + configFile.getPath() + ", debug messages are enabled! Get ready for spam!");
             } else

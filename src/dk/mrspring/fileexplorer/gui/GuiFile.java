@@ -145,7 +145,7 @@ public class GuiFile extends GuiFileBase
 
     private void renderBigList(Minecraft minecraft, int mouseX, int mouseY)
     {
-        float iconSize = 20;
+        float iconSize = LiteModFileExplorer.config.explorerIconSize;
 
         button.setWidth(w);
         button.setHeight(h);
@@ -156,7 +156,7 @@ public class GuiFile extends GuiFileBase
         DrawingHelper helper = LiteModFileExplorer.core.getDrawingHelper();
 
         int lines = helper.drawText(this.getShortFileName(), new Vector(x + (int) iconSize + 3, y + (h / 2)), 0xFFFFFF, true, w - (int) iconSize - 6, DrawingHelper.VerticalTextAlignment.LEFT, DrawingHelper.HorizontalTextAlignment.CENTER);
-        this.h = lines * 9 + (20 - 9);
+        this.h = lines * 9 + ((int) iconSize - 9);
 
         helper.drawShape(new Quad(x + iconSize - 2, y + 1, 1, h - 2).setColor(Color.LT_GREY));
         helper.drawShape(new Quad(x + iconSize - 1, y + 1, 1, h - 2).setColor(Color.WHITE));

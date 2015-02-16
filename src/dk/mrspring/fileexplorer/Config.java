@@ -2,6 +2,8 @@ package dk.mrspring.fileexplorer;
 
 import dk.mrspring.fileexplorer.helper.FileSorter;
 
+import java.io.File;
+
 /**
  * Created by MrSpring on 08-12-2014 for In-Game File Explorer.
  */
@@ -17,6 +19,7 @@ public class Config
     public FileSorter.SortingType file_sorting_type = FileSorter.SortingType.NAME;
     public boolean sortFolders = false;
     public boolean hideNonEditableFiles = false;
+    public int explorerIconSize = 20;
 
     public boolean json_usePrettyPrinting = true;
     public boolean json_allowArrayCollapsing = true;
@@ -25,4 +28,29 @@ public class Config
     public boolean json_showCollapsedMapSize = true;
 
     public String number_format = "00000.00";
+
+    public void validateValues()
+    {
+        {
+            File tempStartFile = new File(startLocation);
+            if (!tempStartFile.isDirectory())
+                startLocation = System.getProperty("user.home");
+        }
+
+        {
+            if (!acceptFileReading)
+                showWelcomeScreen = true;
+        }
+
+        {
+            File tempBackupFile = new File(backupLocation);
+            if (!tempBackupFile.isDirectory())
+                backupLocation = "igfe-backup";
+        }
+
+        {
+            if (explorerIconSize < 15)
+                explorerIconSize = 15;
+        }
+    }
 }
