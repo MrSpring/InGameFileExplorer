@@ -9,6 +9,6 @@ public class TranslateHelper
 {
     public static String translate(String toTranslate)
     {
-        return toTranslate;
+        return StatCollector.translateToLocal(toTranslate);
     }
 }
