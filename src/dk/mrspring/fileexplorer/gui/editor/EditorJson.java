@@ -8,12 +8,12 @@ import dk.mrspring.fileexplorer.gui.editor.json.*;
 import dk.mrspring.fileexplorer.gui.interfaces.IGui;
 import dk.mrspring.fileexplorer.gui.interfaces.IMouseListener;
 import dk.mrspring.fileexplorer.helper.GuiHelper;
+import dk.mrspring.fileexplorer.helper.TranslateHelper;
 import dk.mrspring.llcore.Color;
 import dk.mrspring.llcore.DrawingHelper;
 import dk.mrspring.llcore.Quad;
 import dk.mrspring.llcore.Vector;
 import net.minecraft.client.Minecraft;
-import net.minecraft.util.StatCollector;
 
 import java.io.File;
 import java.io.IOException;
@@ -48,6 +48,8 @@ public class EditorJson extends Editor implements IMouseListener
         {
             e.printStackTrace();
         }
+        if (json == null)
+            json = new LinkedTreeMap<String, Object>();
 
         viewer = new GuiJsonViewer(x, y, w, h, json);
         editor = new GuiJsonEditor(x, y, w, h, json);
@@ -253,20 +255,21 @@ public class EditorJson extends Editor implements IMouseListener
             newArray = new GuiSimpleButton(x, y, 16, 16, "A");
             newMap = new GuiSimpleButton(x, y, 16, 16, "M");
 
-            for (Map.Entry<String, Object> entry : jsonObject.entrySet())
-            {
-                Object value = entry.getValue();
-                String name = entry.getKey();
+            if (jsonObject != null)
+                for (Map.Entry<String, Object> entry : jsonObject.entrySet())
+                {
+                    Object value = entry.getValue();
+                    String name = entry.getKey();
 
-                if (value instanceof Boolean)
-                    this.elements.add(new JsonBooleanElement(x, y, width, name, (Boolean) value));
-                else if (value instanceof String)
-                    this.elements.add(new JsonStringElement(x, y, width, name, (String) value));
-                else if (value instanceof ArrayList)
-                    this.elements.add(new JsonArrayElement(x, y, width, name, (ArrayList<Object>) value));
-                else if (value instanceof LinkedTreeMap)
-                    this.elements.add(new JsonMapElement(x, y, width, name, (LinkedTreeMap<String, Object>) value));
-            }
+                    if (value instanceof Boolean)
+                        this.elements.add(new JsonBooleanElement(x, y, width, name, (Boolean) value));
+                    else if (value instanceof String)
+                        this.elements.add(new JsonStringElement(x, y, width, name, (String) value));
+                    else if (value instanceof ArrayList)
+                        this.elements.add(new JsonArrayElement(x, y, width, name, (ArrayList<Object>) value));
+                    else if (value instanceof LinkedTreeMap)
+                        this.elements.add(new JsonMapElement(x, y, width, name, (LinkedTreeMap<String, Object>) value));
+                }
         }
 
         public void setWidth(int width)
@@ -310,9 +313,9 @@ public class EditorJson extends Editor implements IMouseListener
 
                     yOffset += element.getHeight() + 3;
                 }
-                minecraft.fontRendererObj.drawString(StatCollector.translateToLocal("gui.json_editor.add_new") + ": ", x + xOffset - 18, y + yOffset + 3, 0xFFFFFF, true);
+                minecraft.fontRendererObj.drawString(TranslateHelper.translate("gui.json_editor.add_new") + ": ", x + xOffset - 18, y + yOffset + 3, 0xFFFFFF, true);
 
-                int textWidth = minecraft.fontRendererObj.getStringWidth(StatCollector.translateToLocal("gui.json_editor.add_new") + ": ");
+                int textWidth = minecraft.fontRendererObj.getStringWidth(TranslateHelper.translate("gui.json_editor.add_new") + ": ");
 
                 this.newString.setX(x + textWidth);
                 this.newString.setY(y + yOffset);
@@ -336,7 +339,7 @@ public class EditorJson extends Editor implements IMouseListener
                 this.newMap.draw(minecraft, mouseX, mouseY);
             } catch (StackOverflowError error)
             {
-                LiteModFileExplorer.core.getDrawingHelper().drawText(StatCollector.translateToLocal("gui.json_editor.not_enough_space"), new Vector(w / 2 + x, y + 10), 0xFFFFFF, true, w, DrawingHelper.VerticalTextAlignment.CENTER, DrawingHelper.HorizontalTextAlignment.TOP);
+                LiteModFileExplorer.core.getDrawingHelper().drawText(TranslateHelper.translate("gui.json_editor.not_enough_space"), new Vector(w / 2 + x, y + 10), 0xFFFFFF, true, w, DrawingHelper.VerticalTextAlignment.CENTER, DrawingHelper.HorizontalTextAlignment.TOP);
             }
         }
 

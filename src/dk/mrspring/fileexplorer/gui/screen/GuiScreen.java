@@ -6,6 +6,7 @@ import dk.mrspring.fileexplorer.gui.interfaces.IDelayedDraw;
 import dk.mrspring.fileexplorer.gui.interfaces.IDrawable;
 import dk.mrspring.fileexplorer.gui.interfaces.IGui;
 import dk.mrspring.fileexplorer.gui.interfaces.IMouseListener;
+import dk.mrspring.fileexplorer.helper.TranslateHelper;
 import dk.mrspring.llcore.Color;
 import dk.mrspring.llcore.DrawingHelper;
 import dk.mrspring.llcore.Quad;
@@ -88,7 +89,7 @@ public class GuiScreen extends net.minecraft.client.gui.GuiScreen
 
     public void drawCenteredTitle()
     {
-        String translatedTitle = StatCollector.translateToLocal(this.title);
+        String translatedTitle = TranslateHelper.translate(this.title);
 
         int textPosY = this.barHeight / 2 - 4;
 
@@ -114,7 +115,7 @@ public class GuiScreen extends net.minecraft.client.gui.GuiScreen
 
     public void drawCenteredSubTitle()
     {
-        String translatedSubTitle = StatCollector.translateToLocal(this.subtitle);
+        String translatedSubTitle = TranslateHelper.translate(this.subtitle);
         int textPosY = this.barHeight / 2 - 10;
         this.drawCenteredString(mc.fontRendererObj, translatedSubTitle, this.width / 2, textPosY + 10, 0xFFFFFF);
     }

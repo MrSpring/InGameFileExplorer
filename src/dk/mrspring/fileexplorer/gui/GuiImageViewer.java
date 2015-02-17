@@ -3,6 +3,7 @@ package dk.mrspring.fileexplorer.gui;
 import dk.mrspring.fileexplorer.LiteModFileExplorer;
 import dk.mrspring.fileexplorer.gui.interfaces.IGui;
 import dk.mrspring.fileexplorer.gui.screen.GuiScreenImageViewer;
+import dk.mrspring.fileexplorer.helper.TranslateHelper;
 import dk.mrspring.fileexplorer.loader.ImageLoader;
 import dk.mrspring.llcore.Quad;
 import dk.mrspring.llcore.Vector;
@@ -175,9 +176,9 @@ public class GuiImageViewer implements IGui//, IDelayedDraw
             if (this.image != null && this.buffer != null)
                 this.setImage(image, buffer);
             if (failed)
-                minecraft.fontRendererObj.drawString(StatCollector.translateToLocal("gui.image_viewer.load_failed"), x + 10, y + 10, 0xFF0000);
+                minecraft.fontRendererObj.drawString(TranslateHelper.translate("gui.image_viewer.load_failed"), x + 10, y + 10, 0xFF0000);
             else
-                minecraft.fontRendererObj.drawString(StatCollector.translateToLocal("gui.image_viewer.loading"), x + 10, y + 10, 0x0000FF);
+                minecraft.fontRendererObj.drawString(TranslateHelper.translate("gui.image_viewer.loading"), x + 10, y + 10, 0x0000FF);
         }
     }
 

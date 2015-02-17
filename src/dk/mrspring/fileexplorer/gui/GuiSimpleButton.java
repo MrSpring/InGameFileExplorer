@@ -3,6 +3,7 @@ package dk.mrspring.fileexplorer.gui;
 import dk.mrspring.fileexplorer.LiteModFileExplorer;
 import dk.mrspring.fileexplorer.gui.interfaces.IGui;
 import dk.mrspring.fileexplorer.helper.GuiHelper;
+import dk.mrspring.fileexplorer.helper.TranslateHelper;
 import dk.mrspring.llcore.Color;
 import dk.mrspring.llcore.Icon;
 import dk.mrspring.llcore.Quad;
@@ -101,7 +102,7 @@ public class GuiSimpleButton implements IGui
         if (icon != null)
             LiteModFileExplorer.core.getDrawingHelper().drawIcon(this.getIcon(), new Quad(x + 2, y + 2, width - 4, height - 4));
 
-        String translatedText = StatCollector.translateToLocal(this.text);
+        String translatedText = TranslateHelper.translate(this.text);
 
         int textY = (this.height / 2) + y, textX = (this.width / 2) + x;
         int lines = LiteModFileExplorer.core.getDrawingHelper().drawText(translatedText, new Vector(textX, textY), textColor, true, width - 6, dk.mrspring.llcore.DrawingHelper.VerticalTextAlignment.CENTER, dk.mrspring.llcore.DrawingHelper.HorizontalTextAlignment.CENTER);

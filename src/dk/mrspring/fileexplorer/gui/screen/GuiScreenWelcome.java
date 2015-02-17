@@ -7,6 +7,7 @@ import dk.mrspring.fileexplorer.gui.GuiSimpleButton;
 import dk.mrspring.fileexplorer.gui.interfaces.IGui;
 import dk.mrspring.fileexplorer.gui.interfaces.IMouseListener;
 import dk.mrspring.fileexplorer.helper.GuiHelper;
+import dk.mrspring.fileexplorer.helper.TranslateHelper;
 import dk.mrspring.llcore.DrawingHelper;
 import dk.mrspring.llcore.Color;
 import dk.mrspring.llcore.Quad;
@@ -41,11 +42,11 @@ public class GuiScreenWelcome extends GuiScreen
 
         int topHeight = 60;
 
-        List<String> linesFromMessage = mc.fontRendererObj.listFormattedStringToWidth(StatCollector.translateToLocal("gui.screen.welcome.message").replace("\\n", "\n"), width - 30);
+        List<String> linesFromMessage = mc.fontRendererObj.listFormattedStringToWidth(TranslateHelper.translate("gui.screen.welcome.message").replace("\\n", "\n"), width - 30);
         topHeight += (linesFromMessage.size() * 9);
 
-        int readLines = mc.fontRendererObj.listFormattedStringToWidth(StatCollector.translateToLocal("gui.screen.welcome.i_accept.read"), width - 50).size();
-        int writeLines = mc.fontRendererObj.listFormattedStringToWidth(StatCollector.translateToLocal("gui.screen.welcome.i_accept.write"), width - 50).size();
+        int readLines = mc.fontRendererObj.listFormattedStringToWidth(TranslateHelper.translate("gui.screen.welcome.i_accept.read"), width - 50).size();
+        int writeLines = mc.fontRendererObj.listFormattedStringToWidth(TranslateHelper.translate("gui.screen.welcome.i_accept.write"), width - 50).size();
 
         this.addGuiElement("terms-and-conditions", new GuiTermsAndConditions(20, topHeight, width - 40, height - topHeight - 50 - (readLines * 9) - (writeLines * 9)));
         this.addGuiElement("finish", new GuiSimpleButton(20, height - 40, 40, 20, "Done").disable());
@@ -79,12 +80,12 @@ public class GuiScreenWelcome extends GuiScreen
         super.drawScreen(mouseX, mouseY, partialTicks);
 
         GL11.glScalef(2, 2, 2);
-        helper.drawText(StatCollector.translateToLocal("gui.screen.welcome.title"), new Vector(width / 4, 10), 0xFFFFFF, true, -1, DrawingHelper.VerticalTextAlignment.CENTER, DrawingHelper.HorizontalTextAlignment.TOP);
+        helper.drawText(TranslateHelper.translate("gui.screen.welcome.title"), new Vector(width / 4, 10), 0xFFFFFF, true, -1, DrawingHelper.VerticalTextAlignment.CENTER, DrawingHelper.HorizontalTextAlignment.TOP);
 
         GL11.glScalef(0.5F, 0.5F, 0.5F);
-        helper.drawText(StatCollector.translateToLocal("gui.screen.welcome.message").replace("\\n", "\n"), new Vector(width / 2, 50), 0xFFFFFF, true, width - 30, DrawingHelper.VerticalTextAlignment.CENTER, DrawingHelper.HorizontalTextAlignment.TOP);
-        helper.drawText(StatCollector.translateToLocal("gui.screen.welcome.i_accept.read"), new Vector(32, ((GuiCheckbox) this.getGui("accept-read")).getY() + 1), 0xFFFFFF, true, width - 50, DrawingHelper.VerticalTextAlignment.LEFT, DrawingHelper.HorizontalTextAlignment.TOP);
-        helper.drawText(StatCollector.translateToLocal("gui.screen.welcome.i_accept.write"), new Vector(32, ((GuiCheckbox) this.getGui("accept-write")).getY() + 1), 0xFFFFFF, true, width - 50, DrawingHelper.VerticalTextAlignment.LEFT, DrawingHelper.HorizontalTextAlignment.TOP);
+        helper.drawText(TranslateHelper.translate("gui.screen.welcome.message").replace("\\n", "\n"), new Vector(width / 2, 50), 0xFFFFFF, true, width - 30, DrawingHelper.VerticalTextAlignment.CENTER, DrawingHelper.HorizontalTextAlignment.TOP);
+        helper.drawText(TranslateHelper.translate("gui.screen.welcome.i_accept.read"), new Vector(32, ((GuiCheckbox) this.getGui("accept-read")).getY() + 1), 0xFFFFFF, true, width - 50, DrawingHelper.VerticalTextAlignment.LEFT, DrawingHelper.HorizontalTextAlignment.TOP);
+        helper.drawText(TranslateHelper.translate("gui.screen.welcome.i_accept.write"), new Vector(32, ((GuiCheckbox) this.getGui("accept-write")).getY() + 1), 0xFFFFFF, true, width - 50, DrawingHelper.VerticalTextAlignment.LEFT, DrawingHelper.HorizontalTextAlignment.TOP);
     }
 
     @Override

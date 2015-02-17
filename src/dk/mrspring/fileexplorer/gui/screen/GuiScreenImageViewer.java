@@ -2,6 +2,7 @@ package dk.mrspring.fileexplorer.gui.screen;
 
 import dk.mrspring.fileexplorer.LiteModFileExplorer;
 import dk.mrspring.fileexplorer.gui.GuiImageViewer;
+import dk.mrspring.fileexplorer.helper.TranslateHelper;
 import dk.mrspring.llcore.Color;
 import dk.mrspring.llcore.DrawingHelper;
 import dk.mrspring.llcore.Quad;
@@ -46,9 +47,9 @@ public class GuiScreenImageViewer extends GuiScreen
         int yOffset = 16 - (int) (closeMessageOpacity * fullHeight);
         if (yOffset < 0)
             yOffset = 0;
-//        helper.drawIcon(DrawingHelper.hoverIcon, width / 4 - (mc.fontRendererObj.getStringWidth(StatCollector.translateToLocal("gui.screen.image_viewer.exit_fullscreen")) / 2) - 5, -yOffset, mc.fontRendererObj.getStringWidth(StatCollector.translateToLocal("gui.screen.image_viewer.exit_fullscreen")) + 10, 16, false);
-        helper.drawButtonThingy(new Quad(width / 4 - (mc.fontRendererObj.getStringWidth(StatCollector.translateToLocal("gui.screen.image_viewer.exit_fullscreen")) / 2) - 5, -yOffset, mc.fontRendererObj.getStringWidth(StatCollector.translateToLocal("gui.screen.image_viewer.exit_fullscreen")) + 10, 16), 0, false);
-        helper.drawText(StatCollector.translateToLocal("gui.screen.image_viewer.exit_fullscreen"), new Vector(width / 4, 4 - yOffset), 0xFFFFFF, true, -1, DrawingHelper.VerticalTextAlignment.CENTER, DrawingHelper.HorizontalTextAlignment.TOP);
+//        helper.drawIcon(DrawingHelper.hoverIcon, width / 4 - (mc.fontRendererObj.getStringWidth(TranslateHelper.translate("gui.screen.image_viewer.exit_fullscreen")) / 2) - 5, -yOffset, mc.fontRendererObj.getStringWidth(TranslateHelper.translate("gui.screen.image_viewer.exit_fullscreen")) + 10, 16, false);
+        helper.drawButtonThingy(new Quad(width / 4 - (mc.fontRendererObj.getStringWidth(TranslateHelper.translate("gui.screen.image_viewer.exit_fullscreen")) / 2) - 5, -yOffset, mc.fontRendererObj.getStringWidth(TranslateHelper.translate("gui.screen.image_viewer.exit_fullscreen")) + 10, 16), 0, false);
+        helper.drawText(TranslateHelper.translate("gui.screen.image_viewer.exit_fullscreen"), new Vector(width / 4, 4 - yOffset), 0xFFFFFF, true, -1, DrawingHelper.VerticalTextAlignment.CENTER, DrawingHelper.HorizontalTextAlignment.TOP);
         GL11.glPopMatrix();
     }
 

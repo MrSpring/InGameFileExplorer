@@ -4,6 +4,7 @@ import com.google.gson.internal.LinkedTreeMap;
 import dk.mrspring.fileexplorer.LiteModFileExplorer;
 import dk.mrspring.fileexplorer.gui.GuiCustomTextField;
 import dk.mrspring.fileexplorer.gui.GuiSimpleButton;
+import dk.mrspring.fileexplorer.helper.TranslateHelper;
 import dk.mrspring.llcore.Color;
 import dk.mrspring.llcore.DrawingHelper;
 import dk.mrspring.llcore.Quad;
@@ -131,9 +132,9 @@ public class JsonArrayElement extends JsonEditorElement<ArrayList<Object>>
             helper.drawShape(new Quad(xPosition - 7, yPosition + yOffset + 7, 5, 1).setColor(Color.DK_GREY));
             helper.drawShape(new Quad(xPosition - 8, yPosition + yOffset + 6, 5, 1).setColor(Color.WHITE));
 
-            minecraft.fontRendererObj.drawString(StatCollector.translateToLocal("gui.json_editor.add_new") + ": ", xPosition, yPosition + yOffset + 3, 0xFFFFFF, true);
+            minecraft.fontRendererObj.drawString(TranslateHelper.translate("gui.json_editor.add_new") + ": ", xPosition, yPosition + yOffset + 3, 0xFFFFFF, true);
 
-            int textWidth = minecraft.fontRendererObj.getStringWidth(StatCollector.translateToLocal("gui.json_editor.add_new") + ": ");
+            int textWidth = minecraft.fontRendererObj.getStringWidth(TranslateHelper.translate("gui.json_editor.add_new") + ": ");
 
             this.newString.setX(xPosition + textWidth);
             this.newString.setY(yPosition + yOffset);
@@ -161,7 +162,7 @@ public class JsonArrayElement extends JsonEditorElement<ArrayList<Object>>
             {
                 helper.drawIcon(LiteModFileExplorer.core.getIcon("arrow_right"), new Quad(xPosition + 2, yPosition + 5, 6, 6));
                 if (LiteModFileExplorer.config.json_showCollapsedArraySize)
-                    minecraft.fontRendererObj.drawString(StatCollector.translateToLocal("gui.json_editor.array_size") + ": " + String.valueOf(elements.size()), xPosition, yPosition + 18, 0xFFFFFF, true);
+                    minecraft.fontRendererObj.drawString(TranslateHelper.translate("gui.json_editor.array_size") + ": " + String.valueOf(elements.size()), xPosition, yPosition + 18, 0xFFFFFF, true);
             }
         }
     }

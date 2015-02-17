@@ -35,11 +35,11 @@ public class GuiScreenConfirmClose extends GuiScreen
     {
 //        DrawingHelper.drawIcon(DrawingHelper.hoverIcon, width / 2 - 100, height / 2 - 70, 200, 140, false);
 //
-//        String translatedMessage = StatCollector.translateToLocal("gui.screen.save_before_closing.message").replace("\\n", "\n");
+//        String translatedMessage = TranslateHelper.translate("gui.screen.save_before_closing.message").replace("\\n", "\n");
 //        String preFileName = translatedMessage.split("###")[0];
 //        String postFileName = translatedMessage.split("###")[1];
 //
-//        DrawingHelper.drawSplitCenteredString(mc.fontRendererObj, width / 2, height / 2 - 60, StatCollector.translateToLocal("gui.screen.save_before_closing.title"), 0xFFFFFF, 190, true);
+//        DrawingHelper.drawSplitCenteredString(mc.fontRendererObj, width / 2, height / 2 - 60, TranslateHelper.translate("gui.screen.save_before_closing.title"), 0xFFFFFF, 190, true);
 //        int preLines = DrawingHelper.drawSplitCenteredString(mc.fontRendererObj, width / 2, height / 2 - 40, preFileName, 0xFFFFFF, 190, true);
 //
 //        DrawingHelper.drawQuad(width / 2 - 100 + 11, height / 2 - 35 + (preLines * 9), 200 - 22, 15, Color.BLACK, 1F);

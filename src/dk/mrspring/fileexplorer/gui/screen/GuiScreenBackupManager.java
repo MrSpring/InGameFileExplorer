@@ -34,7 +34,7 @@ public class GuiScreenBackupManager extends GuiScreen
         super.initGui();
 
         this.hideBars().hideTitle();
-        this.addGuiElement("done", new GuiSimpleButton(width - 40 - 10, height - 20 - 10, 40, 20, "Done"));
+        this.addGuiElement("done", new GuiSimpleButton(width - 40 - 10, height - 20 - 10, 40, 20, "gui.screen.backup_manager.done"));
         this.addGuiElement("list", new GuiBackupList(10, 10, Math.min(width - 20, 220), height - 20, LiteModFileExplorer.backupManager));
     }
 
@@ -164,7 +164,7 @@ public class GuiScreenBackupManager extends GuiScreen
             name = entry.getOriginalFile().getName();
             date = entry.getBackupDate().toString();
             backupID = entry.getBackupID();
-            restoreButton = new GuiSimpleButton(0, 0, 50, 0, "Restore");
+            restoreButton = new GuiSimpleButton(0, 0, 50, 0, "gui.screen.backup_manager.restore");
         }
 
         public int draw(Minecraft minecraft, int mouseX, int mouseY, int xPosition, int yPosition, int width)

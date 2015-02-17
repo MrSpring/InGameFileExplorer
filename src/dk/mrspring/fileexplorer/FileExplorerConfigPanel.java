@@ -64,12 +64,13 @@ public class FileExplorerConfigPanel implements ConfigPanel
         takeAutoBackup.draw(minecraft, mouseX, mouseY);
         backupPositionField.draw(minecraft, mouseX, mouseY);
         cleanBackup.draw(minecraft, mouseX, mouseY);
+        sortingType.setY(81 + cleanBackup.getHeight());
         sortingType.draw(minecraft, mouseX, mouseY);
 
         minecraft.fontRendererObj.drawString(TranslateHelper.translate("gui.config_panel.file_explorer.start_folder") + ": ", 0, 4, 0xFFFFFF, true);
         minecraft.fontRendererObj.drawString(TranslateHelper.translate("gui.config_panel.file_explorer.take_backup") + ": ", 0, 22, 0xFFFFFF, true);
         minecraft.fontRendererObj.drawString(TranslateHelper.translate("gui.config_panel.file_explorer.backup_folder") + ": ", 0, 40, 0xFFFFFF, true);
-        minecraft.fontRendererObj.drawString(TranslateHelper.translate("gui.config_panel.file_explorer.file_sorting") + ": ", 0, sortingType.getY(), 0xFFFFFF, true);
+        minecraft.fontRendererObj.drawString(TranslateHelper.translate("gui.config_panel.file_explorer.file_sorting") + ": ", 0, sortingType.getY()-12, 0xFFFFFF, true);
 //        minecraft.fontRendererObj.drawString(TranslateHelper.translate(TranslateHelper.translate("gui.config_panel.file_explorer.clean_backup_warning")), cleanBackup.getWidth() + 2, cleanBackup.getY() + (cleanBackup.getHeight() / 2 - 4), 0xFFFFFF, true);
     }
 

@@ -5,6 +5,7 @@ import dk.mrspring.fileexplorer.gui.interfaces.IGui;
 import dk.mrspring.fileexplorer.gui.interfaces.IMouseListener;
 import dk.mrspring.fileexplorer.helper.FileSorter;
 import dk.mrspring.fileexplorer.helper.GuiHelper;
+import dk.mrspring.fileexplorer.helper.TranslateHelper;
 import dk.mrspring.fileexplorer.loader.FileLoader;
 import dk.mrspring.llcore.Color;
 import dk.mrspring.llcore.DrawingHelper;
@@ -155,7 +156,7 @@ public class GuiFileExplorer implements IGui, IMouseListener
                 textMaxLength -= 75;
 
             int textX = x + textMaxLength / 2, textY = y + 10;
-            helper.drawText(StatCollector.translateToLocal("gui.explorer.no_files"), new Vector(textX, textY), 0xFFFFFF, true, textMaxLength, dk.mrspring.llcore.DrawingHelper.VerticalTextAlignment.CENTER, dk.mrspring.llcore.DrawingHelper.HorizontalTextAlignment.TOP);
+            helper.drawText(TranslateHelper.translate("gui.explorer.no_files"), new Vector(textX, textY), 0xFFFFFF, true, textMaxLength, dk.mrspring.llcore.DrawingHelper.VerticalTextAlignment.CENTER, dk.mrspring.llcore.DrawingHelper.HorizontalTextAlignment.TOP);
         }
 
         int totalHeight = this.getListHeight();

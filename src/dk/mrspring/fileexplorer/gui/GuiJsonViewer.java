@@ -2,6 +2,7 @@ package dk.mrspring.fileexplorer.gui;
 
 import com.google.gson.internal.LinkedTreeMap;
 import dk.mrspring.fileexplorer.LiteModFileExplorer;
+import dk.mrspring.fileexplorer.helper.TranslateHelper;
 import dk.mrspring.llcore.Color;
 import dk.mrspring.llcore.DrawingHelper;
 import dk.mrspring.fileexplorer.helper.GuiHelper;
@@ -79,7 +80,7 @@ public class GuiJsonViewer implements IGui, IMouseListener
         {
             DrawingHelper helper = LiteModFileExplorer.core.getDrawingHelper();
             helper.drawShape(new Quad(x, y, width, height).setColor(Color.BLACK));
-            helper.drawText(StatCollector.translateToLocal("gui.json_editor.not_enough_space").replace("\\n", "\n"), new Vector(width / 2 + x, y + 15), 0xFFFFFF, false, width - 8, DrawingHelper.VerticalTextAlignment.CENTER, DrawingHelper.HorizontalTextAlignment.TOP);
+            helper.drawText(TranslateHelper.translate("gui.json_editor.not_enough_space").replace("\\n", "\n"), new Vector(width / 2 + x, y + 15), 0xFFFFFF, false, width - 8, DrawingHelper.VerticalTextAlignment.CENTER, DrawingHelper.HorizontalTextAlignment.TOP);
         }
     }
 
