@@ -4,9 +4,12 @@ import com.mumfrey.liteloader.modconfig.ConfigPanel;
 import com.mumfrey.liteloader.modconfig.ConfigPanelHost;
 import dk.mrspring.fileexplorer.gui.GuiCheckbox;
 import dk.mrspring.fileexplorer.gui.GuiCustomTextField;
+import dk.mrspring.fileexplorer.gui.GuiDropDownList;
 import dk.mrspring.fileexplorer.gui.GuiSimpleButton;
+import dk.mrspring.fileexplorer.helper.FileSorter;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.StatCollector;
+import org.apache.commons.lang3.ArrayUtils;
 
 import java.io.File;
 
@@ -18,7 +21,8 @@ public class FileExplorerConfigPanel implements ConfigPanel
     GuiCustomTextField startPositionField;
     GuiCheckbox takeAutoBackup;
     GuiCustomTextField backupPositionField;
-    GuiSimpleButton cleanBackup;''
+    GuiSimpleButton cleanBackup;
+    GuiDropDownList sortingType;
 
     @Override
     public void onPanelShown(ConfigPanelHost host)
@@ -29,6 +33,14 @@ public class FileExplorerConfigPanel implements ConfigPanel
         takeAutoBackup = new GuiCheckbox(mc.fontRendererObj.getStringWidth(StatCollector.translateToLocal("gui.config_panel.file_explorer.take_backup") + ": "), 20, 12, 12, startConfig.automaticBackup);
         backupPositionField = new GuiCustomTextField(mc.fontRendererObj.getStringWidth(StatCollector.translateToLocal("gui.config_panel.file_explorer.backup_folder") + ": "), 36, host.getWidth() - mc.fontRendererObj.getStringWidth(StatCollector.translateToLocal("gui.config_panel.file_explorer.backup_folder") + ": "), 16, new File(startConfig.backupLocation).getAbsolutePath());
         cleanBackup = new GuiSimpleButton(0, 60, 75, 26, "gui.config_panel.file_explorer.clean_backup").setAutoHeight(true);
+        FileSorter.SortingType[] types = FileSorter.SortingType.values();
+        int current = ArrayUtils.indexOf(types, LiteModFileExplorer.config.fileSortingType);
+        GuiDropDownList.ListElement[] elements = new GuiDropDownList.ListElement[types.length];
+        for (int i = 0; i < types.length; i++)
+            elements[i] = new GuiDropDownList.ListElement(
+                    StatCollector.translateToLocal("sorting_type." + types[i].toString().toLowerCase() + ".name") + "\n§7" +
+                            StatCollector.translateToLocal("sorting_type." + types[i].toString().toLowerCase() + ".desc"), types[i]);
+        sortingType = new GuiDropDownList(0, 105, 150, 30, current, elements);
     }
 
     @Override
@@ -52,10 +64,12 @@ public class FileExplorerConfigPanel implements ConfigPanel
         takeAutoBackup.draw(minecraft, mouseX, mouseY);
         backupPositionField.draw(minecraft, mouseX, mouseY);
         cleanBackup.draw(minecraft, mouseX, mouseY);
+        sortingType.draw(minecraft, mouseX, mouseY);
 
         minecraft.fontRendererObj.drawString(StatCollector.translateToLocal("gui.config_panel.file_explorer.start_folder") + ": ", 0, 4, 0xFFFFFF, true);
         minecraft.fontRendererObj.drawString(StatCollector.translateToLocal("gui.config_panel.file_explorer.take_backup") + ": ", 0, 22, 0xFFFFFF, true);
         minecraft.fontRendererObj.drawString(StatCollector.translateToLocal("gui.config_panel.file_explorer.backup_folder") + ": ", 0, 40, 0xFFFFFF, true);
+        minecraft.fontRendererObj.drawString(StatCollector.translateToLocal("gui.config_panel.file_explorer.file_sorting") + ": ", 0, 92, 0xFFFFFF, true);
 //        minecraft.fontRendererObj.drawString(StatCollector.translateToLocal(StatCollector.translateToLocal("gui.config_panel.file_explorer.clean_backup_warning")), cleanBackup.getWidth() + 2, cleanBackup.getY() + (cleanBackup.getHeight() / 2 - 4), 0xFFFFFF, true);
     }
 
@@ -67,13 +81,13 @@ public class FileExplorerConfigPanel implements ConfigPanel
         this.backupPositionField.setEnabled(takeAutoBackup.isChecked());
         this.backupPositionField.update();
         this.cleanBackup.update();
-
+        this.sortingType.update();
     }
 
     @Override
     public int getContentHeight()
     {
-        return 100;
+        return 300;
     }
 
     @Override
@@ -85,6 +99,7 @@ public class FileExplorerConfigPanel implements ConfigPanel
         File oldFile = new File(LiteModFileExplorer.config.backupLocation);
         if (!newFile.getAbsolutePath().equals(oldFile.getAbsolutePath()))
             LiteModFileExplorer.config.backupLocation = backupPositionField.getText();
+        LiteModFileExplorer.config.fileSortingType = sortingType.getSelectedElement().getIdentifier();
         LiteModFileExplorer.config.validateValues();
         LiteModFileExplorer.saveConfig();
     }
@@ -99,6 +114,7 @@ public class FileExplorerConfigPanel implements ConfigPanel
         {
             LiteModFileExplorer.resetBackupList();
         }
+        this.sortingType.mouseDown(mouseX, mouseY, mouseButton);
     }
 
     @Override

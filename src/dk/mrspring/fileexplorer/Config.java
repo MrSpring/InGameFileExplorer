@@ -16,10 +16,11 @@ public class Config
     public boolean printDebug = true;
     public boolean automaticBackup = true;
     public String backupLocation = "igfe-backup";
-    public FileSorter.SortingType file_sorting_type = FileSorter.SortingType.NAME;
+    public FileSorter.SortingType fileSortingType = FileSorter.SortingType.NAME;
     public boolean sortFolders = false;
     public boolean hideNonEditableFiles = false;
     public int explorerIconSize = 20;
+    public boolean showArrowOnDropDowns = true;
 
     public boolean json_usePrettyPrinting = true;
     public boolean json_allowArrayCollapsing = true;

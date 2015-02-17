@@ -104,7 +104,7 @@ public class LiteModFileExplorer implements Tickable, Configurable
 
     public static FileSorter.SortingType getDefaultSortingType()
     {
-        return config.file_sorting_type;
+        return config.fileSortingType;
     }
 
     @Override
