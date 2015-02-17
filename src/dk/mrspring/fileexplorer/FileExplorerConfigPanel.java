@@ -18,7 +18,7 @@ public class FileExplorerConfigPanel implements ConfigPanel
     GuiCustomTextField startPositionField;
     GuiCheckbox takeAutoBackup;
     GuiCustomTextField backupPositionField;
-    GuiSimpleButton cleanBackup;
+    GuiSimpleButton cleanBackup;''
 
     @Override
     public void onPanelShown(ConfigPanelHost host)
