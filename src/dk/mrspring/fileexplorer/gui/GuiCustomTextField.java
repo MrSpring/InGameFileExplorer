@@ -54,7 +54,7 @@ public class GuiCustomTextField implements IGui
         GLClippingPlanes.glEnableClipping(x + PADDING, x + w - PADDING, y + PADDING, y + h - PADDING);
         GL11.glPushMatrix();
 
-        int textY = y + (h / 2) - 4; // TODO: Add the scrollbar
+        int textY = y + (h / 2) - 4;
 
         minecraft.fontRendererObj.drawString(getText(), x + PADDING - scroll, textY, 0xFFFFFF, false);
 
