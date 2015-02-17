@@ -4,6 +4,16 @@ gui.config_panel.file_explorer.take_backup=Take Automatic Backup
 gui.config_panel.file_explorer.backup_folder=Backup Folder
 gui.config_panel.file_explorer.clean_backup=Clean Backup Folder
 gui.config_panel.file_explorer.clean_backup_warning=§4WARNING!§r This cannot be undone!
+gui.config_panel.file_explorer.file_sorting=Sort files by
+
+sorting_type.name.name=Name
+sorting_type.name.desc=Sorts files by name
+sorting_type.type.name=Type
+sorting_type.type.desc=Sorts files by extension
+sorting_type.date.name=Date
+sorting_type.date.desc=Sorts files by last edit
+sorting_type.size.name=Size
+sorting_type.size.desc=Sorts files by size
 
 gui.screen.example_page.name=Example Page
 gui.screen.example_page.description=Play around with some cool Gui features!
@@ -20,6 +30,9 @@ gui.screen.save_before_closing.dont_save=Don't Save
 gui.screen.save_before_closing.cancel=Cancel
 
 gui.screen.image_viewer.exit_fullscreen=Click to close...
+
+gui.screen.backup_manager.done=Done
+gui.screen.backup_manager.restore=Restore
 
 gui.json_editor.add_new=Add new
 gui.json_editor.array_size=Elements in Array
