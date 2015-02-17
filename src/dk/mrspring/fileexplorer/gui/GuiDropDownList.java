@@ -186,7 +186,7 @@ public class GuiDropDownList implements IGui
                     new Vector(x + w - 2, y + height - 2).setColor(Color.BLUE),
                     new Vector(x + 2, y + height - 2).setColor(Color.BLUE)
             ).setAlpha((float) alphaProgress / 15));
-            int lines = helper.drawText(text, new Vector(x + 4, y + 3), 0xFFFFFF, false, w - 2, DrawingHelper.VerticalTextAlignment.LEFT, DrawingHelper.HorizontalTextAlignment.TOP);
+            int lines = helper.drawText(text, new Vector(x + 4, y + 3), 0xFFFFFF, true, w - 2, DrawingHelper.VerticalTextAlignment.LEFT, DrawingHelper.HorizontalTextAlignment.TOP);
             height = (lines * 9) + 5;
             return getHeight();
         }
