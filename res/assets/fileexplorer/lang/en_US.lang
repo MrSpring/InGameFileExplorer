@@ -12,27 +12,21 @@ sorting_type.type.name=Type
 sorting_type.type.desc=Sorts files by extension
 sorting_type.date.name=Date
 sorting_type.date.desc=Sorts files by last edit
-sorting_type.size.name=Size
-sorting_type.size.desc=Sorts files by size
 
-gui.screen.example_page.name=Example Page
-gui.screen.example_page.description=Play around with some cool Gui features!
+gui.screen.backup_manager.done=Done
+gui.screen.backup_manager.restore=Restore
 
 gui.screen.welcome.title=Welcome
 gui.screen.welcome.message=Thanks for installing the In-Game File Explorer mod, by MrSpring.\nBefore you can start using the mod, you have to agree to these conditions:
 gui.screen.welcome.i_accept.read=I allow the mod to read from my personal files.
 gui.screen.welcome.i_accept.write=I allow the mod to write to my personal files, and understand the possible risks.
 
-gui.screen.save_before_closing.title=Save before closing?
-gui.screen.save_before_closing.message=The changes you have made to:###has not been saved!\nDo you wish to save these changes before closing?
-gui.screen.save_before_closing.save=Save
-gui.screen.save_before_closing.dont_save=Don't Save
-gui.screen.save_before_closing.cancel=Cancel
-
 gui.screen.image_viewer.exit_fullscreen=Click to close...
 
-gui.screen.backup_manager.done=Done
-gui.screen.backup_manager.restore=Restore
+gui.explorer.no_files=No files found...
+gui.explorer.open=Open
+gui.explorer.refresh=Refresh
+gui.explorer.go_up=Go Up
 
 gui.json_editor.add_new=Add new
 gui.json_editor.array_size=Elements in Array
@@ -41,11 +35,6 @@ gui.json_editor.not_enough_space=There is not enough space to render the JSON el
 gui.json_editor.edit=Edit
 gui.json_editor.save=Save
 gui.json_editor.cancel=Cancel
-
-gui.explorer.no_files=No files found...
-gui.explorer.open=Open
-gui.explorer.refresh=Refresh
-gui.explorer.go_up=Go Up
 
 gui.image_viewer.load_failed=Loading Failed
 gui.image_viewer.loading=Loading...
