@@ -53,5 +53,10 @@ public class Config
             if (explorerIconSize < 15)
                 explorerIconSize = 15;
         }
+
+        {
+            if (fileSortingType == null)
+                fileSortingType = FileSorter.SortingType.NAME;
+        }
     }
 }
