@@ -134,6 +134,16 @@ public class GuiDropDownList implements IGui
 
     }
 
+    public int getY()
+    {
+        return y;
+    }
+
+    public int getX()
+    {
+        return x;
+    }
+
     public static class ListElement
     {
         String text;

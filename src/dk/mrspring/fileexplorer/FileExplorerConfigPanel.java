@@ -7,8 +7,8 @@ import dk.mrspring.fileexplorer.gui.GuiCustomTextField;
 import dk.mrspring.fileexplorer.gui.GuiDropDownList;
 import dk.mrspring.fileexplorer.gui.GuiSimpleButton;
 import dk.mrspring.fileexplorer.helper.FileSorter;
+import dk.mrspring.fileexplorer.helper.TranslateHelper;
 import net.minecraft.client.Minecraft;
-import net.minecraft.util.StatCollector;
 import org.apache.commons.lang3.ArrayUtils;
 
 import java.io.File;
@@ -29,17 +29,17 @@ public class FileExplorerConfigPanel implements ConfigPanel
     {
         Config startConfig = LiteModFileExplorer.config;
         Minecraft mc = Minecraft.getMinecraft();
-        startPositionField = new GuiCustomTextField(mc.fontRendererObj.getStringWidth(StatCollector.translateToLocal("gui.config_panel.file_explorer.start_folder") + ": "), 0, host.getWidth() - mc.fontRendererObj.getStringWidth(StatCollector.translateToLocal("gui.config_panel.file_explorer.start_folder") + ": "), 16, startConfig.startLocation);
-        takeAutoBackup = new GuiCheckbox(mc.fontRendererObj.getStringWidth(StatCollector.translateToLocal("gui.config_panel.file_explorer.take_backup") + ": "), 20, 12, 12, startConfig.automaticBackup);
-        backupPositionField = new GuiCustomTextField(mc.fontRendererObj.getStringWidth(StatCollector.translateToLocal("gui.config_panel.file_explorer.backup_folder") + ": "), 36, host.getWidth() - mc.fontRendererObj.getStringWidth(StatCollector.translateToLocal("gui.config_panel.file_explorer.backup_folder") + ": "), 16, new File(startConfig.backupLocation).getAbsolutePath());
+        startPositionField = new GuiCustomTextField(mc.fontRendererObj.getStringWidth(TranslateHelper.translate("gui.config_panel.file_explorer.start_folder") + ": "), 0, host.getWidth() - mc.fontRendererObj.getStringWidth(TranslateHelper.translate("gui.config_panel.file_explorer.start_folder") + ": "), 16, startConfig.startLocation);
+        takeAutoBackup = new GuiCheckbox(mc.fontRendererObj.getStringWidth(TranslateHelper.translate("gui.config_panel.file_explorer.take_backup") + ": "), 20, 12, 12, startConfig.automaticBackup);
+        backupPositionField = new GuiCustomTextField(mc.fontRendererObj.getStringWidth(TranslateHelper.translate("gui.config_panel.file_explorer.backup_folder") + ": "), 36, host.getWidth() - mc.fontRendererObj.getStringWidth(TranslateHelper.translate("gui.config_panel.file_explorer.backup_folder") + ": "), 16, new File(startConfig.backupLocation).getAbsolutePath());
         cleanBackup = new GuiSimpleButton(0, 60, 75, 26, "gui.config_panel.file_explorer.clean_backup").setAutoHeight(true);
         FileSorter.SortingType[] types = FileSorter.SortingType.values();
         int current = ArrayUtils.indexOf(types, LiteModFileExplorer.config.fileSortingType);
         GuiDropDownList.ListElement[] elements = new GuiDropDownList.ListElement[types.length];
         for (int i = 0; i < types.length; i++)
             elements[i] = new GuiDropDownList.ListElement(
-                    StatCollector.translateToLocal("sorting_type." + types[i].toString().toLowerCase() + ".name") + "\n§7" +
-                            StatCollector.translateToLocal("sorting_type." + types[i].toString().toLowerCase() + ".desc"), types[i]);
+                    TranslateHelper.translate("sorting_type." + types[i].toString().toLowerCase() + ".name") + "\n§7" +
+                            TranslateHelper.translate("sorting_type." + types[i].toString().toLowerCase() + ".desc"), types[i]);
         sortingType = new GuiDropDownList(0, 105, 150, 30, current, elements);
     }
 
@@ -52,7 +52,7 @@ public class FileExplorerConfigPanel implements ConfigPanel
     @Override
     public String getPanelTitle()
     {
-        return StatCollector.translateToLocal("gui.config_panel.file_explorer.title");
+        return TranslateHelper.translate("gui.config_panel.file_explorer.title");
     }
 
     @Override
@@ -66,11 +66,11 @@ public class FileExplorerConfigPanel implements ConfigPanel
         cleanBackup.draw(minecraft, mouseX, mouseY);
         sortingType.draw(minecraft, mouseX, mouseY);
 
-        minecraft.fontRendererObj.drawString(StatCollector.translateToLocal("gui.config_panel.file_explorer.start_folder") + ": ", 0, 4, 0xFFFFFF, true);
-        minecraft.fontRendererObj.drawString(StatCollector.translateToLocal("gui.config_panel.file_explorer.take_backup") + ": ", 0, 22, 0xFFFFFF, true);
-        minecraft.fontRendererObj.drawString(StatCollector.translateToLocal("gui.config_panel.file_explorer.backup_folder") + ": ", 0, 40, 0xFFFFFF, true);
-        minecraft.fontRendererObj.drawString(StatCollector.translateToLocal("gui.config_panel.file_explorer.file_sorting") + ": ", 0, 92, 0xFFFFFF, true);
-//        minecraft.fontRendererObj.drawString(StatCollector.translateToLocal(StatCollector.translateToLocal("gui.config_panel.file_explorer.clean_backup_warning")), cleanBackup.getWidth() + 2, cleanBackup.getY() + (cleanBackup.getHeight() / 2 - 4), 0xFFFFFF, true);
+        minecraft.fontRendererObj.drawString(TranslateHelper.translate("gui.config_panel.file_explorer.start_folder") + ": ", 0, 4, 0xFFFFFF, true);
+        minecraft.fontRendererObj.drawString(TranslateHelper.translate("gui.config_panel.file_explorer.take_backup") + ": ", 0, 22, 0xFFFFFF, true);
+        minecraft.fontRendererObj.drawString(TranslateHelper.translate("gui.config_panel.file_explorer.backup_folder") + ": ", 0, 40, 0xFFFFFF, true);
+        minecraft.fontRendererObj.drawString(TranslateHelper.translate("gui.config_panel.file_explorer.file_sorting") + ": ", 0, sortingType.getY(), 0xFFFFFF, true);
+//        minecraft.fontRendererObj.drawString(TranslateHelper.translate(TranslateHelper.translate("gui.config_panel.file_explorer.clean_backup_warning")), cleanBackup.getWidth() + 2, cleanBackup.getY() + (cleanBackup.getHeight() / 2 - 4), 0xFFFFFF, true);
     }
 
     @Override
