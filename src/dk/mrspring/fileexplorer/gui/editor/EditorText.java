@@ -59,11 +59,11 @@ public class EditorText extends Editor implements IMouseListener
         this.textField.update();
 
         this.saveButton.setX(x - 62);
-        this.saveButton.setY(y + h - 15);
+        this.saveButton.setY(y + h - 20);
         this.saveButton.update();
 
         this.restoreButton.setX(x - 62);
-        this.restoreButton.setY(y + h - 40);
+        this.restoreButton.setY(y + h - 45);
         this.restoreButton.update();
     }
 
