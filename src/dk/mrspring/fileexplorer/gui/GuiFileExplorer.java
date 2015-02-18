@@ -49,7 +49,7 @@ public class GuiFileExplorer implements IGui, IMouseListener
         y = yPos;
         w = width;
         h = height;
-        currentPath = path;
+        currentPath = new File(path).getAbsolutePath();
 
         guiFiles = new ArrayList<GuiFileBase>();
 
