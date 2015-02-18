@@ -29,7 +29,7 @@ public class Config
     public boolean json_showCollapsedArraySize = true;
     public boolean json_showCollapsedMapSize = true;
 
-    public String number_format = "00000.00";
+    public String numberFormat = "00000.00";
 
     public void validateValues()
     {

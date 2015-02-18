@@ -34,8 +34,8 @@ public class GuiNumberField implements IGui
         this.w = w;
         this.h = h;
 
-        setFormat(new DecimalFormat(LiteModFileExplorer.config.number_format));
-        String formatArray = new StringBuilder(LiteModFileExplorer.config.number_format).reverse().toString();
+        setFormat(new DecimalFormat(LiteModFileExplorer.config.numberFormat));
+        String formatArray = new StringBuilder(LiteModFileExplorer.config.numberFormat).reverse().toString();
 
         char character;
         if (formatArray.contains("."))
