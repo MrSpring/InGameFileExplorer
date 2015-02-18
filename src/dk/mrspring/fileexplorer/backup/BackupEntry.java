@@ -10,16 +10,18 @@ public class BackupEntry
 {
     String original_location = "";
     int backup_id = 0;
+    String cause = "";
 
-    public BackupEntry(String backedUpFrom, int backupID)
+    public BackupEntry(String backedUpFrom, int backupID, String cause)
     {
         this.original_location = backedUpFrom;
         this.backup_id = backupID;
+        this.cause = cause;
     }
 
-    public BackupEntry(File backedUpFrom, int backupID)
+    public BackupEntry(File backedUpFrom, int backupID, String cause)
     {
-        this(backedUpFrom.getAbsolutePath(), backupID);
+        this(backedUpFrom.getAbsolutePath(), backupID, cause);
     }
 
     public File getOriginalFile()
@@ -40,5 +42,10 @@ public class BackupEntry
     public int getBackupID()
     {
         return backup_id;
+    }
+
+    public String getCause()
+    {
+        return cause;
     }
 }

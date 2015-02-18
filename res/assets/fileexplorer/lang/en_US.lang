@@ -16,6 +16,9 @@ sorting_type.type.desc=Sorts files by extension
 sorting_type.date.name=Date
 sorting_type.date.desc=Sorts files by last edit
 
+backup_cause.edit=Edited
+backup_cause.delete=Deleted
+
 gui.screen.backup_manager.done=Done
 gui.screen.backup_manager.restore=Restore
 

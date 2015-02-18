@@ -5,6 +5,8 @@ import dk.mrspring.fileexplorer.backup.BackupEntry;
 import dk.mrspring.fileexplorer.backup.BackupManager;
 import dk.mrspring.fileexplorer.gui.GuiSimpleButton;
 import dk.mrspring.fileexplorer.gui.interfaces.IGui;
+import dk.mrspring.fileexplorer.helper.TranslateHelper;
+import dk.mrspring.fileexplorer.loader.FileLoader;
 import dk.mrspring.llcore.Color;
 import dk.mrspring.llcore.DrawingHelper;
 import dk.mrspring.llcore.Quad;
@@ -66,12 +68,6 @@ public class GuiScreenBackupManager extends GuiScreen
         } else super.guiClicked(identifier, gui, mouseX, mouseY, mouseButton);
     }
 
-    @Override
-    public boolean drawGui(String identifier, IGui gui)
-    {
-        return super.drawGui(identifier, gui);
-    }
-
     public class GuiBackupList implements IGui
     {
         int x, y, width, height;
@@ -124,7 +120,7 @@ public class GuiScreenBackupManager extends GuiScreen
                     BackupEntry backupEntry = LiteModFileExplorer.backupManager.restoreBackup(entry.backupID);
                     if (backupEntry != null)
                     {
-//                        FileLoader.restoreBackup(backupEntry);
+                        FileLoader.restoreBackup(backupEntry.getBackupFile(), backupEntry.getOriginalFile());
                         iterator.remove();
                     }
                 }
@@ -156,6 +152,7 @@ public class GuiScreenBackupManager extends GuiScreen
         GuiSimpleButton restoreButton;
         String name;
         String date;
+        String cause;
         int backupID;
         int height = 0;
 
@@ -163,6 +160,7 @@ public class GuiScreenBackupManager extends GuiScreen
         {
             name = entry.getOriginalFile().getName();
             date = entry.getBackupDate().toString();
+            cause = entry.getCause();
             backupID = entry.getBackupID();
             restoreButton = new GuiSimpleButton(0, 0, 50, 0, "gui.screen.backup_manager.restore");
         }
@@ -178,10 +176,11 @@ public class GuiScreenBackupManager extends GuiScreen
 
             restoreButton.draw(minecraft, mouseX, mouseY);
 
-            int nameLines = helper.drawText(name, new Vector(xPosition + 5, yPosition + 5), 0xFFFFFF, true, width - 10 - restoreButton.getWidth(), DrawingHelper.VerticalTextAlignment.LEFT, DrawingHelper.HorizontalTextAlignment.TOP);
-            int dateLines = helper.drawText(date, new Vector(xPosition + 5, yPosition + 5 + 3 + (nameLines * 9)), 0xFFFFFF, true, width - 10 - restoreButton.getWidth(), DrawingHelper.VerticalTextAlignment.LEFT, DrawingHelper.HorizontalTextAlignment.TOP);
+            String rendering = name + "\n§7" + date + "\n" + TranslateHelper.translate("backup_cause." + cause);
 
-            height = (nameLines * 9) + (dateLines * 9) + 12;
+            int lines = helper.drawText(rendering, new Vector(xPosition + 5, yPosition + 5), 0xFFFFFF, true, width - 10 - restoreButton.getWidth(), DrawingHelper.VerticalTextAlignment.LEFT, DrawingHelper.HorizontalTextAlignment.TOP);
+
+            height = lines * 9 + 9;
             restoreButton.setHeight(height - 8);
 
             return this.height;

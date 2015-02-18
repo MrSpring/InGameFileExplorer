@@ -343,6 +343,7 @@ public class LiteModFileExplorer implements Tickable, Configurable
         backupManager = BackupManager.getFromFile(backupListFile);
         if (backupManager == null)
             backupManager = new BackupManager();
+        saveBackupList();
     }
 
     public static void resetBackupList()
@@ -351,6 +352,7 @@ public class LiteModFileExplorer implements Tickable, Configurable
         {
             FileUtils.deleteDirectory(getBackupDirectory());
             backupManager = new BackupManager();
+            saveBackupList();
         } catch (IOException e)
         {
 

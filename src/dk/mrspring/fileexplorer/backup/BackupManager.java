@@ -2,6 +2,7 @@ package dk.mrspring.fileexplorer.backup;
 
 import com.google.gson.Gson;
 import dk.mrspring.fileexplorer.LiteModFileExplorer;
+import dk.mrspring.fileexplorer.loader.FileLoader;
 
 import java.io.File;
 import java.io.FileReader;
@@ -17,10 +18,10 @@ public class BackupManager
 {
     public List<BackupEntry> entries = new ArrayList<BackupEntry>();
 
-    public File registerBackup(File fileToBackup)
+    public File registerBackup(File fileToBackup, String cause)
     {
         int id = (int) (new Date().getTime() / 1000);
-        BackupEntry entry = new BackupEntry(fileToBackup, id);
+        BackupEntry entry = new BackupEntry(fileToBackup, id, cause);
         entries.add(entry);
         return new File(LiteModFileExplorer.config.backupLocation + "/" + id + ".backup");
     }/*
@@ -32,8 +33,7 @@ public class BackupManager
             return;
         this.entries.remove(entry);
         FileLoader.restoreBackup(entry.getBackupFile(), entry.getOriginalFile());
-    }
-*/
+    }*/
 
     public BackupEntry restoreBackup(int backupID)
     {

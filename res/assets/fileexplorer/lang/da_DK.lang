@@ -16,6 +16,9 @@ sorting_type.type.desc=Sorter filer efter udvidelse
 sorting_type.date.name=Dato
 sorting_type.date.desc=Sorter filer efter sidste redigerings dato
 
+backup_cause.edit=Redigeret
+backup_cause.delete=Slettet
+
 gui.screen.backup_manager.restore=Genskab
 gui.screen.backup_manager.done=Færdig
 
