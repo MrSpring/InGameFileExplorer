@@ -41,6 +41,7 @@ public class GuiDropDownList implements IGui
         List<ListElement> rendering = new ArrayList<ListElement>(elements);
         ListElement selectedElement = rendering.remove(selected);
         DrawingHelper helper = LiteModFileExplorer.core.getDrawingHelper();
+        helper.setZIndex(2.0);
 
         helper.drawButtonThingy(new Quad(x, y, w, h), 0, false);
         int offset = selectedElement.draw(mouseX, mouseY, x + 1, y + 2, w - 2) + 3;
@@ -65,6 +66,7 @@ public class GuiDropDownList implements IGui
                 icon = LiteModFileExplorer.core.getIcon("arrow_up");
             helper.drawIcon(icon, new Quad(x + w - iconSize - 2, y + (selectedElement.getHeight() / 2) - (iconSize / 2) + 1, iconSize, iconSize));
         }
+        helper.setZIndex(0);
     }
 
     @Override
