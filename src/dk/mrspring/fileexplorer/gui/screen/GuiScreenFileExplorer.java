@@ -33,7 +33,7 @@ public class GuiScreenFileExplorer extends GuiScreen
         {
             super.initGui();
 
-            this.addGuiElement("explorer", new GuiFileExplorer(5, 5, 250, height - 10, startFrom).setShowBackground(false).setOnFileOpened(new GuiFileExplorer.IOnFileOpened()
+            this.addGuiElement("explorer", new GuiFileExplorer(5, 5, 260, height - 10, startFrom).setShowBackground(false).setOnFileOpened(new GuiFileExplorer.IOnFileOpened()
             {
                 @Override
                 public void onOpened(File file)
@@ -59,7 +59,7 @@ public class GuiScreenFileExplorer extends GuiScreen
         String extension = FileLoader.getFileExtension(file.getName(), true);
         FileType fileType = LiteModFileExplorer.getFileType(extension);
 
-        Editor editor = fileType.getNewEditor(258, 5, width - 243 - 20, height - 10, file);
+        Editor editor = fileType.getNewEditor(258+10, 5, width - 243 - 30, height - 10, file);
         String name = fileType.getName();
 
         if (editor != null)
@@ -77,7 +77,7 @@ public class GuiScreenFileExplorer extends GuiScreen
         if (identifier.equals("editor"))
         {
             Editor editor = (Editor) gui;
-            editor.update(258, 5, width - 243 - 20, height - 10);
+            editor.update(258+10, 5, width - 243 - 30, height - 10);
         }
 
         if (identifier.equals("explorer") && gui instanceof GuiFileExplorer)

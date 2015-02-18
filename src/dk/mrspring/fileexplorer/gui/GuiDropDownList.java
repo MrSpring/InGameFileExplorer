@@ -54,7 +54,7 @@ public class GuiDropDownList implements IGui
                 helper.drawShape(new Quad(x + LINE_SPACING, y + offset, w - (2 * LINE_SPACING), 1));
                 offset += element.draw(mouseX, mouseY, x + 1, y + offset + 1, w - 2);
             }
-            offset += 3;
+            offset += 2;
         }
         h = offset;
 

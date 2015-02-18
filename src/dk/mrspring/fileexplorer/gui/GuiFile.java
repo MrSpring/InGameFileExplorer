@@ -10,6 +10,7 @@ import dk.mrspring.llcore.Vector;
 import net.minecraft.client.Minecraft;
 
 import java.io.File;
+import java.util.Date;
 
 /**
  * Created by MrSpring on 09-11-2014 for In-Game File Explorer.
@@ -105,8 +106,17 @@ public class GuiFile extends GuiFileBase
 
     public String getShortFileName()
     {
-        int lastFileSeperator = this.filePath.lastIndexOf('\\') + 1;
-        return this.filePath.substring(lastFileSeperator);
+        return getFile().getName();
+    }
+
+    public long getLastEdit()
+    {
+        return getFile().lastModified();
+    }
+
+    public Date getLastEditDate()
+    {
+        return new Date(getLastEdit());
     }
 
     public void setWrapName(boolean wrapName)
@@ -155,14 +165,16 @@ public class GuiFile extends GuiFileBase
 
         DrawingHelper helper = LiteModFileExplorer.core.getDrawingHelper();
 
-        int lines = helper.drawText(this.getShortFileName(), new Vector(x + (int) iconSize + 3, y + (h / 2)), 0xFFFFFF, true, w - (int) iconSize - 6, DrawingHelper.VerticalTextAlignment.LEFT, DrawingHelper.HorizontalTextAlignment.CENTER);
+        String rendering = this.getShortFileName();
+        if (LiteModFileExplorer.config.showFileEditBelowName)
+            rendering += "\n§7" + getLastEditDate().toString();
+        int lines = helper.drawText(rendering, new Vector(x + (int) iconSize + 3, y + (h / 2)), 0xFFFFFF, true, w - (int) iconSize - 6, DrawingHelper.VerticalTextAlignment.LEFT, DrawingHelper.HorizontalTextAlignment.CENTER);
         this.h = lines * 9 + ((int) iconSize - 9);
 
         helper.drawShape(new Quad(x + iconSize - 2, y + 1, 1, h - 2).setColor(Color.LT_GREY));
         helper.drawShape(new Quad(x + iconSize - 1, y + 1, 1, h - 2).setColor(Color.WHITE));
 
         helper.drawIcon(this.getFileType().getIcon(), new Quad(x + 2, y + 2 + (h / 2 - (iconSize / 2)), iconSize - 4, iconSize - 4));
-
     }
 
     private void renderList(Minecraft minecraft)

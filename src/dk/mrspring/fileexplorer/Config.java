@@ -21,6 +21,7 @@ public class Config
     public boolean hideNonEditableFiles = false;
     public int explorerIconSize = 20;
     public boolean showArrowOnDropDowns = true;
+    public boolean showFileEditBelowName = true;
 
     public boolean json_usePrettyPrinting = true;
     public boolean json_allowArrayCollapsing = true;
