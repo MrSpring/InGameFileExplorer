@@ -22,6 +22,7 @@ public class Config
     public int explorerIconSize = 20;
     public boolean showArrowOnDropDowns = true;
     public boolean showFileEditBelowName = true;
+    public boolean showFileSizeBelowName = true;
 
     public boolean json_usePrettyPrinting = true;
     public boolean json_allowArrayCollapsing = true;

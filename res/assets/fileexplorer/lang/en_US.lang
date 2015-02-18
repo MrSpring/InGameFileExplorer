@@ -7,6 +7,7 @@ gui.config_panel.file_explorer.clean_backup_warning=§4WARNING!§r This cannot b
 gui.config_panel.file_explorer.file_sorting=Sort files by
 gui.config_panel.file_explorer.hide_non_editable_files=Hide files that can't be edited
 gui.config_panel.file_explorer.show_file_edit_date=Show last edited date below file name
+gui.config_panel.file_explorer.show_file_size=Show file size below file name
 
 sorting_type.name.name=Name
 sorting_type.name.desc=Sorts files by name

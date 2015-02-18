@@ -7,6 +7,7 @@ gui.config_panel.file_explorer.clean_backup_warning=§4ADVARSEL!§r Dette kan ik
 gui.config_panel.file_explorer.file_sorting=Fil sortering
 gui.config_panel.file_explorer.hide_non_editable_files=Skul filer der ikke kan redigeres
 gui.config_panel.file_explorer.show_file_edit_date=Vis seneste ændringsdato under filnavn
+gui.config_panel.file_explorer.show_file_size=Vis fil størrelse under filnavn
 
 sorting_type.name.name=Navn
 sorting_type.name.desc=Sorter filer efter navn

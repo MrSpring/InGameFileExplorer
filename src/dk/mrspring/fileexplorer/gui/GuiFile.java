@@ -2,6 +2,7 @@ package dk.mrspring.fileexplorer.gui;
 
 import dk.mrspring.fileexplorer.LiteModFileExplorer;
 import dk.mrspring.fileexplorer.gui.editor.FileType;
+import dk.mrspring.fileexplorer.helper.FileSize;
 import dk.mrspring.fileexplorer.loader.FileLoader;
 import dk.mrspring.llcore.Color;
 import dk.mrspring.llcore.DrawingHelper;
@@ -10,6 +11,7 @@ import dk.mrspring.llcore.Vector;
 import net.minecraft.client.Minecraft;
 
 import java.io.File;
+import java.nio.file.Files;
 import java.util.Date;
 
 /**
@@ -28,6 +30,7 @@ public class GuiFile extends GuiFileBase
         }
     };
     boolean wrapName = true;
+    FileSize cachedFileSize;
 
     public GuiFile(int xPos, int yPos, int width, int height, String path, RenderType renderType)
     {
@@ -119,6 +122,26 @@ public class GuiFile extends GuiFileBase
         return new Date(getLastEdit());
     }
 
+    public FileSize getFileSize()
+    {
+        if (this.cachedFileSize == null)
+        {
+            try
+            {
+                this.cachedFileSize = new FileSize(Files.size(getFile().toPath()));
+            } catch (Exception e)
+            {
+                System.err.println("Failed getting file size for file: \"" + getFile().toString() + "\":");
+                e.printStackTrace();
+            } finally
+            {
+                if (cachedFileSize == null)
+                    cachedFileSize = new FileSize(0);
+            }
+        }
+        return cachedFileSize;
+    }
+
     public void setWrapName(boolean wrapName)
     {
         this.wrapName = wrapName;
@@ -168,6 +191,8 @@ public class GuiFile extends GuiFileBase
         String rendering = this.getShortFileName();
         if (LiteModFileExplorer.config.showFileEditBelowName)
             rendering += "\n§7" + getLastEditDate().toString();
+        if (LiteModFileExplorer.config.showFileSizeBelowName && !getFile().isDirectory())
+            rendering += "\n§7" + getFileSize().toString();
         int lines = helper.drawText(rendering, new Vector(x + (int) iconSize + 3, y + (h / 2)), 0xFFFFFF, true, w - (int) iconSize - 6, DrawingHelper.VerticalTextAlignment.LEFT, DrawingHelper.HorizontalTextAlignment.CENTER);
         this.h = lines * 9 + ((int) iconSize - 9);
 
