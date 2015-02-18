@@ -23,6 +23,7 @@ public class FileExplorerConfigPanel implements ConfigPanel
     GuiCustomTextField backupPositionField;
     GuiSimpleButton cleanBackup;
     GuiDropDownList sortingType;
+    GuiCheckbox hideNonEditableFiles;
 
     @Override
     public void onPanelShown(ConfigPanelHost host)
@@ -41,6 +42,7 @@ public class FileExplorerConfigPanel implements ConfigPanel
                     TranslateHelper.translate("sorting_type." + types[i].toString().toLowerCase() + ".name") + "\n§7" +
                             TranslateHelper.translate("sorting_type." + types[i].toString().toLowerCase() + ".desc"), types[i]);
         sortingType = new GuiDropDownList(0, 105, 150, 30, current, elements);
+        hideNonEditableFiles = new GuiCheckbox(mc.fontRendererObj.getStringWidth(TranslateHelper.translate("gui.config_panel.file_explorer.hide_non_editable_files") + ": "), 130, 12, 12, startConfig.hideNonEditableFiles);
     }
 
     @Override
@@ -66,11 +68,14 @@ public class FileExplorerConfigPanel implements ConfigPanel
         cleanBackup.draw(minecraft, mouseX, mouseY);
         sortingType.setY(81 + cleanBackup.getHeight());
         sortingType.draw(minecraft, mouseX, mouseY);
+        hideNonEditableFiles.setY(90 + cleanBackup.getHeight() + sortingType.getSelectedElement().getHeight());
+        hideNonEditableFiles.draw(minecraft, mouseX, mouseY);
 
         minecraft.fontRendererObj.drawString(TranslateHelper.translate("gui.config_panel.file_explorer.start_folder") + ": ", 0, 4, 0xFFFFFF, true);
         minecraft.fontRendererObj.drawString(TranslateHelper.translate("gui.config_panel.file_explorer.take_backup") + ": ", 0, 22, 0xFFFFFF, true);
         minecraft.fontRendererObj.drawString(TranslateHelper.translate("gui.config_panel.file_explorer.backup_folder") + ": ", 0, 40, 0xFFFFFF, true);
-        minecraft.fontRendererObj.drawString(TranslateHelper.translate("gui.config_panel.file_explorer.file_sorting") + ": ", 0, sortingType.getY()-12, 0xFFFFFF, true);
+        minecraft.fontRendererObj.drawString(TranslateHelper.translate("gui.config_panel.file_explorer.file_sorting") + ": ", 0, sortingType.getY() - 12, 0xFFFFFF, true);
+        minecraft.fontRendererObj.drawString(TranslateHelper.translate("gui.config_panel.file_explorer.hide_non_editable_files") + ": ", 0, hideNonEditableFiles.getY() + 2, 0xFFFFFF, true);
 //        minecraft.fontRendererObj.drawString(TranslateHelper.translate(TranslateHelper.translate("gui.config_panel.file_explorer.clean_backup_warning")), cleanBackup.getWidth() + 2, cleanBackup.getY() + (cleanBackup.getHeight() / 2 - 4), 0xFFFFFF, true);
     }
 
@@ -83,6 +88,7 @@ public class FileExplorerConfigPanel implements ConfigPanel
         this.backupPositionField.update();
         this.cleanBackup.update();
         this.sortingType.update();
+        this.hideNonEditableFiles.update();
     }
 
     @Override
@@ -101,6 +107,7 @@ public class FileExplorerConfigPanel implements ConfigPanel
         if (!newFile.getAbsolutePath().equals(oldFile.getAbsolutePath()))
             LiteModFileExplorer.config.backupLocation = backupPositionField.getText();
         LiteModFileExplorer.config.fileSortingType = sortingType.getSelectedElement().getIdentifier();
+        LiteModFileExplorer.config.hideNonEditableFiles = hideNonEditableFiles.isChecked();
         LiteModFileExplorer.config.validateValues();
         LiteModFileExplorer.saveConfig();
     }
@@ -116,6 +123,7 @@ public class FileExplorerConfigPanel implements ConfigPanel
             LiteModFileExplorer.resetBackupList();
         }
         this.sortingType.mouseDown(mouseX, mouseY, mouseButton);
+        this.hideNonEditableFiles.mouseDown(mouseX, mouseY, mouseButton);
     }
 
     @Override

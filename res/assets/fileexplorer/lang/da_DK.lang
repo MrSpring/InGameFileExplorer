@@ -5,6 +5,7 @@ gui.config_panel.file_explorer.backup_folder=Backup Mappe
 gui.config_panel.file_explorer.clean_backup=Ryd backup mappe
 gui.config_panel.file_explorer.clean_backup_warning=§4ADVARSEL!§r Dette kan ikke gøres om!
 gui.config_panel.file_explorer.file_sorting=Fil sortering
+gui.config_panel.file_explorer.hide_non_editable_files=Skul filer der ikke kan redigeres
 
 sorting_type.name.name=Navn
 sorting_type.name.desc=Sorter filer efter navn
