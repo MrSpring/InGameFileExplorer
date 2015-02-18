@@ -13,17 +13,17 @@
 <!-- The file is well commented and you should have a read through this script before making     -->
 <!-- changes to ensure that you know how it works.                                               -->
 
-<project name="fileexplorer" basedir="." default="main">
+<project name="InGameFileExplorer" basedir="." default="main">
 
     <!-- The version of your mod, can be any string as long as it's valid as part of a file name -->
     <!-- and should match the version string returned by your mod.                               -->
-    <property name="version"        value="0.1.0" />
+    <property name="version"        value="0.1.0-BETA" />
 
     <!-- The Minecraft version the mod is for, appended to the output file name for reference -->
     <property name="mcversion"      value="1.8.0" />
 
     <!-- The version inserted into the mod metadata to tell the loader what version of MC this mod is for -->
-    <property name="litemodversion" value="${mcversion}" />
+    <property name="litemodversion" value="1.8.0" />
 
     <!-- Your name, this gets written into the mod metadata and jar metadata -->
     <property name="author"         value="MrSpring" />
@@ -38,10 +38,9 @@
     <!-- <property name="outmd5set" value="${ant.project.name}" /> -->
 
     <!-- The base MCP directory, normally 3 levels up from here but change if the build script is moved -->
-    <property name="mcp.dir"        location="..\..\.." />
+    <property name="mcp.dir"        location="../../.." />
 
     <!-- These directory entries should not be changed, they point at various resources below the MCP dir -->
-    <property name="project.src"    location="..\src" />
     <property name="eclipse.dir"    location="${mcp.dir}/eclipse" />
     <property name="mc.src.dir"     location="${mcp.dir}/src/minecraft" />
     <property name="temp.dir"       location="${mcp.dir}/temp" />
@@ -52,6 +51,7 @@
     <property name="stage.dir"      location="${build.dir}/stage/${ant.project.name}/${version}" />
 
     <!-- Output file properties, change as required but in general you won't need to -->
+    <property name="file.prefix"    value="InGameFileExplorer" />
     <property name="file.type"      value="litemod" />
 
     <!-- Path to the python executable used by MCP, change if using a non-windows OS -->
@@ -109,10 +109,12 @@
         <!-- upstream project needs a line below, so if you have additional upstreams then       -->
         <!-- simply duplicate the line below and change "LiteLoader" to the name of the eclipse  -->
         <!-- project that you want to contribute sources from.                                   -->
-        <antcall target="contribute-liteloader-source"/>
+        <antcall target="contributesource"><param name="lib" value="LiteLoader" /></antcall>
+
+        <antcall target="contributesource"><param name="lib" value="SpringCore" /></antcall>
 
         <!-- Lastly we contribute sources from the project itself, you do not need to change this -->
-        <antcall target="contribute-project-source"/>
+        <antcall target="contributesource"><param name="lib" value="${project}" /></antcall>
     </target>
 
     <!-- Stage class files and resources into the staging directory -->
@@ -138,7 +140,7 @@
 
         <!-- Increments and retrieves the build number. -->
         <buildnumber file="buildnumber.txt" />
-        
+
         <!-- Uses the template file to build the litemod.json file and stages it to the staging  -->
         <!-- directory.                                                                          -->
         <concat destfile="${stage.dir}/litemod.json" append="false">
@@ -147,24 +149,16 @@
         </concat>
     </target>
 
-    <!-- Contributes the LiteLoader source files only -->
-    <target name="contribute-liteloader-source" description="Contribute an upstream project source code to the source path">
-        <echo level="info" message="Contributing LiteLoader sources" />
+    <!-- Contributes java sources from a project, do not alter -->
+    <target name="contributesource" description="Contribute an upstream project source code to the source path">
+        <echo level="info" message="Contributing project ${lib}" />
         <copy todir="${target.dir}" verbose="false" overwrite="true" failonerror="false">
             <!-- Eclipse default -->
-            <fileset dir="${eclipse.dir}/LiteLoader/src" />
+            <fileset dir="${eclipse.dir}/${lib}/src" />
             <!-- Legacy default -->
-            <fileset dir="${eclipse.dir}/LiteLoader/java" />
+            <fileset dir="${eclipse.dir}/${lib}/java" />
             <!-- Maven default -->
-            <fileset dir="${eclipse.dir}/LiteLoader/src/main/java" />
-        </copy>
-    </target>
-
-    <!-- Contributes sources for the project. Needed to change because of non-standard project setup. -->
-    <target name="contribute-project-source" description="Contributes source files from the project">
-        <echo level="info" message="Contributing sources from main source folder at: ${project.src}" />
-        <copy todir="${target.dir}" verbose="false" overwrite="true" failonerror="false">
-            <fileset dir="${project.src}" />
+            <fileset dir="${eclipse.dir}/${lib}/src/main/java" />
         </copy>
     </target>
 
@@ -234,8 +228,8 @@
     <target name="litemod" description="Build the litemod file">
         <echo level="info" message="Building final output" />
 
-        <mkdir dir="${dist.dir}/${version}/${mcversion}" />
-        <jar destfile="${dist.dir}/${version}/${mcversion}/FileExplorer-${version}-${mcversion}.${file.type}" duplicate="preserve" index="true" manifestencoding="UTF-8">
+        <mkdir dir="${dist.dir}" />
+        <jar destfile="${dist.dir}/${file.prefix}_${version}.${build.number}_mc${mcversion}.${file.type}" duplicate="preserve" index="true" manifestencoding="UTF-8">
             <manifest>
                 <attribute name="Built-By" value="MCP (http://mcp.ocean-labs.de)" />
                 <attribute name="Implementation-Vendor" value="${author}" />
