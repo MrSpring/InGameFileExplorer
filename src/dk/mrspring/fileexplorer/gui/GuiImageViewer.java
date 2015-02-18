@@ -8,7 +8,6 @@ import dk.mrspring.fileexplorer.loader.ImageLoader;
 import dk.mrspring.llcore.Quad;
 import dk.mrspring.llcore.Vector;
 import net.minecraft.client.Minecraft;
-import net.minecraft.util.StatCollector;
 import org.lwjgl.opengl.GL12;
 
 import java.awt.image.BufferedImage;
@@ -151,14 +150,15 @@ public class GuiImageViewer implements IGui//, IDelayedDraw
                 imageHeight -= 6;
             }
 
-            if (!caption.equals(""))
-            {
-                captionLines = LiteModFileExplorer.core.getDrawingHelper().drawText(this.caption, new Vector(imageX + (imageWidth / 2), imageY + imageHeight), 0xFFFFFF, true, (int) imageWidth, dk.mrspring.llcore.DrawingHelper.VerticalTextAlignment.CENTER, dk.mrspring.llcore.DrawingHelper.HorizontalTextAlignment.TOP);
-                captionExtraHeight = 4;
-            }
+            if (caption != null)
+                if (!caption.equals(""))
+                {
+                    captionLines = LiteModFileExplorer.core.getDrawingHelper().drawText(this.caption, new Vector(imageX + (imageWidth / 2), imageY + imageHeight), 0xFFFFFF, true, (int) imageWidth, dk.mrspring.llcore.DrawingHelper.VerticalTextAlignment.CENTER, dk.mrspring.llcore.DrawingHelper.HorizontalTextAlignment.TOP);
+                    captionExtraHeight = 4;
+                }
 
             glBindTexture(GL_TEXTURE_2D, textureId);
-            LiteModFileExplorer.core.getDrawingHelper().drawShape(new Quad(
+            LiteModFileExplorer.core.getDrawingHelper().drawTexturedShape(new Quad(
                     new Vector(imageX, imageY, 0, 0),
                     new Vector(imageX + imageWidth, imageY, 512, 0),
                     new Vector(imageX + imageWidth, imageY + imageHeight, 512, 512),
