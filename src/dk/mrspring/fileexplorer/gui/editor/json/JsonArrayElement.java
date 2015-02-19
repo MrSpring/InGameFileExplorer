@@ -107,7 +107,7 @@ public class JsonArrayElement extends JsonEditorElement<ArrayList<Object>>
         if (!collapsed)
         {
             if (LiteModFileExplorer.config.json_allowArrayCollapsing)
-                helper.drawIcon(LiteModFileExplorer.core.getIcon("arrrow_down"), new Quad(xPosition + 2, yPosition + 5, 6, 6));
+                helper.drawIcon(LiteModFileExplorer.core.getIcon("arrow_down"), new Quad(xPosition + 2, yPosition + 5, 6, 6));
 
             for (JsonEditorElement element : elements)
             {
