@@ -131,7 +131,7 @@ public class GuiFileExplorer implements IGui, IMouseListener
         if (showPath)
         {
             String openFile = getCurrentAbsolutePath();
-            listHeight -= (9 * LiteModFileExplorer.core.getDrawingHelper().drawText("Open directory:\n§7" + openFile, new Vector(x, y + listHeight), 0xFFFFFF, true, width, DrawingHelper.VerticalTextAlignment.LEFT, DrawingHelper.HorizontalTextAlignment.BOTTOM)) + 4;
+            listHeight -= (9 * LiteModFileExplorer.core.getDrawingHelper().drawText(TranslateHelper.translate("gui.explorer.open_directory") + ":\n§7" + openFile, new Vector(x, y + listHeight), 0xFFFFFF, true, width, DrawingHelper.VerticalTextAlignment.LEFT, DrawingHelper.HorizontalTextAlignment.BOTTOM)) + 4;
         }
 
         if (showBackground)
