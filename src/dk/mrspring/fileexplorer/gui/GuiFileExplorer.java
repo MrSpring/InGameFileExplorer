@@ -24,9 +24,10 @@ import java.util.List;
  */
 public class GuiFileExplorer implements IGui, IMouseListener
 {
-    int x, y, w, h;
+    int x, y, w, h, listHeight;
     boolean showControls = true;
     boolean showBackground = true;
+    boolean showPath = true;
     List<GuiFileBase> guiFiles;
     String currentPath;
     IOnFileOpened onFileOpened;
@@ -116,17 +117,15 @@ public class GuiFileExplorer implements IGui, IMouseListener
     public void draw(Minecraft minecraft, int mouseX, int mouseY)
     {
         int width = w;
+        listHeight = h;
 
         DrawingHelper helper = LiteModFileExplorer.core.getDrawingHelper();
-
-        if (showBackground)
-            helper.drawButtonThingy(new Quad(x, y, w, h), 0, true);
 
         if (showControls)
         {
             width -= 75;
-            helper.drawVerticalLine(new Vector(x + width + 10, y + 6), h - 10, 1, true)
-                    .drawVerticalLine(new Vector(x + width + 10 + 61, y + 6), h - 10, 1, true);
+            helper.drawVerticalLine(new Vector(x + width + 10, y + 6), h - 10, 1, true);
+//                    .drawVerticalLine(new Vector(x + width + 10 + 61, y + 6), h - 10, 1, true);
 //            helper.drawShape(new Quad(x + width + 5 + 6, y + 6, 1, h - 10).setColor(Color.DK_GREY));
 //            helper.drawShape(new Quad(x + width + 5 + 6 + 61, y + 6, 1, h - 10).setColor(Color.DK_GREY));
 
@@ -134,14 +133,24 @@ public class GuiFileExplorer implements IGui, IMouseListener
 //            helper.drawShape(new Quad(x + width + 5 + 5 + 61, y + 5, 1, h - 10).setColor(Color.WHITE));
             this.drawControls(minecraft, mouseX, mouseY, x + width + 5 + 11);
         }
+
+        if (showPath)
+        {
+            String openFile = getCurrentAbsolutePath();
+            listHeight -= (9 * LiteModFileExplorer.core.getDrawingHelper().drawText("Open directory:\n§7" + openFile, new Vector(x, y + listHeight), 0xFFFFFF, true, width, DrawingHelper.VerticalTextAlignment.LEFT, DrawingHelper.HorizontalTextAlignment.BOTTOM)) + 4;
+        }
+
+        if (showBackground)
+            helper.drawButtonThingy(new Quad(x - 2, y - 2, width + 11, listHeight + 4), 0, true);
+
         int yOffset = -scrollHeight, xOffset = 5;
 
-        GLClippingPlanes.glEnableClipping(x, x + width + 5, y, y + h);
+        GLClippingPlanes.glEnableClipping(x, x + width + 5, y, y + listHeight);
         if (guiFiles.size() > 0)
         {
             for (GuiFileBase guiFile : guiFiles)
             {
-                if (!drawGuiFile(xOffset, yOffset, guiFile))
+                if (!drawGuiFile(xOffset, yOffset, listHeight, guiFile))
                 {
                     guiFile.setX(xOffset + x);
                     guiFile.setY(yOffset + y);
@@ -162,18 +171,26 @@ public class GuiFileExplorer implements IGui, IMouseListener
         GLClippingPlanes.glDisableClipping();
 
         int totalHeight = this.getListHeight();
-        if (totalHeight > this.h)
+        if (totalHeight > listHeight)
         {
-            float scrollBarYRange = (h - 40);
+            float scrollBarYRange = (listHeight - 40);
+            if (showBackground)
+                scrollBarYRange -= 2;
             float maxScrollHeight = this.getMaxScrollHeight();
             float scrollProgress = (float) this.scrollHeight / maxScrollHeight;
             float scrollBarY = scrollBarYRange * scrollProgress;
-            helper.drawShape(new Quad(x, y + scrollBarY + 1, 2, 40).setColor(Color.DK_GREY));
-            helper.drawShape(new Quad(x - 1, y + scrollBarY, 2, 40).setColor(Color.WHITE));
+            if (showBackground)
+                scrollBarY += 1;
+            float scrollbarX = x;
+            if (showBackground)
+                scrollbarX += 2;
+            if (!showBackground)
+                helper.drawShape(new Quad(scrollbarX, y + scrollBarY + 1, 2, 40).setColor(Color.DK_GREY));
+            helper.drawShape(new Quad(scrollbarX - 1, y + scrollBarY, 2, 40).setColor(Color.WHITE));
         }
 
-        if (this.drawPath)
-            this.drawPath(minecraft, mouseX, mouseY);
+//        if (this.drawPath)
+//            this.drawPath(minecraft, mouseX, mouseY);
     }
 
     private void drawControls(Minecraft minecraft, int mouseX, int mouseY, int xPos)
@@ -231,10 +248,10 @@ public class GuiFileExplorer implements IGui, IMouseListener
         }
     }
 
-    private boolean drawGuiFile(int xOffset, int yOffset, GuiFileBase file)
+    private boolean drawGuiFile(int xOffset, int yOffset, int height, GuiFileBase file)
     {
         boolean isFileTooHigh = yOffset < -70;
-        boolean isFileTooLow = yOffset > this.h + 40;
+        boolean isFileTooLow = yOffset > height + 40;
         return (isFileTooHigh || isFileTooLow);
     }
 
@@ -247,6 +264,12 @@ public class GuiFileExplorer implements IGui, IMouseListener
             if (i + 1 < pathButtons.length)
                 minecraft.fontRendererObj.drawString(">", button.getX() + button.getWidth() + 1, button.getY() + 3, 0xFFFFFF);
         }
+    }
+
+    public GuiFileExplorer setShowPath(boolean showPath)
+    {
+        this.showPath = showPath;
+        return this;
     }
 
     @Override
@@ -508,7 +531,7 @@ public class GuiFileExplorer implements IGui, IMouseListener
 
     private int getMaxScrollHeight()
     {
-        return getListHeight() - h;
+        return getListHeight() - listHeight;
     }
 
     private int getListHeight()
@@ -536,6 +559,11 @@ public class GuiFileExplorer implements IGui, IMouseListener
     public String getCurrentPath()
     {
         return currentPath;
+    }
+
+    public String getCurrentAbsolutePath()
+    {
+        return new File(getCurrentPath()).getAbsolutePath();
     }
 
     public interface IOnFileOpened

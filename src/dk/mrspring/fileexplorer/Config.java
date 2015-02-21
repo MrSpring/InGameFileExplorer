@@ -32,6 +32,7 @@ public class Config
     public boolean json_showCollapsedMapSize = true;
 
     public String numberFormat = "00000.00";
+    public boolean showExplorerBackground = true;
 
     public void validateValues()
     {

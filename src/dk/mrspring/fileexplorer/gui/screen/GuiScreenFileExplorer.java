@@ -36,14 +36,17 @@ public class GuiScreenFileExplorer extends GuiScreen
         {
             super.initGui();
 
-            this.addGuiElement("explorer", new GuiFileExplorer(5, 5, 260, height - 10, startFrom).setShowBackground(false).setOnFileOpened(new GuiFileExplorer.IOnFileOpened()
-            {
-                @Override
-                public void onOpened(File file)
-                {
-                    GuiScreenFileExplorer.this.openFile(file);
-                }
-            }));
+            this.addGuiElement("explorer", new GuiFileExplorer(5, 5, 260, height - 10, startFrom)
+                    .setShowPath(LiteModFileExplorer.config.showOpenDirectory)
+                    .setShowBackground(LiteModFileExplorer.config.showExplorerBackground)
+                    .setOnFileOpened(new GuiFileExplorer.IOnFileOpened()
+                    {
+                        @Override
+                        public void onOpened(File file)
+                        {
+                            GuiScreenFileExplorer.this.openFile(file);
+                        }
+                    }));
 
             this.hideBars().hideTitle().enableRepeats();
             initialized = true;
@@ -58,6 +61,7 @@ public class GuiScreenFileExplorer extends GuiScreen
         IGui gui = this.getGui("editor");
         if (gui != null)
         {
+            LiteModFileExplorer.core.getDrawingHelper().drawVerticalLine(new Vector(259, 10), height - 20, 1, true);
             Editor editor = (Editor) gui;
             String openFile = editor.getOpenFileName();
             if (openFile != null)
@@ -65,7 +69,7 @@ public class GuiScreenFileExplorer extends GuiScreen
                     LiteModFileExplorer.core.getDrawingHelper().drawText("Open file:\n§7" + openFile, new Vector(258 + 10, 5), 0xFFFFFF, true, -1, DrawingHelper.VerticalTextAlignment.LEFT, DrawingHelper.HorizontalTextAlignment.TOP);
         }
 
-        if (LiteModFileExplorer.config.showOpenDirectory)
+        /*if (LiteModFileExplorer.config.showOpenDirectory)
         {
             gui = this.getGui("explorer");
             if (gui != null)
@@ -73,7 +77,7 @@ public class GuiScreenFileExplorer extends GuiScreen
                 String openFile = ((GuiFileExplorer) gui).getCurrentPath();
                 this.explorerHeightOffset = (9 * LiteModFileExplorer.core.getDrawingHelper().drawText("Open directory:\n§7" + openFile, new Vector(5, height - 5), 0xFFFFFF, true, 258, DrawingHelper.VerticalTextAlignment.LEFT, DrawingHelper.HorizontalTextAlignment.BOTTOM)) + 4;
             }
-        } else this.explorerHeightOffset = 0;
+        } else this.explorerHeightOffset = 0;*/
     }
 
     public void openFile(File file)
@@ -103,7 +107,7 @@ public class GuiScreenFileExplorer extends GuiScreen
         }
 
         if (identifier.equals("explorer") && gui instanceof GuiFileExplorer)
-            ((GuiFileExplorer) gui).setHeight(height - 10 - explorerHeightOffset);
+            ((GuiFileExplorer) gui).setHeight(height - 10);
 
         return true;
     }
