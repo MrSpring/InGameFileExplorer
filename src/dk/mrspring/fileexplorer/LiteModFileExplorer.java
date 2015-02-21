@@ -292,6 +292,26 @@ public class LiteModFileExplorer implements Tickable, Configurable
                 return "TEXT";
             }
         });
+        supportedFileTypes.put(".lang", new FileType()
+        {
+            @Override
+            public String[] getSupportedTypes()
+            {
+                return new String[]{".lang"};
+            }
+
+            @Override
+            public Editor getNewEditor(int x, int y, int width, int height, File file)
+            {
+                return new EditorLang(file, x, y, width, height);
+            }
+
+            @Override
+            public String getName()
+            {
+                return "LANG";
+            }
+        });
 
         FileSorter.load();
     }

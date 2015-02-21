@@ -9,7 +9,6 @@ import dk.mrspring.llcore.DrawingHelper;
 import dk.mrspring.llcore.Quad;
 import net.minecraft.client.Minecraft;
 import org.lwjgl.input.Keyboard;
-import org.lwjgl.opengl.GL11;
 
 /**
  * Created by MrSpring on 14-11-2014 for In-Game File Explorer.
@@ -51,12 +50,16 @@ public class GuiCustomTextField implements IGui
             GLClippingPlanes.glDisableClipping();
         }
 
-        GLClippingPlanes.glEnableClipping(x + PADDING, x + w - PADDING, y + PADDING, y + h - PADDING);
-        GL11.glPushMatrix();
+//        GLClippingPlanes.glEnableClipping(x + PADDING, x + w - PADDING, y + PADDING, y + h - PADDING);
+//        GL11.glPushMatrix();
 
         int textY = y + (h / 2) - 4;
 
+        GLClippingPlanes.glEnableClipping(x, x + w, y, y + h);
+
         minecraft.fontRendererObj.drawString(getText(), x + PADDING - scroll, textY, 0xFFFFFF, false);
+
+        GLClippingPlanes.glDisableClipping();
 
         int cursorX = 0;
         if (focused)
@@ -67,9 +70,9 @@ public class GuiCustomTextField implements IGui
                 cursorX = minecraft.fontRendererObj.getStringWidth(getText());
         }
 
-        GL11.glPopMatrix();
+//        GL11.glPopMatrix();
 
-        GLClippingPlanes.glDisableClipping();
+//        GLClippingPlanes.glDisableClipping();
 
         if (focused)
             minecraft.fontRendererObj.drawString("|", x + cursorX + PADDING - 1 - scroll, textY, 0xFF0000, false);
@@ -88,7 +91,7 @@ public class GuiCustomTextField implements IGui
         float renderEndProgressThrough = (((float) scroll + w - (2 * PADDING)) / (float) textWidth);
 
         scrollX += w * renderStartProgressThrough;
-        scrollXEnd += Math.min(w * renderEndProgressThrough, w+PADDING);
+        scrollXEnd += Math.min(w * renderEndProgressThrough, w + PADDING);
 
         float scrollWidth = scrollXEnd - scrollX;
 

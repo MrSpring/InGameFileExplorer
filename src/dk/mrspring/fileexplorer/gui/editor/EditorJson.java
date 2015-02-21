@@ -1,6 +1,7 @@
 package dk.mrspring.fileexplorer.gui.editor;
 
 import com.google.gson.internal.LinkedTreeMap;
+import com.mumfrey.liteloader.gl.GLClippingPlanes;
 import dk.mrspring.fileexplorer.LiteModFileExplorer;
 import dk.mrspring.fileexplorer.gui.GuiJsonViewer;
 import dk.mrspring.fileexplorer.gui.GuiSimpleButton;
@@ -14,6 +15,7 @@ import dk.mrspring.llcore.DrawingHelper;
 import dk.mrspring.llcore.Quad;
 import dk.mrspring.llcore.Vector;
 import net.minecraft.client.Minecraft;
+import org.lwjgl.opengl.GL11;
 
 import java.io.File;
 import java.io.IOException;
@@ -104,6 +106,8 @@ public class EditorJson extends Editor implements IMouseListener
             this.editButton.setX(x - 62);
             this.editButton.update();
 
+            this.viewer.setY(y);
+            this.viewer.setX(x);
             this.viewer.setWidth(w);
             this.viewer.setHeight(h);
             this.viewer.update();
@@ -285,9 +289,13 @@ public class EditorJson extends Editor implements IMouseListener
         @Override
         public void draw(Minecraft minecraft, int mouseX, int mouseY)
         {
+            GLClippingPlanes.glEnableClipping(x, x + w, y, y + h);
+            GL11.glPushMatrix();
             try
             {
-                int xOffset = 18, yOffset = -scrollHeight;
+                int xOffset = 18, yOffset = 0;//-scrollHeight;
+
+                GL11.glTranslatef(0, -scrollHeight, 0);
 
                 int totalHeight = this.getListHeight();
                 if (this.height < totalHeight)
@@ -341,6 +349,8 @@ public class EditorJson extends Editor implements IMouseListener
             {
                 LiteModFileExplorer.core.getDrawingHelper().drawText(TranslateHelper.translate("gui.json_editor.not_enough_space"), new Vector(w / 2 + x, y + 10), 0xFFFFFF, true, w, DrawingHelper.VerticalTextAlignment.CENTER, DrawingHelper.HorizontalTextAlignment.TOP);
             }
+            GL11.glPopMatrix();
+            GLClippingPlanes.glDisableClipping();
         }
 
         @Override

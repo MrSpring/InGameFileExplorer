@@ -1,6 +1,7 @@
 package dk.mrspring.fileexplorer.gui;
 
 import com.google.gson.internal.LinkedTreeMap;
+import com.mumfrey.liteloader.gl.GLClippingPlanes;
 import dk.mrspring.fileexplorer.LiteModFileExplorer;
 import dk.mrspring.fileexplorer.helper.TranslateHelper;
 import dk.mrspring.llcore.Color;
@@ -60,6 +61,7 @@ public class GuiJsonViewer implements IGui, IMouseListener
     @Override
     public void draw(Minecraft minecraft, int mouseX, int mouseY)
     {
+        GLClippingPlanes.glEnableClipping(x,x+width,y,y+height);
         int yOffset = -scrollHeight, xOffset = 0;
         try
         {
@@ -82,6 +84,7 @@ public class GuiJsonViewer implements IGui, IMouseListener
             helper.drawShape(new Quad(x, y, width, height).setColor(Color.BLACK));
             helper.drawText(TranslateHelper.translate("gui.json_editor.not_enough_space").replace("\\n", "\n"), new Vector(width / 2 + x, y + 15), 0xFFFFFF, false, width - 8, DrawingHelper.VerticalTextAlignment.CENTER, DrawingHelper.HorizontalTextAlignment.TOP);
         }
+        GLClippingPlanes.glDisableClipping();
     }
 
     private void drawScrollBar()
@@ -91,8 +94,8 @@ public class GuiJsonViewer implements IGui, IMouseListener
         float scrollProgress = (float) this.scrollHeight / maxScrollHeight;
         float scrollBarY = scrollBarYRange * scrollProgress;
         DrawingHelper helper = LiteModFileExplorer.core.getDrawingHelper();
-        helper.drawShape(new Quad(x, y + scrollBarY + 1, 2, 40).setColor(Color.DK_GREY));
-        helper.drawShape(new Quad(x - 1, y + scrollBarY, 2, 40).setColor(Color.WHITE));
+        helper.drawShape(new Quad(x+1, y + scrollBarY + 1, 1, 40).setColor(Color.DK_GREY));
+        helper.drawShape(new Quad(x, y + scrollBarY, 1, 40).setColor(Color.WHITE));
     }
 
     /**
@@ -234,5 +237,15 @@ public class GuiJsonViewer implements IGui, IMouseListener
             if (mouseWheel != 0)
                 this.addScroll(-mouseWheel);
         }
+    }
+
+    public void setY(int y)
+    {
+        this.y = y;
+    }
+
+    public void setX(int x)
+    {
+        this.x = x;
     }
 }

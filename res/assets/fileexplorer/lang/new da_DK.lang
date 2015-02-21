@@ -1,0 +1,50 @@
+gui.config_panel.file_explorer.title_new=In-Game File Explorer Konfiguration
+gui.config_panel.file_explorer.start_folder=Start Mappe
+gui.config_panel.file_explorer.take_backup=Tag backup af redigerede og slettede filer
+gui.config_panel.file_explorer.backup_folder=Backup Mappe
+gui.config_panel.file_explorer.clean_backup=Ryd backup mappe
+gui.config_panel.file_explorer.clean_backup_warning=§4ADVARSEL!§r Dette kan ikke gøres om!
+gui.config_panel.file_explorer.file_sorting=Fil sortering
+gui.config_panel.file_explorer.hide_non_editable_files=Skul filer der ikke kan redigeres
+gui.config_panel.file_explorer.show_file_edit_date=Vis seneste ændringsdato under filnavn
+gui.config_panel.file_explorer.show_file_size=Vis fil størrelse under filnavn
+
+// Sorting types:
+sorting_type.name.name=Navn
+sorting_type.name.desc=Sorter filer efter navn
+sorting_type.type.name=Filtype
+sorting_type.type.desc=Sorter filer efter udvidelse
+sorting_type.date.name=Dato
+sorting_type.date.desc=Sorter filer efter sidste redigerings dato
+
+backup_cause.edit=Redigeret
+backup_cause.delete=Slettet
+
+gui.screen.backup_manager.restore=Genskab
+gui.screen.backup_manager.done=Færdig
+
+gui.screen.welcome.title=Velkommen
+gui.screen.welcome.message=Tak fordi du downloadede In-Game File Explorer modden, af MrSpring.\nFør du kan begynde at bruge modden, skal du acceptere de nedenstående betengelser:
+gui.screen.welcome.i_accept.read=Jeg tillader modden at læse fra mine filer.
+gui.screen.welcome.i_accept.write=Jeg tillader modden at skrive til mine filer, og forstår de eventuelle risici.
+
+gui.screen.image_viewer.exit_fullscreen=Klik for at lukke...
+
+gui.explorer.no_files=Der blev ikke fundet nogle filer...
+gui.explorer.open=Åben
+gui.explorer.refresh=Genindlæs
+gui.explorer.go_up=Gå op
+
+gui.json_editor.add_new=Tilføj ny
+gui.json_editor.array_size=Array størrelse
+gui.json_editor.map_size=Map størrelse
+gui.json_editor.not_enough_space=Der er ikke nok plads på skærmen til at vide JSON elementerne.\nGør dit Minecraft vindue størrere eller skift gui størrelsen i instillingerne.
+gui.json_editor.edit=Rediger
+gui.json_editor.save=Gem
+gui.json_editor.cancel=Annuller
+
+gui.image_viewer.load_failed=Fejlede under indlæsning
+gui.image_viewer.loading=Indlæser...
+
+gui.text_editor.save=Gem
+gui.text_editor.reload=Genskab

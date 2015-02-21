@@ -162,7 +162,7 @@ public class GuiScreen extends net.minecraft.client.gui.GuiScreen
             String identifier = entry.getKey();
             IGui element = entry.getValue();
 
-            if (this.drawGui(identifier, element) && !identifier.equals("done_button"))
+            if (this.drawGui(identifier, element, mouseX, mouseY) && !identifier.equals("done_button"))
             {
                 element.draw(mc, mouseX, mouseY);
                 if (element instanceof IDelayedDraw)
@@ -333,7 +333,7 @@ public class GuiScreen extends net.minecraft.client.gui.GuiScreen
         else return null;
     }
 
-    public boolean drawGui(String identifier, IGui gui)
+    public boolean drawGui(String identifier, IGui gui, int mouseX, int mouseY)
     {
         return true;
     }

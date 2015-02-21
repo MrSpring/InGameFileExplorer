@@ -74,7 +74,7 @@ public class GuiScreenConfirmClose extends GuiScreen
     }
 
     @Override
-    public boolean drawGui(String identifier, IGui gui)
+    public boolean drawGui(String identifier, IGui gui, int mouseX, int mouseY)
     {
         if (identifier.equals("save"))
         {
@@ -88,7 +88,7 @@ public class GuiScreenConfirmClose extends GuiScreen
         {
             ((GuiSimpleButton) gui).setX(width / 2 - 80 + 50 + 5 + 50 + 5);
             ((GuiSimpleButton) gui).setY(height / 2 + 70 - (25 + 5));
-        } else return super.drawGui(identifier, gui);
+        } else return super.drawGui(identifier, gui, mouseX, mouseY);
         return true;
     }
 

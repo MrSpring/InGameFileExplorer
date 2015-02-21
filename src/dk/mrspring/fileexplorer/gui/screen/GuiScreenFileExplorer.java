@@ -7,7 +7,9 @@ import dk.mrspring.fileexplorer.gui.editor.FileType;
 import dk.mrspring.fileexplorer.gui.interfaces.IGui;
 import dk.mrspring.fileexplorer.loader.FileLoader;
 import dk.mrspring.llcore.Color;
+import dk.mrspring.llcore.DrawingHelper;
 import dk.mrspring.llcore.Quad;
+import dk.mrspring.llcore.Vector;
 
 import java.io.File;
 
@@ -52,6 +54,15 @@ public class GuiScreenFileExplorer extends GuiScreen
     {
         LiteModFileExplorer.core.getDrawingHelper().drawShape(new Quad(0, 0, width, height).setColor(Color.BLACK).setAlpha(0.5F));
         super.drawScreen(mouseX, mouseY, partialTicks);
+        IGui gui = this.getGui("editor");
+        if (gui != null)
+        {
+            Editor editor = (Editor) gui;
+            String openFile = editor.getOpenFileName();
+            if (openFile != null)
+                if (!openFile.isEmpty())
+                    LiteModFileExplorer.core.getDrawingHelper().drawText("Open file:\n§7" + openFile, new Vector(258 + 10, 5), 0xFFFFFF, true, -1, DrawingHelper.VerticalTextAlignment.LEFT, DrawingHelper.HorizontalTextAlignment.TOP);
+        }
     }
 
     public void openFile(File file)
@@ -59,7 +70,7 @@ public class GuiScreenFileExplorer extends GuiScreen
         String extension = FileLoader.getFileExtension(file.getName(), true);
         FileType fileType = LiteModFileExplorer.getFileType(extension);
 
-        Editor editor = fileType.getNewEditor(258+10, 5, width - 243 - 30, height - 10, file);
+        Editor editor = fileType.getNewEditor(268, 5, width - 213, height - 10, file);
         String name = fileType.getName();
 
         if (editor != null)
@@ -77,7 +88,7 @@ public class GuiScreenFileExplorer extends GuiScreen
         if (identifier.equals("editor"))
         {
             Editor editor = (Editor) gui;
-            editor.update(258+10, 5, width - 243 - 30, height - 10);
+            editor.update(258 + 10, 25, width - 243 - 30, height - 30);
         }
 
         if (identifier.equals("explorer") && gui instanceof GuiFileExplorer)
