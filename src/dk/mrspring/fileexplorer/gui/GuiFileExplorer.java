@@ -61,7 +61,7 @@ public class GuiFileExplorer implements IGui, IMouseListener
         upOne = new GuiSimpleButton(x, y, 50, 20, "gui.explorer.go_up");
 
         this.newFolder.setEnabled(LiteModFileExplorer.config.acceptFileManipulation);
-        this.deleteFile.setEnabled(LiteModFileExplorer.config.acceptFileManipulation);
+//        this.deleteFile.setEnabled(LiteModFileExplorer.config.acceptFileManipulation);
 
         this.refreshList();
     }

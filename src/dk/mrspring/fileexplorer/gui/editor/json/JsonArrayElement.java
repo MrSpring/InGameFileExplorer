@@ -54,7 +54,7 @@ public class JsonArrayElement extends JsonEditorElement<ArrayList<Object>>
                 this.elements.add(new JsonBooleanElement(0, 0, 0, String.valueOf(i) + ": ", (Boolean) object, false));
             else if (object instanceof ArrayList)
                 this.elements.add(new JsonArrayElement(0, 0, 0, String.valueOf(i) + ": ", (ArrayList) object, false));
-            else if (object instanceof Double)
+            else if (object instanceof Number)
                 this.elements.add(new JsonDoubleElement(0, 0, 0, String.valueOf(i) + ": ", (Double) object, false));
             else if (object instanceof LinkedTreeMap)
                 this.elements.add(new JsonMapElement(0, 0, 0, String.valueOf(i) + ": ", (LinkedTreeMap) object, false));

@@ -56,7 +56,7 @@ public class JsonMapElement extends JsonEditorElement<LinkedTreeMap<String, Obje
                 this.elements.add(new JsonBooleanElement(0, 0, 0, key, (Boolean) object));
             else if (object instanceof ArrayList)
                 this.elements.add(new JsonArrayElement(0, 0, 0, key, (ArrayList) object));
-            else if (object instanceof Double)
+            else if (object instanceof Number)
                 this.elements.add(new JsonDoubleElement(0, 0, 0, key, (Double) object));
             else if (object instanceof LinkedTreeMap)
                 this.elements.add(new JsonMapElement(0, 0, 0, key, (LinkedTreeMap) object));

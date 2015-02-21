@@ -3,21 +3,19 @@ package dk.mrspring.fileexplorer.gui;
 import com.google.gson.internal.LinkedTreeMap;
 import com.mumfrey.liteloader.gl.GLClippingPlanes;
 import dk.mrspring.fileexplorer.LiteModFileExplorer;
+import dk.mrspring.fileexplorer.gui.interfaces.IGui;
+import dk.mrspring.fileexplorer.gui.interfaces.IMouseListener;
+import dk.mrspring.fileexplorer.helper.GuiHelper;
 import dk.mrspring.fileexplorer.helper.TranslateHelper;
 import dk.mrspring.llcore.Color;
 import dk.mrspring.llcore.DrawingHelper;
-import dk.mrspring.fileexplorer.helper.GuiHelper;
-import dk.mrspring.fileexplorer.gui.interfaces.IGui;
-import dk.mrspring.fileexplorer.gui.interfaces.IMouseListener;
 import dk.mrspring.llcore.Quad;
 import dk.mrspring.llcore.Vector;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.util.StatCollector;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
@@ -42,7 +40,7 @@ public class GuiJsonViewer implements IGui, IMouseListener
         try
         {
             String jsonCode = LiteModFileExplorer.core.getFileLoader().getContentsFromFile(jsonFile);
-            jsonObject = LiteModFileExplorer.core.getJsonHandler().loadFromJson(jsonCode, HashMap.class);
+            jsonObject = LiteModFileExplorer.core.getJsonHandler().loadFromJson(jsonCode, LinkedTreeMap.class);
         } catch (Exception e)
         {
             e.printStackTrace();
@@ -61,7 +59,7 @@ public class GuiJsonViewer implements IGui, IMouseListener
     @Override
     public void draw(Minecraft minecraft, int mouseX, int mouseY)
     {
-        GLClippingPlanes.glEnableClipping(x,x+width,y,y+height);
+        GLClippingPlanes.glEnableClipping(x, x + width, y, y + height);
         int yOffset = -scrollHeight, xOffset = 0;
         try
         {
@@ -94,7 +92,7 @@ public class GuiJsonViewer implements IGui, IMouseListener
         float scrollProgress = (float) this.scrollHeight / maxScrollHeight;
         float scrollBarY = scrollBarYRange * scrollProgress;
         DrawingHelper helper = LiteModFileExplorer.core.getDrawingHelper();
-        helper.drawShape(new Quad(x+1, y + scrollBarY + 1, 1, 40).setColor(Color.DK_GREY));
+        helper.drawShape(new Quad(x + 1, y + scrollBarY + 1, 1, 40).setColor(Color.DK_GREY));
         helper.drawShape(new Quad(x, y + scrollBarY, 1, 40).setColor(Color.WHITE));
     }
 
@@ -111,7 +109,7 @@ public class GuiJsonViewer implements IGui, IMouseListener
     private int drawObject(Minecraft minecraft, int xOffset, int yOffset, String name, Object object)
     {
         DrawingHelper helper = LiteModFileExplorer.core.getDrawingHelper();
-        if (object instanceof String || object instanceof Boolean || object instanceof Double)
+        if (object instanceof String || object instanceof Boolean || object instanceof Number)
         {
             return this.drawSimpleTextValue(minecraft.fontRendererObj, name, object, x + xOffset, y + yOffset);
         } else if (object instanceof ArrayList)
