@@ -1,5 +1,6 @@
 package dk.mrspring.fileexplorer.gui;
 
+import com.mumfrey.liteloader.gl.GLClippingPlanes;
 import dk.mrspring.fileexplorer.LiteModFileExplorer;
 import dk.mrspring.fileexplorer.gui.interfaces.IGui;
 import dk.mrspring.fileexplorer.gui.interfaces.IMouseListener;
@@ -12,7 +13,6 @@ import dk.mrspring.llcore.DrawingHelper;
 import dk.mrspring.llcore.Quad;
 import dk.mrspring.llcore.Vector;
 import net.minecraft.client.Minecraft;
-import net.minecraft.util.StatCollector;
 
 import java.io.File;
 import java.io.IOException;
@@ -136,6 +136,7 @@ public class GuiFileExplorer implements IGui, IMouseListener
         }
         int yOffset = -scrollHeight, xOffset = 5;
 
+        GLClippingPlanes.glEnableClipping(x, x + width + 5, y, y + h);
         if (guiFiles.size() > 0)
         {
             for (GuiFileBase guiFile : guiFiles)
@@ -158,6 +159,7 @@ public class GuiFileExplorer implements IGui, IMouseListener
             int textX = x + textMaxLength / 2, textY = y + 10;
             helper.drawText(TranslateHelper.translate("gui.explorer.no_files"), new Vector(textX, textY), 0xFFFFFF, true, textMaxLength, dk.mrspring.llcore.DrawingHelper.VerticalTextAlignment.CENTER, dk.mrspring.llcore.DrawingHelper.HorizontalTextAlignment.TOP);
         }
+        GLClippingPlanes.glDisableClipping();
 
         int totalHeight = this.getListHeight();
         if (totalHeight > this.h)
@@ -250,34 +252,37 @@ public class GuiFileExplorer implements IGui, IMouseListener
     @Override
     public boolean mouseDown(int mouseX, int mouseY, int mouseButton)
     {
-        if (this.openFile.mouseDown(mouseX, mouseY, mouseButton))
-            return this.openSelectedFile();
-        else if (this.refreshList.mouseDown(mouseX, mouseY, mouseButton))
-            this.refreshList();
-        else if (this.newFolder.mouseDown(mouseX, mouseY, mouseButton))
-            this.createNewFile();
-        else if (this.deleteFile.mouseDown(mouseX, mouseY, mouseButton))
-            this.deleteSelectedFile();
-        else if (this.upOne.mouseDown(mouseX, mouseY, mouseButton))
-            this.goUpOne();
-        else if (this.isPathClicked(mouseX, mouseY, mouseButton))
-            return true;
-        else
+        if (GuiHelper.isMouseInBounds(mouseX, mouseY, x, y, w, h))
         {
-            boolean returnFromHere = false;
-            this.openFile.disable();
-            this.deleteFile.disable();
-            for (GuiFileBase guiFile : this.guiFiles)
-                if (guiFile.mouseDown(mouseX, mouseY, mouseButton) && guiFile instanceof GuiFile)
-                {
-                    deleteFile.enable();
-                    if (!((GuiFile) guiFile).getFileType().equals(LiteModFileExplorer.getFileType("unknown")))
-                        openFile.enable();
-                    returnFromHere = true;
-                }
-
-            if (returnFromHere)
+            if (this.openFile.mouseDown(mouseX, mouseY, mouseButton))
+                return this.openSelectedFile();
+            else if (this.refreshList.mouseDown(mouseX, mouseY, mouseButton))
+                this.refreshList();
+            else if (this.newFolder.mouseDown(mouseX, mouseY, mouseButton))
+                this.createNewFile();
+            else if (this.deleteFile.mouseDown(mouseX, mouseY, mouseButton))
+                this.deleteSelectedFile();
+            else if (this.upOne.mouseDown(mouseX, mouseY, mouseButton))
+                this.goUpOne();
+            else if (this.isPathClicked(mouseX, mouseY, mouseButton))
                 return true;
+            else
+            {
+                boolean returnFromHere = false;
+                this.openFile.disable();
+                this.deleteFile.disable();
+                for (GuiFileBase guiFile : this.guiFiles)
+                    if (guiFile.mouseDown(mouseX, mouseY, mouseButton) && guiFile instanceof GuiFile)
+                    {
+                        deleteFile.enable();
+                        if (!((GuiFile) guiFile).getFileType().equals(LiteModFileExplorer.getFileType("unknown")))
+                            openFile.enable();
+                        returnFromHere = true;
+                    }
+
+                if (returnFromHere)
+                    return true;
+            }
         }
         return false;
     }
