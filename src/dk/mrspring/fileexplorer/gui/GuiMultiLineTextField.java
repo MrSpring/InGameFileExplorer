@@ -85,9 +85,12 @@ public class GuiMultiLineTextField implements IGui, IMouseListener
     @Override
     public void draw(Minecraft minecraft, int mouseX, int mouseY)
     {
-        int xOffset = 0, yOffset = -scrollHeight;
+        int xOffset = 0, yOffset = 0;
         if (lines * 9 > h)
+        {
             xOffset += 5;
+            yOffset = -scrollHeight;
+        }
 
         if (drawBackground)
             LiteModFileExplorer.core.getDrawingHelper().drawButtonThingy(new Quad(x, y, w, h), focused ? 1 : 0, true, Color.BLACK, 0.85F, Color.BLACK, 0.85F);
