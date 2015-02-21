@@ -46,7 +46,7 @@ public class FileExplorerConfigPanel implements ConfigPanel
         sortingType = new GuiDropDownList(0, 105, 150, 30, current, elements);
         hideNonEditableFiles = new GuiCheckbox(mc.fontRendererObj.getStringWidth(TranslateHelper.translate("gui.config_panel.file_explorer.hide_non_editable_files") + ": "), 130, 12, 12, startConfig.hideNonEditableFiles);
         showEditDate = new GuiCheckbox(mc.fontRendererObj.getStringWidth(TranslateHelper.translate("gui.config_panel.file_explorer.show_file_edit_date") + ": "), 150, 12, 12, startConfig.showFileEditBelowName);
-        showFileSize = new GuiCheckbox(mc.fontRendererObj.getStringWidth(TranslateHelper.translate("gui.config_panel.file_explorer.show_file_size") + ": "), 180, 12, 12, startConfig.showFileEditBelowName);
+        showFileSize = new GuiCheckbox(mc.fontRendererObj.getStringWidth(TranslateHelper.translate("gui.config_panel.file_explorer.show_file_size") + ": "), 180, 12, 12, startConfig.showFileSizeBelowName);
     }
 
     @Override
@@ -139,6 +139,7 @@ public class FileExplorerConfigPanel implements ConfigPanel
         this.sortingType.mouseDown(mouseX, mouseY, mouseButton);
         this.hideNonEditableFiles.mouseDown(mouseX, mouseY, mouseButton);
         this.showEditDate.mouseDown(mouseX, mouseY, mouseButton);
+        this.showFileSize.mouseDown(mouseX, mouseY, mouseButton);
     }
 
     @Override
