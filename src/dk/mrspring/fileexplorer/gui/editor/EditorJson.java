@@ -290,12 +290,12 @@ public class EditorJson extends Editor implements IMouseListener
         public void draw(Minecraft minecraft, int mouseX, int mouseY)
         {
             GLClippingPlanes.glEnableClipping(x, x + w, y, y + h);
-            GL11.glPushMatrix();
+//            GL11.glPushMatrix();
             try
             {
-                int xOffset = 18, yOffset = 0;//-scrollHeight;
+                int xOffset = 18, yOffset = -scrollHeight;
 
-                GL11.glTranslatef(0, -scrollHeight, 0);
+//                GL11.glTranslatef(0, -scrollHeight, 0);
 
                 int totalHeight = this.getListHeight();
                 if (this.height < totalHeight)
@@ -349,7 +349,7 @@ public class EditorJson extends Editor implements IMouseListener
             {
                 LiteModFileExplorer.core.getDrawingHelper().drawText(TranslateHelper.translate("gui.json_editor.not_enough_space"), new Vector(w / 2 + x, y + 10), 0xFFFFFF, true, w, DrawingHelper.VerticalTextAlignment.CENTER, DrawingHelper.HorizontalTextAlignment.TOP);
             }
-            GL11.glPopMatrix();
+//            GL11.glPopMatrix();
             GLClippingPlanes.glDisableClipping();
         }
 
