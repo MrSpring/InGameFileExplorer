@@ -125,12 +125,6 @@ public class GuiFileExplorer implements IGui, IMouseListener
         {
             width -= 75;
             helper.drawVerticalLine(new Vector(x + width + 10, y + 6), h - 10, 1, true);
-//                    .drawVerticalLine(new Vector(x + width + 10 + 61, y + 6), h - 10, 1, true);
-//            helper.drawShape(new Quad(x + width + 5 + 6, y + 6, 1, h - 10).setColor(Color.DK_GREY));
-//            helper.drawShape(new Quad(x + width + 5 + 6 + 61, y + 6, 1, h - 10).setColor(Color.DK_GREY));
-
-//            helper.drawShape(new Quad(x + width + 5 + 5, y + 5, 1, h - 10).setColor(Color.WHITE));
-//            helper.drawShape(new Quad(x + width + 5 + 5 + 61, y + 5, 1, h - 10).setColor(Color.WHITE));
             this.drawControls(minecraft, mouseX, mouseY, x + width + 5 + 11);
         }
 
@@ -143,9 +137,12 @@ public class GuiFileExplorer implements IGui, IMouseListener
         if (showBackground)
             helper.drawButtonThingy(new Quad(x - 2, y - 2, width + 11, listHeight + 4), 0, true);
 
-        int yOffset = -scrollHeight, xOffset = 5;
+        int yOffset = -scrollHeight, xOffset = 2;
 
         GLClippingPlanes.glEnableClipping(x, x + width + 5, y, y + listHeight);
+        int totalHeight = this.getListHeight();
+        if (totalHeight > listHeight)
+            xOffset = 5;
         if (guiFiles.size() > 0)
         {
             for (GuiFileBase guiFile : guiFiles)
@@ -154,7 +151,7 @@ public class GuiFileExplorer implements IGui, IMouseListener
                 {
                     guiFile.setX(xOffset + x);
                     guiFile.setY(yOffset + y);
-                    guiFile.setWidth(width);
+                    guiFile.setWidth(width + 5 - xOffset);
                     guiFile.draw(minecraft, mouseX, mouseY);
                 }
                 yOffset += guiFile.getHeight() + 5;
@@ -170,7 +167,6 @@ public class GuiFileExplorer implements IGui, IMouseListener
         }
         GLClippingPlanes.glDisableClipping();
 
-        int totalHeight = this.getListHeight();
         if (totalHeight > listHeight)
         {
             float scrollBarYRange = (listHeight - 40);
