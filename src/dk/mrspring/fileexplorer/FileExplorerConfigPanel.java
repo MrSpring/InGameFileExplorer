@@ -26,6 +26,7 @@ public class FileExplorerConfigPanel implements ConfigPanel
     GuiCheckbox hideNonEditableFiles;
     GuiCheckbox showEditDate;
     GuiCheckbox showFileSize;
+    GuiCheckbox showOpenDirectory;
 
     @Override
     public void onPanelShown(ConfigPanelHost host)
@@ -47,6 +48,7 @@ public class FileExplorerConfigPanel implements ConfigPanel
         hideNonEditableFiles = new GuiCheckbox(mc.fontRendererObj.getStringWidth(TranslateHelper.translate("gui.config_panel.file_explorer.hide_non_editable_files") + ": "), 130, 12, 12, startConfig.hideNonEditableFiles);
         showEditDate = new GuiCheckbox(mc.fontRendererObj.getStringWidth(TranslateHelper.translate("gui.config_panel.file_explorer.show_file_edit_date") + ": "), 150, 12, 12, startConfig.showFileEditBelowName);
         showFileSize = new GuiCheckbox(mc.fontRendererObj.getStringWidth(TranslateHelper.translate("gui.config_panel.file_explorer.show_file_size") + ": "), 180, 12, 12, startConfig.showFileSizeBelowName);
+        showOpenDirectory = new GuiCheckbox(mc.fontRendererObj.getStringWidth(TranslateHelper.translate("gui.config_panel.file_explorer.show_open_directory") + ": "), 200, 12, 12, startConfig.showOpenDirectory);
     }
 
     @Override
@@ -78,6 +80,8 @@ public class FileExplorerConfigPanel implements ConfigPanel
         showEditDate.draw(minecraft, mouseX, mouseY);
         showFileSize.setY(showEditDate.getY() + 12 + 5);
         showFileSize.draw(minecraft, mouseX, mouseY);
+        showOpenDirectory.setY(showFileSize.getY() + 12 + 5);
+        showOpenDirectory.draw(minecraft, mouseX, mouseY);
 
         minecraft.fontRendererObj.drawString(TranslateHelper.translate("gui.config_panel.file_explorer.start_folder") + ": ", 0, 4, 0xFFFFFF, true);
         minecraft.fontRendererObj.drawString(TranslateHelper.translate("gui.config_panel.file_explorer.take_backup") + ": ", 0, 22, 0xFFFFFF, true);
@@ -86,6 +90,7 @@ public class FileExplorerConfigPanel implements ConfigPanel
         minecraft.fontRendererObj.drawString(TranslateHelper.translate("gui.config_panel.file_explorer.hide_non_editable_files") + ": ", 0, hideNonEditableFiles.getY() + 2, 0xFFFFFF, true);
         minecraft.fontRendererObj.drawString(TranslateHelper.translate("gui.config_panel.file_explorer.show_file_edit_date") + ": ", 0, showEditDate.getY() + 2, 0xFFFFFF, true);
         minecraft.fontRendererObj.drawString(TranslateHelper.translate("gui.config_panel.file_explorer.show_file_size") + ": ", 0, showFileSize.getY() + 2, 0xFFFFFF, true);
+        minecraft.fontRendererObj.drawString(TranslateHelper.translate("gui.config_panel.file_explorer.show_open_directory") + ": ", 0, showOpenDirectory.getY() + 2, 0xFFFFFF, true);
 //        minecraft.fontRendererObj.drawString(TranslateHelper.translate(TranslateHelper.translate("gui.config_panel.file_explorer.clean_backup_warning")), cleanBackup.getWidth() + 2, cleanBackup.getY() + (cleanBackup.getHeight() / 2 - 4), 0xFFFFFF, true);
     }
 
@@ -101,6 +106,7 @@ public class FileExplorerConfigPanel implements ConfigPanel
         this.hideNonEditableFiles.update();
         this.showEditDate.update();
         this.showFileSize.update();
+        this.showOpenDirectory.update();
     }
 
     @Override
@@ -122,6 +128,7 @@ public class FileExplorerConfigPanel implements ConfigPanel
         LiteModFileExplorer.config.hideNonEditableFiles = hideNonEditableFiles.isChecked();
         LiteModFileExplorer.config.showFileEditBelowName = showEditDate.isChecked();
         LiteModFileExplorer.config.showFileSizeBelowName = showFileSize.isChecked();
+        LiteModFileExplorer.config.showOpenDirectory = showOpenDirectory.isChecked();
         LiteModFileExplorer.config.validateValues();
         LiteModFileExplorer.saveConfig();
     }
@@ -140,6 +147,7 @@ public class FileExplorerConfigPanel implements ConfigPanel
         this.hideNonEditableFiles.mouseDown(mouseX, mouseY, mouseButton);
         this.showEditDate.mouseDown(mouseX, mouseY, mouseButton);
         this.showFileSize.mouseDown(mouseX, mouseY, mouseButton);
+        this.showOpenDirectory.mouseDown(mouseX, mouseY, mouseButton);
     }
 
     @Override

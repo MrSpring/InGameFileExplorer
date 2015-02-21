@@ -23,6 +23,7 @@ public class Config
     public boolean showArrowOnDropDowns = true;
     public boolean showFileEditBelowName = true;
     public boolean showFileSizeBelowName = true;
+    public boolean showOpenDirectory = true;
 
     public boolean json_usePrettyPrinting = true;
     public boolean json_allowArrayCollapsing = true;

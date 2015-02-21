@@ -528,6 +528,11 @@ public class GuiFileExplorer implements IGui, IMouseListener
         }
     }
 
+    public String getCurrentPath()
+    {
+        return currentPath;
+    }
+
     public interface IOnFileOpened
     {
         public void onOpened(File file);

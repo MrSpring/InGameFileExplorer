@@ -21,6 +21,7 @@ public class GuiScreenFileExplorer extends GuiScreen
     String startFrom;
     String openFileType = "";
     boolean initialized = false;
+    int explorerHeightOffset = 0;
 
     public GuiScreenFileExplorer(net.minecraft.client.gui.GuiScreen previousScreen, File path)
     {
@@ -63,6 +64,16 @@ public class GuiScreenFileExplorer extends GuiScreen
                 if (!openFile.isEmpty())
                     LiteModFileExplorer.core.getDrawingHelper().drawText("Open file:\n§7" + openFile, new Vector(258 + 10, 5), 0xFFFFFF, true, -1, DrawingHelper.VerticalTextAlignment.LEFT, DrawingHelper.HorizontalTextAlignment.TOP);
         }
+
+        if (LiteModFileExplorer.config.showOpenDirectory)
+        {
+            gui = this.getGui("explorer");
+            if (gui != null)
+            {
+                String openFile = ((GuiFileExplorer) gui).getCurrentPath();
+                this.explorerHeightOffset = (9 * LiteModFileExplorer.core.getDrawingHelper().drawText("Open directory:\n§7" + openFile, new Vector(5, height - 5), 0xFFFFFF, true, 258, DrawingHelper.VerticalTextAlignment.LEFT, DrawingHelper.HorizontalTextAlignment.BOTTOM)) + 4;
+            }
+        } else this.explorerHeightOffset = 0;
     }
 
     public void openFile(File file)
@@ -92,7 +103,7 @@ public class GuiScreenFileExplorer extends GuiScreen
         }
 
         if (identifier.equals("explorer") && gui instanceof GuiFileExplorer)
-            ((GuiFileExplorer) gui).setHeight(height - 10);
+            ((GuiFileExplorer) gui).setHeight(height - 10 - explorerHeightOffset);
 
         return true;
     }
