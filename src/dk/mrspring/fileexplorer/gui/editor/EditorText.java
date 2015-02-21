@@ -54,6 +54,8 @@ public class EditorText extends Editor implements IMouseListener
         this.w = width;
         this.h = height;
 
+        this.textField.setX(x);
+        this.textField.setY(y);
         this.textField.setWidth(w);
         this.textField.setHeight(h);
         this.textField.update();
