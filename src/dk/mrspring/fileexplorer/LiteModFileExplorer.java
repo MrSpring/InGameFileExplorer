@@ -117,6 +117,10 @@ public class LiteModFileExplorer implements Tickable, Configurable
         core.loadIcon(new ResourceLocation("fileexplorer", "txt"));
         core.loadIcon(new ResourceLocation("fileexplorer", "image"));
         core.loadIcon(new ResourceLocation("fileexplorer", "folder"));
+        core.loadIcon(new ResourceLocation("fileexplorer", "arrow_up"));
+        core.loadIcon(new ResourceLocation("fileexplorer", "arrow_down"));
+        core.loadIcon(new ResourceLocation("fileexplorer", "arrow_left"));
+        core.loadIcon(new ResourceLocation("fileexplorer", "arrow_right"));
 
         LiteLoader.getInput().registerKeyBinding(openExampleGui);
         LiteLoader.getInput().registerKeyBinding(openFileExplorer);
@@ -315,8 +319,6 @@ public class LiteModFileExplorer implements Tickable, Configurable
 
         FileSorter.load();
     }
-
-//    }
 
     public static void saveConfig()
     {

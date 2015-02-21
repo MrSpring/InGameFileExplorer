@@ -50,12 +50,9 @@ public class GuiCustomTextField implements IGui
             GLClippingPlanes.glDisableClipping();
         }
 
-//        GLClippingPlanes.glEnableClipping(x + PADDING, x + w - PADDING, y + PADDING, y + h - PADDING);
-//        GL11.glPushMatrix();
-
         int textY = y + (h / 2) - 4;
 
-        GLClippingPlanes.glEnableClipping(x, x + w, y, y + h);
+        GLClippingPlanes.glEnableClipping(x + PADDING, x + w - PADDING, y, y + h);
 
         minecraft.fontRendererObj.drawString(getText(), x + PADDING - scroll, textY, 0xFFFFFF, false);
 
@@ -69,10 +66,6 @@ public class GuiCustomTextField implements IGui
             else if (cursorPos == getText().length())
                 cursorX = minecraft.fontRendererObj.getStringWidth(getText());
         }
-
-//        GL11.glPopMatrix();
-
-//        GLClippingPlanes.glDisableClipping();
 
         if (focused)
             minecraft.fontRendererObj.drawString("|", x + cursorX + PADDING - 1 - scroll, textY, 0xFF0000, false);
