@@ -83,7 +83,7 @@ public class GuiNumberField implements IGui
     private void drawControllers(int xOffset)
     {
         LiteModFileExplorer.core.getDrawingHelper().drawIcon(LiteModFileExplorer.core.getIcon("arrow_down"), new Quad(x + w + xOffset - 3, h / 2 + y + 5, 6, 6));
-        LiteModFileExplorer.core.getDrawingHelper().drawIcon(LiteModFileExplorer.core.getIcon("arrow_down"), new Quad(x + w + xOffset - 3, h / 2 + y - 4 - 8, 6, 6));
+        LiteModFileExplorer.core.getDrawingHelper().drawIcon(LiteModFileExplorer.core.getIcon("arrow_up"), new Quad(x + w + xOffset - 3, h / 2 + y - 4 - 8, 6, 6));
     }
 
     @Override
