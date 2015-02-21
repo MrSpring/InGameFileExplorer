@@ -5,6 +5,7 @@ import dk.mrspring.fileexplorer.backup.BackupEntry;
 import dk.mrspring.fileexplorer.backup.BackupManager;
 import dk.mrspring.fileexplorer.gui.GuiSimpleButton;
 import dk.mrspring.fileexplorer.gui.interfaces.IGui;
+import dk.mrspring.fileexplorer.gui.interfaces.IMouseListener;
 import dk.mrspring.fileexplorer.helper.TranslateHelper;
 import dk.mrspring.fileexplorer.loader.FileLoader;
 import dk.mrspring.llcore.Color;
@@ -68,10 +69,11 @@ public class GuiScreenBackupManager extends GuiScreen
         } else super.guiClicked(identifier, gui, mouseX, mouseY, mouseButton);
     }
 
-    public class GuiBackupList implements IGui
+    public class GuiBackupList implements IGui, IMouseListener
     {
         int x, y, width, height;
         List<GuiBackupEntry> backupEntries;
+        int scrollHeight = 0, listHeight = 0, lastEntryHeight;
 
         public GuiBackupList(int x, int y, int width, int height, BackupManager manager)
         {
@@ -89,11 +91,56 @@ public class GuiScreenBackupManager extends GuiScreen
         public void draw(Minecraft minecraft, int mouseX, int mouseY)
         {
             int yOffset = 0;
+            if (this.listHeight > height)
+                yOffset = -scrollHeight;
+            this.listHeight = 0;
+            int height = 0;
             for (GuiBackupEntry entry : backupEntries)
             {
-                int height = entry.draw(minecraft, mouseX, mouseY, x, y + yOffset, width);
+                height = entry.draw(minecraft, mouseX, mouseY, x, y + yOffset, width);
                 yOffset += height + 5;
+                this.listHeight += height;
             }
+            this.lastEntryHeight = height;
+            if (this.listHeight > this.height)
+                this.drawScrollBar();
+        }
+
+        private void drawScrollBar()
+        {
+            float scrollBarYRange = (height - 40);
+            float maxScrollHeight = getMaxScrollHeight();
+            float scrollProgress = (float) this.scrollHeight / maxScrollHeight;
+            float scrollBarY = scrollBarYRange * scrollProgress;
+            DrawingHelper helper = LiteModFileExplorer.core.getDrawingHelper();
+            helper.drawShape(new Quad(x - 5, y + scrollBarY + 1, 2, 40).setColor(Color.DK_GREY));
+            helper.drawShape(new Quad(x - 6, y + scrollBarY, 2, 40).setColor(Color.WHITE));
+        }
+
+        private int getMaxScrollHeight()
+        {
+            return listHeight - height + this.lastEntryHeight;
+        }
+
+        @Override
+        public void handleMouseWheel(int mouseX, int mouseY, int dWheelRaw)
+        {
+            int mouseWheel = dWheelRaw;
+            mouseWheel /= 4;
+            if (mouseWheel != 0)
+                this.addScroll(-mouseWheel);
+        }
+
+        public void addScroll(int amount)
+        {
+            int maxScrollHeight = getMaxScrollHeight(), minScrollHeight = 0, scrollHeightAfterAddition = this.scrollHeight + amount;
+
+            if (scrollHeightAfterAddition > maxScrollHeight)
+                scrollHeightAfterAddition = maxScrollHeight;
+            else if (scrollHeightAfterAddition < minScrollHeight)
+                scrollHeightAfterAddition = minScrollHeight;
+
+            this.scrollHeight = scrollHeightAfterAddition;
         }
 
         public void updateList(BackupManager manager)
