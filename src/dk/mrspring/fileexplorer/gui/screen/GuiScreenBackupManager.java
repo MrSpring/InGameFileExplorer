@@ -49,7 +49,7 @@ public class GuiScreenBackupManager extends GuiScreen
         float imageWidth = width - 220 - 30;
         if (imageWidth > 20)
         {
-            mc.getTextureManager().bindTexture(new ResourceLocation("fileexplorer", "cats/cat.png"));
+            mc.getTextureManager().bindTexture(new ResourceLocation("fileexplorer", "cats/dog.png"));
             DrawingHelper helper = LiteModFileExplorer.core.getDrawingHelper();
             float maxImageHeight = height - 20 - 30;
             float imageHeight = Math.min((((float) 456 / (float) 600) * imageWidth), maxImageHeight);
