@@ -57,7 +57,7 @@ public class GuiFileExplorer implements IGui, IMouseListener
         openFile = new GuiSimpleButton(x, y, 50, 20, "gui.explorer.open").disable();
         refreshList = new GuiSimpleButton(x, y, 50, 20, "gui.explorer.refresh");
         newFolder = new GuiSimpleButton(x, y, 20, 20, "").setIcon(LiteModFileExplorer.core.getIcon("new_file"));
-        deleteFile = new GuiSimpleButton(x + 30, y, 20, 20, "").setIcon(LiteModFileExplorer.core.getIcon("delete_file")).disable();
+        deleteFile = new GuiSimpleButton(x + 30, y, 20, 20, "").setIcon(LiteModFileExplorer.core.getIcon("cross")).disable();
         upOne = new GuiSimpleButton(x, y, 50, 20, "gui.explorer.go_up");
 
         this.newFolder.setEnabled(LiteModFileExplorer.config.acceptFileManipulation);
