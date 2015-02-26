@@ -22,6 +22,7 @@ backup_cause.delete=Slettet
 
 gui.screen.backup_manager.restore=Genskab
 gui.screen.backup_manager.done=Færdig
+gui.screen.backup_manager.dog=There was a lot of blank space here. Didn't know what to do with it, so here's an image of my dog!
 
 gui.screen.welcome.title=Velkommen
 gui.screen.welcome.message=Tak fordi du downloadede In-Game File Explorer modden, af MrSpring.\nFør du kan begynde at bruge modden, skal du acceptere de nedenstående betengelser:

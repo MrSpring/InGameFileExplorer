@@ -57,6 +57,7 @@ public class GuiScreenBackupManager extends GuiScreen
             helper.setAllowTextures(true);
             LiteModFileExplorer.core.getDrawingHelper().drawTexturedShape(new Quad(240, 10, imageWidth, imageHeight).setColor(Color.BLACK));
             helper.setAllowTextures(false);
+            helper.drawText(TranslateHelper.translate("gui.screen.backup_manager.dog"), new Vector(245, 7 + imageHeight), 0xFFFFFF, true, (int) imageWidth - 10, DrawingHelper.VerticalTextAlignment.LEFT, DrawingHelper.HorizontalTextAlignment.BOTTOM);
         }
     }
 
