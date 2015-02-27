@@ -9,6 +9,7 @@ import dk.mrspring.llcore.DrawingHelper;
 import dk.mrspring.llcore.Quad;
 import dk.mrspring.llcore.Vector;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.FontRenderer;
 
 import java.io.File;
 import java.nio.file.Files;
@@ -188,11 +189,13 @@ public class GuiFile extends GuiFileBase
 
         DrawingHelper helper = LiteModFileExplorer.core.getDrawingHelper();
 
+
+
         String rendering = this.getShortFileName();
         if (LiteModFileExplorer.config.showFileEditBelowName)
-            rendering += "\n§7" + getLastEditDate().toString();
+            rendering += "\n\u00a77" + getLastEditDate().toString();
         if (LiteModFileExplorer.config.showFileSizeBelowName && !getFile().isDirectory())
-            rendering += "\n§7" + getFileSize().toString();
+            rendering += "\n\u00a77" + getFileSize().toString();
         int lines = helper.drawText(rendering, new Vector(x + (int) iconSize + 3, y + (h / 2)), 0xFFFFFF, true, w - (int) iconSize - 6, DrawingHelper.VerticalTextAlignment.LEFT, DrawingHelper.HorizontalTextAlignment.CENTER);
         this.h = lines * 9 + ((int) iconSize - 9);
 

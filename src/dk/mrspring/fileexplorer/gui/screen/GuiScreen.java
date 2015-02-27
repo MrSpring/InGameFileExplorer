@@ -96,7 +96,7 @@ public class GuiScreen extends net.minecraft.client.gui.GuiScreen
         if (this.drawSubTitle())
             textPosY -= 6;
 
-        float titleWidth = mc.fontRendererObj.getStringWidth("§l" + translatedTitle);
+        float titleWidth = mc.fontRendererObj.getStringWidth("\u00a7l" + translatedTitle);
         float underlineOverflow = 5F;
         float underlinePosX = (width / 2) - (titleWidth / 2) - underlineOverflow;
 

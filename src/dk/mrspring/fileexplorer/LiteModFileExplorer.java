@@ -29,10 +29,8 @@ import java.util.Map;
  */
 public class LiteModFileExplorer implements Tickable, Configurable
 {
-    public static KeyBinding openExampleGui = new KeyBinding("key.file_explorer.open_gui", Keyboard.KEY_F, "key.categories.litemods");
-    public static KeyBinding openFileExplorer = new KeyBinding("key.file_explorer.open_explorer", Keyboard.KEY_G, "key.categories.litemods");
-    public static KeyBinding openTextEditor = new KeyBinding("key.file_explorer.open_editor", Keyboard.KEY_H, "key.categories.litemods");
-    public static KeyBinding openImageViewer = new KeyBinding("ket.file_explorer.open_image", Keyboard.KEY_J, "key.categories.litemods");
+    public static KeyBinding openBackupManager = new KeyBinding("key.file_explorer.open_backup_manager", Keyboard.KEY_F, "key.categories.litemods");
+    public static KeyBinding openFileExplorer = new KeyBinding("key.file_explorer.open_file_explorer", Keyboard.KEY_G, "key.categories.litemods");
 
     public static Config config;
     public static File configFile;
@@ -48,28 +46,7 @@ public class LiteModFileExplorer implements Tickable, Configurable
     @Override
     public void onTick(Minecraft minecraft, float partialTicks, boolean inGame, boolean clock)
     {
-        if (openExampleGui.isPressed())
-//            minecraft.displayGuiScreen(new GuiScreenConfirmClose("Confirm", minecraft.currentScreen, new GuiScreenConfirmClose.ResultHandler()
-//            {
-//                @Override
-//                public void save(net.minecraft.client.gui.GuiScreen parentScreen)
-//                {
-//
-//                }
-//
-//                @Override
-//                public void dontSave(net.minecraft.client.gui.GuiScreen parentScreen)
-//                {
-//
-//                }
-//
-//                @Override
-//                public void cancel(net.minecraft.client.gui.GuiScreen parentScreen)
-//                {
-//
-//                }
-//            }, "TextFile.txt"));
-            //minecraft.displayGuiScreen(new GuiScreenExamplePage(minecraft.currentScreen));
+        if (openBackupManager.isPressed())
             minecraft.displayGuiScreen(new GuiScreenBackupManager("Backup Manager", minecraft.currentScreen));
         if (openFileExplorer.isPressed())
         {
@@ -78,10 +55,6 @@ public class LiteModFileExplorer implements Tickable, Configurable
             else
                 minecraft.displayGuiScreen(new GuiScreenFileExplorer(minecraft.currentScreen, new File(config.startLocation)));
         }
-        if (openTextEditor.isPressed())
-            minecraft.displayGuiScreen(new GuiScreenTextEditor("Text text text text\nMore text on a new line.\n\nEven more text.\nAnd finally, no more text! :D"));
-        if (openImageViewer.isPressed())
-            minecraft.displayGuiScreen(new GuiScreenImageViewer("Image Viewer", minecraft.currentScreen, new File("D:\\MC Modding\\In-Game File Explorer\\jars\\liteconfig\\common\\Pick A Universe Wallpaper.png")));
     }
 
     public static boolean canEditFile(String extension)
@@ -133,10 +106,8 @@ public class LiteModFileExplorer implements Tickable, Configurable
 //        core.loadIcon(new ResourceLocation("fileexplorer", "arrow_left"));
 //        core.loadIcon(new ResourceLocation("fileexplorer", "arrow_right"));
 
-        LiteLoader.getInput().registerKeyBinding(openExampleGui);
+        LiteLoader.getInput().registerKeyBinding(openBackupManager);
         LiteLoader.getInput().registerKeyBinding(openFileExplorer);
-        LiteLoader.getInput().registerKeyBinding(openTextEditor);
-        LiteLoader.getInput().registerKeyBinding(openImageViewer);
 
         String configFilePath = configPath.getPath() + File.separator + "InGameFileExplorer.json";
         configFile = new File(configFilePath);

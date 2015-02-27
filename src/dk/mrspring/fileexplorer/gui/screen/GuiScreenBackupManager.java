@@ -224,7 +224,7 @@ public class GuiScreenBackupManager extends GuiScreen
 
             restoreButton.draw(minecraft, mouseX, mouseY);
 
-            String rendering = name + "\n§7" + date + "\n" + TranslateHelper.translate("backup_cause." + cause);
+            String rendering = name + "\n\u00a77" + date + "\n" + TranslateHelper.translate("backup_cause." + cause);
 
             int lines = helper.drawText(rendering, new Vector(xPosition + 5, yPosition + 5), 0xFFFFFF, true, width - 10 - restoreButton.getWidth(), DrawingHelper.VerticalTextAlignment.LEFT, DrawingHelper.HorizontalTextAlignment.TOP);
 

@@ -229,7 +229,7 @@
         <echo level="info" message="Building final output" />
 
         <mkdir dir="${dist.dir}" />
-        <jar destfile="${dist.dir}/${file.prefix}-${version}-RC1.${file.type}" duplicate="preserve" index="true" manifestencoding="UTF-8">
+        <jar destfile="${dist.dir}/${file.prefix}-${version}-RC1-04.${file.type}" duplicate="preserve" index="true" manifestencoding="UTF-8">
             <manifest>
                 <attribute name="Built-By" value="MCP (http://mcp.ocean-labs.de)" />
                 <attribute name="Implementation-Vendor" value="${author}" />

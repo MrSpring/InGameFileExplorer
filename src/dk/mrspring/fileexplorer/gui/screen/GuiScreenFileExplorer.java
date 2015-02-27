@@ -66,7 +66,7 @@ public class GuiScreenFileExplorer extends GuiScreen
             String openFile = editor.getOpenFileName();
             if (openFile != null)
                 if (!openFile.isEmpty())
-                    LiteModFileExplorer.core.getDrawingHelper().drawText("Open file:\n§7" + openFile, new Vector(258 + 10, 5), 0xFFFFFF, true, -1, DrawingHelper.VerticalTextAlignment.LEFT, DrawingHelper.HorizontalTextAlignment.TOP);
+                    LiteModFileExplorer.core.getDrawingHelper().drawText("Open file:\n\u00a77" + openFile, new Vector(258 + 10, 5), 0xFFFFFF, true, -1, DrawingHelper.VerticalTextAlignment.LEFT, DrawingHelper.HorizontalTextAlignment.TOP);
         }
 
         /*if (LiteModFileExplorer.config.showOpenDirectory)

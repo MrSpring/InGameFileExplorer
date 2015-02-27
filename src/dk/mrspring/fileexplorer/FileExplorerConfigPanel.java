@@ -42,7 +42,7 @@ public class FileExplorerConfigPanel implements ConfigPanel
         GuiDropDownList.ListElement[] elements = new GuiDropDownList.ListElement[types.length];
         for (int i = 0; i < types.length; i++)
             elements[i] = new GuiDropDownList.ListElement(
-                    TranslateHelper.translate("sorting_type." + types[i].toString().toLowerCase() + ".name") + "\n§7" +
+                    TranslateHelper.translate("sorting_type." + types[i].toString().toLowerCase() + ".name") + "\n\u00a77" +
                             TranslateHelper.translate("sorting_type." + types[i].toString().toLowerCase() + ".desc"), types[i]);
         sortingType = new GuiDropDownList(0, 105, 150, 30, current, elements);
         hideNonEditableFiles = new GuiCheckbox(mc.fontRendererObj.getStringWidth(TranslateHelper.translate("gui.config_panel.file_explorer.hide_non_editable_files") + ": "), 130, 12, 12, startConfig.hideNonEditableFiles);
