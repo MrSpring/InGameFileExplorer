@@ -7,6 +7,8 @@ These include:
 * .png/.jpeg - The mod also include an image viewer!
 * .json - The mod includes a simple-to-use in-game JSON editor (WIP)!
 
+The mod has been tested on Windows and Linux. It may or may not work on Mac. If you try this on a Mac, then please tell me how it goes (If it crashes, send me the crashlog).
+
 ### Preview as of [RC1](http://bdl.mrspring.dk?m=igfe&v=0.1.0-beta-rc1-04&r):
 ![Preview](http://mrspring.dk/mods/igfe/preview02.png)
 
