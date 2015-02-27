@@ -1,4 +1,5 @@
-# Requires [LiteLoader](http://liteloader.com) 1.8 and latest [LLCore](https://github.com/MrSpring/LLCore) to run!
+# Requires [LiteLoader](http://liteloader.com) 1.8!
+Also requires latest [LLCore](https://github.com/MrSpring/LLCore) in order to run in development environments. If you are playing with the mod you don't need LLCore, it is build into the downloaded .litemod file.
 
 The in-game file explorer mod allows you to look around your systems file, and view/edit some file types.
 These include:  
