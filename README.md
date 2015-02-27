@@ -6,5 +6,8 @@ These include:
 * .png/.jpeg - The mod also include an image viewer!
 * .json - The mod includes a simple-to-use in-game JSON editor (WIP)!
 
-### Preview:
+### Preview as of RC1:
+![Preview](http://mrspring.dk/mods/igfe/preview02.png)
+
+### Old Preview:
 ![Preview](http://mrspring.dk/mods/igfe/preview01.png)
