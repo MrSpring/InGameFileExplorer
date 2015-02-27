@@ -124,7 +124,7 @@ public class GuiFileExplorer implements IGui, IMouseListener
         if (showControls)
         {
             width -= 75;
-            helper.drawVerticalLine(new Vector(x + width + 10, y + 6), h - 10, 1, true);
+            helper.drawVerticalLine(new Vector(x + width + 11, y + 6), h - 10, 1, true);
             this.drawControls(minecraft, mouseX, mouseY, x + width + 5 + 11);
         }
 

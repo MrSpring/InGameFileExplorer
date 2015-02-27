@@ -8,12 +8,11 @@ import dk.mrspring.fileexplorer.gui.interfaces.IGui;
 import dk.mrspring.fileexplorer.gui.interfaces.IMouseListener;
 import dk.mrspring.fileexplorer.helper.GuiHelper;
 import dk.mrspring.fileexplorer.helper.TranslateHelper;
-import dk.mrspring.llcore.DrawingHelper;
 import dk.mrspring.llcore.Color;
+import dk.mrspring.llcore.DrawingHelper;
 import dk.mrspring.llcore.Quad;
 import dk.mrspring.llcore.Vector;
 import net.minecraft.client.Minecraft;
-import net.minecraft.util.StatCollector;
 import org.apache.commons.io.FileUtils;
 import org.lwjgl.opengl.GL11;
 
@@ -148,8 +147,7 @@ public class GuiScreenWelcome extends GuiScreen
 
             GL11.glPushMatrix();
             GLClippingPlanes.glEnableClipping(x + 1, x + w - 1, y + 1, y + h - 1);
-            GL11.glTranslatef(0, scrollHeight, 0);
-            lines = helper.drawText(currentText, new Vector(x + 5, y + 5), 0xFFFFFF, true, w - 10, DrawingHelper.VerticalTextAlignment.LEFT, DrawingHelper.HorizontalTextAlignment.CENTER);
+            lines = helper.drawText(currentText, new Vector(x + 5, y + 5 + scrollHeight), 0xFFFFFF, true, w - 10, DrawingHelper.VerticalTextAlignment.LEFT, DrawingHelper.HorizontalTextAlignment.TOP);
             GLClippingPlanes.glDisableClipping();
             GL11.glPopMatrix();
 
@@ -167,7 +165,8 @@ public class GuiScreenWelcome extends GuiScreen
         @Override
         public void update()
         {
-
+            if (h > lines * 9)
+                scrollHeight = 0;
         }
 
         @Override

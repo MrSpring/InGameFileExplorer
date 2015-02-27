@@ -98,6 +98,7 @@ public class GuiMultiLineTextField implements IGui, IMouseListener
         GLClippingPlanes.glEnableClipping(x, x + w, y + padding, y + h - padding);
 
         lines = LiteModFileExplorer.core.getDrawingHelper().drawText(text, new Vector(x + padding + xOffset, y + padding + yOffset), 0xFFFFFF, true, w - (padding * 2) - xOffset, dk.mrspring.llcore.DrawingHelper.VerticalTextAlignment.LEFT, dk.mrspring.llcore.DrawingHelper.HorizontalTextAlignment.TOP);
+        GLClippingPlanes.glDisableClipping();
         String cutLine = line.substring(0, cursorRelativePos);
         int cursorXOffset = minecraft.fontRendererObj.getStringWidth(cutLine) + xOffset;
 
@@ -106,8 +107,6 @@ public class GuiMultiLineTextField implements IGui, IMouseListener
 
         if (lines * 9 > h)
             this.drawScrollBar();
-
-        GLClippingPlanes.glDisableClipping();
     }
 
     private void drawScrollBar()

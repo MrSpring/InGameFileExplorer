@@ -120,7 +120,7 @@ public class GuiScreenBackupManager extends GuiScreen
 
         private int getMaxScrollHeight()
         {
-            return listHeight - height + this.lastEntryHeight;
+            return listHeight - height + this.lastEntryHeight+9;
         }
 
         @Override

@@ -10,6 +10,9 @@ gui.config_panel.file_explorer.show_file_edit_date=Show last edited date below f
 gui.config_panel.file_explorer.show_file_size=Show file size below file name
 gui.config_panel.file_explorer.show_open_directory=Show open directory
 
+key.file_explorer.open_backup_manager=Open Backup Manager GUI
+key.file_explorer.open_file_explorer=Open File Explorer GUI
+
 sorting_type.name.name=Name
 sorting_type.name.desc=Sorts files by name
 sorting_type.type.name=Type

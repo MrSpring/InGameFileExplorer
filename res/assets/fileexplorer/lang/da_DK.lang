@@ -10,6 +10,9 @@ gui.config_panel.file_explorer.show_file_edit_date=Vis seneste ændringsdato und
 gui.config_panel.file_explorer.show_file_size=Vis fil størrelse under filnavn
 gui.config_panel.file_explorer.show_open_directory=Vis åben mappes navn
 
+key.file_explorer.open_backup_manager=Åben Backup Manager GUI
+key.file_explorer.open_file_explorer=Åben File Explorer GUI
+
 sorting_type.name.name=Navn
 sorting_type.name.desc=Sorter filer efter navn
 sorting_type.type.name=Filtype
