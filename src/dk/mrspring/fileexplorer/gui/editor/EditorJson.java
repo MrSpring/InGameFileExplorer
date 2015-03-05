@@ -17,7 +17,6 @@ import dk.mrspring.llcore.Vector;
 import net.minecraft.client.Minecraft;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -27,7 +26,7 @@ import java.util.Map;
  */
 public class EditorJson extends Editor implements IMouseListener
 {
-    File jsonFile;
+    File openFile;
 
     GuiJsonEditor editor;
     GuiJsonViewer viewer;
@@ -40,12 +39,24 @@ public class EditorJson extends Editor implements IMouseListener
     {
         super(x, y, w, h);
 
-        this.jsonFile = file;
+        this.openFile = file;
 
+        Map<String, Object> content = getMapFromFile(openFile);
+
+        viewer = new GuiJsonViewer(x, y, w, h, content);
+        editor = new GuiJsonEditor(x, y, w, h, content);
+
+        editButton = new GuiSimpleButton(x - 62, y + h - 50, 50, 20, "gui.json_editor.edit");
+        saveButton = new GuiSimpleButton(x - 62, y + h - 20, 50, 20, "gui.json_editor.save");
+        cancelButton = new GuiSimpleButton(x - 62, y + h - 50, 50, 20, "gui.json_editor.cancel");
+    }
+
+    public Map<String, Object> getMapFromFile(File file)
+    {
         Map<String, Object> json = new LinkedTreeMap<String, Object>();
         try
         {
-            String jsonCode = LiteModFileExplorer.core.getFileLoader().getContentsFromFile(jsonFile);
+            String jsonCode = LiteModFileExplorer.core.getFileLoader().getContentsFromFile(file);
             json = LiteModFileExplorer.core.getJsonHandler().loadFromJson(jsonCode, LinkedTreeMap.class);
         } catch (Exception e)
         {
@@ -53,13 +64,12 @@ public class EditorJson extends Editor implements IMouseListener
         }
         if (json == null)
             json = new LinkedTreeMap<String, Object>();
+        return json;
+    }
 
-        viewer = new GuiJsonViewer(x, y, w, h, json);
-        editor = new GuiJsonEditor(x, y, w, h, json);
-
-        editButton = new GuiSimpleButton(x - 62, y + h - 50, 50, 20, "gui.json_editor.edit");
-        saveButton = new GuiSimpleButton(x - 62, y + h - 20, 50, 20, "gui.json_editor.save");
-        cancelButton = new GuiSimpleButton(x - 62, y + h - 50, 50, 20, "gui.json_editor.cancel");
+    public String getFileFromMap(Map<String, Object> content)
+    {
+        return LiteModFileExplorer.core.getJsonHandler().toJson(content);
     }
 
     @Override
@@ -148,10 +158,10 @@ public class EditorJson extends Editor implements IMouseListener
     public void save()
     {
         Map<String, Object> fromEditor = editor.toJsonMap();
-        String jsonCode = LiteModFileExplorer.core.getJsonHandler().toJson(fromEditor);
+        String fromMap = getFileFromMap(fromEditor);
         try
         {
-            LiteModFileExplorer.core.getFileLoader().writeToFile(jsonFile, jsonCode);
+            LiteModFileExplorer.core.getFileLoader().writeToFile(openFile, fromMap);
         } catch (Exception e)
         {
             e.printStackTrace();
@@ -162,29 +172,29 @@ public class EditorJson extends Editor implements IMouseListener
 
     private void reloadViewer()
     {
-        Map<String, Object> json = new LinkedTreeMap<String, Object>();
-        try
+        Map<String, Object> json = this.getMapFromFile(openFile);
+        /*try
         {
-            String jsonCode = LiteModFileExplorer.core.getFileLoader().getContentsFromFile(jsonFile);
+            String jsonCode = LiteModFileExplorer.core.getFileLoader().getContentsFromFile(openFile);
             json = LiteModFileExplorer.core.getJsonHandler().loadFromJson(jsonCode, LinkedTreeMap.class);
         } catch (IOException e)
         {
             e.printStackTrace();
-        }
+        }*/
         viewer = new GuiJsonViewer(x, y, w, h, json);
     }
 
     private void reloadEditor()
     {
-        Map<String, Object> json = new LinkedTreeMap<String, Object>();
-        try
+        Map<String, Object> json = this.getMapFromFile(openFile);
+        /*try
         {
-            String jsonCode = LiteModFileExplorer.core.getFileLoader().getContentsFromFile(jsonFile);
+            String jsonCode = LiteModFileExplorer.core.getFileLoader().getContentsFromFile(openFile);
             json = LiteModFileExplorer.core.getJsonHandler().loadFromJson(jsonCode, LinkedTreeMap.class);
         } catch (IOException e)
         {
             e.printStackTrace();
-        }
+        }*/
         editor = new GuiJsonEditor(x, y, w, h, json);
     }
 
@@ -197,7 +207,7 @@ public class EditorJson extends Editor implements IMouseListener
     @Override
     public String getOpenFileName()
     {
-        return jsonFile.getName();
+        return openFile.getName();
     }
 
     @Override
@@ -273,9 +283,9 @@ public class EditorJson extends Editor implements IMouseListener
                     else if (value instanceof Number)
                         this.elements.add(new JsonDoubleElement(x, y, width, name, (Double) value));
                     else if (value instanceof ArrayList)
-                        this.elements.add(new JsonArrayElement(x, y, width, name, (ArrayList<Object>) value));
-                    else if (value instanceof LinkedTreeMap)
-                        this.elements.add(new JsonMapElement(x, y, width, name, (LinkedTreeMap<String, Object>) value));
+                        this.elements.add(new JsonArrayElement(x, y, width, name, (List<Object>) value));
+                    else if (value instanceof Map)
+                        this.elements.add(new JsonMapElement(x, y, width, name, (Map<String, Object>) value));
                 }
         }
 

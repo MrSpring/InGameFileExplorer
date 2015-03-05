@@ -12,19 +12,20 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.util.StatCollector;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by MrSpring on 30-12-2014 for In-Game File Explorer.
  */
-public class JsonArrayElement extends JsonEditorElement<ArrayList<Object>>
+public class JsonArrayElement extends JsonEditorElement<List<Object>>
 {
     GuiCustomTextField nameField;
-    ArrayList<JsonEditorElement> elements;
+    List<JsonEditorElement> elements;
     GuiSimpleButton newBoolean, newDouble, newString, newArray, newMap, collapse;
     boolean canEditName, collapsed = false;
     int collapseWidth = 12;
 
-    public JsonArrayElement(int x, int y, int maxWidth, String name, ArrayList<Object> list, boolean canEditName)
+    public JsonArrayElement(int x, int y, int maxWidth, String name, List<Object> list, boolean canEditName)
     {
         super(x, y, maxWidth, name, list);
         this.canEditName = canEditName;
@@ -61,7 +62,7 @@ public class JsonArrayElement extends JsonEditorElement<ArrayList<Object>>
         }
     }
 
-    public JsonArrayElement(int x, int y, int maxWidth, String name, ArrayList<Object> list)
+    public JsonArrayElement(int x, int y, int maxWidth, String name, List<Object> list)
     {
         this(x, y, maxWidth, name, list, true);
     }

@@ -305,6 +305,29 @@ public class LiteModFileExplorer implements Tickable, Configurable
             }
         });
 
+        tempType = new FileType()
+        {
+            @Override
+            public String[] getSupportedTypes()
+            {
+                return new String[]{".yml", ".yaml"};
+            }
+
+            @Override
+            public Editor getNewEditor(int x, int y, int width, int height, File file)
+            {
+                return new EditorYml(x, y, width, height, file);
+            }
+
+            @Override
+            public String getName()
+            {
+                return "YAML";
+            }
+        };
+        supportedFileTypes.put(".yml", tempType);
+        supportedFileTypes.put(".yaml", tempType);
+
         FileSorter.load();
     }
 

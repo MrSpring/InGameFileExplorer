@@ -17,7 +17,7 @@ import java.util.Map;
 /**
  * Created by MrSpring on 30-12-2014 for In-Game File Explorer.
  */
-public class JsonMapElement extends JsonEditorElement<LinkedTreeMap<String, Object>>
+public class JsonMapElement extends JsonEditorElement<Map<String, Object>>
 {
     GuiCustomTextField nameField;
     ArrayList<JsonEditorElement> elements;
@@ -25,7 +25,7 @@ public class JsonMapElement extends JsonEditorElement<LinkedTreeMap<String, Obje
     boolean canEditName, collapsed;
     int collapseWidth = 12;
 
-    public JsonMapElement(int x, int y, int maxWidth, String name, LinkedTreeMap<String, Object> map, boolean canEditName)
+    public JsonMapElement(int x, int y, int maxWidth, String name, Map<String, Object> map, boolean canEditName)
     {
         super(x, y, maxWidth, name, map);
         this.canEditName = canEditName;
@@ -63,9 +63,9 @@ public class JsonMapElement extends JsonEditorElement<LinkedTreeMap<String, Obje
         }
     }
 
-    public JsonMapElement(int x, int y, int maxWidth, String name, LinkedTreeMap<String, Object> list)
+    public JsonMapElement(int x, int y, int maxWidth, String name, Map<String, Object> map)
     {
-        this(x, y, maxWidth, name, list, true);
+        this(x, y, maxWidth, name, map, true);
     }
 
     @Override

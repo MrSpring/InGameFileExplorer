@@ -15,9 +15,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by MrSpring on 19-12-2014 for In-Game File Explorer.
@@ -25,7 +23,6 @@ import java.util.Map;
 public class GuiJsonViewer implements IGui, IMouseListener
 {
     int x, y, width, height, jsonHeight, scrollHeight = 0;
-    File jsonFile;
     Map<String, Object> jsonObject;
 
     public GuiJsonViewer(int x, int y, int width, int height, File file)
@@ -35,11 +32,9 @@ public class GuiJsonViewer implements IGui, IMouseListener
         this.width = width;
         this.height = height;
 
-        this.jsonFile = file;
-
         try
         {
-            String jsonCode = LiteModFileExplorer.core.getFileLoader().getContentsFromFile(jsonFile);
+            String jsonCode = LiteModFileExplorer.core.getFileLoader().getContentsFromFile(file);
             jsonObject = LiteModFileExplorer.core.getJsonHandler().loadFromJson(jsonCode, LinkedTreeMap.class);
         } catch (Exception e)
         {
@@ -104,7 +99,8 @@ public class GuiJsonViewer implements IGui, IMouseListener
      * @param yOffset   Y offset to render the object at.
      * @param name      The name of the object being rendered.
      * @param object    The object being rendered.
-     * @return Returns the height of the rendered object, which gets added to the yOffset to render the next object below this.
+     * @return Returns the height of the rendered object, which gets added to the yOffset to render the next object
+     * below this.
      */
     private int drawObject(Minecraft minecraft, int xOffset, int yOffset, String name, Object object)
     {
@@ -115,49 +111,63 @@ public class GuiJsonViewer implements IGui, IMouseListener
         } else if (object instanceof ArrayList)
         {
             ArrayList<Object> list = (ArrayList<Object>) object;
-            int height = 11;
-
-            minecraft.fontRendererObj.drawString(name + ":", x + xOffset, y + yOffset, 0xFFFFFF, true);
-            for (int i = 0; i < list.size(); i++)
-            {
-                String entryName = String.valueOf(i);
-                Object entryObject = list.get(i);
-                int objectHeight = this.drawObject(minecraft, xOffset + 5, yOffset + height, entryName, entryObject);
-                float lineHeight = objectHeight;
-                if (i == list.size() - 1)
-                    lineHeight = 5F;
-                helper.drawShape(new Quad(x + xOffset + 1, y + yOffset + height + 1, 1, lineHeight).setColor(Color.DK_GREY));
-                helper.drawShape(new Quad(x + xOffset, y + yOffset + height, 1, lineHeight).setColor(Color.WHITE));
-
-                helper.drawShape(new Quad(x + xOffset + 2, y + yOffset + height + 5, 3, 1).setColor(Color.DK_GREY));
-                helper.drawShape(new Quad(x + xOffset + 1, y + yOffset + height + 4, 3, 1).setColor(Color.WHITE));
-                height += objectHeight;
-            }
-            return height;
+            return this.drawList(helper, minecraft, xOffset, yOffset, name, list);
         } else if (object instanceof LinkedTreeMap)
         {
-            LinkedTreeMap<String, Object> treeMap = (LinkedTreeMap<String, Object>) object;
-            minecraft.fontRendererObj.drawString(name + ":", x + xOffset, y + yOffset, 0xFFFFFF, true);
-            int height = 11;
-            Iterator<Map.Entry<String, Object>> iterator = treeMap.entrySet().iterator();
-            while (iterator.hasNext())
-            {
-                Map.Entry<String, Object> entry = iterator.next();
-                String entryName = entry.getKey();
-                Object entryObject = entry.getValue();
-                int objectHeight = this.drawObject(minecraft, xOffset + 5, yOffset + height, entryName, entryObject);
-                float lineHeight = objectHeight;
-                if (!iterator.hasNext())
-                    lineHeight = 5F;
-                helper.drawShape(new Quad(x + xOffset + 1, y + yOffset + height + 1, 1, lineHeight).setColor(Color.DK_GREY));
-                helper.drawShape(new Quad(x + xOffset, y + yOffset + height, 1, lineHeight).setColor(Color.WHITE));
-
-                helper.drawShape(new Quad(x + xOffset + 2, y + yOffset + height + 5, 3, 1).setColor(Color.DK_GREY));
-                helper.drawShape(new Quad(x + xOffset + 1, y + yOffset + height + 4, 3, 1).setColor(Color.WHITE));
-                height += objectHeight;
-            }
-            return height;
+            LinkedTreeMap<String, Object> map = (LinkedTreeMap<String, Object>) object;
+            return this.drawMap(helper, minecraft, xOffset, yOffset, name, map);
+        } else if (object instanceof HashMap)
+        {
+            HashMap<String, Object> map = (HashMap<String, Object>) object;
+            return this.drawMap(helper, minecraft, xOffset, yOffset, name, map);
         } else return 0;
+    }
+
+    private int drawList(DrawingHelper helper, Minecraft minecraft, int xOffset, int yOffset, String name, List list)
+    {
+        int height = 11;
+
+        minecraft.fontRendererObj.drawString(name + ":", x + xOffset, y + yOffset, 0xFFFFFF, true);
+        for (int i = 0; i < list.size(); i++)
+        {
+            String entryName = String.valueOf(i);
+            Object entryObject = list.get(i);
+            int objectHeight = this.drawObject(minecraft, xOffset + 5, yOffset + height, entryName, entryObject);
+            float lineHeight = objectHeight;
+            if (i == list.size() - 1)
+                lineHeight = 5F;
+            helper.drawShape(new Quad(x + xOffset + 1, y + yOffset + height + 1, 1, lineHeight).setColor(Color.DK_GREY));
+            helper.drawShape(new Quad(x + xOffset, y + yOffset + height, 1, lineHeight).setColor(Color.WHITE));
+
+            helper.drawShape(new Quad(x + xOffset + 2, y + yOffset + height + 5, 3, 1).setColor(Color.DK_GREY));
+            helper.drawShape(new Quad(x + xOffset + 1, y + yOffset + height + 4, 3, 1).setColor(Color.WHITE));
+            height += objectHeight;
+        }
+        return height;
+    }
+
+    private int drawMap(DrawingHelper helper, Minecraft minecraft, int xOffset, int yOffset, String name, Map<String, Object> map)
+    {
+        minecraft.fontRendererObj.drawString(name + ":", x + xOffset, y + yOffset, 0xFFFFFF, true);
+        int height = 11;
+        Iterator<Map.Entry<String, Object>> iterator = map.entrySet().iterator();
+        while (iterator.hasNext())
+        {
+            Map.Entry<String, Object> entry = iterator.next();
+            String entryName = entry.getKey();
+            Object entryObject = entry.getValue();
+            int objectHeight = this.drawObject(minecraft, xOffset + 5, yOffset + height, entryName, entryObject);
+            float lineHeight = objectHeight;
+            if (!iterator.hasNext())
+                lineHeight = 5F;
+            helper.drawShape(new Quad(x + xOffset + 1, y + yOffset + height + 1, 1, lineHeight).setColor(Color.DK_GREY));
+            helper.drawShape(new Quad(x + xOffset, y + yOffset + height, 1, lineHeight).setColor(Color.WHITE));
+
+            helper.drawShape(new Quad(x + xOffset + 2, y + yOffset + height + 5, 3, 1).setColor(Color.DK_GREY));
+            helper.drawShape(new Quad(x + xOffset + 1, y + yOffset + height + 4, 3, 1).setColor(Color.WHITE));
+            height += objectHeight;
+        }
+        return height;
     }
 
     private int drawSimpleTextValue(FontRenderer renderer, String name, Object object, int x, int y)
