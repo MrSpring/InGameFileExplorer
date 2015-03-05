@@ -8,7 +8,9 @@ import com.mumfrey.liteloader.core.LiteLoader;
 import com.mumfrey.liteloader.modconfig.ConfigPanel;
 import dk.mrspring.fileexplorer.backup.BackupManager;
 import dk.mrspring.fileexplorer.gui.editor.*;
-import dk.mrspring.fileexplorer.gui.screen.*;
+import dk.mrspring.fileexplorer.gui.screen.GuiScreenBackupManager;
+import dk.mrspring.fileexplorer.gui.screen.GuiScreenFileExplorer;
+import dk.mrspring.fileexplorer.gui.screen.GuiScreenWelcome;
 import dk.mrspring.fileexplorer.helper.FileSorter;
 import dk.mrspring.fileexplorer.loader.FileLoader;
 import dk.mrspring.llcore.Icon;
@@ -252,12 +254,12 @@ public class LiteModFileExplorer implements Tickable, Configurable
         supportedFileTypes.put(".jpg", tempType);
         supportedFileTypes.put(".jpeg", tempType);
 
-        supportedFileTypes.put(".txt", new FileType()
+        tempType = new FileType()
         {
             @Override
             public String[] getSupportedTypes()
             {
-                return new String[]{".txt"};
+                return new String[]{".txt", ".rtf"};
             }
 
             @Override
@@ -277,7 +279,11 @@ public class LiteModFileExplorer implements Tickable, Configurable
             {
                 return "TEXT";
             }
-        });
+        };
+
+        supportedFileTypes.put(".txt", tempType);
+        supportedFileTypes.put(".rtf", tempType);
+
         supportedFileTypes.put(".lang", new FileType()
         {
             @Override
