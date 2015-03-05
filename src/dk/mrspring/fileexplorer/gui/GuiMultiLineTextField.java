@@ -116,7 +116,7 @@ public class GuiMultiLineTextField implements IGui, IMouseListener
         float scrollProgress = (float) this.scrollHeight / maxScrollHeight;
         float scrollBarY = scrollBarYRange * scrollProgress + padding;
         LiteModFileExplorer.core.getDrawingHelper().drawShape(new Quad(x + padding, y + scrollBarY + 1, 3, 40).setColor(Color.DK_GREY));
-        LiteModFileExplorer.core.getDrawingHelper().drawShape(new Quad(x + padding - 1, y + scrollBarY, 3, 40).setColor(dk.mrspring.llcore.Color.DK_GREY));
+        LiteModFileExplorer.core.getDrawingHelper().drawShape(new Quad(x + padding - 1, y + scrollBarY, 3, 40).setColor(Color.WHITE));
     }
 
     @Override
