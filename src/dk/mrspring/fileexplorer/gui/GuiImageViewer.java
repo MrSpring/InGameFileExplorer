@@ -8,6 +8,7 @@ import dk.mrspring.fileexplorer.loader.ImageLoader;
 import dk.mrspring.llcore.Quad;
 import dk.mrspring.llcore.Vector;
 import net.minecraft.client.Minecraft;
+import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL12;
 
 import java.awt.image.BufferedImage;
@@ -164,6 +165,7 @@ public class GuiImageViewer implements IGui//, IDelayedDraw
                     new Vector(imageX + imageWidth, imageY + imageHeight, 512, 512),
                     new Vector(imageX, imageY + imageHeight, 0, 512)));
             glPopMatrix();
+            minecraft.getTextureManager().bindTexture(new ResourceLocation("textures/font/ascii.png"));
             if (showFullscreenButton)
             {
                 fullscreenButton.setX(x + (int) imageWidth - 20);

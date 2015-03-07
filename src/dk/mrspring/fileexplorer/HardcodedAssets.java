@@ -69,6 +69,12 @@ public class HardcodedAssets
             new Quad(0.5F, 0.1F, 0.6F, 0.1F, 0.6F, 0.6F, 0.5F, 0.6F),
             new Quad(0.6F, 0.1F, 0.8F, 0.1F, 0.8F, 0.5F, 0.6F, 0.5F));
 
+    public static Icon fullscreenIcon = new Icon(1, 1,
+            new Quad(0.1F, 0.1F, 0.1F, 0.1F, 0.4F, 0.1F, 0.1F, 0.4F),
+            new Quad(0.9F, 0.1F, 0.9F, 0.1F, 0.6F, 0.1F, 0.9F, 0.4F),
+            new Quad(0.9F, 0.9F, 0.9F, 0.9F, 0.6F, 0.9F, 0.9F, 0.6F),
+            new Quad(0.1F, 0.9F, 0.1F, 0.9F, 0.1F, 0.6F, 0.4F, 0.9F));
+
     public static Icon arrowUpIcon = new Icon(1, 1, new Quad(0.5F, 0.1F, 0.8F, 0.9F, 0.8F, 0.9F, 0.2F, 0.9F));
     public static Icon arrowDownIcon = new Icon(1, 1, new Quad(0.8F, 0.1F, 0.8F, 0.1F, 0.5F, 0.9F, 0.2F, 0.1F));
     public static Icon arrowLeftIcon = new Icon(1, 1, new Quad(0.1F, 0.5F, 0.9F, 0.2F, 0.9F, 0.8F, 0.9F, 0.8F));

@@ -98,6 +98,7 @@ public class LiteModFileExplorer implements Tickable, Configurable
         core.registerIcon(HardcodedAssets.crossIcon, "cross");
         core.registerIcon(HardcodedAssets.checkMarkIcon, "check_mark");
         core.registerIcon(HardcodedAssets.newFileIcon, "new_file");
+        core.registerIcon(HardcodedAssets.fullscreenIcon, "fullscreen");
 //        core.loadIcon(new ResourceLocation("fileexplorer", "unknown"));
 //        core.loadIcon(new ResourceLocation("fileexplorer", "json"));
 //        core.loadIcon(new ResourceLocation("fileexplorer", "txt"));
