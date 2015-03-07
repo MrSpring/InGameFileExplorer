@@ -306,7 +306,7 @@ public class LiteModFileExplorer implements Tickable, Configurable
             }
         });
 
-        tempType = new FileType()
+        /*tempType = new FileType()
         {
             @Override
             public String[] getSupportedTypes()
@@ -327,7 +327,7 @@ public class LiteModFileExplorer implements Tickable, Configurable
             }
         };
         supportedFileTypes.put(".yml", tempType);
-        supportedFileTypes.put(".yaml", tempType);
+        supportedFileTypes.put(".yaml", tempType);*/
 
         FileSorter.load();
     }
