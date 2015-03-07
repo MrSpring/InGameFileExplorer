@@ -24,6 +24,7 @@ public class Config
     public boolean showFileEditBelowName = true;
     public boolean showFileSizeBelowName = true;
     public boolean showOpenDirectory = true;
+    public String[] textFileTypes = new String[]{".txt", ".rtf"};
 
     public boolean json_usePrettyPrinting = true;
     public boolean json_allowArrayCollapsing = true;

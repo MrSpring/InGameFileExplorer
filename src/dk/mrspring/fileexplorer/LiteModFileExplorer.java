@@ -23,7 +23,9 @@ import org.lwjgl.input.Keyboard;
 
 import java.awt.image.BufferedImage;
 import java.io.*;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -66,13 +68,20 @@ public class LiteModFileExplorer implements Tickable, Configurable
 
     public static FileType getFileType(String extension)
     {
+        System.out.println("Returning file type for: " + extension);
         if (extension == null)
             return supportedFileTypes.get("unknown");
         else if (extension.isEmpty())
             return supportedFileTypes.get("directory");
         FileType type = supportedFileTypes.get(extension);
         if (type == null)
-            type = supportedFileTypes.get("unknown");
+        {
+            String[] types = config.textFileTypes;
+            List<String> list = Arrays.asList(types);
+            if (list.contains(extension))
+                type = supportedFileTypes.get("text");
+            else type = supportedFileTypes.get("unknown");
+        }
         return type;
     }
 
@@ -255,12 +264,12 @@ public class LiteModFileExplorer implements Tickable, Configurable
         supportedFileTypes.put(".jpg", tempType);
         supportedFileTypes.put(".jpeg", tempType);
 
-        tempType = new FileType()
+        supportedFileTypes.put("text", new FileType()
         {
             @Override
             public String[] getSupportedTypes()
             {
-                return new String[]{".txt", ".rtf"};
+                return config.textFileTypes;
             }
 
             @Override
@@ -280,10 +289,8 @@ public class LiteModFileExplorer implements Tickable, Configurable
             {
                 return "TEXT";
             }
-        };
-
-        supportedFileTypes.put(".txt", tempType);
-        supportedFileTypes.put(".rtf", tempType);
+        });
+//        supportedFileTypes.put(".rtf", tempType);
 
         supportedFileTypes.put(".lang", new FileType()
         {
