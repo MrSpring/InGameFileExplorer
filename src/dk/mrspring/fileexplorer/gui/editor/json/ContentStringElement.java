@@ -6,16 +6,14 @@ import net.minecraft.client.Minecraft;
 /**
  * Created by MrSpring on 30-12-2014 for In-Game File Explorer.
  */
-public class JsonStringElement extends JsonEditorElement<String>
+public class ContentStringElement extends ContentEditorElement<String>
 {
     GuiCustomTextField nameField, valueField;
     boolean canEditName;
 
-    public JsonStringElement(int x, int y, int maxWidth, String name, String object, boolean canEditName)
+    public ContentStringElement(int x, int y, int maxWidth, String name, String object, boolean canEditName)
     {
-        super(x, y, maxWidth, name, object);
-
-        this.canEditName = canEditName;
+        super(x, y, maxWidth, name, object, canEditName);
 
         int width = maxWidth;
         if (width > 400)
@@ -25,7 +23,7 @@ public class JsonStringElement extends JsonEditorElement<String>
         this.valueField = new GuiCustomTextField(x + (width / 2) + 2, y, (width / 2) - 2, 16, object);
     }
 
-    public JsonStringElement(int x, int y, int maxWidth, String name, String object)
+    public ContentStringElement(int x, int y, int maxWidth, String name, String object)
     {
         this(x, y, maxWidth, name, object, true);
     }

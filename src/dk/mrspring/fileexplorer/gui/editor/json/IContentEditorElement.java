@@ -5,7 +5,7 @@ import net.minecraft.client.Minecraft;
 /**
  * Created by MrSpring on 30-12-2014 for In-Game File Explorer.
  */
-public interface IJsonEditorElement<E>
+public interface IContentEditorElement<E>
 {
     public int getHeight();
 

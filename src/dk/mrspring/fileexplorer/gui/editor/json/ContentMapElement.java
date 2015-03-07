@@ -9,7 +9,6 @@ import dk.mrspring.llcore.Color;
 import dk.mrspring.llcore.DrawingHelper;
 import dk.mrspring.llcore.Quad;
 import net.minecraft.client.Minecraft;
-import net.minecraft.util.StatCollector;
 
 import java.util.ArrayList;
 import java.util.Map;
@@ -17,17 +16,17 @@ import java.util.Map;
 /**
  * Created by MrSpring on 30-12-2014 for In-Game File Explorer.
  */
-public class JsonMapElement extends JsonEditorElement<Map<String, Object>>
+public class ContentMapElement extends ContentEditorElement<Map<String, Object>>
 {
     GuiCustomTextField nameField;
-    ArrayList<JsonEditorElement> elements;
+    ArrayList<ContentEditorElement> elements;
     GuiSimpleButton newBoolean, newDouble, newString, newArray, newMap, collapse;
-    boolean canEditName, collapsed;
+    boolean collapsed;
     int collapseWidth = 12;
 
-    public JsonMapElement(int x, int y, int maxWidth, String name, Map<String, Object> map, boolean canEditName)
+    public ContentMapElement(int x, int y, int maxWidth, String name, Map<String, Object> map, boolean canEditName)
     {
-        super(x, y, maxWidth, name, map);
+        super(x, y, maxWidth, name, map, canEditName);
         this.canEditName = canEditName;
 
         if (!LiteModFileExplorer.config.json_allowMapCollapsing)
@@ -38,7 +37,7 @@ public class JsonMapElement extends JsonEditorElement<Map<String, Object>>
             width = 200;
 
         nameField = new GuiCustomTextField(x + collapseWidth, y, width - collapseWidth, 16, name);
-        elements = new ArrayList<JsonEditorElement>();
+        elements = new ArrayList<ContentEditorElement>();
         newString = new GuiSimpleButton(x, y, 16, 16, "S");
         newBoolean = new GuiSimpleButton(x, y, 16, 16, "B");
         newDouble = new GuiSimpleButton(x, y, 16, 16, "D");
@@ -51,19 +50,19 @@ public class JsonMapElement extends JsonEditorElement<Map<String, Object>>
             Object object = entry.getValue();
             String key = entry.getKey();
             if (object instanceof String)
-                this.elements.add(new JsonStringElement(0, 0, 0, key, (String) object));
+                this.elements.add(new ContentStringElement(0, 0, 0, key, (String) object));
             else if (object instanceof Boolean)
-                this.elements.add(new JsonBooleanElement(0, 0, 0, key, (Boolean) object));
+                this.elements.add(new ContentBooleanElement(0, 0, 0, key, (Boolean) object));
             else if (object instanceof ArrayList)
-                this.elements.add(new JsonArrayElement(0, 0, 0, key, (ArrayList) object));
+                this.elements.add(new ContentArrayElement(0, 0, 0, key, (ArrayList) object));
             else if (object instanceof Number)
-                this.elements.add(new JsonDoubleElement(0, 0, 0, key, (Double) object));
+                this.elements.add(new ContentDoubleElement(0, 0, 0, key, (Double) object));
             else if (object instanceof LinkedTreeMap)
-                this.elements.add(new JsonMapElement(0, 0, 0, key, (LinkedTreeMap) object));
+                this.elements.add(new ContentMapElement(0, 0, 0, key, (LinkedTreeMap) object));
         }
     }
 
-    public JsonMapElement(int x, int y, int maxWidth, String name, Map<String, Object> map)
+    public ContentMapElement(int x, int y, int maxWidth, String name, Map<String, Object> map)
     {
         this(x, y, maxWidth, name, map, true);
     }
@@ -75,7 +74,7 @@ public class JsonMapElement extends JsonEditorElement<Map<String, Object>>
         if (!collapsed)
         {
             height += 19;
-            for (JsonEditorElement element : elements) height += element.getHeight() + 3;
+            for (ContentEditorElement element : elements) height += element.getHeight() + 3;
         } else if (LiteModFileExplorer.config.json_showCollapsedMapSize)
             height += 10;
 
@@ -110,7 +109,7 @@ public class JsonMapElement extends JsonEditorElement<Map<String, Object>>
             if (LiteModFileExplorer.config.json_allowMapCollapsing)
                 helper.drawIcon(LiteModFileExplorer.core.getIcon("arrow_down"), new Quad(xPosition + 2, yPosition + 5, 6, 6));
 
-            for (JsonEditorElement element : elements)
+            for (ContentEditorElement element : elements)
             {
                 element.drawElement(xPosition + xOffset, yPosition + yOffset, maxWidth - xOffset, mouseX, mouseY, minecraft);
 
@@ -175,7 +174,7 @@ public class JsonMapElement extends JsonEditorElement<Map<String, Object>>
         if (this.nameField.mouseDown(mouseX, mouseY, mouseButton))
             returns = true;
 
-        for (JsonEditorElement element : elements)
+        for (ContentEditorElement element : elements)
         {
             if (element.mouseDown(mouseX, mouseY, mouseButton))
                 returns = true;
@@ -189,15 +188,15 @@ public class JsonMapElement extends JsonEditorElement<Map<String, Object>>
         if (!returns)
         {
             if (this.newDouble.mouseDown(mouseX, mouseY, mouseButton))
-                this.elements.add(new JsonDoubleElement(0, 0, 0, "name", 10.0));
+                this.elements.add(new ContentDoubleElement(0, 0, 0, "name", 10.0));
             else if (this.newBoolean.mouseDown(mouseX, mouseY, mouseButton))
-                this.elements.add(new JsonBooleanElement(0, 0, 0, "name", false));
+                this.elements.add(new ContentBooleanElement(0, 0, 0, "name", false));
             else if (this.newString.mouseDown(mouseX, mouseY, mouseButton))
-                this.elements.add(new JsonStringElement(0, 0, 0, "name", "value"));
+                this.elements.add(new ContentStringElement(0, 0, 0, "name", "value"));
             else if (this.newArray.mouseDown(mouseX, mouseY, mouseButton))
-                this.elements.add(new JsonArrayElement(0, 0, 0, "name", new ArrayList<Object>()));
+                this.elements.add(new ContentArrayElement(0, 0, 0, "name", new ArrayList<Object>()));
             else if (this.newMap.mouseDown(mouseX, mouseY, mouseButton))
-                this.elements.add(new JsonMapElement(0, 0, 0, "name", new LinkedTreeMap<String, Object>()));
+                this.elements.add(new ContentMapElement(0, 0, 0, "name", new LinkedTreeMap<String, Object>()));
             else if (this.collapse.mouseDown(mouseX, mouseY, mouseButton) && LiteModFileExplorer.config.json_allowMapCollapsing)
                 this.collapsed = !collapsed;
             else return false;
@@ -210,7 +209,7 @@ public class JsonMapElement extends JsonEditorElement<Map<String, Object>>
     public Object getValue()
     {
         ArrayList<Object> list = new ArrayList<Object>();
-        for (JsonEditorElement element : elements) list.add(element.getValue());
+        for (ContentEditorElement element : elements) list.add(element.getValue());
         return list;
     }
 
@@ -229,7 +228,7 @@ public class JsonMapElement extends JsonEditorElement<Map<String, Object>>
     @Override
     public void updateElement()
     {
-        for (JsonEditorElement element : elements)
+        for (ContentEditorElement element : elements)
         {
             element.updateElement();
             element.getDeleteButton().update();
@@ -246,7 +245,7 @@ public class JsonMapElement extends JsonEditorElement<Map<String, Object>>
     {
         if (this.canEditName)
             this.nameField.handleKeyTyped(keyCode, character);
-        for (JsonEditorElement element : elements)
+        for (ContentEditorElement element : elements)
             element.handleKeyTypes(character, keyCode);
     }
 }

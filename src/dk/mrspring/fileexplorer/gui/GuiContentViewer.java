@@ -20,12 +20,12 @@ import java.util.*;
 /**
  * Created by MrSpring on 19-12-2014 for In-Game File Explorer.
  */
-public class GuiJsonViewer implements IGui, IMouseListener
+public class GuiContentViewer implements IGui, IMouseListener
 {
     int x, y, width, height, jsonHeight, scrollHeight = 0;
     Map<String, Object> jsonObject;
 
-    public GuiJsonViewer(int x, int y, int width, int height, File file)
+    public GuiContentViewer(int x, int y, int width, int height, File file)
     {
         this.x = x;
         this.y = y;
@@ -42,7 +42,7 @@ public class GuiJsonViewer implements IGui, IMouseListener
         }
     }
 
-    public GuiJsonViewer(int x, int y, int width, int height, Map<String, Object> objectMap)
+    public GuiContentViewer(int x, int y, int width, int height, Map<String, Object> objectMap)
     {
         this.x = x;
         this.y = y;

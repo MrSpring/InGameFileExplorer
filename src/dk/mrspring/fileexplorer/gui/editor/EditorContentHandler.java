@@ -3,7 +3,7 @@ package dk.mrspring.fileexplorer.gui.editor;
 import com.google.gson.internal.LinkedTreeMap;
 import com.mumfrey.liteloader.gl.GLClippingPlanes;
 import dk.mrspring.fileexplorer.LiteModFileExplorer;
-import dk.mrspring.fileexplorer.gui.GuiJsonViewer;
+import dk.mrspring.fileexplorer.gui.GuiContentViewer;
 import dk.mrspring.fileexplorer.gui.GuiSimpleButton;
 import dk.mrspring.fileexplorer.gui.editor.json.*;
 import dk.mrspring.fileexplorer.gui.interfaces.IGui;
@@ -24,18 +24,18 @@ import java.util.Map;
 /**
  * Created by MrSpring on 07-01-2015 for In-Game File Explorer.
  */
-public class EditorJson extends Editor implements IMouseListener
+public class EditorContentHandler extends Editor implements IMouseListener
 {
     File openFile;
 
-    GuiJsonEditor editor;
-    GuiJsonViewer viewer;
+    GuiContentEditor editor;
+    GuiContentViewer viewer;
 
     GuiSimpleButton editButton;
     GuiSimpleButton saveButton, cancelButton;
     boolean editing = false;
 
-    public EditorJson(int x, int y, int w, int h, File file)
+    public EditorContentHandler(int x, int y, int w, int h, File file)
     {
         super(x, y, w, h);
 
@@ -43,12 +43,17 @@ public class EditorJson extends Editor implements IMouseListener
 
         Map<String, Object> content = getMapFromFile(openFile);
 
-        viewer = new GuiJsonViewer(x, y, w, h, content);
-        editor = new GuiJsonEditor(x, y, w, h, content);
+        viewer = new GuiContentViewer(x, y, w, h, content);
+        editor = new GuiContentEditor(x, y, w, h, content);
 
         editButton = new GuiSimpleButton(x - 62, y + h - 50, 50, 20, "gui.json_editor.edit");
         saveButton = new GuiSimpleButton(x - 62, y + h - 20, 50, 20, "gui.json_editor.save");
         cancelButton = new GuiSimpleButton(x - 62, y + h - 50, 50, 20, "gui.json_editor.cancel");
+    }
+
+    public static interface ContentType<E>
+    {
+        public ContentEditorElement<E> getAsEditorElement(String name, E value, boolean canEditName);
     }
 
     public Map<String, Object> getMapFromFile(File file)
@@ -172,30 +177,14 @@ public class EditorJson extends Editor implements IMouseListener
 
     private void reloadViewer()
     {
-        Map<String, Object> json = this.getMapFromFile(openFile);
-        /*try
-        {
-            String jsonCode = LiteModFileExplorer.core.getFileLoader().getContentsFromFile(openFile);
-            json = LiteModFileExplorer.core.getJsonHandler().loadFromJson(jsonCode, LinkedTreeMap.class);
-        } catch (IOException e)
-        {
-            e.printStackTrace();
-        }*/
-        viewer = new GuiJsonViewer(x, y, w, h, json);
+        Map<String, Object> content = this.getMapFromFile(openFile);
+        viewer = new GuiContentViewer(x, y, w, h, content);
     }
 
     private void reloadEditor()
     {
-        Map<String, Object> json = this.getMapFromFile(openFile);
-        /*try
-        {
-            String jsonCode = LiteModFileExplorer.core.getFileLoader().getContentsFromFile(openFile);
-            json = LiteModFileExplorer.core.getJsonHandler().loadFromJson(jsonCode, LinkedTreeMap.class);
-        } catch (IOException e)
-        {
-            e.printStackTrace();
-        }*/
-        editor = new GuiJsonEditor(x, y, w, h, json);
+        Map<String, Object> content = this.getMapFromFile(openFile);
+        editor = new GuiContentEditor(x, y, w, h, content);
     }
 
     private void startEditing()
@@ -249,13 +238,13 @@ public class EditorJson extends Editor implements IMouseListener
         }
     }
 
-    public class GuiJsonEditor implements IGui, IMouseListener
+    public class GuiContentEditor implements IGui, IMouseListener
     {
-        List<JsonEditorElement> elements;
+        List<ContentEditorElement> elements;
         int x, y, width, height, scrollHeight;
         GuiSimpleButton newBoolean, newDouble, newString, newArray, newMap;
 
-        public GuiJsonEditor(int x, int y, int w, int h, Map<String, Object> jsonObject)
+        public GuiContentEditor(int x, int y, int w, int h, Map<String, Object> jsonObject)
         {
             this.x = x;
             this.y = y;
@@ -263,7 +252,7 @@ public class EditorJson extends Editor implements IMouseListener
             this.width = w;
             this.height = h;
 
-            elements = new ArrayList<JsonEditorElement>();
+            elements = new ArrayList<ContentEditorElement>();
             newString = new GuiSimpleButton(x, y, 16, 16, "S");
             newBoolean = new GuiSimpleButton(x, y, 16, 16, "B");
             newDouble = new GuiSimpleButton(x, y, 16, 16, "D");
@@ -277,15 +266,15 @@ public class EditorJson extends Editor implements IMouseListener
                     String name = entry.getKey();
 
                     if (value instanceof Boolean)
-                        this.elements.add(new JsonBooleanElement(x, y, width, name, (Boolean) value));
+                        this.elements.add(new ContentBooleanElement(x, y, width, name, (Boolean) value));
                     else if (value instanceof String)
-                        this.elements.add(new JsonStringElement(x, y, width, name, (String) value));
+                        this.elements.add(new ContentStringElement(x, y, width, name, (String) value));
                     else if (value instanceof Number)
-                        this.elements.add(new JsonDoubleElement(x, y, width, name, (Double) value));
+                        this.elements.add(new ContentDoubleElement(x, y, width, name, (Double) value));
                     else if (value instanceof ArrayList)
-                        this.elements.add(new JsonArrayElement(x, y, width, name, (List<Object>) value));
+                        this.elements.add(new ContentArrayElement(x, y, width, name, (List<Object>) value));
                     else if (value instanceof Map)
-                        this.elements.add(new JsonMapElement(x, y, width, name, (Map<String, Object>) value));
+                        this.elements.add(new ContentMapElement(x, y, width, name, (Map<String, Object>) value));
                 }
         }
 
@@ -324,7 +313,7 @@ public class EditorJson extends Editor implements IMouseListener
 //                    DrawingHelper.drawQuad(x - 1, y + scrollBarY, 2, 40, Color.WHITE, 1F);
                 }
 
-                for (JsonEditorElement element : elements)
+                for (ContentEditorElement element : elements)
                 {
                     element.drawElement(x + xOffset, y + yOffset, width - xOffset, mouseX, mouseY, minecraft);
 
@@ -372,7 +361,7 @@ public class EditorJson extends Editor implements IMouseListener
             if (this.getListHeight() < height)
                 scrollHeight = 0;
 
-            for (JsonEditorElement element : elements)
+            for (ContentEditorElement element : elements)
             {
                 element.updateElement();
                 element.getDeleteButton().update();
@@ -390,7 +379,7 @@ public class EditorJson extends Editor implements IMouseListener
             boolean anythingClicked = false;
             for (int i = 0; i < elements.size(); i++)
             {
-                JsonEditorElement element = elements.get(i);
+                ContentEditorElement element = elements.get(i);
                 if (element.mouseDown(mouseX, mouseY, mouseButton))
                     anythingClicked = true;
                 else if (element.getDeleteButton().mouseDown(mouseX, mouseY, mouseButton))
@@ -400,15 +389,15 @@ public class EditorJson extends Editor implements IMouseListener
             if (!anythingClicked)
             {
                 if (this.newDouble.mouseDown(mouseX, mouseY, mouseButton))
-                    this.elements.add(new JsonDoubleElement(0, 0, 0, "name", 10.0));
+                    this.elements.add(new ContentDoubleElement(0, 0, 0, "name", 10.0));
                 else if (this.newBoolean.mouseDown(mouseX, mouseY, mouseButton))
-                    this.elements.add(new JsonBooleanElement(0, 0, 0, "name", false));
+                    this.elements.add(new ContentBooleanElement(0, 0, 0, "name", false));
                 else if (this.newString.mouseDown(mouseX, mouseY, mouseButton))
-                    this.elements.add(new JsonStringElement(0, 0, 0, "name", "value"));
+                    this.elements.add(new ContentStringElement(0, 0, 0, "name", "value"));
                 else if (this.newArray.mouseDown(mouseX, mouseY, mouseButton))
-                    this.elements.add(new JsonArrayElement(0, 0, 0, "name", new ArrayList<Object>()));
+                    this.elements.add(new ContentArrayElement(0, 0, 0, "name", new ArrayList<Object>()));
                 else if (this.newMap.mouseDown(mouseX, mouseY, mouseButton))
-                    this.elements.add(new JsonMapElement(0, 0, 0, "name", new LinkedTreeMap<String, Object>()));
+                    this.elements.add(new ContentMapElement(0, 0, 0, "name", new LinkedTreeMap<String, Object>()));
             }
 
             return anythingClicked;
@@ -429,7 +418,7 @@ public class EditorJson extends Editor implements IMouseListener
         @Override
         public void handleKeyTyped(int keyCode, char character)
         {
-            for (JsonEditorElement element : elements)
+            for (ContentEditorElement element : elements)
                 element.handleKeyTypes(character, keyCode);
         }
 
@@ -437,7 +426,7 @@ public class EditorJson extends Editor implements IMouseListener
         {
             Map<String, Object> map = new LinkedTreeMap<String, Object>();
 
-            for (JsonEditorElement element : elements)
+            for (ContentEditorElement element : elements)
             {
                 String elementName = element.getName();
                 Object elementValue = element.getValue();
@@ -468,7 +457,7 @@ public class EditorJson extends Editor implements IMouseListener
         private int getListHeight()
         {
             int height = 16;
-            for (JsonEditorElement element : elements)
+            for (ContentEditorElement element : elements)
                 height += element.getHeight() + 3;
             return height;
         }

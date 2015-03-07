@@ -7,17 +7,14 @@ import net.minecraft.client.Minecraft;
 /**
  * Created by MrSpring on 03-01-2015 for In-Game File Explorer.
  */
-public class JsonDoubleElement extends JsonEditorElement<Double>
+public class ContentDoubleElement extends ContentEditorElement<Double>
 {
     GuiNumberField numberField;
     GuiCustomTextField nameField;
-    boolean canEditName;
 
-    public JsonDoubleElement(int x, int y, int maxWidth, String name, Double object, boolean canEditName)
+    public ContentDoubleElement(int x, int y, int maxWidth, String name, Double object, boolean canEditName)
     {
-        super(x, y, maxWidth, name, object);
-
-        this.canEditName = canEditName;
+        super(x, y, maxWidth, name, object, canEditName);
 
         int width = maxWidth;
         if (width > 400)
@@ -27,7 +24,7 @@ public class JsonDoubleElement extends JsonEditorElement<Double>
         this.numberField = new GuiNumberField(x, y, width / 2 - 2, 32, object);
     }
 
-    public JsonDoubleElement(int x, int y, int maxWidth, String name, Double object)
+    public ContentDoubleElement(int x, int y, int maxWidth, String name, Double object)
     {
         this(x, y, maxWidth, name, object, true);
     }

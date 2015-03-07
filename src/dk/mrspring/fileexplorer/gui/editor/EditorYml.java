@@ -12,7 +12,7 @@ import java.util.Map;
 /**
  * Created by Konrad on 05-03-2015.
  */
-public class EditorYml extends EditorJson
+public class EditorYml extends EditorContentHandler
 {
     public EditorYml(int x, int y, int w, int h, File file)
     {

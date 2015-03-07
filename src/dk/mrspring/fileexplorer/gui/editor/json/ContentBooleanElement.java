@@ -7,19 +7,16 @@ import net.minecraft.client.Minecraft;
 /**
  * Created by MrSpring on 30-12-2014 for In-Game File Explorer.
  */
-public class JsonBooleanElement extends JsonEditorElement<Boolean>
+public class ContentBooleanElement extends ContentEditorElement<Boolean>
 {
     boolean value;
-    boolean canEditName;
 
     GuiCustomTextField nameField;
     GuiBoolean booleanGui;
 
-    public JsonBooleanElement(int x, int y, int maxWidth, String name, boolean object, boolean canEditName)
+    public ContentBooleanElement(int x, int y, int maxWidth, String name, boolean object, boolean canEditName)
     {
-        super(x, y, maxWidth, name, object);
-
-        this.canEditName = canEditName;
+        super(x, y, maxWidth, name, object, canEditName);
 
         this.value = object;
 
@@ -33,7 +30,7 @@ public class JsonBooleanElement extends JsonEditorElement<Boolean>
         this.booleanGui = new GuiBoolean(x + width - 32, y, object);
     }
 
-    public JsonBooleanElement(int x, int y, int maxWidth, String name, boolean object)
+    public ContentBooleanElement(int x, int y, int maxWidth, String name, boolean object)
     {
         this(x, y, maxWidth, name, object, true);
     }

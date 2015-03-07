@@ -9,7 +9,6 @@ import dk.mrspring.llcore.Color;
 import dk.mrspring.llcore.DrawingHelper;
 import dk.mrspring.llcore.Quad;
 import net.minecraft.client.Minecraft;
-import net.minecraft.util.StatCollector;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,18 +16,17 @@ import java.util.List;
 /**
  * Created by MrSpring on 30-12-2014 for In-Game File Explorer.
  */
-public class JsonArrayElement extends JsonEditorElement<List<Object>>
+public class ContentArrayElement extends ContentEditorElement<List<Object>>
 {
     GuiCustomTextField nameField;
-    List<JsonEditorElement> elements;
+    List<ContentEditorElement> elements;
     GuiSimpleButton newBoolean, newDouble, newString, newArray, newMap, collapse;
-    boolean canEditName, collapsed = false;
+    boolean collapsed = false;
     int collapseWidth = 12;
 
-    public JsonArrayElement(int x, int y, int maxWidth, String name, List<Object> list, boolean canEditName)
+    public ContentArrayElement(int x, int y, int maxWidth, String name, List<Object> list, boolean canEditName)
     {
-        super(x, y, maxWidth, name, list);
-        this.canEditName = canEditName;
+        super(x, y, maxWidth, name, list, canEditName);
 
         if (!LiteModFileExplorer.config.json_allowArrayCollapsing)
             collapseWidth = 0;
@@ -38,7 +36,7 @@ public class JsonArrayElement extends JsonEditorElement<List<Object>>
             width = 200;
 
         nameField = new GuiCustomTextField(x + collapseWidth, y, width - collapseWidth, 16, name);
-        elements = new ArrayList<JsonEditorElement>();
+        elements = new ArrayList<ContentEditorElement>();
         newString = new GuiSimpleButton(x, y, 16, 16, "S");
         newBoolean = new GuiSimpleButton(x, y, 16, 16, "B");
         newDouble = new GuiSimpleButton(x, y, 16, 16, "D");
@@ -50,19 +48,19 @@ public class JsonArrayElement extends JsonEditorElement<List<Object>>
         {
             Object object = list.get(i);
             if (object instanceof String)
-                this.elements.add(new JsonStringElement(0, 0, 0, String.valueOf(i) + ": ", (String) object, false));
+                this.elements.add(new ContentStringElement(0, 0, 0, String.valueOf(i) + ": ", (String) object, false));
             else if (object instanceof Boolean)
-                this.elements.add(new JsonBooleanElement(0, 0, 0, String.valueOf(i) + ": ", (Boolean) object, false));
+                this.elements.add(new ContentBooleanElement(0, 0, 0, String.valueOf(i) + ": ", (Boolean) object, false));
             else if (object instanceof ArrayList)
-                this.elements.add(new JsonArrayElement(0, 0, 0, String.valueOf(i) + ": ", (ArrayList) object, false));
+                this.elements.add(new ContentArrayElement(0, 0, 0, String.valueOf(i) + ": ", (ArrayList) object, false));
             else if (object instanceof Number)
-                this.elements.add(new JsonDoubleElement(0, 0, 0, String.valueOf(i) + ": ", (Double) object, false));
+                this.elements.add(new ContentDoubleElement(0, 0, 0, String.valueOf(i) + ": ", (Double) object, false));
             else if (object instanceof LinkedTreeMap)
-                this.elements.add(new JsonMapElement(0, 0, 0, String.valueOf(i) + ": ", (LinkedTreeMap) object, false));
+                this.elements.add(new ContentMapElement(0, 0, 0, String.valueOf(i) + ": ", (LinkedTreeMap) object, false));
         }
     }
 
-    public JsonArrayElement(int x, int y, int maxWidth, String name, List<Object> list)
+    public ContentArrayElement(int x, int y, int maxWidth, String name, List<Object> list)
     {
         this(x, y, maxWidth, name, list, true);
     }
@@ -75,7 +73,7 @@ public class JsonArrayElement extends JsonEditorElement<List<Object>>
         if (!collapsed)
         {
             height += 19;
-            for (JsonEditorElement element : elements) height += element.getHeight() + 3;
+            for (ContentEditorElement element : elements) height += element.getHeight() + 3;
         } else if (LiteModFileExplorer.config.json_showCollapsedArraySize)
             height += 10;
 
@@ -110,7 +108,7 @@ public class JsonArrayElement extends JsonEditorElement<List<Object>>
             if (LiteModFileExplorer.config.json_allowArrayCollapsing)
                 helper.drawIcon(LiteModFileExplorer.core.getIcon("arrow_down"), new Quad(xPosition + 2, yPosition + 5, 6, 6));
 
-            for (JsonEditorElement element : elements)
+            for (ContentEditorElement element : elements)
             {
                 element.drawElement(xPosition + xOffset, yPosition + yOffset, maxWidth - xOffset, mouseX, mouseY, minecraft);
 
@@ -175,7 +173,7 @@ public class JsonArrayElement extends JsonEditorElement<List<Object>>
         if (this.nameField.mouseDown(mouseX, mouseY, mouseButton))
             returns = true;
 
-        for (JsonEditorElement element : elements)
+        for (ContentEditorElement element : elements)
         {
             if (element.mouseDown(mouseX, mouseY, mouseButton))
                 returns = true;
@@ -189,15 +187,15 @@ public class JsonArrayElement extends JsonEditorElement<List<Object>>
         if (!returns)
         {
             if (this.newDouble.mouseDown(mouseX, mouseY, mouseButton))
-                this.elements.add(new JsonDoubleElement(0, 0, 0, "name", 10.0, false));
+                this.elements.add(new ContentDoubleElement(0, 0, 0, "name", 10.0, false));
             else if (this.newBoolean.mouseDown(mouseX, mouseY, mouseButton))
-                this.elements.add(new JsonBooleanElement(0, 0, 0, "name", false, false));
+                this.elements.add(new ContentBooleanElement(0, 0, 0, "name", false, false));
             else if (this.newString.mouseDown(mouseX, mouseY, mouseButton))
-                this.elements.add(new JsonStringElement(0, 0, 0, "name", "value", false));
+                this.elements.add(new ContentStringElement(0, 0, 0, "name", "value", false));
             else if (this.newArray.mouseDown(mouseX, mouseY, mouseButton))
-                this.elements.add(new JsonArrayElement(0, 0, 0, "name", new ArrayList<Object>(), false));
+                this.elements.add(new ContentArrayElement(0, 0, 0, "name", new ArrayList<Object>(), false));
             else if (this.newMap.mouseDown(mouseX, mouseY, mouseButton))
-                this.elements.add(new JsonMapElement(0, 0, 0, "name", new LinkedTreeMap<String, Object>(), false));
+                this.elements.add(new ContentMapElement(0, 0, 0, "name", new LinkedTreeMap<String, Object>(), false));
             else if (this.collapse.mouseDown(mouseX, mouseY, mouseButton) && LiteModFileExplorer.config.json_allowArrayCollapsing)
                 this.collapsed = !collapsed;
         }
@@ -208,7 +206,7 @@ public class JsonArrayElement extends JsonEditorElement<List<Object>>
     public Object getValue()
     {
         ArrayList<Object> list = new ArrayList<Object>();
-        for (JsonEditorElement element : elements) list.add(element.getValue());
+        for (ContentEditorElement element : elements) list.add(element.getValue());
         return list;
     }
 
@@ -229,7 +227,7 @@ public class JsonArrayElement extends JsonEditorElement<List<Object>>
     {
         for (int i = 0; i < elements.size(); i++)
         {
-            JsonEditorElement element = elements.get(i);
+            ContentEditorElement element = elements.get(i);
             element.setName(String.valueOf(i) + ": ");
             element.updateElement();
             element.getDeleteButton().update();
@@ -246,7 +244,7 @@ public class JsonArrayElement extends JsonEditorElement<List<Object>>
     {
         if (canEditName)
             this.nameField.handleKeyTyped(keyCode, character);
-        for (JsonEditorElement element : elements)
+        for (ContentEditorElement element : elements)
             element.handleKeyTypes(character, keyCode);
     }
 }
