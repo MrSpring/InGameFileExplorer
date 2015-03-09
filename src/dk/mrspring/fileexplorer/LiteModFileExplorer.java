@@ -68,7 +68,6 @@ public class LiteModFileExplorer implements Tickable, Configurable
 
     public static FileType getFileType(String extension)
     {
-        System.out.println("Returning file type for: " + extension);
         if (extension == null)
             return supportedFileTypes.get("unknown");
         else if (extension.isEmpty())
