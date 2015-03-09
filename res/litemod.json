@@ -1,8 +1,0 @@
-{
-  "name": "In-Game File Explorer",
-  "mcversion": "1.8.0",
-  "version": "0.1.0-BETA",
-  "revision": "0001",
-  "author": "Mr. Spring",
-  "description": "The in-game file explorer mod allows you to look around your systems files, and view/edit some file types:\n.txt - The mod has a built in text-editor for text files. Files can be viewed, edited and saved without having to leave the game.\n.png/.jpeg - The mod also include an image viewer!\n.json - The mod includes a simple-to-use gui based in-game JSON editor."
-}
