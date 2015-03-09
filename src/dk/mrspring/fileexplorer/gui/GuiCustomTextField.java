@@ -283,4 +283,9 @@ public class GuiCustomTextField implements IGui
         if (scroll < 0)
             scroll = 0;
     }
+
+    public int getY()
+    {
+        return y;
+    }
 }

@@ -27,15 +27,16 @@ public class FileExplorerConfigPanel implements ConfigPanel
     GuiCheckbox showEditDate;
     GuiCheckbox showFileSize;
     GuiCheckbox showOpenDirectory;
+    GuiCustomTextField textFileTypes;
 
     @Override
     public void onPanelShown(ConfigPanelHost host)
     {
-        Config startConfig = LiteModFileExplorer.config;
+        Config config = LiteModFileExplorer.config;
         Minecraft mc = Minecraft.getMinecraft();
-        startPositionField = new GuiCustomTextField(mc.fontRendererObj.getStringWidth(TranslateHelper.translate("gui.config_panel.file_explorer.start_folder") + ": "), 0, host.getWidth() - mc.fontRendererObj.getStringWidth(TranslateHelper.translate("gui.config_panel.file_explorer.start_folder") + ": "), 16, startConfig.startLocation);
-        takeAutoBackup = new GuiCheckbox(mc.fontRendererObj.getStringWidth(TranslateHelper.translate("gui.config_panel.file_explorer.take_backup") + ": "), 20, 12, 12, startConfig.automaticBackup);
-        backupPositionField = new GuiCustomTextField(mc.fontRendererObj.getStringWidth(TranslateHelper.translate("gui.config_panel.file_explorer.backup_folder") + ": "), 36, host.getWidth() - mc.fontRendererObj.getStringWidth(TranslateHelper.translate("gui.config_panel.file_explorer.backup_folder") + ": "), 16, new File(startConfig.backupLocation).getAbsolutePath());
+        startPositionField = new GuiCustomTextField(mc.fontRendererObj.getStringWidth(TranslateHelper.translate("gui.config_panel.file_explorer.start_folder") + ": "), 0, host.getWidth() - mc.fontRendererObj.getStringWidth(TranslateHelper.translate("gui.config_panel.file_explorer.start_folder") + ": "), 16, config.startLocation);
+        takeAutoBackup = new GuiCheckbox(mc.fontRendererObj.getStringWidth(TranslateHelper.translate("gui.config_panel.file_explorer.take_backup") + ": "), 20, 12, 12, config.automaticBackup);
+        backupPositionField = new GuiCustomTextField(mc.fontRendererObj.getStringWidth(TranslateHelper.translate("gui.config_panel.file_explorer.backup_folder") + ": "), 36, host.getWidth() - mc.fontRendererObj.getStringWidth(TranslateHelper.translate("gui.config_panel.file_explorer.backup_folder") + ": "), 16, new File(config.backupLocation).getAbsolutePath());
         cleanBackup = new GuiSimpleButton(0, 60, 75, 26, "gui.config_panel.file_explorer.clean_backup").setAutoHeight(true);
         FileSorter.SortingType[] types = FileSorter.SortingType.values();
         int current = ArrayUtils.indexOf(types, LiteModFileExplorer.config.fileSortingType);
@@ -45,10 +46,11 @@ public class FileExplorerConfigPanel implements ConfigPanel
                     TranslateHelper.translate("sorting_type." + types[i].toString().toLowerCase() + ".name") + "\n\u00a77" +
                             TranslateHelper.translate("sorting_type." + types[i].toString().toLowerCase() + ".desc"), types[i]);
         sortingType = new GuiDropDownList(0, 105, 150, 30, current, elements);
-        hideNonEditableFiles = new GuiCheckbox(mc.fontRendererObj.getStringWidth(TranslateHelper.translate("gui.config_panel.file_explorer.hide_non_editable_files") + ": "), 130, 12, 12, startConfig.hideNonEditableFiles);
-        showEditDate = new GuiCheckbox(mc.fontRendererObj.getStringWidth(TranslateHelper.translate("gui.config_panel.file_explorer.show_file_edit_date") + ": "), 150, 12, 12, startConfig.showFileEditBelowName);
-        showFileSize = new GuiCheckbox(mc.fontRendererObj.getStringWidth(TranslateHelper.translate("gui.config_panel.file_explorer.show_file_size") + ": "), 180, 12, 12, startConfig.showFileSizeBelowName);
-        showOpenDirectory = new GuiCheckbox(mc.fontRendererObj.getStringWidth(TranslateHelper.translate("gui.config_panel.file_explorer.show_open_directory") + ": "), 200, 12, 12, startConfig.showOpenDirectory);
+        hideNonEditableFiles = new GuiCheckbox(mc.fontRendererObj.getStringWidth(TranslateHelper.translate("gui.config_panel.file_explorer.hide_non_editable_files") + ": "), 130, 12, 12, config.hideNonEditableFiles);
+        showEditDate = new GuiCheckbox(mc.fontRendererObj.getStringWidth(TranslateHelper.translate("gui.config_panel.file_explorer.show_file_edit_date") + ": "), 150, 12, 12, config.showFileEditBelowName);
+        showFileSize = new GuiCheckbox(mc.fontRendererObj.getStringWidth(TranslateHelper.translate("gui.config_panel.file_explorer.show_file_size") + ": "), 180, 12, 12, config.showFileSizeBelowName);
+        showOpenDirectory = new GuiCheckbox(mc.fontRendererObj.getStringWidth(TranslateHelper.translate("gui.config_panel.file_explorer.show_open_directory") + ": "), 200, 12, 12, config.showOpenDirectory);
+        textFileTypes = new GuiCustomTextField(0, 250, host.getWidth(), 16, config.getTextFileTypes());
     }
 
     @Override
@@ -82,6 +84,8 @@ public class FileExplorerConfigPanel implements ConfigPanel
         showFileSize.draw(minecraft, mouseX, mouseY);
         showOpenDirectory.setY(showFileSize.getY() + 12 + 5);
         showOpenDirectory.draw(minecraft, mouseX, mouseY);
+        textFileTypes.setY(showOpenDirectory.getY() + 12 + 5 + 10);
+        textFileTypes.draw(minecraft, mouseX, mouseY);
 
         minecraft.fontRendererObj.drawString(TranslateHelper.translate("gui.config_panel.file_explorer.start_folder") + ": ", 0, 4, 0xFFFFFF, true);
         minecraft.fontRendererObj.drawString(TranslateHelper.translate("gui.config_panel.file_explorer.take_backup") + ": ", 0, 22, 0xFFFFFF, true);
@@ -91,6 +95,7 @@ public class FileExplorerConfigPanel implements ConfigPanel
         minecraft.fontRendererObj.drawString(TranslateHelper.translate("gui.config_panel.file_explorer.show_file_edit_date") + ": ", 0, showEditDate.getY() + 2, 0xFFFFFF, true);
         minecraft.fontRendererObj.drawString(TranslateHelper.translate("gui.config_panel.file_explorer.show_file_size") + ": ", 0, showFileSize.getY() + 2, 0xFFFFFF, true);
         minecraft.fontRendererObj.drawString(TranslateHelper.translate("gui.config_panel.file_explorer.show_open_directory") + ": ", 0, showOpenDirectory.getY() + 2, 0xFFFFFF, true);
+        minecraft.fontRendererObj.drawString(TranslateHelper.translate("gui.config_panel.file_explorer.text_file_types") + ": ", 0, textFileTypes.getY() - 10, 0xFFFFFF, true);
 //        minecraft.fontRendererObj.drawString(TranslateHelper.translate(TranslateHelper.translate("gui.config_panel.file_explorer.clean_backup_warning")), cleanBackup.getWidth() + 2, cleanBackup.getY() + (cleanBackup.getHeight() / 2 - 4), 0xFFFFFF, true);
     }
 
@@ -107,6 +112,7 @@ public class FileExplorerConfigPanel implements ConfigPanel
         this.showEditDate.update();
         this.showFileSize.update();
         this.showOpenDirectory.update();
+        this.textFileTypes.update();
     }
 
     @Override
@@ -129,6 +135,7 @@ public class FileExplorerConfigPanel implements ConfigPanel
         LiteModFileExplorer.config.showFileEditBelowName = showEditDate.isChecked();
         LiteModFileExplorer.config.showFileSizeBelowName = showFileSize.isChecked();
         LiteModFileExplorer.config.showOpenDirectory = showOpenDirectory.isChecked();
+        LiteModFileExplorer.config.setTextFileTypes(textFileTypes.getText());
         LiteModFileExplorer.config.validateValues();
         LiteModFileExplorer.saveConfig();
     }
@@ -148,6 +155,7 @@ public class FileExplorerConfigPanel implements ConfigPanel
         this.showEditDate.mouseDown(mouseX, mouseY, mouseButton);
         this.showFileSize.mouseDown(mouseX, mouseY, mouseButton);
         this.showOpenDirectory.mouseDown(mouseX, mouseY, mouseButton);
+        this.textFileTypes.mouseDown(mouseX, mouseY, mouseButton);
     }
 
     @Override
@@ -155,6 +163,7 @@ public class FileExplorerConfigPanel implements ConfigPanel
     {
         this.startPositionField.handleKeyTyped(keyCode, keyChar);
         this.backupPositionField.handleKeyTyped(keyCode, keyChar);
+        this.textFileTypes.handleKeyTyped(keyCode, keyChar);
     }
 
     @Override

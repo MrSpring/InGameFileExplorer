@@ -9,6 +9,7 @@ gui.config_panel.file_explorer.hide_non_editable_files=Hide files that can't be 
 gui.config_panel.file_explorer.show_file_edit_date=Show last edited date below file name
 gui.config_panel.file_explorer.show_file_size=Show file size below file name
 gui.config_panel.file_explorer.show_open_directory=Show open directory
+gui.config_panel.file_explorer.text_file_types=Text file types (separated by semicolon ';')
 
 key.file_explorer.open_backup_manager=Open Backup Manager GUI
 key.file_explorer.open_file_explorer=Open File Explorer GUI

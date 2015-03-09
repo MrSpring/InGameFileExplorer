@@ -9,6 +9,7 @@ gui.config_panel.file_explorer.hide_non_editable_files=Skul filer der ikke kan r
 gui.config_panel.file_explorer.show_file_edit_date=Vis seneste ændringsdato under filnavn
 gui.config_panel.file_explorer.show_file_size=Vis fil størrelse under filnavn
 gui.config_panel.file_explorer.show_open_directory=Vis åben mappes navn
+gui.config_panel.file_explorer.text_file_types=Text fil typer (adskilt med semikolon ';')
 
 key.file_explorer.open_backup_manager=Åben Backup Manager GUI
 key.file_explorer.open_file_explorer=Åben File Explorer GUI

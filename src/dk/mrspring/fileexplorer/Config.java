@@ -63,5 +63,30 @@ public class Config
             if (fileSortingType == null)
                 fileSortingType = FileSorter.SortingType.NAME;
         }
+
+        {
+            if (textFileTypes.length == 0)
+                textFileTypes = new String[]{".txt", ".rtf"};
+        }
+    }
+
+    public String getTextFileTypes()
+    {
+        StringBuilder builder = new StringBuilder(textFileTypes[0]);
+        for (String type : textFileTypes)
+        {
+            builder.append(';');
+            builder.append(type);
+        }
+        return builder.toString();
+    }
+
+    public void setTextFileTypes(String string)
+    {
+        String[] types;
+        if (string.contains(";"))
+            types = string.split(";");
+        else types = new String[]{string};
+        this.textFileTypes = types;
     }
 }
