@@ -74,7 +74,7 @@ public class GuiScreenBackupManager extends GuiScreen
     {
         int x, y, width, height;
         List<GuiBackupEntry> backupEntries;
-        int scrollHeight = 0, listHeight = 0, lastEntryHeight;
+        int scrollHeight = 0, listHeight = 0;
 
         public GuiBackupList(int x, int y, int width, int height, BackupManager manager)
         {
@@ -95,14 +95,12 @@ public class GuiScreenBackupManager extends GuiScreen
             if (this.listHeight > height)
                 yOffset = -scrollHeight;
             this.listHeight = 0;
-            int height = 0;
             for (GuiBackupEntry entry : backupEntries)
             {
-                height = entry.draw(minecraft, mouseX, mouseY, x, y + yOffset, width);
+                int height = entry.draw(minecraft, mouseX, mouseY, x, y + yOffset, width);
                 yOffset += height + 5;
-                this.listHeight += height;
+                this.listHeight += height + 5;
             }
-            this.lastEntryHeight = height;
             if (this.listHeight > this.height)
                 this.drawScrollBar();
         }
@@ -120,7 +118,7 @@ public class GuiScreenBackupManager extends GuiScreen
 
         private int getMaxScrollHeight()
         {
-            return listHeight - height + this.lastEntryHeight+9;
+            return listHeight - height - 5;
         }
 
         @Override
