@@ -16,18 +16,20 @@ import java.util.Map;
 /**
  * Created by MrSpring on 30-12-2014 for In-Game File Explorer.
  */
-public class ContentMapElement extends ContentEditorElement<Map<String, Object>>
+public class ContentMapElement extends ContentEditorElement<Map>
 {
     GuiCustomTextField nameField;
     ArrayList<ContentEditorElement> elements;
     GuiSimpleButton newBoolean, newDouble, newString, newArray, newMap, collapse;
     boolean collapsed;
     int collapseWidth = 12;
+    ContentHandler handler;
 
-    public ContentMapElement(int x, int y, int maxWidth, String name, Map<String, Object> map, boolean canEditName)
+    public ContentMapElement(int x, int y, int maxWidth, String name, Map<String, Object> map, boolean canEditName, ContentHandler handler)
     {
         super(x, y, maxWidth, name, map, canEditName);
         this.canEditName = canEditName;
+        this.handler = handler;
 
         if (!LiteModFileExplorer.config.json_allowMapCollapsing)
             collapseWidth = 0;
@@ -49,22 +51,25 @@ public class ContentMapElement extends ContentEditorElement<Map<String, Object>>
         {
             Object object = entry.getValue();
             String key = entry.getKey();
-            if (object instanceof String)
-                this.elements.add(new ContentStringElement(0, 0, 0, key, (String) object));
-            else if (object instanceof Boolean)
-                this.elements.add(new ContentBooleanElement(0, 0, 0, key, (Boolean) object));
-            else if (object instanceof ArrayList)
-                this.elements.add(new ContentArrayElement(0, 0, 0, key, (ArrayList) object));
-            else if (object instanceof Number)
-                this.elements.add(new ContentDoubleElement(0, 0, 0, key, (Double) object));
-            else if (object instanceof LinkedTreeMap)
-                this.elements.add(new ContentMapElement(0, 0, 0, key, (LinkedTreeMap) object));
+            IContentType contentType = handler.getContentType(key, object, true);
+            if (contentType != null)
+                this.elements.add(contentType.getAsEditorElement(0, 0, 0, key, object, true, handler));
+//            if (object instanceof String)
+//                this.elements.add(new ContentStringElement(0, 0, 0, key, (String) object));
+//            else if (object instanceof Boolean)
+//                this.elements.add(new ContentBooleanElement(0, 0, 0, key, (Boolean) object));
+//            else if (object instanceof ArrayList)
+//                this.elements.add(new ContentArrayElement(0, 0, 0, key, (ArrayList) object));
+//            else if (object instanceof Number)
+//                this.elements.add(new ContentDoubleElement(0, 0, 0, key, (Double) object));
+//            else if (object instanceof LinkedTreeMap)
+//                this.elements.add(new ContentMapElement(0, 0, 0, key, (LinkedTreeMap) object));
         }
     }
 
-    public ContentMapElement(int x, int y, int maxWidth, String name, Map<String, Object> map)
+    public ContentMapElement(int x, int y, int maxWidth, String name, Map<String, Object> map, ContentHandler handler)
     {
-        this(x, y, maxWidth, name, map, true);
+        this(x, y, maxWidth, name, map, true, handler);
     }
 
     @Override
@@ -194,9 +199,9 @@ public class ContentMapElement extends ContentEditorElement<Map<String, Object>>
             else if (this.newString.mouseDown(mouseX, mouseY, mouseButton))
                 this.elements.add(new ContentStringElement(0, 0, 0, "name", "value"));
             else if (this.newArray.mouseDown(mouseX, mouseY, mouseButton))
-                this.elements.add(new ContentArrayElement(0, 0, 0, "name", new ArrayList<Object>()));
+                this.elements.add(new ContentArrayElement(0, 0, 0, "name", new ArrayList<Object>(), handler));
             else if (this.newMap.mouseDown(mouseX, mouseY, mouseButton))
-                this.elements.add(new ContentMapElement(0, 0, 0, "name", new LinkedTreeMap<String, Object>()));
+                this.elements.add(new ContentMapElement(0, 0, 0, "name", new LinkedTreeMap<String, Object>(), handler));
             else if (this.collapse.mouseDown(mouseX, mouseY, mouseButton) && LiteModFileExplorer.config.json_allowMapCollapsing)
                 this.collapsed = !collapsed;
             else return false;

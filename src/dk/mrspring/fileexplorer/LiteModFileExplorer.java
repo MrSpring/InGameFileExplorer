@@ -8,6 +8,7 @@ import com.mumfrey.liteloader.core.LiteLoader;
 import com.mumfrey.liteloader.modconfig.ConfigPanel;
 import dk.mrspring.fileexplorer.backup.BackupManager;
 import dk.mrspring.fileexplorer.gui.editor.*;
+import dk.mrspring.fileexplorer.gui.editor.json.ContentHandler;
 import dk.mrspring.fileexplorer.gui.screen.GuiScreenBackupManager;
 import dk.mrspring.fileexplorer.gui.screen.GuiScreenFileExplorer;
 import dk.mrspring.fileexplorer.gui.screen.GuiScreenWelcome;
@@ -157,7 +158,7 @@ public class LiteModFileExplorer implements Tickable, Configurable
             @Override
             public Editor getNewEditor(int x, int y, int width, int height, File file)
             {
-                return new EditorContentHandler(x, y, width, height, file);
+                return new EditorContentHandler(x, y, width, height, file, new ContentHandler());
             }
 
             @Override

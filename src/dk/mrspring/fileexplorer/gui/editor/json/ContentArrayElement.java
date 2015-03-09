@@ -16,17 +16,20 @@ import java.util.List;
 /**
  * Created by MrSpring on 30-12-2014 for In-Game File Explorer.
  */
-public class ContentArrayElement extends ContentEditorElement<List<Object>>
+public class ContentArrayElement extends ContentEditorElement<List>
 {
     GuiCustomTextField nameField;
     List<ContentEditorElement> elements;
     GuiSimpleButton newBoolean, newDouble, newString, newArray, newMap, collapse;
     boolean collapsed = false;
     int collapseWidth = 12;
+    ContentHandler handler;
 
-    public ContentArrayElement(int x, int y, int maxWidth, String name, List<Object> list, boolean canEditName)
+    public ContentArrayElement(int x, int y, int maxWidth, String name, List<Object> list, boolean canEditName, ContentHandler handler)
     {
         super(x, y, maxWidth, name, list, canEditName);
+
+        this.handler = handler;
 
         if (!LiteModFileExplorer.config.json_allowArrayCollapsing)
             collapseWidth = 0;
@@ -46,8 +49,12 @@ public class ContentArrayElement extends ContentEditorElement<List<Object>>
 
         for (int i = 0; i < list.size(); i++)
         {
-            Object object = list.get(i);
-            if (object instanceof String)
+            Object value = list.get(i);
+            String key = String.valueOf(i) + ": ";
+            IContentType type = handler.getContentType(key, value, false);
+            if (type != null)
+                this.elements.add(type.getAsEditorElement(0, 0, 0, key, value, false, handler));
+            /*if (object instanceof String)
                 this.elements.add(new ContentStringElement(0, 0, 0, String.valueOf(i) + ": ", (String) object, false));
             else if (object instanceof Boolean)
                 this.elements.add(new ContentBooleanElement(0, 0, 0, String.valueOf(i) + ": ", (Boolean) object, false));
@@ -56,13 +63,13 @@ public class ContentArrayElement extends ContentEditorElement<List<Object>>
             else if (object instanceof Number)
                 this.elements.add(new ContentDoubleElement(0, 0, 0, String.valueOf(i) + ": ", (Double) object, false));
             else if (object instanceof LinkedTreeMap)
-                this.elements.add(new ContentMapElement(0, 0, 0, String.valueOf(i) + ": ", (LinkedTreeMap) object, false));
+                this.elements.add(new ContentMapElement(0, 0, 0, String.valueOf(i) + ": ", (LinkedTreeMap) object, false));*/
         }
     }
 
-    public ContentArrayElement(int x, int y, int maxWidth, String name, List<Object> list)
+    public ContentArrayElement(int x, int y, int maxWidth, String name, List<Object> list, ContentHandler handler)
     {
-        this(x, y, maxWidth, name, list, true);
+        this(x, y, maxWidth, name, list, true, handler);
     }
 
     @Override
@@ -193,9 +200,9 @@ public class ContentArrayElement extends ContentEditorElement<List<Object>>
             else if (this.newString.mouseDown(mouseX, mouseY, mouseButton))
                 this.elements.add(new ContentStringElement(0, 0, 0, "name", "value", false));
             else if (this.newArray.mouseDown(mouseX, mouseY, mouseButton))
-                this.elements.add(new ContentArrayElement(0, 0, 0, "name", new ArrayList<Object>(), false));
+                this.elements.add(new ContentArrayElement(0, 0, 0, "name", new ArrayList<Object>(), false, handler));
             else if (this.newMap.mouseDown(mouseX, mouseY, mouseButton))
-                this.elements.add(new ContentMapElement(0, 0, 0, "name", new LinkedTreeMap<String, Object>(), false));
+                this.elements.add(new ContentMapElement(0, 0, 0, "name", new LinkedTreeMap<String, Object>(), false, handler));
             else if (this.collapse.mouseDown(mouseX, mouseY, mouseButton) && LiteModFileExplorer.config.json_allowArrayCollapsing)
                 this.collapsed = !collapsed;
         }

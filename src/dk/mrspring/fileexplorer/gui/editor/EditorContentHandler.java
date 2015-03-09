@@ -35,13 +35,16 @@ public class EditorContentHandler extends Editor implements IMouseListener
     GuiSimpleButton saveButton, cancelButton;
     boolean editing = false;
 
-    public EditorContentHandler(int x, int y, int w, int h, File file)
+    ContentHandler contentHandler;
+
+    public EditorContentHandler(int x, int y, int w, int h, File file, ContentHandler contentHandler)
     {
         super(x, y, w, h);
 
         this.openFile = file;
+        this.contentHandler = contentHandler;
 
-        Map<String, Object> content = getMapFromFile(openFile);
+        Map<String, Object> content = contentHandler.getMapFromFile(openFile);
 
         viewer = new GuiContentViewer(x, y, w, h, content);
         editor = new GuiContentEditor(x, y, w, h, content);
@@ -51,31 +54,6 @@ public class EditorContentHandler extends Editor implements IMouseListener
         cancelButton = new GuiSimpleButton(x - 62, y + h - 50, 50, 20, "gui.json_editor.cancel");
     }
 
-    public static interface ContentType<E>
-    {
-        public ContentEditorElement<E> getAsEditorElement(String name, E value, boolean canEditName);
-    }
-
-    public Map<String, Object> getMapFromFile(File file)
-    {
-        Map<String, Object> json = new LinkedTreeMap<String, Object>();
-        try
-        {
-            String jsonCode = LiteModFileExplorer.core.getFileLoader().getContentsFromFile(file);
-            json = LiteModFileExplorer.core.getJsonHandler().loadFromJson(jsonCode, LinkedTreeMap.class);
-        } catch (Exception e)
-        {
-            e.printStackTrace();
-        }
-        if (json == null)
-            json = new LinkedTreeMap<String, Object>();
-        return json;
-    }
-
-    public String getFileFromMap(Map<String, Object> content)
-    {
-        return LiteModFileExplorer.core.getJsonHandler().toJson(content);
-    }
 
     @Override
     public void draw(Minecraft minecraft, int mouseX, int mouseY)
@@ -163,7 +141,7 @@ public class EditorContentHandler extends Editor implements IMouseListener
     public void save()
     {
         Map<String, Object> fromEditor = editor.toJsonMap();
-        String fromMap = getFileFromMap(fromEditor);
+        String fromMap = contentHandler.getFileFromMap(fromEditor);
         try
         {
             LiteModFileExplorer.core.getFileLoader().writeToFile(openFile, fromMap);
@@ -177,13 +155,13 @@ public class EditorContentHandler extends Editor implements IMouseListener
 
     private void reloadViewer()
     {
-        Map<String, Object> content = this.getMapFromFile(openFile);
+        Map<String, Object> content = contentHandler.getMapFromFile(openFile);
         viewer = new GuiContentViewer(x, y, w, h, content);
     }
 
     private void reloadEditor()
     {
-        Map<String, Object> content = this.getMapFromFile(openFile);
+        Map<String, Object> content = contentHandler.getMapFromFile(openFile);
         editor = new GuiContentEditor(x, y, w, h, content);
     }
 
@@ -264,8 +242,10 @@ public class EditorContentHandler extends Editor implements IMouseListener
                 {
                     Object value = entry.getValue();
                     String name = entry.getKey();
-
-                    if (value instanceof Boolean)
+                    IContentType type = contentHandler.getContentType(name, value, true);
+                    if (type != null)
+                        this.elements.add(type.getAsEditorElement(x, y, width, name, value, true, contentHandler));
+                    /*if (value instanceof Boolean)
                         this.elements.add(new ContentBooleanElement(x, y, width, name, (Boolean) value));
                     else if (value instanceof String)
                         this.elements.add(new ContentStringElement(x, y, width, name, (String) value));
@@ -274,7 +254,7 @@ public class EditorContentHandler extends Editor implements IMouseListener
                     else if (value instanceof ArrayList)
                         this.elements.add(new ContentArrayElement(x, y, width, name, (List<Object>) value));
                     else if (value instanceof Map)
-                        this.elements.add(new ContentMapElement(x, y, width, name, (Map<String, Object>) value));
+                        this.elements.add(new ContentMapElement(x, y, width, name, (Map<String, Object>) value));*/
                 }
         }
 
@@ -395,9 +375,9 @@ public class EditorContentHandler extends Editor implements IMouseListener
                 else if (this.newString.mouseDown(mouseX, mouseY, mouseButton))
                     this.elements.add(new ContentStringElement(0, 0, 0, "name", "value"));
                 else if (this.newArray.mouseDown(mouseX, mouseY, mouseButton))
-                    this.elements.add(new ContentArrayElement(0, 0, 0, "name", new ArrayList<Object>()));
+                    this.elements.add(new ContentArrayElement(0, 0, 0, "name", new ArrayList<Object>(), contentHandler));
                 else if (this.newMap.mouseDown(mouseX, mouseY, mouseButton))
-                    this.elements.add(new ContentMapElement(0, 0, 0, "name", new LinkedTreeMap<String, Object>()));
+                    this.elements.add(new ContentMapElement(0, 0, 0, "name", new LinkedTreeMap<String, Object>(), contentHandler));
             }
 
             return anythingClicked;

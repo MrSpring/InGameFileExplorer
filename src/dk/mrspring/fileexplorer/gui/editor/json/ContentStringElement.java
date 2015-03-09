@@ -19,6 +19,8 @@ public class ContentStringElement extends ContentEditorElement<String>
         if (width > 400)
             width = 400;
 
+        this.canEditName = canEditName;
+
         this.nameField = new GuiCustomTextField(x, y, (width / 2) - 2, 16, name);
         this.valueField = new GuiCustomTextField(x + (width / 2) + 2, y, (width / 2) - 2, 16, object);
     }
