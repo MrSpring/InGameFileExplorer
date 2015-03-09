@@ -31,9 +31,7 @@ public class EditorYml extends EditorContentHandler
                     String fromFile = LiteModFileExplorer.core.getFileLoader().getContentsFromFile(file);
                     StringReader stringReader = new StringReader(fromFile);
                     YamlReader reader = new YamlReader(stringReader);
-//                    reader.getConfig().setClassTag("tag:yaml.org,2002:map", LinkedHashMap.class);
                     reader.getConfig().setClassTag("tag:yaml.org,2002:map", LinkedHashMap.class);
-//                    reader.getConfig().readConfig.
                     yml = reader.read(LinkedHashMap.class);
                 } catch (Exception e)
                 {
@@ -51,8 +49,7 @@ public class EditorYml extends EditorContentHandler
                 {
                     StringWriter stringWriter = new StringWriter();
                     YamlWriter yamlWriter = new YamlWriter(stringWriter);
-                    yamlWriter.getConfig().setClassTag("tag:yaml.org,2002:map", LinkedHashMap.class); //reader.getConfig().setWriteRootElementTags(false);
-//                    yamlWriter.getConfig().
+                    yamlWriter.getConfig().setClassTag("tag:yaml.org,2002:map", LinkedHashMap.class);
                     yamlWriter.write(content);
                     yamlWriter.close();
                     return stringWriter.getBuffer().toString();
