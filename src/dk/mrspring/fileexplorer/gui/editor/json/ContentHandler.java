@@ -5,6 +5,7 @@ import dk.mrspring.fileexplorer.LiteModFileExplorer;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -15,7 +16,7 @@ public class ContentHandler
 {
     public Map<String, Object> getMapFromFile(File file)
     {
-        Map<String, Object> json = new LinkedTreeMap<String, Object>();
+        Map<String, Object> json = new LinkedHashMap<String, Object>();
         try
         {
             String jsonCode = LiteModFileExplorer.core.getFileLoader().getContentsFromFile(file);

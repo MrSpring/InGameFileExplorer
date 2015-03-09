@@ -1,6 +1,5 @@
 package dk.mrspring.fileexplorer.gui.editor;
 
-import com.google.gson.internal.LinkedTreeMap;
 import com.mumfrey.liteloader.gl.GLClippingPlanes;
 import dk.mrspring.fileexplorer.LiteModFileExplorer;
 import dk.mrspring.fileexplorer.gui.GuiContentViewer;
@@ -18,6 +17,7 @@ import net.minecraft.client.Minecraft;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -140,7 +140,7 @@ public class EditorContentHandler extends Editor implements IMouseListener
 
     public void save()
     {
-        Map<String, Object> fromEditor = editor.toJsonMap();
+        Map<String, Object> fromEditor = editor.toMap();
         String fromMap = contentHandler.getFileFromMap(fromEditor);
         try
         {
@@ -377,7 +377,7 @@ public class EditorContentHandler extends Editor implements IMouseListener
                 else if (this.newArray.mouseDown(mouseX, mouseY, mouseButton))
                     this.elements.add(new ContentArrayElement(0, 0, 0, "name", new ArrayList<Object>(), contentHandler));
                 else if (this.newMap.mouseDown(mouseX, mouseY, mouseButton))
-                    this.elements.add(new ContentMapElement(0, 0, 0, "name", new LinkedTreeMap<String, Object>(), contentHandler));
+                    this.elements.add(new ContentMapElement(0, 0, 0, "name", new LinkedHashMap<String, Object>(), contentHandler));
             }
 
             return anythingClicked;
@@ -402,9 +402,9 @@ public class EditorContentHandler extends Editor implements IMouseListener
                 element.handleKeyTypes(character, keyCode);
         }
 
-        public Map<String, Object> toJsonMap()
+        public Map<String, Object> toMap()
         {
-            Map<String, Object> map = new LinkedTreeMap<String, Object>();
+            Map<String, Object> map = new LinkedHashMap<String, Object>();
 
             for (ContentEditorElement element : elements)
             {
