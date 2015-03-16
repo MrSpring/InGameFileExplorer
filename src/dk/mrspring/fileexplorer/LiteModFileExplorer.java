@@ -8,7 +8,7 @@ import com.mumfrey.liteloader.core.LiteLoader;
 import com.mumfrey.liteloader.modconfig.ConfigPanel;
 import dk.mrspring.fileexplorer.backup.BackupManager;
 import dk.mrspring.fileexplorer.gui.editor.*;
-import dk.mrspring.fileexplorer.gui.editor.json.ContentHandler;
+import dk.mrspring.fileexplorer.gui.editor.content.ContentHandler;
 import dk.mrspring.fileexplorer.gui.screen.GuiScreenBackupManager;
 import dk.mrspring.fileexplorer.gui.screen.GuiScreenFileExplorer;
 import dk.mrspring.fileexplorer.gui.screen.GuiScreenWelcome;

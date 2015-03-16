@@ -1,4 +1,4 @@
-package dk.mrspring.fileexplorer.gui.editor.json;
+package dk.mrspring.fileexplorer.gui.editor.content;
 
 /**
  * Created by Konrad on 09-03-2015.

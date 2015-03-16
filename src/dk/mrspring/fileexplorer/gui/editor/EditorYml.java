@@ -4,7 +4,7 @@ import com.esotericsoftware.yamlbeans.YamlReader;
 import com.esotericsoftware.yamlbeans.YamlWriter;
 import com.google.gson.internal.LinkedTreeMap;
 import dk.mrspring.fileexplorer.LiteModFileExplorer;
-import dk.mrspring.fileexplorer.gui.editor.json.ContentHandler;
+import dk.mrspring.fileexplorer.gui.editor.content.ContentHandler;
 
 import java.io.File;
 import java.io.StringReader;

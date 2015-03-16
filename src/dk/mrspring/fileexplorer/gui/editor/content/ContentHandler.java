@@ -1,4 +1,4 @@
-package dk.mrspring.fileexplorer.gui.editor.json;
+package dk.mrspring.fileexplorer.gui.editor.content;
 
 import com.google.gson.internal.LinkedTreeMap;
 import dk.mrspring.fileexplorer.LiteModFileExplorer;

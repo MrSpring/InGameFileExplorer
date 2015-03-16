@@ -4,7 +4,7 @@ import com.mumfrey.liteloader.gl.GLClippingPlanes;
 import dk.mrspring.fileexplorer.LiteModFileExplorer;
 import dk.mrspring.fileexplorer.gui.GuiContentViewer;
 import dk.mrspring.fileexplorer.gui.GuiSimpleButton;
-import dk.mrspring.fileexplorer.gui.editor.json.*;
+import dk.mrspring.fileexplorer.gui.editor.content.*;
 import dk.mrspring.fileexplorer.gui.interfaces.IGui;
 import dk.mrspring.fileexplorer.gui.interfaces.IMouseListener;
 import dk.mrspring.fileexplorer.helper.GuiHelper;

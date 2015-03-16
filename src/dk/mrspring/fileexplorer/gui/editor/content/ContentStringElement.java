@@ -1,4 +1,4 @@
-package dk.mrspring.fileexplorer.gui.editor.json;
+package dk.mrspring.fileexplorer.gui.editor.content;
 
 import dk.mrspring.fileexplorer.gui.GuiCustomTextField;
 import net.minecraft.client.Minecraft;
