@@ -317,7 +317,7 @@ public class LiteModFileExplorer implements Tickable, Configurable
             @Override
             public Editor getNewEditor(int x, int y, int width, int height, File file)
             {
-                return new EditorLang(file, x, y, width, height);
+                return new EditorLang(x, y, width, height, file);
             }
 
             @Override
