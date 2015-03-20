@@ -14,6 +14,26 @@ import java.util.Map;
  */
 public class ContentHandler
 {
+    public String[] getNewElementButtonIDs()
+    {
+        return new String[]{"S", "B", "D", "A", "M"};
+    }
+
+    public IContentType getNewContentType(String buttonID)
+    {
+        if (buttonID.equals("S"))
+            return new StringContentType();
+        else if (buttonID.equals("B"))
+            return new BooleanContentType();
+        else if (buttonID.equals("D"))
+            return new NumberContentType();
+        else if (buttonID.equals("A"))
+            return new ListContentType();
+        else if (buttonID.equals("M"))
+            return new MapContentType();
+        else return null;
+    }
+
     public Map<String, Object> getMapFromFile(File file)
     {
         Map<String, Object> json = new LinkedHashMap<String, Object>();

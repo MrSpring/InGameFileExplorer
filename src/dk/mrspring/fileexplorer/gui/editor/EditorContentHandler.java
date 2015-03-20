@@ -245,16 +245,6 @@ public class EditorContentHandler extends Editor implements IMouseListener
                     IContentType type = contentHandler.getContentType(name, value, true);
                     if (type != null)
                         this.elements.add(type.getAsEditorElement(x, y, width, name, value, true, contentHandler));
-                    /*if (value instanceof Boolean)
-                        this.elements.add(new ContentBooleanElement(x, y, width, name, (Boolean) value));
-                    else if (value instanceof String)
-                        this.elements.add(new ContentStringElement(x, y, width, name, (String) value));
-                    else if (value instanceof Number)
-                        this.elements.add(new ContentDoubleElement(x, y, width, name, (Double) value));
-                    else if (value instanceof ArrayList)
-                        this.elements.add(new ContentArrayElement(x, y, width, name, (List<Object>) value));
-                    else if (value instanceof Map)
-                        this.elements.add(new ContentMapElement(x, y, width, name, (Map<String, Object>) value));*/
                 }
         }
 

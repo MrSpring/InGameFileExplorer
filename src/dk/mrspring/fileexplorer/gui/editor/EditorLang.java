@@ -1,20 +1,110 @@
 package dk.mrspring.fileexplorer.gui.editor;
 
 import dk.mrspring.fileexplorer.LiteModFileExplorer;
-import dk.mrspring.fileexplorer.gui.GuiLangViewer;
-import dk.mrspring.fileexplorer.gui.editor.lang.Lang;
-import dk.mrspring.fileexplorer.gui.interfaces.IMouseListener;
-import net.minecraft.client.Minecraft;
+import dk.mrspring.fileexplorer.gui.editor.content.ContentHandler;
+import dk.mrspring.fileexplorer.gui.editor.content.IContentType;
+import dk.mrspring.fileexplorer.gui.editor.lang.BlankLine;
+import dk.mrspring.fileexplorer.gui.editor.lang.BlankLineContentType;
+import dk.mrspring.fileexplorer.gui.editor.lang.Comment;
+import dk.mrspring.fileexplorer.gui.editor.lang.CommentContentType;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 /**
  * Created by Konrad on 18-02-2015.
  */
-public class EditorLang extends Editor implements IMouseListener
+public class EditorLang extends EditorContentHandler//extends Editor implements IMouseListener
 {
-    GuiLangViewer viewer;
+    public EditorLang(int x, int y, int w, int h, File file)
+    {
+        super(x, y, w, h, file, new ContentHandler()
+        {
+            @Override
+            public Map<String, Object> getMapFromFile(File file)
+            {
+                Map<String, Object> values = new LinkedHashMap<String, Object>();
+                try
+                {
+                    String langFile = LiteModFileExplorer.core.getFileLoader().getContentsFromFile(file);
+                    String[] lines = langFile.split("\n");
+                    for (int i = 0; i < lines.length; i++)
+                    {
+                        String line = lines[i];
+                        if (line.isEmpty())
+                            values.put(String.valueOf(i), new BlankLine());
+                        else if (line.startsWith("//"))
+                        {
+                            String commentName = String.valueOf(i);
+                            String commentValue = line.substring(2).trim();
+                            values.put(commentName, new Comment(commentValue));
+                        } else if (line.contains("="))
+                        {
+                            int equalsPos = line.indexOf("=");
+                            String key = line.substring(0, equalsPos);
+                            String value = line.substring(equalsPos);
+                            values.put(key, value);
+                        }
+                    }
+                } catch (IOException e)
+                {
+                    e.printStackTrace();
+                }
+                return values;
+            }
+
+            @Override
+            public String getFileFromMap(Map<String, Object> content)
+            {
+                StringBuilder builder = new StringBuilder();
+                for (Map.Entry<String, Object> entry : content.entrySet())
+                {
+                    String name = entry.getKey();
+                    Object value = entry.getValue();
+
+                    if (value instanceof String)
+                    {
+                        String s = (String) value;
+                        builder.append(name);
+                        builder.append("=");
+                        builder.append(s);
+                    } else if (value instanceof Comment)
+                    {
+                        Comment comment = (Comment) value;
+                        builder.append("// ");
+                        builder.append(comment.comment);
+                    }
+
+                    builder.append("\n");
+                }
+                return builder.toString();
+            }
+
+            @Override
+            public String[] getNewElementButtonIDs()
+            {
+                return new String[]{"S", "C", "L"};
+            }
+
+            @Override
+            public IContentType getNewContentType(String buttonID)
+            {
+                if (buttonID.equals("C"))
+                    return new CommentContentType();
+                else if (buttonID.equals("L"))
+                    return new BlankLineContentType();
+                else if (buttonID.equals("S"))
+                    return new StringContentType();
+                else return null;
+            }
+        });
+    }
+
+
+
+    /*GuiLangViewer viewer;
     File openFile;
 
     public EditorLang(File file, int x, int y, int w, int h)
@@ -100,5 +190,5 @@ public class EditorLang extends Editor implements IMouseListener
     public void mouseClickMove(int mouseX, int mouseY, int mouseButton, long timeSinceClick)
     {
 
-    }
+    }*/
 }
